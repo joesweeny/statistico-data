@@ -1,0 +1,16 @@
+version: "3.3"
+services:
+  web:
+    build:
+      dockerfile: ./docker/go/Dockerfile
+      context: ./
+    ports:
+      - "8080"
+  nginx:
+    build:
+      dockerfile: ./docker/nginx/Dockerfile
+      context: ./
+    ports:
+      - "80:80"
+    depends_on:
+      - "web"
