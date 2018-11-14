@@ -12,5 +12,3 @@ services:
       context: ./
     ports:
       - "80:80"
-    depends_on:
-      - "web"
