@@ -1,0 +1,32 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/golang:1.11
+
+    working_directory: /go/src/github.com/joesweeny/stats-hub
+
+    steps:
+      - setup_remote_docker
+      - checkout
+
+      - run:
+          name: Install Dependencies
+          command: |
+            go get -u -v -t github.com/Masterminds/glide
+
+      - run:
+          name: Build Release Image
+          command: |
+            glide install -v
+            docker-compose -f docker-compose.yml up -d --build
+
+      - deploy:
+          name: Deploy
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              chmod +x ./.circleci/deploy/docker-push.sh
+              ./.circleci/deploy/docker-push.sh
+              chmod +x ./.circleci/deploy/docker-deploy.sh
+              ./.circleci/deploy/docker-deploy.sh
+            fi
