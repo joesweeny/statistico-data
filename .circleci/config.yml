@@ -25,6 +25,6 @@ jobs:
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
               chmod +x ./.circleci/deploy/docker-push.sh
               ./.circleci/deploy/docker-push.sh
-              chmod +x ./.circleci/staging/docker-deploy.sh
+              chmod +x ./.circleci/deploy/docker-deploy.sh
               ./.circleci/deploy/docker-deploy.sh
             fi
