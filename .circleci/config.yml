@@ -9,7 +9,7 @@ jobs:
     steps:
       - add_ssh_keys:
           fingerprints:
-            - "88:6e:bf:8b:ea:c4:d4:8f:90:ed:9a:45:d8:83:9f:d6"
+            - "3f:66:e4:bb:f0:43:80:a8:78:1f:e5:36:7b:41:34:56"
       - checkout
 
       - setup_remote_docker
