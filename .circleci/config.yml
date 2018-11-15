@@ -10,6 +10,10 @@ jobs:
       - setup_remote_docker
       - checkout
 
+      - add_ssh_keys:
+          fingerprints:
+            - "3f:66:e4:bb:f0:43:80:a8:78:1f:e5:36:7b:41:34:56"
+
       - run:
           name: Install Dependencies
           command: |
