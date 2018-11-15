@@ -1,0 +1,7 @@
+#!/bin/bash
+
+set -e
+
+scp docker-compose.production.yml root@${STAGING_SERVER}:~/staging
+ssh root@${STAGING_SERVER} "docker-compose -f ./production/docker-compose.production.yml pull web && \
+docker-compose -f ./production/docker-compose.production.yml up -d
