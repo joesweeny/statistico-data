@@ -1,7 +1,7 @@
 version: 2
 jobs:
   build:
-    working_directory: ~/stats-hub
+    working_directory: /usr/local/go_workspace/src
     machine:
       image: circleci/classic:201711-01
 
