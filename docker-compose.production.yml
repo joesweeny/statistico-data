@@ -1,7 +1,7 @@
 version: "3.5"
 services:
   web:
-    image: joesweeny/statshub_web:latest
+    image: joesweeny/statshub_web:$RELEASE
     networks:
      - proxynet
 
