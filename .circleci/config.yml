@@ -7,9 +7,9 @@ jobs:
     working_directory: /go/src/github.com/joesweeny/stats-hub
 
     steps:
-      - setup_remote_docker
-
       - checkout
+
+      - setup_remote_docker
 
       - run:
           name: Install Dependencies
