@@ -1,9 +1,10 @@
 version: 2
 jobs:
   build:
-    working_directory: /usr/local/go_workspace/src
     machine:
       image: circleci/classic:201711-01
+      environment:
+        IMPORT_PATH: "github.com/joesweeny/stats-hub"
 
     steps:
       - checkout
@@ -12,6 +13,8 @@ jobs:
           command: |
             sudo add-apt-repository ppa:masterminds/glide && sudo apt-get update
             sudo apt-get install glide
+            mkdir -p "$GOPATH/src/$IMPORT_PATH"
+            rsync -azC --delete ./ "$GOPATH/src/$IMPORT_PATH/"
 
       - run:
           name: Build Release Image
