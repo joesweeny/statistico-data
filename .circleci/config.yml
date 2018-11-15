@@ -1,7 +1,7 @@
 version: 2
 jobs:
   build:
-    working_directory: /go/src/github.com/joesweeny/stats-hub
+    working_directory: ~/go/src/github.com/joesweeny/stats-hub
     machine:
       image: circleci/classic:201711-01
 
