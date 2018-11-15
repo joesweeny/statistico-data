@@ -6,6 +6,8 @@ services:
       context: ./
     ports:
       - "8080"
+    volumes:
+      - .:/opt
   nginx:
     build:
       dockerfile: ./docker/nginx/Dockerfile

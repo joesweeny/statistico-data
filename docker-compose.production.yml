@@ -1,4 +1,10 @@
-version: "3.3"
+version: "3.5"
 services:
   web:
     image: joesweeny/statshub_web:latest
+    networks:
+     - proxynet
+
+networks:
+  proxynet:
+    name: joe_sweeny_network
