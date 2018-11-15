@@ -20,35 +20,13 @@ jobs:
           command: |
             glide install -v
             docker-compose -f docker-compose.yml up -d --build
-#version: 2
-#jobs:
-#  build:
-#    machine:
-#      image: circleci/classic:201711-01
-#      environment:
-#        GOROOT: ""
-#        GOPATH: "${HOME}/.go_project"
-#        PATH: "${GOPATH}/bin:${PATH}"
-#        BUILD_PATH: "${GOPATH}/src/github.com/joesweeny/stats-hub"
-#
-#    steps:
-#      - checkout
-#      - run:
-#          name: Install dependencies
-#          command: |
-#            mkdir -p ~/.go_project/src/github.com/joesweeny
-#            ln -s ${HOME}/stats-hub ${BUILD_PATH}
-#            sudo add-apt-repository ppa:masterminds/glide && sudo apt-get update
-#            sudo apt-get install glide
-#
 
-#
-#      - deploy:
-#          name: Deploy
-#          command: |
-#            if [ "${CIRCLE_BRANCH}" == "master" ]; then
-#              chmod +x ./.circleci/deploy/docker-push.sh
-#              ./.circleci/deploy/docker-push.sh
-#              chmod +x ./.circleci/deploy/docker-deploy.sh
-#              ./.circleci/deploy/docker-deploy.sh
-#            fi
+      - deploy:
+          name: Deploy
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              chmod +x ./.circleci/deploy/docker-push.sh
+              ./.circleci/deploy/docker-push.sh
+              chmod +x ./.circleci/deploy/docker-deploy.sh
+              ./.circleci/deploy/docker-deploy.sh
+            fi
