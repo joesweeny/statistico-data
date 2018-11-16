@@ -2,8 +2,8 @@
 
 set -e
 
-echo $(git rev-parse HEAD)
-sed -i s/\'$RELEASE\'/$(git rev-parse HEAD)/ docker-compose.production.yml
-scp docker-compose.production.yml root@${PRODUCTION_SERVER}:~/stats-hub
-ssh root@${PRODUCTION_SERVER} "docker-compose -f ~/stats-hub/docker-compose.production.yml pull web && \
-docker-compose -f ~/stats-hub/docker-compose.production.yml up -d"
+RELEASE=$(git rev-parse HEAD)
+echo "Release number: $RELEASE"
+scp docker-compose.production.yml root@${PRODUCTION_SERVER}:~
+ssh -t root@${PRODUCTION_SERVER} 'export RELEASE='"'$RELEASE'"'; bash -s && docker-compose -f ~/docker-compose.production.yml pull web && \
+docker-compose -f ~/docker-compose.production.yml up -d'

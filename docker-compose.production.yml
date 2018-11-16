@@ -2,9 +2,5 @@ version: "3.5"
 services:
   web:
     image: joesweeny/statshub_web:$RELEASE
-    networks:
-     - proxynet
-
-networks:
-  proxynet:
-    name: joe_sweeny_network
+    ports:
+      - "80:8080"
