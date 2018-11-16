@@ -3,25 +3,48 @@ package main
 import (
 	"net/http"
 	"fmt"
-	"log"
-	"github.com/gorilla/mux"
+	//"log"
+	"io/ioutil"
+	"encoding/json"
 )
 
+type SportMonkCountry struct {
+	ID int `json:"id"`
+	Name string `json:"name"`
+	Extra struct {
+		Continent string `json:"continent"`
+		IsoCode string `json:"iso"`
+	}
+}
+
+type SportMonkCountryResponse struct {
+	Countries []SportMonkCountry `json:"data"`
+}
+
 func main() {
-	router := mux.NewRouter()
+	response, err := http.Get("https://soccer.sportmonks.com/api/v2.0/countries?api_token=hMNoq0c2fMjipNWEeG7IMmDF9bMNKeVoRi8lJ0qZDhg125U1IormejZKfwua")
 
-	router.HandleFunc("/", routePath).Methods("GET")
-	router.HandleFunc("/healthcheck", healthCheck).Methods("GET")
+	if err != nil {
+		fmt.Printf("The HTTP request failed with error %s\n", err)
+	}
 
-	log.Fatal(http.ListenAndServe(":8080", router))
+	data, _ := ioutil.ReadAll(response.Body)
+
+	r, err := parseCountries(data)
+
+	for _, country := range r.Countries {
+		fmt.Printf("%+v\n", country)
+	}
 }
 
-func routePath(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprint(w, "Hello, World. This actually works!!")
-	w.WriteHeader(http.StatusOK)
-}
+func parseCountries(body []byte) (*SportMonkCountryResponse, error) {
+	var r = new(SportMonkCountryResponse)
 
-func healthCheck(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprint(w, "Healthcheck OK")
-	w.WriteHeader(http.StatusOK)
+	err := json.Unmarshal(body, r)
+
+	if err != nil {
+		fmt.Printf("Parsing request body in objects fields: %s\n", err)
+	}
+
+	return r, err
 }
