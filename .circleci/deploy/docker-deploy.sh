@@ -4,8 +4,6 @@ set -e
 
 RELEASE=$CIRCLE_SHA1
 API_KEY=${SPORT_MONKS_API_KEY}
-echo "Release number: $RELEASE"
-echo "API KEY number: $API_KEY"
 
 scp docker-compose.production.yml root@${PRODUCTION_SERVER}:~
 
