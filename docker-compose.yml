@@ -6,3 +6,9 @@ services:
       - "8000:8000"
     environment:
       NAME: "Joe"
+
+  console:
+    build: ./console
+    environment:
+      NAME: "Joe"
+    tty: true
