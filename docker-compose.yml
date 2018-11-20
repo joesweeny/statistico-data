@@ -4,7 +4,5 @@ services:
     build: ./api
     ports:
       - "8000:8000"
-    volumes:
-      - .:/go/src/github.com/joesweeny/statshub
     environment:
       NAME: "Joe"
