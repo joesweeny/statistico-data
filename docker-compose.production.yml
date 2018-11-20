@@ -1,6 +1,8 @@
 version: "3.5"
 services:
-  web:
-    image: joesweeny/stats-hub_web:$RELEASE
+  api:
+    image: joesweeny/statshub_api:$RELEASE
     ports:
-      - "80:8080"
+      - "80:8000"
+    environment:
+      NAME: "Joe"

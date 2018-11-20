@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"github.com/gorilla/mux"
+	"os"
 )
 
 func main() {
@@ -13,11 +14,12 @@ func main() {
 	router.HandleFunc("/", routePath).Methods("GET")
 	router.HandleFunc("/healthcheck", healthCheck).Methods("GET")
 
-	log.Fatal(http.ListenAndServe(":8080", router))
+	log.Fatal(http.ListenAndServe(":8000", router))
 }
 
 func routePath(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprint(w, "Hello, World. This actually works!!")
+	name := os.Getenv("NAME")
+	fmt.Fprint(w, "Hello " + name + " This actually works!!")
 	w.WriteHeader(http.StatusOK)
 }
 
