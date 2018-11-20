@@ -6,3 +6,9 @@ services:
       - "80:8000"
     environment:
       NAME: "Joe"
+
+  console:
+    image: joesweeny/statshub_console:$RELEASE
+    environment:
+      NAME: "Joe"
+    tty: true
