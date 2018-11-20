@@ -1,16 +1,18 @@
 package main
 
 import (
-	"os"
 	"fmt"
 	sportsmonks "github.com/joesweeny/statshub/console/service/sportmonks"
+	"github.com/joesweeny/statshub/console/config"
 )
 
 func main() {
-	uri := os.Getenv("SPORT_MONKS_URI")
-	key := os.Getenv("SPORT_MONKS_API_KEY")
+	con := config.GetConfig()
 
-	client := sportsmonks.NewClient(uri, key)
+	client := sportsmonks.NewClient(
+		con.Services.SportMonks.BaseUri,
+		con.Services.SportMonks.ApiKey,
+	)
 
 	response, err := client.GetCountries()
 
