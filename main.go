@@ -13,7 +13,7 @@ func main() {
 	router.HandleFunc("/", routePath).Methods("GET")
 	router.HandleFunc("/healthcheck", healthCheck).Methods("GET")
 
-	log.Fatal(http.ListenAndServe(":8080", router))
+	log.Fatal(http.ListenAndServe(":8000", router))
 }
 
 func routePath(w http.ResponseWriter, r *http.Request) {
