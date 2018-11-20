@@ -4,7 +4,7 @@ jobs:
     docker:
       - image: circleci/golang:1.11
 
-    working_directory: /go/src/github.com/joesweeny/stats-hub
+    working_directory: /go/src/github.com/joesweeny/statshub
 
     steps:
       - add_ssh_keys:
@@ -15,14 +15,8 @@ jobs:
       - setup_remote_docker
 
       - run:
-          name: Install Dependencies
-          command: |
-            go get -u -v -t github.com/Masterminds/glide
-
-      - run:
           name: Build Release Image
           command: |
-            glide install -v
             docker-compose -f docker-compose.yml up -d --build
 
       - deploy:
