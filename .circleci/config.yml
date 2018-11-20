@@ -23,7 +23,7 @@ jobs:
           name: Deploy
           environment:
             SPORT_MONKS_API_KEY: ${SPORT_MONKS_API_KEY}
-            RELEASE: ${$CIRCLE_SHA1}
+            RELEASE: ${CIRCLE_SHA1}
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
               ssh-keyscan $PRODUCTION_SERVER >> ~/.ssh/known_hosts
