@@ -9,7 +9,7 @@ echo "API KEY number: $API_KEY"
 
 scp docker-compose.production.yml root@${PRODUCTION_SERVER}:~
 
-ssh -t root@${PRODUCTION_SERVER} 'env RELEASE='"'$RELEASE'"' SPORT_MONK_API_KEY='"'$API_KEY'"' \
+ssh -t root@${PRODUCTION_SERVER} 'export RELEASE='"'$RELEASE'"' export SPORT_MONKS_API_KEY='"'$API_KEY'"' \
 
 docker-compose -f ./docker-compose.production.yml pull api && \
 
