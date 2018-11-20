@@ -2,11 +2,26 @@ package main
 
 import (
 	"fmt"
-	"os"
+	sportsmonks "github.com/joesweeny/statshub/console/service/sportmonks"
+	"github.com/joesweeny/statshub/console/config"
 )
 
 func main() {
-	name := os.Getenv("NAME")
+	con := config.GetConfig()
 
-	fmt.Printf("Hello %s from the Console", name)
+	client := sportsmonks.NewClient(
+		con.Services.SportMonks.BaseUri,
+		con.Services.SportMonks.ApiKey,
+	)
+
+	response, err := client.GetCountries()
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	for _, country := range response.CountryList {
+		fmt.Printf("%+v\n", country)
+	}
 }
+

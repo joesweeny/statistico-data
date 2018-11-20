@@ -10,5 +10,6 @@ services:
   console:
     build: ./console
     environment:
-      NAME: "Joe"
+      SPORT_MONKS_URI: "https://soccer.sportmonks.com/api/v2.0"
+      SPORT_MONKS_API_KEY: "hMNoq0c2fMjipNWEeG7IMmDF9bMNKeVoRi8lJ0qZDhg125U1IormejZKfwua"
     tty: true
