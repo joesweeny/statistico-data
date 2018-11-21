@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	sportsmonks "github.com/joesweeny/statshub/console/service/sportmonks"
-	"github.com/joesweeny/statshub/console/config"
+	sportsmonks "github.com/joesweeny/statshub/internal/service/sportmonks"
+	"github.com/joesweeny/statshub/internal/config"
 )
 
 func main() {

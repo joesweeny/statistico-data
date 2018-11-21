@@ -1,14 +1,18 @@
 version: "3.3"
 services:
   api:
-    build: ./api
+    build:
+      dockerfile: ./docker/api/Dockerfile
+      context: .
     ports:
       - "8000:8000"
     environment:
       NAME: "Joe"
 
   console:
-    build: ./console
+    build:
+      dockerfile: ./docker/console/Dockerfile
+      context: .
     environment:
       SPORT_MONKS_URI: "https://soccer.sportmonks.com/api/v2.0"
       SPORT_MONKS_API_KEY: "hMNoq0c2fMjipNWEeG7IMmDF9bMNKeVoRi8lJ0qZDhg125U1IormejZKfwua"
