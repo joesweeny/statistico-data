@@ -1,5 +1,14 @@
 version: "3.5"
 services:
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_USER: dev
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: statshub
+    ports:
+      - 5432:5432
+
   api:
     image: joesweeny/statshub_api:$RELEASE
     ports:
