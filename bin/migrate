@@ -1,0 +1,3 @@
+#!/bin/sh
+
+goose -dir ./database/migrations/ postgres "user=dev dbname=statshub password=password sslmode=disable" up
