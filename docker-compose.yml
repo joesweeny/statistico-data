@@ -30,3 +30,18 @@ services:
     tty: true
     links:
       - postgres
+
+  migrate:
+    build:
+      dockerfile: ./docker/migrate/Dockerfile
+      context: .
+    environment:
+      DB_HOST: postgres
+      DB_USER: dev
+      DB_PASSWORD: password
+      DB_NAME: statshub
+    links:
+      - postgres
+    depends_on:
+      - postgres
+    command: ["./bin/migrate"]
