@@ -32,7 +32,6 @@ services:
       DB_USER: dev
       DB_PASSWORD: password
       DB_NAME: statshub
-    tty: true
     links:
       - postgres
     depends_on:
