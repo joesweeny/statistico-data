@@ -1,5 +1,14 @@
 version: "3.5"
 services:
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_USER: dev
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: statshub
+    ports:
+      - 5432:5432
+
   api:
     image: joesweeny/statshub_api:$RELEASE
     ports:
@@ -13,3 +22,18 @@ services:
       SPORT_MONKS_URI: "https://soccer.sportmonks.com/api/v2.0"
       SPORT_MONKS_API_KEY: $SPORT_MONKS_API_KEY
     tty: true
+
+  migrate:
+    build:
+      dockerfile: ./docker/migrate/Dockerfile
+      context: .
+    environment:
+      DB_HOST: postgres
+      DB_USER: dev
+      DB_PASSWORD: password
+      DB_NAME: statshub
+    links:
+      - postgres
+    depends_on:
+      - postgres
+    command: ["./bin/migrate"]
