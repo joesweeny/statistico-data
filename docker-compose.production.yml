@@ -24,9 +24,7 @@ services:
     tty: true
 
   migrate:
-    build:
-      dockerfile: ./docker/migrate/Dockerfile
-      context: .
+    image: joesweeny/statshub_migrate:$RELEASE
     environment:
       DB_HOST: postgres
       DB_USER: dev
