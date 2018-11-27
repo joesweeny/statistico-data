@@ -13,5 +13,7 @@ docker-compose -f ./docker-compose.production.yml pull api && \
 
 docker-compose -f ./docker-compose.production.yml pull console && \
 
+docker-compose -f ./docker-compose.production.yml pull migrate && \
+
 docker-compose -f ./docker-compose.production.yml up -d'
 
