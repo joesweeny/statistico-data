@@ -25,10 +25,12 @@ services:
       dockerfile: ./docker/console/Dockerfile
       context: .
     environment:
+      DB_DRIVER: postgres
       DB_HOST: postgres
       DB_NAME: statshub
       DB_PASSWORD: password
       DB_USER: dev
+      DB_PORT: 5432
       SPORT_MONKS_URI: "https://soccer.sportmonks.com/api/v2.0"
       SPORT_MONKS_API_KEY: "hMNoq0c2fMjipNWEeG7IMmDF9bMNKeVoRi8lJ0qZDhg125U1IormejZKfwua"
     tty: true
@@ -57,6 +59,7 @@ services:
     volumes:
       - .:/go/src/github.com/joesweeny/statshub
     environment:
+      DB_DRIVER: postgres
       DB_HOST: postgres
       DB_PASSWORD: password
       DB_NAME: statshub

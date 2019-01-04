@@ -2,20 +2,14 @@ package repository
 
 import (
 	"testing"
-	"os"
 	"fmt"
 	"database/sql"
 	"github.com/joesweeny/statshub/internal/model"
+	"github.com/joesweeny/statshub/internal/config"
 	"github.com/satori/go.uuid"
 	"time"
 	_ "github.com/lib/pq"
 )
-
-var host = os.Getenv("DB_HOST")
-var port = os.Getenv("DB_PORT")
-var user = os.Getenv("DB_USER")
-var pass = os.Getenv("DB_PASSWORD")
-var name = os.Getenv("DB_NAME")
 
 func TestInsert(t *testing.T) {
 	conn, cleanUp := getConnection(t)
@@ -24,7 +18,7 @@ func TestInsert(t *testing.T) {
 	t.Run("insert increases table count", func(t *testing.T) {
 		t.Helper()
 		for i := 1; i < 4; i++ {
-			var id = uuid.Must(uuid.NewV4())
+			var id = uuid.Must(uuid.NewV4(), nil)
 			c := newCountry(id)
 
 			if err := repo.Insert(c); err != nil {
@@ -65,12 +59,52 @@ func TestInsert(t *testing.T) {
 	conn.Close()
 }
 
+func TestUpdate(t *testing.T) {
+	conn, cleanUp := getConnection(t)
+	repo := NewPostgresCountryRepository(conn)
+
+	t.Run("insert update modifies existing record", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+		var id = uuid.Must(uuid.NewV4(), nil)
+		c := newCountry(id)
+
+		if err := repo.Insert(c); err != nil {
+			t.Fatalf("Error when inserting record into the database: %s", err.Error())
+		}
+
+		s := "Scotland"
+		c.Name = s
+
+		fmt.Println(c.Name)
+
+		repo.Update(c)
+
+		r, err := repo.GetById(c.ID)
+
+		if err != nil {
+			t.Fatalf("Error when updating a record in the database: %s", err.Error())
+		}
+
+		got := r.Name
+		want := s
+
+		if got != want {
+			t.Errorf("got %s, want %s", got, want)
+		}
+
+		cleanUp()
+	})
+}
+
+var db = config.GetConfig().DB
+
 func getConnection(t *testing.T) (*sql.DB, func()) {
 	psqlInfo := fmt.Sprintf("host=%s port=%s user=%s "+
 		"password=%s dbname=%s sslmode=disable",
-		host, port, user, pass, name)
+		db.Host, db.Port, db.User, db.Password, db.Name)
 
-	db, err := sql.Open("postgres", psqlInfo)
+	db, err := sql.Open(db.Driver, psqlInfo)
 
 	if err != nil {
 		panic(err)
@@ -95,5 +129,5 @@ func newCountry(u uuid.UUID) model.Country {
 		time.Now(),
 	}
 
-	return c;
+	return c
 }
