@@ -23,18 +23,9 @@ func TestInsert(t *testing.T) {
 
 	t.Run("insert increases table count", func(t *testing.T) {
 		t.Helper()
-		sum := 1
-		for i := sum; i < 4; i++ {
+		for i := 1; i < 4; i++ {
 			var id = uuid.Must(uuid.NewV4())
-			var c = model.Country{
-				id,
-				i,
-				"England",
-				"Europe",
-				"ENG",
-				time.Now(),
-				time.Now(),
-			}
+			c := newCountry(id)
 
 			if err := repo.Insert(c); err != nil {
 				t.Fatalf("Error when inserting record into the database: %s", err.Error())
@@ -48,10 +39,9 @@ func TestInsert(t *testing.T) {
 				t.Fatalf("Error when scanning rows returned by the database: %s", err.Error())
 			}
 
-			if sum != count {
-				t.Fatalf("Expected %d, got %d", sum, count)
+			if i != count {
+				t.Fatalf("Expected %d, got %d", i, count)
 			}
-			sum += 1
 		}
 
 		cleanUp()
@@ -59,15 +49,7 @@ func TestInsert(t *testing.T) {
 
 	t.Run("insert returns error when ID primary key violates unique constraint", func(t *testing.T) {
 		t.Helper()
-		var c = model.Country{
-			uuid.UUID{},
-			1,
-			"England",
-			"Europe",
-			"ENG",
-			time.Now(),
-			time.Now(),
-		}
+		c := newCountry(uuid.UUID{})
 
 		if err := repo.Insert(c); err != nil {
 			t.Fatalf("Test failed, expected nil, got %s", err)
@@ -100,4 +82,18 @@ func getConnection(t *testing.T) (*sql.DB, func()) {
 			t.Fatalf("Failed to clear database. %s", err.Error())
 		}
 	}
+}
+
+func newCountry(u uuid.UUID) model.Country {
+	c := model.Country{
+		u,
+		1,
+		"England",
+		"Europe",
+		"ENG",
+		time.Now(),
+		time.Now(),
+	}
+
+	return c;
 }
