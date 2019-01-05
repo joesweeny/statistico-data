@@ -1,4 +1,4 @@
-package repository
+package country
 
 import (
 	"testing"
@@ -103,6 +103,84 @@ func TestUpdate(t *testing.T) {
 			t.Fatalf("Test failed, expected nil, got %v", err)
 		}
 	})
+
+	conn.Close()
+}
+
+func TestGetById(t *testing.T) {
+	conn, cleanUp := getConnection(t)
+	repo := NewPostgresCountryRepository(conn)
+
+	t.Run("country can be retrieved by ID", func (t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+
+		var id = uuid.Must(uuid.NewV4(), nil)
+		c := newCountry(id)
+
+		if err := repo.Insert(c); err != nil {
+			t.Errorf("Error when inserting record into the database: %s", err.Error())
+		}
+
+		r, err := repo.GetById(id)
+
+		if err != nil {
+			t.Errorf("Error when inserting record into the database: %s", err.Error())
+		}
+
+		if r.Name != c.Name {
+			t.Fatalf("Test failed, expected %s, got %s", c.Name, r.Name)
+		}
+	})
+
+	t.Run("returns error if country does not exist", func (t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+
+		if _, err := repo.GetById(uuid.UUID{}); err == nil {
+			t.Fatalf("Test failed, expected %v, got nil", err)
+		}
+	})
+
+	conn.Close()
+}
+
+func TestGetByExternalId(t *testing.T) {
+	conn, cleanUp := getConnection(t)
+	repo := NewPostgresCountryRepository(conn)
+
+	t.Run("country can be retrieved by External ID", func (t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+
+		var id = uuid.Must(uuid.NewV4(), nil)
+		c := newCountry(id)
+
+		if err := repo.Insert(c); err != nil {
+			t.Errorf("Error when inserting record into the database: %s", err.Error())
+		}
+
+		r, err := repo.GetByExternalId(c.ExternalID)
+
+		if err != nil {
+			t.Errorf("Error when inserting record into the database: %s", err.Error())
+		}
+
+		if r.Name != c.Name {
+			t.Fatalf("Test failed, expected %s, got %s", c.Name, r.Name)
+		}
+	})
+
+	t.Run("returns error if country does not exist", func (t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+
+		if _, err := repo.GetByExternalId(999); err == nil {
+			t.Fatalf("Test failed, expected %v, got nil", err)
+		}
+	})
+
+	conn.Close()
 }
 
 var db = config.GetConfig().DB

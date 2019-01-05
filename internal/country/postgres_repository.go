@@ -1,8 +1,7 @@
-package repository
+package country
 
 import (
 	"database/sql"
-	"github.com/joesweeny/statshub/internal/country"
 	"github.com/joesweeny/statshub/internal/model"
 	"github.com/satori/go.uuid"
 	"time"
@@ -13,7 +12,7 @@ type postgresCountryRepository struct {
 	Connection *sql.DB
 }
 
-func NewPostgresCountryRepository(db *sql.DB) country.Repository {
+func NewPostgresCountryRepository(db *sql.DB) Repository {
 	return &postgresCountryRepository{db}
 }
 
