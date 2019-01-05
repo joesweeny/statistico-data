@@ -7,7 +7,6 @@ import (
 	"github.com/satori/go.uuid"
 	"time"
 	_ "github.com/lib/pq"
-	"fmt"
 )
 
 type postgresCountryRepository struct {
@@ -38,17 +37,14 @@ func (p *postgresCountryRepository) Insert(c model.Country) error {
 }
 
 func (p *postgresCountryRepository) Update(c model.Country) error {
-	c, err := p.GetById(c.ID)
-
-	fmt.Println(c.Name)
+	_, err := p.GetById(c.ID)
 
 	if err != nil {
 		return err
 	}
 
 	query := `
-	UPDATE country set id = $1, external_id = $2, name = $3, continent = $4, iso = $5, updated_at = S6)
-	VALUES ($1, $2, $3, $4, $5, $6)`
+	UPDATE country set id = $1, external_id = $2, name = $3, continent = $4, iso = $5, updated_at = $6`
 
 	_, err = p.Connection.Exec(
 		query,
