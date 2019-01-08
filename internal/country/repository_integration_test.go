@@ -9,6 +9,7 @@ import (
 	"github.com/satori/go.uuid"
 	"time"
 	_ "github.com/lib/pq"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestInsert(t *testing.T) {
@@ -87,9 +88,7 @@ func TestUpdate(t *testing.T) {
 		got := r.Name
 		want := s
 
-		if got != want {
-			t.Fatalf("got %s, want %s", got, want)
-		}
+		assert.Equal(t, got, want)
 	})
 
 	t.Run("returns error if record does not exist", func (t *testing.T) {
@@ -125,12 +124,16 @@ func TestGetById(t *testing.T) {
 		r, err := repo.GetById(id)
 
 		if err != nil {
-			t.Errorf("Error when inserting record into the database: %s", err.Error())
+			t.Errorf("Error when retrieving a record from the database: %s", err.Error())
 		}
 
-		if r.Name != c.Name {
-			t.Fatalf("Test failed, expected %s, got %s", c.Name, r.Name)
-		}
+		a := assert.New(t)
+
+		a.Equal("England", r.Name)
+		a.Equal("Europe", r.Continent)
+		a.Equal("ENG", r.ISO)
+		a.Equal("2019-01-08 16:33:20 +0000 UTC", r.CreatedAt.String())
+		a.Equal("2019-01-08 16:33:20 +0000 UTC", r.UpdatedAt.String())
 	})
 
 	t.Run("returns error if country does not exist", func (t *testing.T) {
@@ -163,12 +166,16 @@ func TestGetByExternalId(t *testing.T) {
 		r, err := repo.GetByExternalId(c.ExternalID)
 
 		if err != nil {
-			t.Errorf("Error when inserting record into the database: %s", err.Error())
+			t.Errorf("Error when retrieving a record from the database: %s", err.Error())
 		}
 
-		if r.Name != c.Name {
-			t.Fatalf("Test failed, expected %s, got %s", c.Name, r.Name)
-		}
+		a := assert.New(t)
+
+		a.Equal("England", r.Name)
+		a.Equal("Europe", r.Continent)
+		a.Equal("ENG", r.ISO)
+		a.Equal("2019-01-08 16:33:20 +0000 UTC", r.CreatedAt.String())
+		a.Equal("2019-01-08 16:33:20 +0000 UTC", r.UpdatedAt.String())
 	})
 
 	t.Run("returns error if country does not exist", func (t *testing.T) {
@@ -206,13 +213,13 @@ func getConnection(t *testing.T) (*sql.DB, func()) {
 
 func newCountry(u uuid.UUID) model.Country {
 	c := model.Country{
-		u,
-		1,
-		"England",
-		"Europe",
-		"ENG",
-		time.Now(),
-		time.Now(),
+		ID:         u,
+		ExternalID: 1,
+		Name:       "England",
+		Continent:  "Europe",
+		ISO:        "ENG",
+		CreatedAt:  time.Unix(1546965200, 0),
+		UpdatedAt:  time.Unix(1546965200, 0),
 	}
 
 	return c
