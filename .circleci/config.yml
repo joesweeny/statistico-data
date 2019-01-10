@@ -2,14 +2,14 @@ version: 2
 jobs:
   build:
     working_directory: /go/src/github.com/joesweeny/statshub
-    machine:
-      image: circleci/golang:1.11
+    machine: true
 
     steps:
+      - checkout
+      
       - add_ssh_keys:
           fingerprints:
             - "3f:66:e4:bb:f0:43:80:a8:78:1f:e5:36:7b:41:34:56"
-      - checkout
 
       - run:
           name: Install dependencies
