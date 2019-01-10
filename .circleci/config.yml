@@ -15,9 +15,9 @@ jobs:
       - setup_remote_docker
 
       - run:
-        name: Install dependencies
-        command: |
-          go get -u github.com/golang/dep/cmd/dep
+          name: Install dependencies
+          command: |
+            go get -u github.com/golang/dep/cmd/dep
 
       - run:
           name: Build Release Image
@@ -27,7 +27,7 @@ jobs:
 
       - run:
           name: Test Release Image
-          commands: |
+          command: |
             docker-compose -f docker-compose.yml run test docker/migrate/wait-for-it.sh postgres:5432 -t 90
             docker-compose -f docker-compose.yml run test go test -v ./...
 
