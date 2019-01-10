@@ -1,8 +1,10 @@
 version: 2
 jobs:
   build:
-    working_directory: ~/go/src/github.com/joesweeny/statshub
+    working_directory: ./go/src/github.com/joesweeny/statshub
     machine: true
+    environment:
+      GOPATH: /go
 
     steps:
       - checkout
