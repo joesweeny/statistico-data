@@ -29,7 +29,7 @@ jobs:
           name: Test Release Image
           command: |
             dep ensure
-            docker-compose -f docker-compose.yml run test go test -v ./...
+            docker-compose -f docker-compose.yml run test gotestsum -f short-verbose
 
       - deploy:
           name: Deploy
