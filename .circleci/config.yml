@@ -21,7 +21,7 @@ jobs:
       - run:
           name: Build Release Image
           command: |
-            dep ensure
+            /home/circleci/go/bin/dep ensure
             docker-compose -f docker-compose.yml up -d --build
 
       - run:
