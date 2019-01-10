@@ -35,9 +35,7 @@ func TestInsert(t *testing.T) {
 				t.Errorf("Error when scanning rows returned by the database: %s", err.Error())
 			}
 
-			if i != count {
-				t.Fatalf("Expected %d, got %d", i, count)
-			}
+			assert.Equal(t, i, count)
 		}
 	})
 
