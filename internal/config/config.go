@@ -3,27 +3,29 @@ package config
 import "os"
 
 type Config struct {
-	Services Services
+	DB Database
 }
 
 func GetConfig() (*Config) {
-	sm := SportMonks{
-		os.Getenv("SPORT_MONKS_URI"),
-		os.Getenv("SPORT_MONKS_API_KEY"),
+	config := Config{}
+
+	config.DB = Database{
+		os.Getenv("DB_DRIVER"),
+		os.Getenv("DB_HOST"),
+		os.Getenv("DB_PORT"),
+		os.Getenv("DB_USER"),
+		os.Getenv("DB_PASSWORD"),
+		os.Getenv("DB_NAME"),
 	}
-
-	services := Services{sm}
-
-	config := Config{services}
 
 	return &config
 }
 
-type Services struct {
-	SportMonks SportMonks
-}
-
-type SportMonks struct {
-	BaseUri string
-	ApiKey string
+type Database struct {
+	Driver    string
+	Host      string
+	Port      string
+	User      string
+	Password  string
+	Name      string
 }
