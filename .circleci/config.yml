@@ -28,6 +28,7 @@ jobs:
       - run:
           name: Test Release Image
           command: |
+            dep ensure
             docker-compose -f docker-compose.yml run test go test -v ./...
 
       - deploy:
