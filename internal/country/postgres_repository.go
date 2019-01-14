@@ -52,7 +52,7 @@ func (p *postgresCountryRepository) Update(c model.Country) error {
 		c.Name,
 		c.Continent,
 		c.ISO,
-		time.Now().Unix(),
+		c.UpdatedAt.Unix(),
 	)
 
 	return err

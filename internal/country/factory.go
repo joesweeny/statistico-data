@@ -34,6 +34,5 @@ func (f Factory) update(s sportmonks.Country, m model.Country) model.Country {
 }
 
 func generateId() uuid.UUID {
-	id := uuid.Must(uuid.NewV4(), nil)
-	return id
+	return uuid.Must(uuid.NewV4(), nil)
 }
