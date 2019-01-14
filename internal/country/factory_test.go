@@ -19,13 +19,15 @@ func TestFactoryCreate(t *testing.T) {
 
 		newCountry := f.create(newClientCountry())
 
-		assert.IsType(t, uuid.UUID{}, newCountry.ID)
-		assert.Equal(t, 180, newCountry.ExternalID)
-		assert.Equal(t, "England", newCountry.Name)
-		assert.Equal(t, "Europe", newCountry.Continent)
-		assert.Equal(t, "ENG", newCountry.ISO)
-		assert.Equal(t, "2019-01-14 11:25:00 +0000 UTC", newCountry.CreatedAt.String())
-		assert.Equal(t, "2019-01-14 11:25:00 +0000 UTC", newCountry.UpdatedAt.String())
+		a := assert.New(t)
+
+		a.IsType(uuid.UUID{}, newCountry.ID)
+		a.Equal(180, newCountry.ExternalID)
+		a.Equal("England", newCountry.Name)
+		a.Equal("Europe", newCountry.Continent)
+		a.Equal("ENG", newCountry.ISO)
+		a.Equal("2019-01-14 11:25:00 +0000 UTC", newCountry.CreatedAt.String())
+		a.Equal("2019-01-14 11:25:00 +0000 UTC", newCountry.UpdatedAt.String())
 	})
 }
 
@@ -43,12 +45,14 @@ func TestFactoryUpdate(t *testing.T) {
 
 		updated := f.update(clientCountry, newCountry)
 
-		assert.Equal(t, 180, updated.ExternalID)
-		assert.Equal(t, "United Kingdom", updated.Name)
-		assert.Equal(t, "Europe", updated.Continent)
-		assert.Equal(t, "ENG", updated.ISO)
-		assert.Equal(t, "2019-01-14 11:25:00 +0000 UTC", updated.CreatedAt.String())
-		assert.Equal(t, "2019-01-14 11:35:00 +0000 UTC", updated.UpdatedAt.String())
+		a := assert.New(t)
+
+		a.Equal(180, updated.ExternalID)
+		a.Equal("United Kingdom", updated.Name)
+		a.Equal("Europe", updated.Continent)
+		a.Equal("ENG", updated.ISO)
+		a.Equal("2019-01-14 11:25:00 +0000 UTC", updated.CreatedAt.String())
+		a.Equal("2019-01-14 11:35:00 +0000 UTC", updated.UpdatedAt.String())
 	})
 }
 
