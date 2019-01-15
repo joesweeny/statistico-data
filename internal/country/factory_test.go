@@ -17,11 +17,11 @@ func TestFactoryCreate(t *testing.T) {
 	t.Run("a new domain country struct is hydrated", func (t *testing.T) {
 		t.Helper()
 
-		newCountry := f.create(newClientCountry())
+		newCountry := f.create(newClientCountry(), uuid.FromStringOrNil("794f464a-a2e3-4d31-ac90-b7e255a28030"))
 
 		a := assert.New(t)
 
-		a.IsType(uuid.UUID{}, newCountry.ID)
+		a.Equal("794f464a-a2e3-4d31-ac90-b7e255a28030", newCountry.ID.String())
 		a.Equal(180, newCountry.ExternalID)
 		a.Equal("England", newCountry.Name)
 		a.Equal("Europe", newCountry.Continent)
@@ -37,7 +37,7 @@ func TestFactoryUpdate(t *testing.T) {
 
 		clientCountry := newClientCountry()
 
-		newCountry := f.create(clientCountry)
+		newCountry := f.create(clientCountry, uuid.FromStringOrNil("794f464a-a2e3-4d31-ac90-b7e255a28030"))
 
 		clock.Advance(10 * time.Minute)
 

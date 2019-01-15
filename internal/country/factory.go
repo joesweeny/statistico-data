@@ -11,9 +11,9 @@ type Factory struct {
 	clock clockwork.Clock
 }
 
-func (f Factory) create(s sportmonks.Country) model.Country {
+func (f Factory) create(s sportmonks.Country, id uuid.UUID) model.Country {
 	return model.Country{
-		ID: 		generateId(),
+		ID: 		id,
 		ExternalID: s.ID,
 		Name: 		s.Name,
 		Continent: 	s.Extra.Continent,
@@ -31,8 +31,4 @@ func (f Factory) update(s sportmonks.Country, m model.Country) model.Country {
 	m.UpdatedAt = f.clock.Now()
 
 	return m
-}
-
-func generateId() uuid.UUID {
-	return uuid.Must(uuid.NewV4(), nil)
 }

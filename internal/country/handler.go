@@ -3,6 +3,7 @@ package country
 import (
 	"github.com/joesweeny/sportmonks-go-client"
 	"github.com/joesweeny/statshub/internal/model"
+	"github.com/satori/go.uuid"
 )
 
 type Handler struct {
@@ -14,7 +15,7 @@ func (h Handler) Handle(s sportmonks.Country) error {
 	c, err := h.repository.GetByExternalId(s.ID)
 
 	if err != nil && (model.Country{}) == c {
-		country := h.factory.create(s)
+		country := h.factory.create(s, uuid.Must(uuid.NewV4(), nil))
 
 		if err := h.repository.Insert(country); err != nil {
 			return err
