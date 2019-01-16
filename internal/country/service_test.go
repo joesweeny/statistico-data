@@ -37,7 +37,7 @@ func TestProcess(t *testing.T) {
 
 	service := Service{
 		repository: repo,
-		factory:    factory{clockwork.NewFakeClockAt(date)},
+		factory:    factory{clockwork.NewFakeClock()},
 		client:     client,
 		logger:     log.New(ioutil.Discard, "", 0),
 	}
@@ -133,6 +133,3 @@ func clientCountry() sportmonks.Country {
 		},
 	}
 }
-
-var date = time.Date(2019, 01, 14, 11, 25, 00, 00, time.UTC)
-
