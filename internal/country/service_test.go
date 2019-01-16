@@ -21,7 +21,6 @@ func TestProcess(t *testing.T) {
 	repo := new(mockRepository)
 
 	server := newTestClient(func(req *http.Request) *http.Response {
-		// Test request parameters
 		assert.Equal(t, req.URL.String(), "http://example.com/api/v2.0/countries?api_token=my-key&page=1")
 		b, _ := json.Marshal(countryResponse())
 		return &http.Response{
@@ -52,13 +51,10 @@ func TestProcess(t *testing.T) {
 
 	t.Run("updates existing country", func (t *testing.T) {
 		id := uuid.FromStringOrNil("644e6546-63ae-47f8-be9d-06936e6fad35")
-
 		repo.On("getByExternalId", 1).Return(newCountry(id), nil)
-
 		repo.On("update", model.Country{}).Return(nil)
 		repo.MethodCalled("update", model.Country{})
 		repo.AssertNotCalled(t, "insert", mock.Anything)
-
 		service.Process()
 	})
 }
