@@ -7,11 +7,11 @@ import (
 	"github.com/joesweeny/statshub/internal/model"
 )
 
-type Factory struct {
+type factory struct {
 	clock clockwork.Clock
 }
 
-func (f Factory) create(s sportmonks.Country, id uuid.UUID) model.Country {
+func (f factory) createCountry(s sportmonks.Country, id uuid.UUID) model.Country {
 	return model.Country{
 		ID: 		id,
 		ExternalID: s.ID,
@@ -23,7 +23,7 @@ func (f Factory) create(s sportmonks.Country, id uuid.UUID) model.Country {
 	}
 }
 
-func (f Factory) update(s sportmonks.Country, m model.Country) model.Country {
+func (f factory) updateCountry(s sportmonks.Country, m model.Country) model.Country {
 	m.ExternalID = s.ID
 	m.Name = s.Name
 	m.Continent = s.Extra.Continent

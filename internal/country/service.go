@@ -3,15 +3,18 @@ package country
 import (
 	"github.com/joesweeny/sportmonks-go-client"
 	"log"
+	"github.com/joesweeny/statshub/internal/model"
+	"github.com/satori/go.uuid"
 )
 
 type Service struct {
+	repository
+	factory
 	client     sportmonks.Client
-	handler	   Handler
-	logger     log.Logger
+	logger     *log.Logger
 }
 
-func (s Service) HandleCountries() error {
+func (s Service) Process() error {
 	res, err := s.client.Countries(1, []string{})
 
 	if err != nil {
@@ -26,9 +29,8 @@ func (s Service) HandleCountries() error {
 		}
 
 		for _, country := range res.Data {
-			// Handle error, leaving blank for now - push method into a Go routine
-			// Log error out
-			s.handler.Handle(country)
+			// Push method into a Go routine
+			s.persistCountry(country)
 		}
 
 		i++
@@ -36,3 +38,27 @@ func (s Service) HandleCountries() error {
 
 	return nil
 }
+
+func (s Service) persistCountry(c sportmonks.Country) {
+	country, err := s.getByExternalId(c.ID)
+
+	if err != nil && (model.Country{}) == country {
+		created := s.createCountry(c, uuid.Must(uuid.NewV4(), nil))
+
+		if err := s.insert(created); err != nil {
+			log.Printf("Error occurred when creating struct %+v", created)
+		}
+
+		return
+	}
+
+	updated := s.updateCountry(c, country)
+
+	if err := s.update(updated); err != nil {
+		log.Printf("Error occurred when updating struct %+v", updated)
+	}
+
+	return
+}
+
+

@@ -11,13 +11,13 @@ import (
 
 var t = time.Date(2019, 01, 14, 11, 25, 00, 00, time.UTC)
 var clock = clockwork.NewFakeClockAt(t)
-var f = Factory{clock}
+var f = factory{clock}
 
 func TestFactoryCreate(t *testing.T) {
 	t.Run("a new domain country struct is hydrated", func (t *testing.T) {
 		t.Helper()
 
-		newCountry := f.create(newClientCountry(), uuid.FromStringOrNil("794f464a-a2e3-4d31-ac90-b7e255a28030"))
+		newCountry := f.createCountry(newClientCountry(), uuid.FromStringOrNil("794f464a-a2e3-4d31-ac90-b7e255a28030"))
 
 		a := assert.New(t)
 
@@ -37,13 +37,13 @@ func TestFactoryUpdate(t *testing.T) {
 
 		clientCountry := newClientCountry()
 
-		newCountry := f.create(clientCountry, uuid.FromStringOrNil("794f464a-a2e3-4d31-ac90-b7e255a28030"))
+		newCountry := f.createCountry(clientCountry, uuid.FromStringOrNil("794f464a-a2e3-4d31-ac90-b7e255a28030"))
 
 		clock.Advance(10 * time.Minute)
 
 		clientCountry.Name = "United Kingdom"
 
-		updated := f.update(clientCountry, newCountry)
+		updated := f.updateCountry(clientCountry, newCountry)
 
 		a := assert.New(t)
 

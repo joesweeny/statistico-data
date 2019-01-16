@@ -12,11 +12,11 @@ type postgresCountryRepository struct {
 	Connection *sql.DB
 }
 
-func NewPostgresCountryRepository(db *sql.DB) Repository {
+func newPostgresCountryRepository(db *sql.DB) repository {
 	return &postgresCountryRepository{db}
 }
 
-func (p *postgresCountryRepository) Insert(c model.Country) error {
+func (p *postgresCountryRepository) insert(c model.Country) error {
 	query := `
 	INSERT INTO country (id, external_id, name, continent, iso, created_at, updated_at)
 	VALUES ($1, $2, $3, $4, $5, $6, $7)`
@@ -35,8 +35,8 @@ func (p *postgresCountryRepository) Insert(c model.Country) error {
 	return err
 }
 
-func (p *postgresCountryRepository) Update(c model.Country) error {
-	_, err := p.GetById(c.ID)
+func (p *postgresCountryRepository) update(c model.Country) error {
+	_, err := p.getById(c.ID)
 
 	if err != nil {
 		return err
@@ -58,14 +58,14 @@ func (p *postgresCountryRepository) Update(c model.Country) error {
 	return err
 }
 
-func (p *postgresCountryRepository) GetById(u uuid.UUID) (model.Country, error) {
+func (p *postgresCountryRepository) getById(u uuid.UUID) (model.Country, error) {
 	query := `SELECT * from country where id = $1`
 	row := p.Connection.QueryRow(query, u.String())
 
 	return rowToCountry(row)
 }
 
-func (p *postgresCountryRepository) GetByExternalId(id int) (model.Country, error) {
+func (p *postgresCountryRepository) getByExternalId(id int) (model.Country, error) {
 	query := `SELECT * from country where external_id = $1`
 	row := p.Connection.QueryRow(query, id)
 

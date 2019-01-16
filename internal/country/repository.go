@@ -5,9 +5,9 @@ import (
 	"github.com/satori/go.uuid"
 )
 
-type Repository interface {
-	Insert(c model.Country) error
-	Update(c model.Country) error
-	GetById(u uuid.UUID) (model.Country, error)
-	GetByExternalId(id int) (model.Country, error)
+type repository interface {
+	insert(c model.Country) error
+	update(c model.Country) error
+	getById(u uuid.UUID) (model.Country, error)
+	getByExternalId(id int) (model.Country, error)
 }
