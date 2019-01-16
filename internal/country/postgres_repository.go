@@ -12,10 +12,6 @@ type postgresCountryRepository struct {
 	Connection *sql.DB
 }
 
-func newPostgresCountryRepository(db *sql.DB) repository {
-	return &postgresCountryRepository{db}
-}
-
 func (p *postgresCountryRepository) insert(c model.Country) error {
 	query := `
 	INSERT INTO country (id, external_id, name, continent, iso, created_at, updated_at)

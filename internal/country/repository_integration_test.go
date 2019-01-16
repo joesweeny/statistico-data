@@ -14,7 +14,7 @@ import (
 
 func TestInsert(t *testing.T) {
 	conn, cleanUp := getConnection(t)
-	repo := newPostgresCountryRepository(conn)
+	repo := postgresCountryRepository{conn}
 
 	t.Run("increases table count", func(t *testing.T) {
 		t.Helper()
@@ -58,7 +58,7 @@ func TestInsert(t *testing.T) {
 
 func TestUpdate(t *testing.T) {
 	conn, cleanUp := getConnection(t)
-	repo := newPostgresCountryRepository(conn)
+	repo := postgresCountryRepository{conn}
 
 	t.Run("modifies existing record", func(t *testing.T) {
 		t.Helper()
@@ -106,7 +106,7 @@ func TestUpdate(t *testing.T) {
 
 func TestGetById(t *testing.T) {
 	conn, cleanUp := getConnection(t)
-	repo := newPostgresCountryRepository(conn)
+	repo := postgresCountryRepository{conn}
 
 	t.Run("country can be retrieved by ID", func (t *testing.T) {
 		t.Helper()
@@ -148,7 +148,7 @@ func TestGetById(t *testing.T) {
 
 func TestGetByExternalId(t *testing.T) {
 	conn, cleanUp := getConnection(t)
-	repo := newPostgresCountryRepository(conn)
+	repo := postgresCountryRepository{conn}
 
 	t.Run("country can be retrieved by External ID", func (t *testing.T) {
 		t.Helper()
