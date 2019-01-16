@@ -14,7 +14,7 @@ import (
 
 func TestInsert(t *testing.T) {
 	conn, cleanUp := getConnection(t)
-	repo := NewPostgresCountryRepository(conn)
+	repo := postgresCountryRepository{conn}
 
 	t.Run("increases table count", func(t *testing.T) {
 		t.Helper()
@@ -23,7 +23,7 @@ func TestInsert(t *testing.T) {
 			var id = uuid.Must(uuid.NewV4(), nil)
 			c := newCountry(id)
 
-			if err := repo.Insert(c); err != nil {
+			if err := repo.insert(c); err != nil {
 				t.Errorf("Error when inserting record into the database: %s", err.Error())
 			}
 
@@ -44,11 +44,11 @@ func TestInsert(t *testing.T) {
 		defer cleanUp()
 		c := newCountry(uuid.UUID{})
 
-		if err := repo.Insert(c); err != nil {
+		if err := repo.insert(c); err != nil {
 			t.Errorf("Test failed, expected nil, got %s", err)
 		}
 
-		if e := repo.Insert(c); e == nil {
+		if e := repo.insert(c); e == nil {
 			t.Fatalf("Test failed, expected %s, got nil", e)
 		}
 	})
@@ -58,7 +58,7 @@ func TestInsert(t *testing.T) {
 
 func TestUpdate(t *testing.T) {
 	conn, cleanUp := getConnection(t)
-	repo := NewPostgresCountryRepository(conn)
+	repo := postgresCountryRepository{conn}
 
 	t.Run("modifies existing record", func(t *testing.T) {
 		t.Helper()
@@ -66,18 +66,18 @@ func TestUpdate(t *testing.T) {
 		var id = uuid.Must(uuid.NewV4(), nil)
 		c := newCountry(id)
 
-		if err := repo.Insert(c); err != nil {
+		if err := repo.insert(c); err != nil {
 			t.Errorf("Error when inserting record into the database: %s", err.Error())
 		}
 
 		s := "Scotland"
 		c.Name = s
 
-		if err := repo.Update(c); err != nil {
+		if err := repo.update(c); err != nil {
 			t.Errorf("Error when updating a record in the database: %s", err.Error())
 		}
 
-		r, err := repo.GetById(c.ID)
+		r, err := repo.getById(c.ID)
 
 		if err != nil {
 			t.Errorf("Error when updating a record in the database: %s", err.Error())
@@ -94,7 +94,7 @@ func TestUpdate(t *testing.T) {
 		defer cleanUp()
 		c := newCountry(uuid.NewV4())
 
-		err := repo.Update(c)
+		err := repo.update(c)
 
 		if err == nil {
 			t.Fatalf("Test failed, expected nil, got %v", err)
@@ -106,7 +106,7 @@ func TestUpdate(t *testing.T) {
 
 func TestGetById(t *testing.T) {
 	conn, cleanUp := getConnection(t)
-	repo := NewPostgresCountryRepository(conn)
+	repo := postgresCountryRepository{conn}
 
 	t.Run("country can be retrieved by ID", func (t *testing.T) {
 		t.Helper()
@@ -115,11 +115,11 @@ func TestGetById(t *testing.T) {
 		var id = uuid.Must(uuid.NewV4(), nil)
 		c := newCountry(id)
 
-		if err := repo.Insert(c); err != nil {
+		if err := repo.insert(c); err != nil {
 			t.Errorf("Error when inserting record into the database: %s", err.Error())
 		}
 
-		r, err := repo.GetById(id)
+		r, err := repo.getById(id)
 
 		if err != nil {
 			t.Errorf("Error when retrieving a record from the database: %s", err.Error())
@@ -138,7 +138,7 @@ func TestGetById(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
 
-		if _, err := repo.GetById(uuid.UUID{}); err == nil {
+		if _, err := repo.getById(uuid.UUID{}); err == nil {
 			t.Fatalf("Test failed, expected %v, got nil", err)
 		}
 	})
@@ -148,7 +148,7 @@ func TestGetById(t *testing.T) {
 
 func TestGetByExternalId(t *testing.T) {
 	conn, cleanUp := getConnection(t)
-	repo := NewPostgresCountryRepository(conn)
+	repo := postgresCountryRepository{conn}
 
 	t.Run("country can be retrieved by External ID", func (t *testing.T) {
 		t.Helper()
@@ -157,11 +157,11 @@ func TestGetByExternalId(t *testing.T) {
 		var id = uuid.Must(uuid.NewV4(), nil)
 		c := newCountry(id)
 
-		if err := repo.Insert(c); err != nil {
+		if err := repo.insert(c); err != nil {
 			t.Errorf("Error when inserting record into the database: %s", err.Error())
 		}
 
-		r, err := repo.GetByExternalId(c.ExternalID)
+		r, err := repo.getByExternalId(c.ExternalID)
 
 		if err != nil {
 			t.Errorf("Error when retrieving a record from the database: %s", err.Error())
@@ -180,7 +180,7 @@ func TestGetByExternalId(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
 
-		if _, err := repo.GetByExternalId(999); err == nil {
+		if _, err := repo.getByExternalId(999); err == nil {
 			t.Fatalf("Test failed, expected %v, got nil", err)
 		}
 	})
@@ -188,7 +188,7 @@ func TestGetByExternalId(t *testing.T) {
 	conn.Close()
 }
 
-var db = config.GetConfig().DB
+var db = config.GetConfig().Database
 
 func getConnection(t *testing.T) (*sql.DB, func()) {
 	psqlInfo := fmt.Sprintf("host=%s port=%s user=%s "+
