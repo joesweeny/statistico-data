@@ -188,7 +188,7 @@ func TestGetByExternalId(t *testing.T) {
 	conn.Close()
 }
 
-var db = config.GetConfig().DB
+var db = config.GetConfig().Database
 
 func getConnection(t *testing.T) (*sql.DB, func()) {
 	psqlInfo := fmt.Sprintf("host=%s port=%s user=%s "+

@@ -3,13 +3,14 @@ package config
 import "os"
 
 type Config struct {
-	DB Database
+	Database
+	Services
 }
 
 func GetConfig() (*Config) {
 	config := Config{}
 
-	config.DB = Database{
+	config.Database = Database{
 		os.Getenv("DB_DRIVER"),
 		os.Getenv("DB_HOST"),
 		os.Getenv("DB_PORT"),
@@ -18,14 +19,10 @@ func GetConfig() (*Config) {
 		os.Getenv("DB_NAME"),
 	}
 
-	return &config
-}
+	config.Services.SportsMonks = SportsMonks{
+		baseUri: 	"https://soccer.sportmonks.com",
+		apiKey: 	os.Getenv("SPORTMONKS_API_KEY"),
+	}
 
-type Database struct {
-	Driver    string
-	Host      string
-	Port      string
-	User      string
-	Password  string
-	Name      string
+	return &config
 }

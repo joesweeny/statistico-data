@@ -31,7 +31,6 @@ services:
       DB_PASSWORD: password
       DB_USER: dev
       DB_PORT: 5432
-      SPORT_MONKS_URI: "https://soccer.sportmonks.com/api/v2.0"
     tty: true
     links:
       - postgres

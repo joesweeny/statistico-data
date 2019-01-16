@@ -14,7 +14,6 @@ import (
 	"encoding/json"
 	"errors"
 	"bytes"
-	"time"
 )
 
 func TestProcess(t *testing.T) {
