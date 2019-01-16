@@ -129,7 +129,7 @@ func TestGetById(t *testing.T) {
 
 		a.Equal("England", r.Name)
 		a.Equal("Europe", r.Continent)
-		a.Equal("ENG", r.ISO)
+		a.Equal("ENGLAND", r.ISO)
 		a.Equal("2019-01-08 16:33:20 +0000 UTC", r.CreatedAt.String())
 		a.Equal("2019-01-08 16:33:20 +0000 UTC", r.UpdatedAt.String())
 	})
