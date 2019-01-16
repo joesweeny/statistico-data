@@ -8,21 +8,21 @@ import (
 )
 
 type Service struct {
-	repository
-	factory
-	client     sportmonks.Client
-	logger     *log.Logger
+	Repository
+	Factory
+	Client     *sportmonks.Client
+	Logger     *log.Logger
 }
 
 func (s Service) Process() error {
-	res, err := s.client.Countries(1, []string{})
+	res, err := s.Client.Countries(1, []string{})
 
 	if err != nil {
 		return err
 	}
 
 	for i := res.Meta.Pagination.CurrentPage; i <= res.Meta.Pagination.TotalPages; i++ {
-		res, err := s.client.Countries(i, []string{})
+		res, err := s.Client.Countries(i, []string{})
 
 		if err != nil {
 			return err
@@ -40,12 +40,12 @@ func (s Service) Process() error {
 }
 
 func (s Service) persistCountry(c sportmonks.Country) {
-	country, err := s.getByExternalId(c.ID)
+	country, err := s.GetByExternalId(c.ID)
 
 	if err != nil && (model.Country{}) == country {
 		created := s.createCountry(c, uuid.Must(uuid.NewV4(), nil))
 
-		if err := s.insert(created); err != nil {
+		if err := s.Insert(created); err != nil {
 			log.Printf("Error occurred when creating struct %+v", created)
 		}
 
@@ -54,7 +54,7 @@ func (s Service) persistCountry(c sportmonks.Country) {
 
 	updated := s.updateCountry(c, country)
 
-	if err := s.update(updated); err != nil {
+	if err := s.Update(updated); err != nil {
 		log.Printf("Error occurred when updating struct %+v", updated)
 	}
 

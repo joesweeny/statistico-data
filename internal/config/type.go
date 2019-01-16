@@ -14,6 +14,6 @@ type Services struct {
 }
 
 type SportsMonks struct {
-	baseUri string
-	apiKey	string
+	BaseUri string
+	ApiKey	string
 }
