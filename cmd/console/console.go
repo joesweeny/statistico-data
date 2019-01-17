@@ -10,10 +10,10 @@ import (
 
 const country = "country"
 
+var option = flag.String("option", "", "Provide the model name to process")
+
 func main() {
 	app := bootstrap.Bootstrap{Config: config.GetConfig()}
-
-	option := flag.String("option", "", "Provide the model name to process")
 
 	flag.Parse()
 
