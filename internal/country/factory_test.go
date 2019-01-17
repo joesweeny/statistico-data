@@ -11,7 +11,7 @@ import (
 
 var t = time.Date(2019, 01, 14, 11, 25, 00, 00, time.UTC)
 var clock = clockwork.NewFakeClockAt(t)
-var f = factory{clock}
+var f = Factory{clock}
 
 func TestFactoryCreate(t *testing.T) {
 	t.Run("a new domain country struct is hydrated", func (t *testing.T) {
