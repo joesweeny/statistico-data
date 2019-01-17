@@ -17,7 +17,7 @@ services:
       DB_PASSWORD: $DB_PASSWORD
       DB_PORT: $DB_PORT
       DB_USER: $DB_USER
-      SPORT_MONKS_API_KEY: $SPORT_MONKS_API_KEY
+      SPORTMONKS_API_KEY: $SPORTMONKS_API_KEY
     tty: true
 
   migrate:
