@@ -22,13 +22,13 @@ jobs:
           name: Build Release Image
           command: |
             $GOPATH/bin/dep ensure
-            docker-compose -f docker-compose.yml up -d --build
+            docker-compose -f docker-compose.dev.yml up -d --build
 
       - run:
           name: Test Release Image
           command: |
             $GOPATH/bin/dep ensure
-            docker-compose -f docker-compose.yml run test gotestsum -f short-verbose
+            docker-compose -f docker-compose.dev.yml run test gotestsum -f short-verbose
 
       - deploy:
           name: Deploy
