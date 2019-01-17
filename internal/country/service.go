@@ -55,7 +55,7 @@ func (s Service) persistCountry(c sportmonks.Country) {
 	updated := s.updateCountry(c, country)
 
 	if err := s.Update(updated); err != nil {
-		log.Printf("Error occurred when updating struct %+v", updated)
+		log.Printf("Error occurred when updating struct: %+v, error %+v", updated, err)
 	}
 
 	return

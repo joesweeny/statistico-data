@@ -39,7 +39,7 @@ func (p *PostgresCountryRepository) Update(c model.Country) error {
 	}
 
 	query := `
-	UPDATE country set id = $1, external_id = $2, name = $3, continent = $4, iso = $5, updated_at = $6`
+	UPDATE country set external_id = $2, name = $3, continent = $4, iso = $5, updated_at = $6 where id = $1`
 
 	_, err = p.Connection.Exec(
 		query,
