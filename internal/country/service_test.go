@@ -35,25 +35,25 @@ func TestProcess(t *testing.T) {
 	}
 
 	service := Service{
-		repository: repo,
-		factory:    factory{clockwork.NewFakeClock()},
-		client:     client,
-		logger:     log.New(ioutil.Discard, "", 0),
+		Repository: repo,
+		Factory:    Factory{clockwork.NewFakeClock()},
+		Client:     &client,
+		Logger:     log.New(ioutil.Discard, "", 0),
 	}
 
 	t.Run("inserts new country", func (t *testing.T) {
-		repo.On("getByExternalId", 1).Return(model.Country{}, errors.New("not Found"))
-		repo.On("insert", mock.Anything).Return(nil)
-		repo.AssertNotCalled(t, "update", mock.Anything)
+		repo.On("GetByExternalId", 1).Return(model.Country{}, errors.New("not Found"))
+		repo.On("Insert", mock.Anything).Return(nil)
+		repo.AssertNotCalled(t, "Update", mock.Anything)
 		service.Process()
 	})
 
 	t.Run("updates existing country", func (t *testing.T) {
 		id := uuid.FromStringOrNil("644e6546-63ae-47f8-be9d-06936e6fad35")
-		repo.On("getByExternalId", 1).Return(newCountry(id), nil)
-		repo.On("update", model.Country{}).Return(nil)
-		repo.MethodCalled("update", model.Country{})
-		repo.AssertNotCalled(t, "insert", mock.Anything)
+		repo.On("GetByExternalId", 1).Return(newCountry(id), nil)
+		repo.On("Update", model.Country{}).Return(nil)
+		repo.MethodCalled("Update", model.Country{})
+		repo.AssertNotCalled(t, "Insert", mock.Anything)
 		service.Process()
 	})
 }
@@ -62,22 +62,22 @@ type mockRepository struct {
 	mock.Mock
 }
 
-func (m mockRepository) insert(c model.Country) error {
+func (m mockRepository) Insert(c model.Country) error {
 	args := m.Called(c)
 	return args.Error(0)
 }
 
-func (m mockRepository) update(c model.Country) error {
+func (m mockRepository) Update(c model.Country) error {
 	args := m.Called(c)
 	return args.Error(0)
 }
 
-func (m mockRepository) getById(u uuid.UUID) (model.Country, error) {
+func (m mockRepository) GetById(u uuid.UUID) (model.Country, error) {
 	args := m.Called(u)
 	return args.Get(0).(model.Country), args.Error(1)
 }
 
-func (m mockRepository) getByExternalId(id int) (model.Country, error) {
+func (m mockRepository) GetByExternalId(id int) (model.Country, error) {
 	args := m.Called(id)
 	return args.Get(0).(model.Country), args.Error(1)
 }
