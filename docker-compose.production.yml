@@ -1,13 +1,5 @@
 version: "3.5"
 services:
-  postgres:
-    image: postgres
-    environment:
-      POSTGRES_USER: dev
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: statshub
-    ports:
-      - 5432:5432
 
   api:
     image: joesweeny/statshub_api:$RELEASE
@@ -19,17 +11,22 @@ services:
   console:
     image: joesweeny/statshub_console:$RELEASE
     environment:
-      SPORT_MONKS_URI: "https://soccer.sportmonks.com/api/v2.0"
+      DB_DRIVER: $DB_DRIVER
+      DB_HOST: $DB_HOST
+      DB_NAME: $DB_NAME
+      DB_PASSWORD: $DB_PASSWORD
+      DB_PORT: $DB_PORT
+      DB_USER: $DB_USER
       SPORT_MONKS_API_KEY: $SPORT_MONKS_API_KEY
     tty: true
 
   migrate:
     image: joesweeny/statshub_migrate:$RELEASE
     environment:
-      DB_HOST: postgres
-      DB_USER: dev
-      DB_PASSWORD: password
-      DB_NAME: statshub
+      DB_HOST: $DB_HOST
+      DB_NAME: $DB_NAME
+      DB_PASSWORD: $DB_PASSWORD
+      DB_USER: $DB_USER
     links:
       - postgres
     depends_on:
