@@ -7,7 +7,7 @@ type Config struct {
 	Services
 }
 
-func GetConfig() (*Config) {
+func GetConfig() *Config {
 	config := Config{}
 
 	config.Database = Database{

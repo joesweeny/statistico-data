@@ -10,15 +10,12 @@ import (
 	"github.com/jonboulle/clockwork"
 )
 
-type Bootstrap struct {}
-
-func getConfig() *config.Config {
-	return config.GetConfig()
+type Bootstrap struct {
+	Config *config.Config
 }
 
-func databaseConnection() *sql.DB {
-	c := getConfig()
-	db := c.Database
+func (b Bootstrap) databaseConnection() *sql.DB {
+	db := b.Config.Database
 
 	psqlInfo := fmt.Sprintf("host=%s port=%s user=%s "+
 		"password=%s dbname=%s sslmode=disable",
@@ -33,9 +30,8 @@ func databaseConnection() *sql.DB {
 	return conn
 }
 
-func sportmonksClient() (*sportmonks.Client, error) {
-	c := getConfig()
-	s := c.Services.SportsMonks
+func (b Bootstrap) sportmonksClient() (*sportmonks.Client, error) {
+	s := b.Config.Services.SportsMonks
 	return sportmonks.NewClient(s.BaseUri, s.ApiKey)
 }
 

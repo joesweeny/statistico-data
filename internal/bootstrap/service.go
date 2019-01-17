@@ -5,8 +5,8 @@ import (
 )
 
 func (b Bootstrap) GetCountryService() (country.Service) {
-	conn := databaseConnection()
-	client, err := sportmonksClient()
+	conn := b.databaseConnection()
+	client, err := b.sportmonksClient()
 
 	if err != nil {
 		panic(err.Error())
