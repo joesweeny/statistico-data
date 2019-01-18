@@ -27,7 +27,7 @@ func TestInsert(t *testing.T) {
 				t.Errorf("Error when inserting record into the database: %s", err.Error())
 			}
 
-			row := conn.QueryRow("select count(*) from country")
+			row := conn.QueryRow("select count(*) from sportmonks_country")
 
 			var count int
 
