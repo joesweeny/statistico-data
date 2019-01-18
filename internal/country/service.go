@@ -32,8 +32,6 @@ func (s Service) Process() error {
 			// Push method into a Go routine
 			s.persistCountry(country)
 		}
-
-		i++
 	}
 
 	return nil
