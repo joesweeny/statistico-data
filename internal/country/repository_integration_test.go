@@ -202,7 +202,7 @@ func getConnection(t *testing.T) (*sql.DB, func()) {
 	}
 
 	return db, func() {
-		_, err := db.Exec("delete from country")
+		_, err := db.Exec("delete from sportmonks_country")
 		if err != nil {
 			t.Fatalf("Failed to clear database. %s", err.Error())
 		}
