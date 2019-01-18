@@ -27,7 +27,7 @@ func TestInsert(t *testing.T) {
 				t.Errorf("Error when inserting record into the database: %s", err.Error())
 			}
 
-			row := conn.QueryRow("select count(*) from country")
+			row := conn.QueryRow("select count(*) from sportmonks_country")
 
 			var count int
 
@@ -202,7 +202,7 @@ func getConnection(t *testing.T) (*sql.DB, func()) {
 	}
 
 	return db, func() {
-		_, err := db.Exec("delete from country")
+		_, err := db.Exec("delete from sportmonks_country")
 		if err != nil {
 			t.Fatalf("Failed to clear database. %s", err.Error())
 		}

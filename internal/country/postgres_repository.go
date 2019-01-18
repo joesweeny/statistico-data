@@ -14,7 +14,7 @@ type PostgresCountryRepository struct {
 
 func (p *PostgresCountryRepository) Insert(c model.Country) error {
 	query := `
-	INSERT INTO country (id, external_id, name, continent, iso, created_at, updated_at)
+	INSERT INTO sportmonks_country (id, external_id, name, continent, iso, created_at, updated_at)
 	VALUES ($1, $2, $3, $4, $5, $6, $7)`
 
 	_, err := p.Connection.Exec(
@@ -39,7 +39,7 @@ func (p *PostgresCountryRepository) Update(c model.Country) error {
 	}
 
 	query := `
-	UPDATE country set external_id = $2, name = $3, continent = $4, iso = $5, updated_at = $6 where id = $1`
+	UPDATE sportmonks_country set external_id = $2, name = $3, continent = $4, iso = $5, updated_at = $6 where id = $1`
 
 	_, err = p.Connection.Exec(
 		query,
@@ -55,14 +55,14 @@ func (p *PostgresCountryRepository) Update(c model.Country) error {
 }
 
 func (p *PostgresCountryRepository) GetById(u uuid.UUID) (model.Country, error) {
-	query := `SELECT * from country where id = $1`
+	query := `SELECT * from sportmonks_country where id = $1`
 	row := p.Connection.QueryRow(query, u.String())
 
 	return rowToCountry(row)
 }
 
 func (p *PostgresCountryRepository) GetByExternalId(id int) (model.Country, error) {
-	query := `SELECT * from country where external_id = $1`
+	query := `SELECT * from sportmonks_country where external_id = $1`
 	row := p.Connection.QueryRow(query, id)
 
 	return rowToCountry(row)
