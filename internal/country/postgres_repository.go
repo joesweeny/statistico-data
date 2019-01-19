@@ -3,7 +3,6 @@ package country
 import (
 	"database/sql"
 	"github.com/joesweeny/statshub/internal/model"
-	"github.com/satori/go.uuid"
 	"time"
 	_ "github.com/lib/pq"
 )
@@ -14,13 +13,12 @@ type PostgresCountryRepository struct {
 
 func (p *PostgresCountryRepository) Insert(c model.Country) error {
 	query := `
-	INSERT INTO sportmonks_country (id, external_id, name, continent, iso, created_at, updated_at)
-	VALUES ($1, $2, $3, $4, $5, $6, $7)`
+	INSERT INTO sportmonks_country (id, name, continent, iso, created_at, updated_at)
+	VALUES ($1, $2, $3, $4, $5, $6)`
 
 	_, err := p.Connection.Exec(
 		query,
-		c.ID.String(),
-		c.ExternalID,
+		c.ID,
 		c.Name,
 		c.Continent,
 		c.ISO,
@@ -39,12 +37,11 @@ func (p *PostgresCountryRepository) Update(c model.Country) error {
 	}
 
 	query := `
-	UPDATE sportmonks_country set external_id = $2, name = $3, continent = $4, iso = $5, updated_at = $6 where id = $1`
+	UPDATE sportmonks_country set name = $2, continent = $3, iso = $4, updated_at = $5 where id = $1`
 
 	_, err = p.Connection.Exec(
 		query,
-		c.ID.String(),
-		c.ExternalID,
+		c.ID,
 		c.Name,
 		c.Continent,
 		c.ISO,
@@ -54,23 +51,15 @@ func (p *PostgresCountryRepository) Update(c model.Country) error {
 	return err
 }
 
-func (p *PostgresCountryRepository) GetById(u uuid.UUID) (model.Country, error) {
+func (p *PostgresCountryRepository) GetById(id int) (model.Country, error) {
 	query := `SELECT * from sportmonks_country where id = $1`
-	row := p.Connection.QueryRow(query, u.String())
-
-	return rowToCountry(row)
-}
-
-func (p *PostgresCountryRepository) GetByExternalId(id int) (model.Country, error) {
-	query := `SELECT * from sportmonks_country where external_id = $1`
 	row := p.Connection.QueryRow(query, id)
 
 	return rowToCountry(row)
 }
 
 func rowToCountry(r *sql.Row) (model.Country, error) {
-	var id string
-	var external int
+	var id int
 	var name string
 	var continent string
 	var iso string
@@ -79,12 +68,11 @@ func rowToCountry(r *sql.Row) (model.Country, error) {
 
 	c := model.Country{}
 
-	if err := r.Scan(&id, &name, &continent, &iso, &created, &updated, &external); err != nil {
+	if err := r.Scan(&id, &name, &continent, &iso, &created, &updated); err != nil {
 		return c, err
 	}
 
-	c.ID = uuid.FromStringOrNil(id)
-	c.ExternalID = external
+	c.ID = id
 	c.Name = name
 	c.Continent = continent
 	c.ISO = iso

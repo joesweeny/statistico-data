@@ -4,7 +4,6 @@ import (
 	"github.com/joesweeny/sportmonks-go-client"
 	"log"
 	"github.com/joesweeny/statshub/internal/model"
-	"github.com/satori/go.uuid"
 )
 
 type Service struct {
@@ -38,10 +37,10 @@ func (s Service) Process() error {
 }
 
 func (s Service) persistCountry(c sportmonks.Country) {
-	country, err := s.GetByExternalId(c.ID)
+	country, err := s.GetById(c.ID)
 
 	if err != nil && (model.Country{}) == country {
-		created := s.createCountry(c, uuid.Must(uuid.NewV4(), nil))
+		created := s.createCountry(c)
 
 		if err := s.Insert(created); err != nil {
 			log.Printf("Error occurred when creating struct %+v", created)
