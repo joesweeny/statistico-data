@@ -13,7 +13,7 @@ import (
 
 func TestInsert(t *testing.T) {
 	conn, cleanUp := getConnection(t)
-	repo := PostgresCountryRepository{conn}
+	repo := PostgresCountryRepository{Connection: conn}
 
 	t.Run("increases table count", func(t *testing.T) {
 		t.Helper()

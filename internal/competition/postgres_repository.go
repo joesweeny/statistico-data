@@ -13,8 +13,8 @@ type PostgresCompetitionRepository struct {
 
 func (p *PostgresCompetitionRepository) Insert(c model.Competition) error {
 	query := `
-	INSERT INTO sportsmonks_competition (id, name, country_id, is_cup, created_at, updated_at)
-	VALUE ($1, $2, $3, $4, $5, $6)`
+	INSERT INTO sportmonks_competition (id, name, country_id, is_cup, created_at, updated_at)
+	VALUES ($1, $2, $3, $4, $5, $6)`
 
 	_, err := p.Connection.Exec(
 		query,
