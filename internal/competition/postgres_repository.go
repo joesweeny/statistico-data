@@ -30,7 +30,7 @@ func (p *PostgresCompetitionRepository) Insert(c model.Competition) error {
 }
 
 func (p *PostgresCompetitionRepository) GetById(id int) (model.Competition, error) {
-	query := `SELECT * FROM sportmonks_country where id = $1`
+	query := `SELECT * FROM sportmonks_competition where id = $1`
 	row := p.Connection.QueryRow(query, id)
 
 	return rowToCompetition(row)

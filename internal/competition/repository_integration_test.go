@@ -54,6 +54,37 @@ func TestInsert(t *testing.T) {
 	conn.Close()
 }
 
+func TestGetById(t *testing.T) {
+	conn, cleanUp := getConnection(t)
+	repo := PostgresCompetitionRepository{Connection: conn}
+
+	t.Run("competition can be retrieved by ID", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+
+		c := newCompetition(45)
+
+		if err := repo.Insert(c); err != nil {
+			t.Errorf("Error when inserting record into the database: %s", err.Error())
+		}
+
+		r, err := repo.GetById(45)
+
+		if err != nil {
+			t.Errorf("Error when retrieving a record from the database: %s", err.Error())
+		}
+
+		a := assert.New(t)
+
+		a.Equal(45, r.ID)
+		a.Equal("Premier League", r.Name)
+		a.Equal(462, r.CountryID)
+		a.Equal(false, r.IsCup)
+		a.Equal("2019-01-08 16:33:20 +0000 UTC", r.CreatedAt.String())
+		a.Equal("2019-01-08 16:33:20 +0000 UTC", r.UpdatedAt.String())
+	})
+}
+
 var db = config.GetConfig().Database
 
 func getConnection(t *testing.T) (*sql.DB, func()) {
