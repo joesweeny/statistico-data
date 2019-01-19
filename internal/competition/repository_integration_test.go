@@ -36,6 +36,22 @@ func TestInsert(t *testing.T) {
 			assert.Equal(t, i, count)
 		}
 	})
+
+	t.Run("returns error when ID primary key violates unique constraint", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+		c := newCompetition(50)
+
+		if err := repo.Insert(c); err != nil {
+			t.Errorf("Test failed, expected nil, got %s", err)
+		}
+
+		if e := repo.Insert(c); e == nil {
+			t.Fatalf("Test failed, expected %s, got nil", e)
+		}
+	})
+
+	conn.Close()
 }
 
 var db = config.GetConfig().Database
