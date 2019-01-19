@@ -5,7 +5,10 @@ import (
 	"github.com/joesweeny/statshub/internal/model"
 	_ "github.com/lib/pq"
 	"time"
+	"errors"
 )
+
+var ErrNotFound = errors.New("not found")
 
 type PostgresCompetitionRepository struct {
 	Connection *sql.DB
@@ -47,7 +50,7 @@ func rowToCompetition(r *sql.Row) (model.Competition, error) {
 	c := model.Competition{}
 
 	if err := r.Scan(&id, &name, &countryId, &isCup, &created, &updated); err != nil {
-		return c, err
+		return c, ErrNotFound
 	}
 
 	c.ID = id

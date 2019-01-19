@@ -83,6 +83,19 @@ func TestGetById(t *testing.T) {
 		a.Equal("2019-01-08 16:33:20 +0000 UTC", r.CreatedAt.String())
 		a.Equal("2019-01-08 16:33:20 +0000 UTC", r.UpdatedAt.String())
 	})
+
+	t.Run("returns an error if country does not exist", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+
+		_, err := repo.GetById(780);
+
+		if err == nil {
+			t.Fatalf("Test failed, expected %v, got nil", err)
+		}
+
+		assert.Equal(t, err, ErrNotFound)
+	})
 }
 
 var db = config.GetConfig().Database
