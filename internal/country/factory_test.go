@@ -6,7 +6,6 @@ import (
 	"time"
 	"github.com/joesweeny/sportmonks-go-client"
 	"github.com/stretchr/testify/assert"
-	"github.com/satori/go.uuid"
 )
 
 var t = time.Date(2019, 01, 14, 11, 25, 00, 00, time.UTC)
@@ -17,12 +16,11 @@ func TestFactoryCreate(t *testing.T) {
 	t.Run("a new domain country struct is hydrated", func (t *testing.T) {
 		t.Helper()
 
-		newCountry := f.createCountry(newClientCountry(), uuid.FromStringOrNil("794f464a-a2e3-4d31-ac90-b7e255a28030"))
+		newCountry := f.createCountry(newClientCountry())
 
 		a := assert.New(t)
 
-		a.Equal("794f464a-a2e3-4d31-ac90-b7e255a28030", newCountry.ID.String())
-		a.Equal(180, newCountry.ExternalID)
+		a.Equal(180, newCountry.ID)
 		a.Equal("England", newCountry.Name)
 		a.Equal("Europe", newCountry.Continent)
 		a.Equal("ENG", newCountry.ISO)
@@ -37,7 +35,7 @@ func TestFactoryUpdate(t *testing.T) {
 
 		clientCountry := newClientCountry()
 
-		newCountry := f.createCountry(clientCountry, uuid.FromStringOrNil("794f464a-a2e3-4d31-ac90-b7e255a28030"))
+		newCountry := f.createCountry(clientCountry)
 
 		clock.Advance(10 * time.Minute)
 
@@ -47,7 +45,7 @@ func TestFactoryUpdate(t *testing.T) {
 
 		a := assert.New(t)
 
-		a.Equal(180, updated.ExternalID)
+		a.Equal(180, updated.ID)
 		a.Equal("United Kingdom", updated.Name)
 		a.Equal("Europe", updated.Continent)
 		a.Equal("ENG", updated.ISO)

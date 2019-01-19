@@ -1,13 +1,11 @@
 package model
 
 import (
-	"github.com/satori/go.uuid"
 	"time"
 )
 
 type Country struct {
-	ID         uuid.UUID `json:"id"`
-	ExternalID int       `json:"external_id"`
+	ID         int		 `json:"id"`
 	Name       string    `json:"name"`
 	Continent  string    `json:"continent"`
 	ISO        string    `json:"iso"`

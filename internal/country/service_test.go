@@ -4,7 +4,6 @@ import (
 	"testing"
 	"github.com/stretchr/testify/mock"
 	"github.com/joesweeny/statshub/internal/model"
-	"github.com/satori/go.uuid"
 	"net/http"
 	"github.com/stretchr/testify/assert"
 	"log"
@@ -42,15 +41,14 @@ func TestProcess(t *testing.T) {
 	}
 
 	t.Run("inserts new country", func (t *testing.T) {
-		repo.On("GetByExternalId", 1).Return(model.Country{}, errors.New("not Found"))
+		repo.On("GetById", 1).Return(model.Country{}, errors.New("not Found"))
 		repo.On("Insert", mock.Anything).Return(nil)
 		repo.AssertNotCalled(t, "Update", mock.Anything)
 		service.Process()
 	})
 
 	t.Run("updates existing country", func (t *testing.T) {
-		id := uuid.FromStringOrNil("644e6546-63ae-47f8-be9d-06936e6fad35")
-		repo.On("GetByExternalId", 1).Return(newCountry(id), nil)
+		repo.On("GetById", 1).Return(newCountry(1), nil)
 		repo.On("Update", model.Country{}).Return(nil)
 		repo.MethodCalled("Update", model.Country{})
 		repo.AssertNotCalled(t, "Insert", mock.Anything)
@@ -72,12 +70,7 @@ func (m mockRepository) Update(c model.Country) error {
 	return args.Error(0)
 }
 
-func (m mockRepository) GetById(u uuid.UUID) (model.Country, error) {
-	args := m.Called(u)
-	return args.Get(0).(model.Country), args.Error(1)
-}
-
-func (m mockRepository) GetByExternalId(id int) (model.Country, error) {
+func (m mockRepository) GetById(id int) (model.Country, error) {
 	args := m.Called(id)
 	return args.Get(0).(model.Country), args.Error(1)
 }

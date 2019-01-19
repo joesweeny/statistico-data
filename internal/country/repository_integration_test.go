@@ -6,7 +6,6 @@ import (
 	"database/sql"
 	"github.com/joesweeny/statshub/internal/model"
 	"github.com/joesweeny/statshub/internal/config"
-	"github.com/satori/go.uuid"
 	"time"
 	_ "github.com/lib/pq"
 	"github.com/stretchr/testify/assert"
@@ -20,8 +19,7 @@ func TestInsert(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
 		for i := 1; i < 4; i++ {
-			var id = uuid.Must(uuid.NewV4(), nil)
-			c := newCountry(id)
+			c := newCountry(i)
 
 			if err := repo.Insert(c); err != nil {
 				t.Errorf("Error when inserting record into the database: %s", err.Error())
@@ -42,7 +40,7 @@ func TestInsert(t *testing.T) {
 	t.Run("returns error when ID primary key violates unique constraint", func(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
-		c := newCountry(uuid.UUID{})
+		c := newCountry(10)
 
 		if err := repo.Insert(c); err != nil {
 			t.Errorf("Test failed, expected nil, got %s", err)
@@ -63,8 +61,7 @@ func TestUpdate(t *testing.T) {
 	t.Run("modifies existing record", func(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
-		var id = uuid.Must(uuid.NewV4(), nil)
-		c := newCountry(id)
+		c := newCountry(100)
 
 		if err := repo.Insert(c); err != nil {
 			t.Errorf("Error when inserting record into the database: %s", err.Error())
@@ -92,7 +89,7 @@ func TestUpdate(t *testing.T) {
 	t.Run("returns error if record does not exist", func (t *testing.T) {
 		t.Helper()
 		defer cleanUp()
-		c := newCountry(uuid.NewV4())
+		c := newCountry(146)
 
 		err := repo.Update(c)
 
@@ -112,14 +109,13 @@ func TestGetById(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
 
-		var id = uuid.Must(uuid.NewV4(), nil)
-		c := newCountry(id)
+		c := newCountry(62)
 
 		if err := repo.Insert(c); err != nil {
 			t.Errorf("Error when inserting record into the database: %s", err.Error())
 		}
 
-		r, err := repo.GetById(id)
+		r, err := repo.GetById(62)
 
 		if err != nil {
 			t.Errorf("Error when retrieving a record from the database: %s", err.Error())
@@ -127,6 +123,7 @@ func TestGetById(t *testing.T) {
 
 		a := assert.New(t)
 
+		a.Equal(62, r.ID)
 		a.Equal("England", r.Name)
 		a.Equal("Europe", r.Continent)
 		a.Equal("ENG", r.ISO)
@@ -138,49 +135,7 @@ func TestGetById(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
 
-		if _, err := repo.GetById(uuid.UUID{}); err == nil {
-			t.Fatalf("Test failed, expected %v, got nil", err)
-		}
-	})
-
-	conn.Close()
-}
-
-func TestGetByExternalId(t *testing.T) {
-	conn, cleanUp := getConnection(t)
-	repo := PostgresCountryRepository{conn}
-
-	t.Run("country can be retrieved by External ID", func (t *testing.T) {
-		t.Helper()
-		defer cleanUp()
-
-		var id = uuid.Must(uuid.NewV4(), nil)
-		c := newCountry(id)
-
-		if err := repo.Insert(c); err != nil {
-			t.Errorf("Error when inserting record into the database: %s", err.Error())
-		}
-
-		r, err := repo.GetByExternalId(c.ExternalID)
-
-		if err != nil {
-			t.Errorf("Error when retrieving a record from the database: %s", err.Error())
-		}
-
-		a := assert.New(t)
-
-		a.Equal("England", r.Name)
-		a.Equal("Europe", r.Continent)
-		a.Equal("ENG", r.ISO)
-		a.Equal("2019-01-08 16:33:20 +0000 UTC", r.CreatedAt.String())
-		a.Equal("2019-01-08 16:33:20 +0000 UTC", r.UpdatedAt.String())
-	})
-
-	t.Run("returns error if country does not exist", func (t *testing.T) {
-		t.Helper()
-		defer cleanUp()
-
-		if _, err := repo.GetByExternalId(999); err == nil {
+		if _, err := repo.GetById(4); err == nil {
 			t.Fatalf("Test failed, expected %v, got nil", err)
 		}
 	})
@@ -209,10 +164,9 @@ func getConnection(t *testing.T) (*sql.DB, func()) {
 	}
 }
 
-func newCountry(u uuid.UUID) model.Country {
+func newCountry(id int) model.Country {
 	c := model.Country{
-		ID:         u,
-		ExternalID: 1,
+		ID:         id,
 		Name:       "England",
 		Continent:  "Europe",
 		ISO:        "ENG",
