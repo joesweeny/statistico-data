@@ -104,6 +104,56 @@ func TestUpdate(t *testing.T) {
 			t.Fatalf("Test failed, expected nil, got %v", err)
 		}
 	})
+
+	conn.Close()
+}
+
+func TestGetById(t *testing.T) {
+	conn, cleanUp := getConnection(t)
+	repo := PostgresSeasonRepository{Connection: conn}
+
+	t.Run("season can be retrieved by ID", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+
+		s := newSeason(146)
+
+		err := repo.Update(s)
+
+		if err == nil {
+			t.Fatalf("Test failed, expected nil, got %v", err)
+		}
+
+		if err := repo.Insert(s); err != nil {
+			t.Errorf("Error when inserting record into the database: %s", err.Error())
+		}
+
+		r, err := repo.GetById(146)
+
+		if err != nil {
+			t.Errorf("Error when retrieving a record from the database: %s", err.Error())
+		}
+
+		a := assert.New(t)
+
+		a.Equal(146, r.ID)
+		a.Equal("2018-2019", r.Name)
+		a.Equal(560, r.LeagueID)
+		a.True(r.IsCurrent)
+		a.Equal("2019-01-08 16:33:20 +0000 UTC", r.CreatedAt.String())
+		a.Equal("2019-01-08 16:33:20 +0000 UTC", r.UpdatedAt.String())
+	})
+
+	t.Run("returns error if season does not exist", func (t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+
+		if _, err := repo.GetById(4); err == nil {
+			t.Fatalf("Test failed, expected %v, got nil", err)
+		}
+	})
+
+	conn.Close()
 }
 
 var db = config.GetConfig().Database
