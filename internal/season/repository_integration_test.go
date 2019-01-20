@@ -148,8 +148,14 @@ func TestGetById(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
 
-		if _, err := repo.GetById(4); err == nil {
-			t.Fatalf("Test failed, expected %v, got nil", err)
+		_, err := repo.GetById(4)
+
+		if err == nil {
+			t.Errorf("Test failed, expected %v, got nil", err)
+		}
+
+		if err != ErrNotFound {
+			t.Fatalf("Test failed, expected %v, got %s", ErrNotFound, err)
 		}
 	})
 
