@@ -8,6 +8,7 @@ import (
 	"github.com/joesweeny/statshub/internal/model"
 	"time"
 	"github.com/stretchr/testify/assert"
+	_ "github.com/lib/pq"
 )
 
 func TestInsert(t *testing.T) {
@@ -64,7 +65,7 @@ func newSeason(id int) model.Season {
 		ID:         id,
 		Name:       "2018-2019",
 		LeagueID:   560,
-		Current:    true,
+		IsCurrent:  true,
 		CreatedAt:  time.Unix(1546965200, 0),
 		UpdatedAt:  time.Unix(1546965200, 0),
 	}

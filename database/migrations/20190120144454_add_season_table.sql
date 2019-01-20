@@ -4,7 +4,7 @@ CREATE TABLE sportmonks_season (
   id INTEGER NOT NULL PRIMARY KEY,
   name VARCHAR NOT NULL,
   league_id INTEGER NOT NULL,
-  current BOOLEAN NOT NULL,
+  is_current BOOLEAN NOT NULL,
   created_at INTEGER NOT NULL,
   updated_at INTEGER NOT NULL
 );
