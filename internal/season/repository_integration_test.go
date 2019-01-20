@@ -51,6 +51,59 @@ func TestInsert(t *testing.T) {
 			t.Fatalf("Test failed, expected %s, got nil", e)
 		}
 	})
+
+	conn.Close()
+}
+
+func TestUpdate(t *testing.T) {
+	conn, cleanUp := getConnection(t)
+	repo := PostgresSeasonRepository{Connection: conn}
+
+	t.Run("modifies existing record", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+
+		s := newSeason(50)
+
+		if err := repo.Insert(s); err != nil {
+			t.Errorf("Error when inserting record into the database: %s", err.Error())
+		}
+
+		var d = time.Date(2019, 01, 14, 11, 25, 00, 00, time.UTC)
+
+		s.IsCurrent = false
+		s.LeagueID = 2
+		s.UpdatedAt = d
+
+		if err := repo.Update(s); err != nil {
+			t.Errorf("Error when updating a record in the database: %s", err.Error())
+		}
+
+		r, err := repo.GetById(50)
+
+		if err != nil {
+			t.Errorf("Error when updating a record in the database: %s", err.Error())
+		}
+
+		a := assert.New(t)
+
+		a.Equal(50, r.ID)
+		a.Equal("2018-2019", r.Name)
+		a.Equal(false, r.IsCurrent)
+		a.Equal("2019-01-14 11:25:00 +0000 UTC", r.UpdatedAt.String())
+	})
+
+	t.Run("returns an error if record does not exist", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+		c := newSeason(146)
+
+		err := repo.Update(c)
+
+		if err == nil {
+			t.Fatalf("Test failed, expected nil, got %v", err)
+		}
+	})
 }
 
 var db = config.GetConfig().Database
