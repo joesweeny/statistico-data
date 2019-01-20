@@ -164,7 +164,7 @@ func getConnection(t *testing.T) (*sql.DB, func()) {
 	}
 }
 
-func newCountry(id int) model.Country {
+func newCountry(id int) *model.Country {
 	c := model.Country{
 		ID:         id,
 		Name:       "England",
@@ -174,5 +174,5 @@ func newCountry(id int) model.Country {
 		UpdatedAt:  time.Unix(1546965200, 0),
 	}
 
-	return c
+	return &c
 }
