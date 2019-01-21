@@ -37,7 +37,30 @@ func (p *PostgresFixtureRepository) Insert(f *model.Fixture) error {
 }
 
 func (p *PostgresFixtureRepository) Update(f *model.Fixture) error {
-	return nil
+	_, err := p.GetById(f.ID)
+
+	if err != nil {
+		return err
+	}
+
+	query := `
+	UPDATE sportmonks_fixture set season_id = $2, round_id = $3, venue_id = $4, home_team_id = $5, away_team_id = $6,
+	referee_id = $7, date = $8, updated_at = $9 where id = $1`
+
+	_, err = p.Connection.Exec(
+		query,
+		f.ID,
+		f.SeasonID,
+		f.RoundID,
+		f.VenueID,
+		f.HomeTeamID,
+		f.AwayTeamID,
+		f.RefereeID,
+		f.Date.Unix(),
+		f.UpdatedAt.Unix(),
+	)
+
+	return err
 }
 
 func (p *PostgresFixtureRepository) GetById(id int) (*model.Fixture, error) {

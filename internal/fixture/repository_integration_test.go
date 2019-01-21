@@ -106,6 +106,72 @@ func TestGetById(t *testing.T) {
 	conn.Close()
 }
 
+func TestUpdate(t *testing.T) {
+	conn, cleanUp := getConnection(t)
+	repo := PostgresFixtureRepository{Connection: conn}
+
+	t.Run("modifies existing fixture", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+
+		f := newFixture(78)
+
+		if err := repo.Insert(f); err != nil {
+			t.Errorf("Error when inserting record into the database: %s", err.Error())
+		}
+
+		var venueId = 574
+		var roundId *int
+		var d = time.Date(2019, 01, 14, 11, 25, 00, 00, time.UTC)
+
+		f.VenueID = &venueId
+		f.AwayTeamID = 4390
+		f.RoundID = roundId
+		f.Date = d
+
+		if err := repo.Update(f); err != nil {
+			t.Errorf("Error when updating a record in the database: %s", err.Error())
+		}
+
+		r, err := repo.GetById(78)
+
+		if err != nil {
+			t.Errorf("Error when updating a record in the database: %s", err.Error())
+		}
+
+		a := assert.New(t)
+
+		a.Equal(78, f.ID)
+		a.Equal(14567, f.SeasonID)
+		a.Nil(f.RoundID)
+		a.Equal(574, *f.VenueID)
+		a.Equal(451, f.HomeTeamID)
+		a.Equal(4390, f.AwayTeamID)
+		a.Nil(f.RefereeID)
+		a.Equal("2019-01-14 11:25:00 +0000 UTC", r.Date.String())
+		a.Equal("2019-01-08 16:33:20 +0000 UTC", r.CreatedAt.String())
+		a.Equal("2019-01-08 16:33:20 +0000 UTC", r.UpdatedAt.String())
+	})
+
+	t.Run("returns an error if fixture does not exist", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+		c := newFixture(146)
+
+		err := repo.Update(c)
+
+		if err == nil {
+			t.Fatalf("Test failed, expected nil, got %v", err)
+		}
+
+		if err != ErrNotFound {
+			t.Fatalf("Test failed, expected %v, got %v", ErrNotFound, err)
+		}
+	})
+
+	conn.Close()
+}
+
 var db = config.GetConfig().Database
 
 func getConnection(t *testing.T) (*sql.DB, func()) {
