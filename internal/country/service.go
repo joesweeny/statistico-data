@@ -29,18 +29,18 @@ func (s Service) Process() error {
 
 		for _, country := range res.Data {
 			// Push method into a Go routine
-			s.persistCountry(country)
+			s.persistCountry(&country)
 		}
 	}
 
 	return nil
 }
 
-func (s Service) persistCountry(c sportmonks.Country) {
+func (s Service) persistCountry(c *sportmonks.Country) {
 	country, err := s.GetById(c.ID)
 
 	if err != nil && (model.Country{}) == *country {
-		created := s.createCountry(&c)
+		created := s.createCountry(c)
 
 		if err := s.Insert(created); err != nil {
 			log.Printf("Error occurred when creating struct %+v", created)
@@ -49,7 +49,7 @@ func (s Service) persistCountry(c sportmonks.Country) {
 		return
 	}
 
-	updated := s.updateCountry(&c, country)
+	updated := s.updateCountry(c, country)
 
 	if err := s.Update(updated); err != nil {
 		log.Printf("Error occurred when updating struct: %+v, error %+v", updated, err)
