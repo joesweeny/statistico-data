@@ -53,20 +53,20 @@
   version = "v1.0.0"
 
 [[projects]]
+  digest = "1:cf31692c14422fa27c83a05292eb5cbe0fb2775972e8f1f8446a71549bd8980b"
+  name = "github.com/pkg/errors"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "ba968bfe8b2f7e042a574c888954fccecfa385b4"
+  version = "v0.8.1"
+
+[[projects]]
   digest = "1:0028cb19b2e4c3112225cd871870f2d9cf49b9b4276531f03438a88e94be86fe"
   name = "github.com/pmezard/go-difflib"
   packages = ["difflib"]
   pruneopts = "UT"
   revision = "792786c7400a136282c1664665ae0a8db921c6c2"
   version = "v1.0.0"
-
-[[projects]]
-  digest = "1:274f67cb6fed9588ea2521ecdac05a6d62a8c51c074c1fccc6a49a40ba80e925"
-  name = "github.com/satori/go.uuid"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "f58768cc1a7a7e77a3bd49e98cdd21419399b6a3"
-  version = "v1.2.0"
 
 [[projects]]
   digest = "1:ac83cf90d08b63ad5f7e020ef480d319ae890c208f8524622a2f3136e2686b02"
@@ -87,6 +87,14 @@
   revision = "ffdc059bfe9ce6a4e144ba849dbedead332c6053"
   version = "v1.3.0"
 
+[[projects]]
+  digest = "1:a4b04b5314d49a67ad022fa7693453ee2b823ab99314f52fa3930ed31085dfef"
+  name = "gopkg.in/guregu/null.v3"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "80515d440932108546bcade467bb7d6968e812e2"
+  version = "v3.4.0"
+
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
@@ -95,9 +103,10 @@
     "github.com/joesweeny/sportmonks-go-client",
     "github.com/jonboulle/clockwork",
     "github.com/lib/pq",
-    "github.com/satori/go.uuid",
+    "github.com/pkg/errors",
     "github.com/stretchr/testify/assert",
     "github.com/stretchr/testify/mock",
+    "gopkg.in/guregu/null.v3",
   ]
   solver-name = "gps-cdcl"
   solver-version = 1
