@@ -87,6 +87,23 @@ func TestGetById(t *testing.T) {
 		a.Equal("2019-01-08 16:33:20 +0000 UTC", r.CreatedAt.String())
 		a.Equal("2019-01-08 16:33:20 +0000 UTC", r.UpdatedAt.String())
 	})
+
+	t.Run("returns error if fixture does not exist", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+
+		_, err := repo.GetById(99)
+
+		if err == nil {
+			t.Errorf("Test failed, expected %v, got nil", err)
+		}
+
+		if err != ErrNotFound {
+			t.Fatalf("Test failed, expected %v, got %s", ErrNotFound, err)
+		}
+	})
+
+	conn.Close()
 }
 
 var db = config.GetConfig().Database
