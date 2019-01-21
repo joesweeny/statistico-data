@@ -54,7 +54,7 @@ func TestFactoryUpdate(t *testing.T) {
 	})
 }
 
-func newClientCountry() sportmonks.Country {
+func newClientCountry() *sportmonks.Country {
 	country := sportmonks.Country{
 		ID: 180,
 		Name: "England",
@@ -75,5 +75,5 @@ func newClientCountry() sportmonks.Country {
 		},
 	}
 
-	return country
+	return &country
 }

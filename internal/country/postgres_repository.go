@@ -5,13 +5,16 @@ import (
 	"github.com/joesweeny/statshub/internal/model"
 	"time"
 	_ "github.com/lib/pq"
+	"github.com/pkg/errors"
 )
 
 type PostgresCountryRepository struct {
 	Connection *sql.DB
 }
 
-func (p *PostgresCountryRepository) Insert(c model.Country) error {
+var ErrNotFound = errors.New("not found")
+
+func (p *PostgresCountryRepository) Insert(c *model.Country) error {
 	query := `
 	INSERT INTO sportmonks_country (id, name, continent, iso, created_at, updated_at)
 	VALUES ($1, $2, $3, $4, $5, $6)`
@@ -29,7 +32,7 @@ func (p *PostgresCountryRepository) Insert(c model.Country) error {
 	return err
 }
 
-func (p *PostgresCountryRepository) Update(c model.Country) error {
+func (p *PostgresCountryRepository) Update(c *model.Country) error {
 	_, err := p.GetById(c.ID)
 
 	if err != nil {
@@ -51,14 +54,14 @@ func (p *PostgresCountryRepository) Update(c model.Country) error {
 	return err
 }
 
-func (p *PostgresCountryRepository) GetById(id int) (model.Country, error) {
+func (p *PostgresCountryRepository) GetById(id int) (*model.Country, error) {
 	query := `SELECT * from sportmonks_country where id = $1`
 	row := p.Connection.QueryRow(query, id)
 
 	return rowToCountry(row)
 }
 
-func rowToCountry(r *sql.Row) (model.Country, error) {
+func rowToCountry(r *sql.Row) (*model.Country, error) {
 	var id int
 	var name string
 	var continent string
@@ -69,7 +72,7 @@ func rowToCountry(r *sql.Row) (model.Country, error) {
 	c := model.Country{}
 
 	if err := r.Scan(&id, &name, &continent, &iso, &created, &updated); err != nil {
-		return c, err
+		return &c, ErrNotFound
 	}
 
 	c.ID = id
@@ -79,5 +82,5 @@ func rowToCountry(r *sql.Row) (model.Country, error) {
 	c.CreatedAt = time.Unix(created, 0)
 	c.UpdatedAt = time.Unix(updated, 0)
 
-	return c, nil
+	return &c, nil
 }

@@ -183,8 +183,8 @@ func getConnection(t *testing.T) (*sql.DB, func()) {
 	}
 }
 
-func newSeason(id int) model.Season {
-	return model.Season{
+func newSeason(id int) *model.Season {
+	return &model.Season{
 		ID:         id,
 		Name:       "2018-2019",
 		LeagueID:   560,

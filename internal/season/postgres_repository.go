@@ -13,7 +13,7 @@ type PostgresSeasonRepository struct {
 	Connection *sql.DB
 }
 
-func (p *PostgresSeasonRepository) Insert(s model.Season) error {
+func (p *PostgresSeasonRepository) Insert(s *model.Season) error {
 	query := `
 	INSERT INTO sportmonks_season (id, name, league_id, is_current, created_at, updated_at)
 	VALUES ($1, $2, $3, $4, $5, $6)`
@@ -31,7 +31,7 @@ func (p *PostgresSeasonRepository) Insert(s model.Season) error {
 	return err
 }
 
-func (p *PostgresSeasonRepository) Update(s model.Season) error {
+func (p *PostgresSeasonRepository) Update(s *model.Season) error {
 	 _, err := p.GetById(s.ID)
 
 	 if err != nil {
@@ -53,14 +53,14 @@ func (p *PostgresSeasonRepository) Update(s model.Season) error {
 	 return err
 }
 
-func (p *PostgresSeasonRepository) GetById(id int) (model.Season, error) {
+func (p *PostgresSeasonRepository) GetById(id int) (*model.Season, error) {
 	query := `SELECT * FROM sportmonks_season where id = $1`
 	row := p.Connection.QueryRow(query, id)
 
 	return rowToSeason(row)
 }
 
-func rowToSeason(r *sql.Row) (model.Season, error) {
+func rowToSeason(r *sql.Row) (*model.Season, error) {
 	var id int
 	var name string
 	var leagueId int
@@ -71,7 +71,7 @@ func rowToSeason(r *sql.Row) (model.Season, error) {
 	s := model.Season{}
 
 	if err := r.Scan(&id, &name, &leagueId, &current, &created, &updated); err != nil {
-		return s, ErrNotFound
+		return &s, ErrNotFound
 	}
 
 	s.ID = id
@@ -81,5 +81,5 @@ func rowToSeason(r *sql.Row) (model.Season, error) {
 	s.CreatedAt = time.Unix(created, 0)
 	s.UpdatedAt = time.Unix(updated, 0)
 
-	return s, nil
+	return &s, nil
 }

@@ -14,7 +14,7 @@ type PostgresCompetitionRepository struct {
 	Connection *sql.DB
 }
 
-func (p *PostgresCompetitionRepository) Insert(c model.Competition) error {
+func (p *PostgresCompetitionRepository) Insert(c *model.Competition) error {
 	query := `
 	INSERT INTO sportmonks_competition (id, name, country_id, is_cup, created_at, updated_at)
 	VALUES ($1, $2, $3, $4, $5, $6)`
@@ -32,14 +32,14 @@ func (p *PostgresCompetitionRepository) Insert(c model.Competition) error {
 	return err
 }
 
-func (p *PostgresCompetitionRepository) GetById(id int) (model.Competition, error) {
+func (p *PostgresCompetitionRepository) GetById(id int) (*model.Competition, error) {
 	query := `SELECT * FROM sportmonks_competition where id = $1`
 	row := p.Connection.QueryRow(query, id)
 
 	return rowToCompetition(row)
 }
 
-func rowToCompetition(r *sql.Row) (model.Competition, error) {
+func rowToCompetition(r *sql.Row) (*model.Competition, error) {
 	var id int
 	var name string
 	var countryId int
@@ -50,7 +50,7 @@ func rowToCompetition(r *sql.Row) (model.Competition, error) {
 	c := model.Competition{}
 
 	if err := r.Scan(&id, &name, &countryId, &isCup, &created, &updated); err != nil {
-		return c, ErrNotFound
+		return &c, ErrNotFound
 	}
 
 	c.ID = id
@@ -60,5 +60,5 @@ func rowToCompetition(r *sql.Row) (model.Competition, error) {
 	c.CreatedAt = time.Unix(created, 0)
 	c.UpdatedAt = time.Unix(updated, 0)
 
-	return c, nil
+	return &c, nil
 }

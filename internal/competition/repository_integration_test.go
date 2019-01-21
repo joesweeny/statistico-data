@@ -119,8 +119,8 @@ func getConnection(t *testing.T) (*sql.DB, func()) {
 	}
 }
 
-func newCompetition(id int) model.Competition {
-	return model.Competition{
+func newCompetition(id int) *model.Competition {
+	return &model.Competition{
 		ID:         id,
 		Name:       "Premier League",
 		CountryID:  462,
