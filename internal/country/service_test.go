@@ -41,16 +41,17 @@ func TestProcess(t *testing.T) {
 	}
 
 	t.Run("inserts new country", func (t *testing.T) {
-		repo.On("GetById", 1).Return(model.Country{}, errors.New("not Found"))
+		repo.On("GetById", 1).Return(&model.Country{}, errors.New("not Found"))
 		repo.On("Insert", mock.Anything).Return(nil)
 		repo.AssertNotCalled(t, "Update", mock.Anything)
 		service.Process()
 	})
 
 	t.Run("updates existing country", func (t *testing.T) {
-		repo.On("GetById", 1).Return(newCountry(1), nil)
-		repo.On("Update", model.Country{}).Return(nil)
-		repo.MethodCalled("Update", model.Country{})
+		c := newCountry(1)
+		repo.On("GetById", 1).Return(c, nil)
+		repo.On("Update", &c).Return(nil)
+		repo.MethodCalled("Update", &c)
 		repo.AssertNotCalled(t, "Insert", mock.Anything)
 		service.Process()
 	})
@@ -60,19 +61,20 @@ type mockRepository struct {
 	mock.Mock
 }
 
-func (m mockRepository) Insert(c model.Country) error {
+func (m mockRepository) Insert(c *model.Country) error {
 	args := m.Called(c)
 	return args.Error(0)
 }
 
-func (m mockRepository) Update(c model.Country) error {
-	args := m.Called(c)
+func (m mockRepository) Update(c *model.Country) error {
+	args := m.Called(&c)
 	return args.Error(0)
 }
 
-func (m mockRepository) GetById(id int) (model.Country, error) {
+func (m mockRepository) GetById(id int) (*model.Country, error) {
 	args := m.Called(id)
-	return args.Get(0).(model.Country), args.Error(1)
+	c := args.Get(0).(*model.Country)
+	return c, args.Error(1)
 }
 
 type roundTripFunc func(req *http.Request) *http.Response

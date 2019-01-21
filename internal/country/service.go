@@ -29,17 +29,17 @@ func (s Service) Process() error {
 
 		for _, country := range res.Data {
 			// Push method into a Go routine
-			s.persistCountry(country)
+			s.persistCountry(&country)
 		}
 	}
 
 	return nil
 }
 
-func (s Service) persistCountry(c sportmonks.Country) {
+func (s Service) persistCountry(c *sportmonks.Country) {
 	country, err := s.GetById(c.ID)
 
-	if err != nil && (model.Country{}) == country {
+	if err != nil && (model.Country{}) == *country {
 		created := s.createCountry(c)
 
 		if err := s.Insert(created); err != nil {
