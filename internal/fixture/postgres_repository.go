@@ -5,7 +5,6 @@ import (
 	"database/sql"
 	"github.com/joesweeny/statshub/internal/model"
 	"time"
-	"gopkg.in/guregu/null.v3"
 	_ "github.com/lib/pq"
 )
 
@@ -51,11 +50,11 @@ func (p *PostgresFixtureRepository) GetById(id int) (*model.Fixture, error) {
 func rowToFixture(r *sql.Row) (*model.Fixture, error) {
 	var id int
 	var seasonId int
-	var roundId null.Int
-	var venueId null.Int
+	var roundId *int
+	var venueId *int
 	var homeTeam int
 	var awayTeam int
-	var referee null.Int
+	var referee *int
 	var date int64
 	var created int64
 	var updated int64
