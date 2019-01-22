@@ -1,10 +1,10 @@
-package fixture
+package round
 
 import (
+	"github.com/joesweeny/statshub/internal/config"
 	"database/sql"
 	"testing"
 	"fmt"
-	"github.com/joesweeny/statshub/internal/config"
 	"github.com/joesweeny/statshub/internal/model"
 	"time"
 	"github.com/stretchr/testify/assert"
@@ -12,20 +12,20 @@ import (
 
 func TestInsert(t *testing.T) {
 	conn, cleanUp := getConnection(t)
-	repo := PostgresFixtureRepository{Connection: conn}
+	repo := PostgresRoundRepository{Connection: conn}
 
 	t.Run("increases table count", func(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
 
 		for i := 1; i < 4; i++ {
-			c := newFixture(i)
+			c := newRound(i)
 
 			if err := repo.Insert(c); err != nil {
 				t.Errorf("Error when inserting record into the database: %s", err.Error())
 			}
 
-			row := conn.QueryRow("select count(*) from sportmonks_fixture")
+			row := conn.QueryRow("select count(*) from sportmonks_round")
 
 			var count int
 
@@ -40,7 +40,7 @@ func TestInsert(t *testing.T) {
 	t.Run("returns error when ID primary key violates unique constraint", func(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
-		c := newFixture(50)
+		c := newRound(50)
 
 		if err := repo.Insert(c); err != nil {
 			t.Errorf("Test failed, expected nil, got %s", err)
@@ -56,13 +56,13 @@ func TestInsert(t *testing.T) {
 
 func TestGetById(t *testing.T) {
 	conn, cleanUp := getConnection(t)
-	repo := PostgresFixtureRepository{Connection: conn}
+	repo := PostgresRoundRepository{Connection: conn}
 
-	t.Run("fixture can be retrieved by ID", func(t *testing.T) {
+	t.Run("round can be retrieved by ID", func(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
 
-		f := newFixture(43)
+		f := newRound(43)
 
 		if err := repo.Insert(f); err != nil {
 			t.Errorf("Error when inserting record into the database: %s", err.Error())
@@ -77,18 +77,15 @@ func TestGetById(t *testing.T) {
 		a := assert.New(t)
 
 		a.Equal(43, r.ID)
-		a.Equal(14567, r.SeasonID)
-		a.Equal(165789, *r.RoundID)
-		a.Nil(f.VenueID)
-		a.Equal(451, r.HomeTeamID)
-		a.Equal(924, r.AwayTeamID)
-		a.Nil(r.RefereeID)
-		a.Equal("2019-01-21 16:08:49 +0000 UTC", r.Date.String())
-		a.Equal("2019-01-08 16:33:20 +0000 UTC", r.CreatedAt.String())
-		a.Equal("2019-01-08 16:33:20 +0000 UTC", r.UpdatedAt.String())
+		a.Equal("5", r.Name)
+		a.Equal(4387, r.SeasonID)
+		a.Equal("2019-01-21 16:08:49 +0000 UTC", r.StartDate.String())
+		a.Equal("2019-01-21 16:08:49 +0000 UTC", r.EndDate.String())
+		a.Equal("2019-01-21 16:08:49 +0000 UTC", r.CreatedAt.String())
+		a.Equal("2019-01-21 16:08:49 +0000 UTC", r.UpdatedAt.String())
 	})
 
-	t.Run("returns error if fixture does not exist", func(t *testing.T) {
+	t.Run("returns error if round does not exist", func(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
 
@@ -108,32 +105,29 @@ func TestGetById(t *testing.T) {
 
 func TestUpdate(t *testing.T) {
 	conn, cleanUp := getConnection(t)
-	repo := PostgresFixtureRepository{Connection: conn}
+	repo := PostgresRoundRepository{Connection: conn}
 
-	t.Run("modifies existing fixture", func(t *testing.T) {
+	t.Run("modifies existing round", func(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
 
-		f := newFixture(78)
+		r := newRound(897)
 
-		if err := repo.Insert(f); err != nil {
+		if err := repo.Insert(r); err != nil {
 			t.Errorf("Error when inserting record into the database: %s", err.Error())
 		}
 
-		var venueId = 574
-		var roundId *int
-		var d = time.Date(2019, 01, 14, 11, 25, 00, 00, time.UTC)
+		var s = time.Date(2019, 01, 14, 11, 25, 00, 00, time.UTC)
+		var e = time.Date(2019, 01, 14, 11, 29, 00, 00, time.UTC)
 
-		f.VenueID = &venueId
-		f.AwayTeamID = 4390
-		f.RoundID = roundId
-		f.Date = d
+		r.StartDate = s
+		r.EndDate = e
 
-		if err := repo.Update(f); err != nil {
+		if err := repo.Update(r); err != nil {
 			t.Errorf("Error when updating a record in the database: %s", err.Error())
 		}
 
-		r, err := repo.GetById(78)
+		r, err := repo.GetById(897)
 
 		if err != nil {
 			t.Errorf("Error when updating a record in the database: %s", err.Error())
@@ -141,22 +135,19 @@ func TestUpdate(t *testing.T) {
 
 		a := assert.New(t)
 
-		a.Equal(78, f.ID)
-		a.Equal(14567, f.SeasonID)
-		a.Nil(f.RoundID)
-		a.Equal(574, *f.VenueID)
-		a.Equal(451, f.HomeTeamID)
-		a.Equal(4390, f.AwayTeamID)
-		a.Nil(f.RefereeID)
-		a.Equal("2019-01-14 11:25:00 +0000 UTC", r.Date.String())
-		a.Equal("2019-01-08 16:33:20 +0000 UTC", r.CreatedAt.String())
-		a.Equal("2019-01-08 16:33:20 +0000 UTC", r.UpdatedAt.String())
+		a.Equal(897, r.ID)
+		a.Equal("5", r.Name)
+		a.Equal(4387, r.SeasonID)
+		a.Equal("2019-01-14 11:25:00 +0000 UTC", r.StartDate.String())
+		a.Equal("2019-01-14 11:29:00 +0000 UTC", r.EndDate.String())
+		a.Equal("2019-01-21 16:08:49 +0000 UTC", r.CreatedAt.String())
+		a.Equal("2019-01-21 16:08:49 +0000 UTC", r.UpdatedAt.String())
 	})
 
-	t.Run("returns an error if fixture does not exist", func(t *testing.T) {
+	t.Run("returns an error if round does not exist", func(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
-		c := newFixture(146)
+		c := newRound(146)
 
 		err := repo.Update(c)
 
@@ -186,24 +177,21 @@ func getConnection(t *testing.T) (*sql.DB, func()) {
 	}
 
 	return db, func() {
-		_, err := db.Exec("delete from sportmonks_fixture")
+		_, err := db.Exec("delete from sportmonks_round")
 		if err != nil {
 			t.Fatalf("Failed to clear database. %s", err.Error())
 		}
 	}
 }
 
-func newFixture(id int) *model.Fixture {
-	var roundId = 165789
-
-	return &model.Fixture{
-		ID:         id,
-		SeasonID:   14567,
-		RoundID:    &roundId,
-		HomeTeamID: 451,
-		AwayTeamID: 924,
-		Date:       time.Unix(1548086929, 0),
-		CreatedAt:  time.Unix(1546965200, 0),
-		UpdatedAt:  time.Unix(1546965200, 0),
+func newRound(id int) *model.Round {
+	return &model.Round{
+		ID:        id,
+		Name:      "5",
+		SeasonID:  4387,
+		StartDate: time.Unix(1548086929, 0),
+		EndDate:   time.Unix(1548086929, 0),
+		CreatedAt: time.Unix(1548086929, 0),
+		UpdatedAt: time.Unix(1548086929, 0),
 	}
 }
