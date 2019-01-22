@@ -18,17 +18,32 @@ func main() {
 
 	flag.Parse()
 
+	var service bootstrap.Service
+
 	switch *option {
 	case competition:
-		app.GetCompetitionService().Process()
-		fmt.Println("Competitions processed successfully")
-		os.Exit(0)
+		service = app.GetCompetitionService()
+		break
 	case country:
-		app.GetCountryService().Process()
-		fmt.Println("Countries processed successfully")
-		os.Exit(0)
+		service = app.GetCountryService()
+		break
 	default:
 		fmt.Println("The option provided is not supported")
+		os.Exit(1)
+	}
+
+	if err := service.Process(); err != nil {
+		fail(option, err)
+		os.Exit(1)
+	}
+
+	fmt.Printf("Processing complete for %s", *option)
+	os.Exit(0)
+}
+
+func fail(model *string, err error) {
+	if err != nil {
+		fmt.Printf("Error when processing %s: %s", model, err.Error())
 		os.Exit(1)
 	}
 }
