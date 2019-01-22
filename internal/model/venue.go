@@ -2,11 +2,14 @@ package model
 
 import "time"
 
-type Season struct {
+type Venue struct {
 	ID           int       `json:"id"`
 	Name         string    `json:"name"`
-	LeagueID     int       `json:"league_id"`
-	IsCurrent    bool      `json:"current"`
+	Surface      *string   `json:"surface"`
+	Address      *string   `json:"address"`
+	City         *string   `json:"city"`
+	Capacity     *int      `json:"capacity"`
 	CreatedAt  	 time.Time `json:"created_at"`
 	UpdatedAt    time.Time `json:"updated_at"`
+
 }
