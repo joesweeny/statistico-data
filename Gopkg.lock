@@ -27,11 +27,11 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:09d442d2468bd2a45663d71c013c12519456182c6520741212d5d69d0376a79a"
+  digest = "1:5baa1a4ba9e86d4a54ae19c183517395ef235975396a9e361722d0a9807864c8"
   name = "github.com/joesweeny/sportmonks-go-client"
   packages = ["."]
   pruneopts = "UT"
-  revision = "6b5c39665e86e97c2fefedfa9987a791ba640e94"
+  revision = "560fbdb02cbdca7ae3dc0e0183194afa6d798a1e"
 
 [[projects]]
   digest = "1:75ab90ae3f5d876167e60f493beadfe66f0ed861a710f283fb06c86437a09538"
@@ -87,14 +87,6 @@
   revision = "ffdc059bfe9ce6a4e144ba849dbedead332c6053"
   version = "v1.3.0"
 
-[[projects]]
-  digest = "1:a4b04b5314d49a67ad022fa7693453ee2b823ab99314f52fa3930ed31085dfef"
-  name = "gopkg.in/guregu/null.v3"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "80515d440932108546bcade467bb7d6968e812e2"
-  version = "v3.4.0"
-
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
@@ -106,7 +98,6 @@
     "github.com/pkg/errors",
     "github.com/stretchr/testify/assert",
     "github.com/stretchr/testify/mock",
-    "gopkg.in/guregu/null.v3",
   ]
   solver-name = "gps-cdcl"
   solver-version = 1

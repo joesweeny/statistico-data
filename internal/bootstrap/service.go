@@ -2,9 +2,30 @@ package bootstrap
 
 import (
 	"github.com/joesweeny/statshub/internal/country"
+	"github.com/joesweeny/statshub/internal/competition"
 )
 
-func (b Bootstrap) GetCountryService() (country.Service) {
+type Service interface {
+	Process() error
+}
+
+func (b Bootstrap) GetCompetitionService() competition.Service {
+	conn := b.databaseConnection()
+	client, err := b.sportmonksClient()
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	return competition.Service{
+		Repository: &competition.PostgresCompetitionRepository{Connection: conn},
+		Factory:    competition.Factory{Clock: clock()},
+		Client:     client,
+		Logger:     logger(),
+	}
+}
+
+func (b Bootstrap) GetCountryService() country.Service {
 	conn := b.databaseConnection()
 	client, err := b.sportmonksClient()
 
