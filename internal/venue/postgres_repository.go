@@ -34,6 +34,31 @@ func (p *PostgresVenueRepository) Insert(v *model.Venue) error {
 	return err
 }
 
+func (p *PostgresVenueRepository) Update (v *model.Venue) error {
+	_, err := p.GetById(v.ID)
+
+	if err != nil {
+		return err
+	}
+
+	query := `
+	UPDATE sportmonks_venue set name = $2, surface = $3, address = $4, city = $5, capacity = $6, updated_at = $7
+	WHERE id = $1`
+
+	_, err = p.Connection.Exec(
+		query,
+		v.ID,
+		v.Name,
+		v.Surface,
+		v.Address,
+		v.City,
+		v.Capacity,
+		v.UpdatedAt.Unix(),
+	)
+
+	return err
+}
+
 func (p *PostgresVenueRepository) GetById(id int) (*model.Venue, error) {
 	query := `SELECT * FROM sportmonks_venue where id = $1`
 	row := p.Connection.QueryRow(query, id)

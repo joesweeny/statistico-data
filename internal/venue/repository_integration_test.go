@@ -104,6 +104,69 @@ func TestGetById(t *testing.T) {
 	conn.Close()
 }
 
+func TestUpdate(t *testing.T) {
+	conn, cleanUp := getConnection(t)
+	repo := PostgresVenueRepository{Connection: conn}
+
+	t.Run("modifies existing venue", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+
+		v := newVenue(2)
+
+		if err := repo.Insert(v); err != nil {
+			t.Errorf("Error when inserting record into the database: %s", err.Error())
+		}
+
+		var add = "Stratford"
+		var c = 60000
+
+		v.Address = &add
+		v.Capacity = &c
+		v.Name = "Upton Park"
+		v.Surface = nil
+
+		if err := repo.Update(v); err != nil {
+			t.Errorf("Error when updating a record in the database: %s", err.Error())
+		}
+
+		r, err := repo.GetById(2)
+
+		if err != nil {
+			t.Errorf("Error when updating a record in the database: %s", err.Error())
+		}
+
+		a := assert.New(t)
+
+		a.Equal(2, r.ID)
+		a.Equal("Upton Park", r.Name)
+		a.Nil(r.Surface)
+		a.Equal("Stratford", *r.Address)
+		a.Equal("London", *r.City)
+		a.Equal(60000, *r.Capacity)
+		a.Equal("2019-01-21 16:08:49 +0000 UTC", r.CreatedAt.String())
+		a.Equal("2019-01-21 16:08:49 +0000 UTC", r.UpdatedAt.String())
+	})
+
+	t.Run("returns an error if venue does not exist", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+		c := newVenue(146)
+
+		err := repo.Update(c)
+
+		if err == nil {
+			t.Fatalf("Test failed, expected nil, got %v", err)
+		}
+
+		if err != ErrNotFound {
+			t.Fatalf("Test failed, expected %v, got %v", ErrNotFound, err)
+		}
+	})
+
+	conn.Close()
+}
+
 var db = config.GetConfig().Database
 
 func getConnection(t *testing.T) (*sql.DB, func()) {
