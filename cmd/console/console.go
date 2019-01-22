@@ -43,7 +43,7 @@ func main() {
 
 func fail(model *string, err error) {
 	if err != nil {
-		fmt.Printf("Error when processing %s: %s", model, err.Error())
+		fmt.Printf("Error when processing %s: %s", *model, err.Error())
 		os.Exit(1)
 	}
 }

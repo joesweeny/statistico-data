@@ -41,7 +41,7 @@ func TestProcess(t *testing.T) {
 	}
 
 	t.Run("inserts new competition", func (t *testing.T) {
-		repo.On("GetById", 1).Return(&model.Competition{}, errors.New("not Found"))
+		repo.On("GetById", 564).Return(&model.Competition{}, errors.New("not Found"))
 		repo.On("Insert", mock.Anything).Return(nil)
 		repo.AssertNotCalled(t, "Update", mock.Anything)
 		service.Process()
@@ -49,7 +49,7 @@ func TestProcess(t *testing.T) {
 
 	t.Run("updates existing competition", func (t *testing.T) {
 		c := newCompetition(1)
-		repo.On("GetById", 1).Return(c, nil)
+		repo.On("GetById", 564).Return(c, nil)
 		repo.On("Update", &c).Return(nil)
 		repo.MethodCalled("Update", &c)
 		repo.AssertNotCalled(t, "Insert", mock.Anything)
