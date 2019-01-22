@@ -5,6 +5,10 @@ import (
 	"github.com/joesweeny/statshub/internal/competition"
 )
 
+type Service interface {
+	Process() error
+}
+
 func (b Bootstrap) GetCompetitionService() competition.Service {
 	conn := b.databaseConnection()
 	client, err := b.sportmonksClient()
