@@ -32,6 +32,27 @@ func (p *PostgresCompetitionRepository) Insert(c *model.Competition) error {
 	return err
 }
 
+func (p *PostgresCompetitionRepository) Update(c *model.Competition) error {
+	_, err := p.GetById(c.ID)
+
+	if err != nil {
+		return err
+	}
+
+	query := `
+	UPDATE sportmonks_competition set name = $2, is_cup = $3, updated_at = $4 where id = $1`
+
+	_, err = p.Connection.Exec(
+		query,
+		c.ID,
+		c.Name,
+		c.IsCup,
+		c.UpdatedAt.Unix(),
+	)
+
+	return err
+}
+
 func (p *PostgresCompetitionRepository) GetById(id int) (*model.Competition, error) {
 	query := `SELECT * FROM sportmonks_competition where id = $1`
 	row := p.Connection.QueryRow(query, id)

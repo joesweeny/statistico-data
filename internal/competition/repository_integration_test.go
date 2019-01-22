@@ -98,6 +98,58 @@ func TestGetById(t *testing.T) {
 	})
 }
 
+func TestUpdate(t *testing.T) {
+	conn, cleanUp := getConnection(t)
+	repo := PostgresCompetitionRepository{Connection: conn}
+
+	t.Run("modifies existing record", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+
+		c := newCompetition(45)
+
+		if err := repo.Insert(c); err != nil {
+			t.Errorf("Error when inserting record into the database: %s", err.Error())
+		}
+
+		c.Name = "New League Name"
+		c.IsCup = true
+
+		if err := repo.Update(c); err != nil {
+			t.Errorf("Error when updating a record in the database: %s", err.Error())
+		}
+
+		r, err := repo.GetById(45)
+
+		if err != nil {
+			t.Errorf("Error when retrieving a record from the database: %s", err.Error())
+		}
+
+		a := assert.New(t)
+
+		a.Equal(45, r.ID)
+		a.Equal("New League Name", r.Name)
+		a.Equal(462, r.CountryID)
+		a.Equal(true, r.IsCup)
+		a.Equal("2019-01-08 16:33:20 +0000 UTC", r.CreatedAt.String())
+		a.Equal("2019-01-08 16:33:20 +0000 UTC", r.UpdatedAt.String())
+	})
+
+	t.Run("returns error if record does not exist", func (t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+		c := newCompetition(146)
+
+		err := repo.Update(c)
+
+		if err == nil {
+			t.Fatalf("Test failed, expected nil, got %v", err)
+		}
+	})
+
+	conn.Close()
+}
+
 var db = config.GetConfig().Database
 
 func getConnection(t *testing.T) (*sql.DB, func()) {
