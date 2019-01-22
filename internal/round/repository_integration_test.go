@@ -103,6 +103,66 @@ func TestGetById(t *testing.T) {
 	conn.Close()
 }
 
+func TestUpdate(t *testing.T) {
+	conn, cleanUp := getConnection(t)
+	repo := PostgresRoundRepository{Connection: conn}
+
+	t.Run("modifies existing round", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+
+		r := newRound(897)
+
+		if err := repo.Insert(r); err != nil {
+			t.Errorf("Error when inserting record into the database: %s", err.Error())
+		}
+
+		var s = time.Date(2019, 01, 14, 11, 25, 00, 00, time.UTC)
+		var e = time.Date(2019, 01, 14, 11, 29, 00, 00, time.UTC)
+
+		r.StartDate = s
+		r.EndDate = e
+
+		if err := repo.Update(r); err != nil {
+			t.Errorf("Error when updating a record in the database: %s", err.Error())
+		}
+
+		r, err := repo.GetById(897)
+
+		if err != nil {
+			t.Errorf("Error when updating a record in the database: %s", err.Error())
+		}
+
+		a := assert.New(t)
+
+		a.Equal(897, r.ID)
+		a.Equal("5", r.Name)
+		a.Equal(4387, r.SeasonID)
+		a.Equal("2019-01-14 11:25:00 +0000 UTC", r.StartDate.String())
+		a.Equal("2019-01-14 11:29:00 +0000 UTC", r.EndDate.String())
+		a.Equal("2019-01-21 16:08:49 +0000 UTC", r.CreatedAt.String())
+		a.Equal("2019-01-21 16:08:49 +0000 UTC", r.UpdatedAt.String())
+	})
+
+	t.Run("returns an error if round does not exist", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+		c := newRound(146)
+
+		err := repo.Update(c)
+
+		if err == nil {
+			t.Fatalf("Test failed, expected nil, got %v", err)
+		}
+
+		if err != ErrNotFound {
+			t.Fatalf("Test failed, expected %v, got %v", ErrNotFound, err)
+		}
+	})
+
+	conn.Close()
+}
+
 var db = config.GetConfig().Database
 
 func getConnection(t *testing.T) (*sql.DB, func()) {

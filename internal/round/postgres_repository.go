@@ -40,6 +40,30 @@ func (p *PostgresRoundRepository) GetById(id int) (*model.Round, error) {
 	return rowToRound(row)
 }
 
+func (p *PostgresRoundRepository) Update(r *model.Round) error {
+	_, err := p.GetById(r.ID)
+
+	if err != nil {
+		return err
+	}
+
+	query := `
+	UPDATE sportmonks_round set name = $2, season_id = $3, start_date = $4, end_date = $5, updated_at = $6
+	where id = $1`
+
+	_, err = p.Connection.Exec(
+		query,
+		r.ID,
+		r.Name,
+		r.SeasonID,
+		r.StartDate.Unix(),
+		r.EndDate.Unix(),
+		r.UpdatedAt.Unix(),
+	)
+
+	return err
+}
+
 func rowToRound(r *sql.Row) (*model.Round, error) {
 	var id int
 	var name string
