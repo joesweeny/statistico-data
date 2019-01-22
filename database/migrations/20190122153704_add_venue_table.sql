@@ -6,7 +6,7 @@ CREATE TABLE sportmonks_venue (
   surface VARCHAR,
   address VARCHAR,
   city VARCHAR,
-  capacity VARCHAR,
+  capacity INTEGER,
   created_at INTEGER NOT NULL,
   updated_at INTEGER NOT NULL
 );
