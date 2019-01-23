@@ -48,6 +48,45 @@ func (p *PostgresResultRepository) Insert(r *model.Result) error {
 	return err
 }
 
+func (p *PostgresResultRepository) Update(r *model.Result) error {
+	_, err := p.GetByFixtureId(r.FixtureID)
+
+	if err != nil {
+		return err
+	}
+
+	query := `
+	UPDATE sportmonks_result SET pitch_condition = $2, home_formation = $3, away_formation = $4, home_score = $5, 
+    away_score = $6, home_pen_score = $7, away_pen_score = $8, half_time_score = $9, full_time_score = $10, 
+	extra_time_score = $11, home_league_position = $12, away_league_position = $13, minutes = $14, seconds = $15, 
+	added_time = $16, extra_time = $17, injury_time = $18, updated_at = $19 WHERE fixture_id = $1`
+
+	_, err = p.Connection.Exec(
+		query,
+		r.FixtureID,
+		r.PitchCondition,
+		r.HomeFormation,
+		r.AwayFormation,
+		r.HomeScore,
+		r.AwayScore,
+		r.HomePenScore,
+		r.AwayPenScore,
+		r.HalfTimeScore,
+		r.FullTimeScore,
+		r.ExtraTimeScore,
+		r.HomeLeaguePosition,
+		r.AwayLeaguePosition,
+		r.Minutes,
+		r.Seconds,
+		r.AddedTime,
+		r.ExtraTime,
+		r.InjuryTime,
+		r.UpdatedAt.Unix(),
+	)
+
+	return err
+}
+
 func (p *PostgresResultRepository) GetByFixtureId(id int) (*model.Result, error) {
 	query := `SELECT * FROM sportmonks_result where fixture_id = $1`
 	row := p.Connection.QueryRow(query, id)
@@ -64,9 +103,9 @@ func rowToResult(r *sql.Row) (*model.Result, error) {
 	var awayScore         *int
 	var homePenScore      *int
 	var awayPenScore      *int
-	var halfTimeScore     *int
-	var fullTimeScore     *int
-	var extraTimeScore    *int
+	var halfTimeScore     *string
+	var fullTimeScore     *string
+	var extraTimeScore    *string
 	var homePosition      *int
 	var awayPosition      *int
 	var mins              *int

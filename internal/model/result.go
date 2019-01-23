@@ -11,9 +11,9 @@ type Result struct {
 	AwayScore             *int       `json:"away_score"`
 	HomePenScore	      *int       `json:"home_pen_score"`
 	AwayPenScore	      *int       `json:"away_pen_score"`
-	HalfTimeScore         *int       `json:"half_time_score"`
-	FullTimeScore         *int       `json:"full_time_score"`
-	ExtraTimeScore        *int       `json:"extra_time_score"`
+	HalfTimeScore         *string    `json:"half_time_score"`
+	FullTimeScore         *string    `json:"full_time_score"`
+	ExtraTimeScore        *string    `json:"extra_time_score"`
 	HomeLeaguePosition    *int       `json:"home_league_position"`
 	AwayLeaguePosition    *int       `json:"away_league_position"`
 	Minutes               *int       `json:"minutes"`
