@@ -1,18 +1,18 @@
 package season
 
 import (
-	"github.com/stretchr/testify/mock"
-	"github.com/joesweeny/statshub/internal/model"
-	"net/http"
-	"github.com/joesweeny/sportmonks-go-client"
-	"github.com/stretchr/testify/assert"
-	"encoding/json"
-	"io/ioutil"
 	"bytes"
-	"github.com/jonboulle/clockwork"
-	"log"
-	"testing"
+	"encoding/json"
 	"errors"
+	"github.com/joesweeny/sportmonks-go-client"
+	"github.com/joesweeny/statshub/internal/model"
+	"github.com/jonboulle/clockwork"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
+	"io/ioutil"
+	"log"
+	"net/http"
+	"testing"
 )
 
 func TestProcess(t *testing.T) {

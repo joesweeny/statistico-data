@@ -2,8 +2,8 @@ package season
 
 import (
 	"github.com/joesweeny/sportmonks-go-client"
-	"log"
 	"github.com/joesweeny/statshub/internal/model"
+	"log"
 )
 
 type Service struct {

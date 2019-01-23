@@ -1,11 +1,11 @@
 package season
 
 import (
-	"time"
-	"github.com/jonboulle/clockwork"
-	"testing"
 	"github.com/joesweeny/sportmonks-go-client"
+	"github.com/jonboulle/clockwork"
 	"github.com/stretchr/testify/assert"
+	"testing"
+	"time"
 )
 
 var t = time.Date(2019, 01, 14, 11, 25, 00, 00, time.UTC)
@@ -59,11 +59,11 @@ func newClientSeason() *sportmonks.Season {
 		CurrentSeason:  true,
 		CurrentRoundID: 10,
 		CurrentStageID: 567,
-		Fixtures:       struct {
+		Fixtures: struct {
 			Data []sportmonks.Fixture `json:"data"`
-		} {},
-		Results:       struct {
+		}{},
+		Results: struct {
 			Data []sportmonks.Fixture `json:"data"`
-		} {},
+		}{},
 	}
 }
