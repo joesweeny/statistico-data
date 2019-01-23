@@ -10,6 +10,7 @@ import (
 
 const competition = "competition"
 const country = "country"
+const season = "season"
 
 var option = flag.String("option", "", "Provide the model name to process")
 
@@ -27,6 +28,8 @@ func main() {
 	case country:
 		service = app.GetCountryService()
 		break
+	case season:
+		service = app.GetSeasonService()
 	default:
 		fmt.Println("The option provided is not supported")
 		os.Exit(1)

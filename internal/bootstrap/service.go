@@ -3,6 +3,7 @@ package bootstrap
 import (
 	"github.com/joesweeny/statshub/internal/competition"
 	"github.com/joesweeny/statshub/internal/country"
+	"github.com/joesweeny/statshub/internal/season"
 )
 
 type Service interface {
@@ -36,6 +37,24 @@ func (b Bootstrap) GetCountryService() country.Service {
 	c := country.Service{
 		Repository: &country.PostgresCountryRepository{Connection: conn},
 		Factory:    country.Factory{Clock: clock()},
+		Client:     client,
+		Logger:     logger(),
+	}
+
+	return c
+}
+
+func (b Bootstrap) GetSeasonService() season.Service {
+	conn := b.databaseConnection()
+	client, err := b.sportmonksClient()
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	c := season.Service{
+		Repository: &season.PostgresSeasonRepository{Connection: conn},
+		Factory:    season.Factory{Clock: clock()},
 		Client:     client,
 		Logger:     logger(),
 	}
