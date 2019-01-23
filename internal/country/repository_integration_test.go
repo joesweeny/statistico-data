@@ -1,14 +1,14 @@
 package country
 
 import (
-	"testing"
-	"fmt"
 	"database/sql"
-	"github.com/joesweeny/statshub/internal/model"
+	"fmt"
 	"github.com/joesweeny/statshub/internal/config"
-	"time"
+	"github.com/joesweeny/statshub/internal/model"
 	_ "github.com/lib/pq"
 	"github.com/stretchr/testify/assert"
+	"testing"
+	"time"
 )
 
 func TestInsert(t *testing.T) {
@@ -86,7 +86,7 @@ func TestUpdate(t *testing.T) {
 		assert.Equal(t, got, want)
 	})
 
-	t.Run("returns error if record does not exist", func (t *testing.T) {
+	t.Run("returns error if record does not exist", func(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
 		c := newCountry(146)
@@ -105,7 +105,7 @@ func TestGetById(t *testing.T) {
 	conn, cleanUp := getConnection(t)
 	repo := PostgresCountryRepository{conn}
 
-	t.Run("country can be retrieved by ID", func (t *testing.T) {
+	t.Run("country can be retrieved by ID", func(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
 
@@ -131,7 +131,7 @@ func TestGetById(t *testing.T) {
 		a.Equal("2019-01-08 16:33:20 +0000 UTC", r.UpdatedAt.String())
 	})
 
-	t.Run("returns error if country does not exist", func (t *testing.T) {
+	t.Run("returns error if country does not exist", func(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
 
@@ -166,12 +166,12 @@ func getConnection(t *testing.T) (*sql.DB, func()) {
 
 func newCountry(id int) *model.Country {
 	c := model.Country{
-		ID:         id,
-		Name:       "England",
-		Continent:  "Europe",
-		ISO:        "ENG",
-		CreatedAt:  time.Unix(1546965200, 0),
-		UpdatedAt:  time.Unix(1546965200, 0),
+		ID:        id,
+		Name:      "England",
+		Continent: "Europe",
+		ISO:       "ENG",
+		CreatedAt: time.Unix(1546965200, 0),
+		UpdatedAt: time.Unix(1546965200, 0),
 	}
 
 	return &c

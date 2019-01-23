@@ -1,13 +1,13 @@
 package bootstrap
 
 import (
-	"github.com/joesweeny/statshub/internal/config"
 	"database/sql"
 	"fmt"
 	"github.com/joesweeny/sportmonks-go-client"
+	"github.com/joesweeny/statshub/internal/config"
+	"github.com/jonboulle/clockwork"
 	"log"
 	"os"
-	"github.com/jonboulle/clockwork"
 )
 
 type Bootstrap struct {

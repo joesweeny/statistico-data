@@ -1,20 +1,20 @@
 package competition
 
 import (
-	"testing"
 	"database/sql"
 	"fmt"
 	"github.com/joesweeny/statshub/internal/config"
 	"github.com/joesweeny/statshub/internal/model"
-	"time"
 	"github.com/stretchr/testify/assert"
+	"testing"
+	"time"
 )
 
 func TestInsert(t *testing.T) {
 	conn, cleanUp := getConnection(t)
 	repo := PostgresCompetitionRepository{Connection: conn}
 
-	t.Run("increases table count", func (t *testing.T) {
+	t.Run("increases table count", func(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
 
@@ -88,7 +88,7 @@ func TestGetById(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
 
-		_, err := repo.GetById(780);
+		_, err := repo.GetById(780)
 
 		if err == nil {
 			t.Fatalf("Test failed, expected %v, got nil", err)
@@ -135,7 +135,7 @@ func TestUpdate(t *testing.T) {
 		a.Equal("2019-01-08 16:33:20 +0000 UTC", r.UpdatedAt.String())
 	})
 
-	t.Run("returns error if record does not exist", func (t *testing.T) {
+	t.Run("returns error if record does not exist", func(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
 		c := newCompetition(146)
@@ -173,11 +173,11 @@ func getConnection(t *testing.T) (*sql.DB, func()) {
 
 func newCompetition(id int) *model.Competition {
 	return &model.Competition{
-		ID:         id,
-		Name:       "Premier League",
-		CountryID:  462,
-		IsCup:      false,
-		CreatedAt:  time.Unix(1546965200, 0),
-		UpdatedAt:  time.Unix(1546965200, 0),
+		ID:        id,
+		Name:      "Premier League",
+		CountryID: 462,
+		IsCup:     false,
+		CreatedAt: time.Unix(1546965200, 0),
+		UpdatedAt: time.Unix(1546965200, 0),
 	}
 }

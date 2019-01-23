@@ -4,8 +4,8 @@ import (
 	"database/sql"
 	"github.com/joesweeny/statshub/internal/model"
 	_ "github.com/lib/pq"
-	"time"
 	"github.com/pkg/errors"
+	"time"
 )
 
 var ErrNotFound = errors.New("not found")

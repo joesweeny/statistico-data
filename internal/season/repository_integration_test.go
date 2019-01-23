@@ -1,14 +1,14 @@
 package season
 
 import (
-	"github.com/joesweeny/statshub/internal/config"
-	"testing"
 	"database/sql"
 	"fmt"
+	"github.com/joesweeny/statshub/internal/config"
 	"github.com/joesweeny/statshub/internal/model"
-	"time"
-	"github.com/stretchr/testify/assert"
 	_ "github.com/lib/pq"
+	"github.com/stretchr/testify/assert"
+	"testing"
+	"time"
 )
 
 func TestInsert(t *testing.T) {
@@ -144,7 +144,7 @@ func TestGetById(t *testing.T) {
 		a.Equal("2019-01-08 16:33:20 +0000 UTC", r.UpdatedAt.String())
 	})
 
-	t.Run("returns error if season does not exist", func (t *testing.T) {
+	t.Run("returns error if season does not exist", func(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
 
@@ -185,11 +185,11 @@ func getConnection(t *testing.T) (*sql.DB, func()) {
 
 func newSeason(id int) *model.Season {
 	return &model.Season{
-		ID:         id,
-		Name:       "2018-2019",
-		LeagueID:   560,
-		IsCurrent:  true,
-		CreatedAt:  time.Unix(1546965200, 0),
-		UpdatedAt:  time.Unix(1546965200, 0),
+		ID:        id,
+		Name:      "2018-2019",
+		LeagueID:  560,
+		IsCurrent: true,
+		CreatedAt: time.Unix(1546965200, 0),
+		UpdatedAt: time.Unix(1546965200, 0),
 	}
 }

@@ -2,10 +2,10 @@ package competition
 
 import (
 	"github.com/joesweeny/sportmonks-go-client"
-	"time"
 	"github.com/jonboulle/clockwork"
-	"testing"
 	"github.com/stretchr/testify/assert"
+	"testing"
+	"time"
 )
 
 var t = time.Date(2019, 01, 14, 11, 25, 00, 00, time.UTC)
@@ -70,14 +70,14 @@ func newClientLeague() *sportmonks.League {
 			TopscorerGoals   bool `json:"topscorer_goals"`
 			TopscorerAssists bool `json:"topscorer_assists"`
 			TopscorerCards   bool `json:"topscorer_cards"`
-		} {
-			TopscorerGoals: true,
+		}{
+			TopscorerGoals:   true,
 			TopscorerAssists: false,
-			TopscorerCards: true,
-			},
-		Seasons: struct{
+			TopscorerCards:   true,
+		},
+		Seasons: struct {
 			Data []sportmonks.Season `json:"data"`
-		} {
+		}{
 			Data: []sportmonks.Season{},
 		},
 	}

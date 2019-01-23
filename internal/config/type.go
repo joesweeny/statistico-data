@@ -1,12 +1,12 @@
 package config
 
 type Database struct {
-	Driver    string
-	Host      string
-	Port      string
-	User      string
-	Password  string
-	Name      string
+	Driver   string
+	Host     string
+	Port     string
+	User     string
+	Password string
+	Name     string
 }
 
 type Services struct {
@@ -15,5 +15,5 @@ type Services struct {
 
 type SportsMonks struct {
 	BaseUri string
-	ApiKey	string
+	ApiKey  string
 }

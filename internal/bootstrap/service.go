@@ -1,8 +1,8 @@
 package bootstrap
 
 import (
-	"github.com/joesweeny/statshub/internal/country"
 	"github.com/joesweeny/statshub/internal/competition"
+	"github.com/joesweeny/statshub/internal/country"
 )
 
 type Service interface {

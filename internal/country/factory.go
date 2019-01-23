@@ -1,9 +1,9 @@
 package country
 
 import (
-	"github.com/jonboulle/clockwork"
 	"github.com/joesweeny/sportmonks-go-client"
 	"github.com/joesweeny/statshub/internal/model"
+	"github.com/jonboulle/clockwork"
 )
 
 type Factory struct {
@@ -12,12 +12,12 @@ type Factory struct {
 
 func (f Factory) createCountry(s *sportmonks.Country) *model.Country {
 	return &model.Country{
-		ID: 		s.ID,
-		Name: 		s.Name,
-		Continent: 	s.Extra.Continent,
-		ISO: 		s.Extra.ISO,
-		CreatedAt: 	f.Clock.Now(),
-		UpdatedAt: 	f.Clock.Now(),
+		ID:        s.ID,
+		Name:      s.Name,
+		Continent: s.Extra.Continent,
+		ISO:       s.Extra.ISO,
+		CreatedAt: f.Clock.Now(),
+		UpdatedAt: f.Clock.Now(),
 	}
 }
 

@@ -1,8 +1,8 @@
 package result
 
 import (
-	"errors"
 	"database/sql"
+	"errors"
 	"github.com/joesweeny/statshub/internal/model"
 	_ "github.com/lib/pq"
 	"time"
@@ -95,26 +95,26 @@ func (p *PostgresResultRepository) GetByFixtureId(id int) (*model.Result, error)
 }
 
 func rowToResult(r *sql.Row) (*model.Result, error) {
-	var fixtureId         int
-	var pitch             *string
-	var homeFormation     *string
-	var awayFormation     *string
-	var homeScore         *int
-	var awayScore         *int
-	var homePenScore      *int
-	var awayPenScore      *int
-	var halfTimeScore     *string
-	var fullTimeScore     *string
-	var extraTimeScore    *string
-	var homePosition      *int
-	var awayPosition      *int
-	var mins              *int
-	var secs              *int
-	var added             *int
-	var extra             *int
-	var injury            *int
-	var created           int64
-	var updated           int64
+	var fixtureId int
+	var pitch *string
+	var homeFormation *string
+	var awayFormation *string
+	var homeScore *int
+	var awayScore *int
+	var homePenScore *int
+	var awayPenScore *int
+	var halfTimeScore *string
+	var fullTimeScore *string
+	var extraTimeScore *string
+	var homePosition *int
+	var awayPosition *int
+	var mins *int
+	var secs *int
+	var added *int
+	var extra *int
+	var injury *int
+	var created int64
+	var updated int64
 
 	m := model.Result{}
 

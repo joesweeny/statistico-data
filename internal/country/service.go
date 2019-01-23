@@ -2,15 +2,15 @@ package country
 
 import (
 	"github.com/joesweeny/sportmonks-go-client"
-	"log"
 	"github.com/joesweeny/statshub/internal/model"
+	"log"
 )
 
 type Service struct {
 	Repository
 	Factory
-	Client     *sportmonks.Client
-	Logger     *log.Logger
+	Client *sportmonks.Client
+	Logger *log.Logger
 }
 
 func (s Service) Process() error {
@@ -57,5 +57,3 @@ func (s Service) persistCountry(c *sportmonks.Country) {
 
 	return
 }
-
-

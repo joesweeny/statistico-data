@@ -3,9 +3,9 @@ package country
 import (
 	"database/sql"
 	"github.com/joesweeny/statshub/internal/model"
-	"time"
 	_ "github.com/lib/pq"
 	"github.com/pkg/errors"
+	"time"
 )
 
 type PostgresCountryRepository struct {

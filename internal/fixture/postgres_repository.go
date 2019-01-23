@@ -1,11 +1,11 @@
 package fixture
 
 import (
-	"github.com/pkg/errors"
 	"database/sql"
 	"github.com/joesweeny/statshub/internal/model"
-	"time"
 	_ "github.com/lib/pq"
+	"github.com/pkg/errors"
+	"time"
 )
 
 var ErrNotFound = errors.New("not found")

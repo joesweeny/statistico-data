@@ -20,8 +20,8 @@ func GetConfig() *Config {
 	}
 
 	config.Services.SportsMonks = SportsMonks{
-		BaseUri: 	"https://soccer.sportmonks.com",
-		ApiKey: 	os.Getenv("SPORTMONKS_API_KEY"),
+		BaseUri: "https://soccer.sportmonks.com",
+		ApiKey:  os.Getenv("SPORTMONKS_API_KEY"),
 	}
 
 	return &config

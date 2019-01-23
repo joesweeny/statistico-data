@@ -1,18 +1,18 @@
 package competition
 
 import (
-	"github.com/stretchr/testify/mock"
-	"github.com/joesweeny/statshub/internal/model"
-	"net/http"
-	"github.com/joesweeny/sportmonks-go-client"
-	"github.com/stretchr/testify/assert"
-	"encoding/json"
-	"io/ioutil"
 	"bytes"
-	"github.com/jonboulle/clockwork"
-	"log"
-	"testing"
+	"encoding/json"
 	"errors"
+	"github.com/joesweeny/sportmonks-go-client"
+	"github.com/joesweeny/statshub/internal/model"
+	"github.com/jonboulle/clockwork"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
+	"io/ioutil"
+	"log"
+	"net/http"
+	"testing"
 )
 
 func TestProcess(t *testing.T) {
@@ -40,14 +40,14 @@ func TestProcess(t *testing.T) {
 		Logger:     log.New(ioutil.Discard, "", 0),
 	}
 
-	t.Run("inserts new competition", func (t *testing.T) {
+	t.Run("inserts new competition", func(t *testing.T) {
 		repo.On("GetById", 564).Return(&model.Competition{}, errors.New("not Found"))
 		repo.On("Insert", mock.Anything).Return(nil)
 		repo.AssertNotCalled(t, "Update", mock.Anything)
 		service.Process()
 	})
 
-	t.Run("updates existing competition", func (t *testing.T) {
+	t.Run("updates existing competition", func(t *testing.T) {
 		c := newCompetition(1)
 		repo.On("GetById", 564).Return(c, nil)
 		repo.On("Update", &c).Return(nil)
@@ -56,7 +56,6 @@ func TestProcess(t *testing.T) {
 		service.Process()
 	})
 }
-
 
 type mockRepository struct {
 	mock.Mock
@@ -122,14 +121,14 @@ func clientLeague() sportmonks.League {
 			TopscorerGoals   bool `json:"topscorer_goals"`
 			TopscorerAssists bool `json:"topscorer_assists"`
 			TopscorerCards   bool `json:"topscorer_cards"`
-		} {
-			TopscorerGoals: true,
+		}{
+			TopscorerGoals:   true,
 			TopscorerAssists: false,
-			TopscorerCards: true,
+			TopscorerCards:   true,
 		},
-		Seasons: struct{
+		Seasons: struct {
 			Data []sportmonks.Season `json:"data"`
-		} {
+		}{
 			Data: []sportmonks.Season{},
 		},
 	}

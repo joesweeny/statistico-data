@@ -2,10 +2,10 @@ package competition
 
 import (
 	"database/sql"
+	"errors"
 	"github.com/joesweeny/statshub/internal/model"
 	_ "github.com/lib/pq"
 	"time"
-	"errors"
 )
 
 var ErrNotFound = errors.New("not found")
