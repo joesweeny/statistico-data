@@ -21,7 +21,7 @@ CREATE TABLE sportmonks_result (
     injury_time INTEGER,
     created_at INTEGER NOT NULL,
     updated_at INTEGER NOT NULL
-)
+);
 -- +goose Down
 -- SQL in this section is executed when the migration is rolled back.
 DROP TABLE sportmonks_result
