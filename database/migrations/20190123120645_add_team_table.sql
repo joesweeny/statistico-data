@@ -7,7 +7,7 @@ CREATE TABLE sportmonks_team (
   country_id INTEGER,
   venue_id INTEGER NOT NULL,
   national_team BOOLEAN NOT NULL,
-  founded VARCHAR,
+  founded INTEGER,
   logo VARCHAR,
   created_at INTEGER NOT NULL,
   updated_at INTEGER NOT NULL
