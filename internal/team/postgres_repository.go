@@ -36,6 +36,33 @@ func (p *PostgresTeamRepository) Insert(t *model.Team) error {
 	return err
 }
 
+func (p *PostgresTeamRepository) Update(m *model.Team) error {
+	_, err := p.GetById(m.ID)
+
+	if err != nil {
+		return err
+	}
+
+	query := `
+	UPDATE sportmonks_team set name = $2, short_code = $3, country_id = $4, venue_id = $5, national_team = $6,
+	founded = $7, logo = $8, updated_at = $9 where id = $1`
+
+	_, err = p.Connection.Exec(
+		query,
+		m.ID,
+		m.Name,
+		m.ShortCode,
+		m.CountryID,
+		m.VenueID,
+		m.NationalTeam,
+		m.Founded,
+		m.Logo,
+		m.UpdatedAt.Unix(),
+	)
+
+	return err
+}
+
 func (p *PostgresTeamRepository) GetById(id int) (*model.Team, error) {
 	query := `SELECT * FROM sportmonks_team where id = $1`
 	row := p.Connection.QueryRow(query, id)
