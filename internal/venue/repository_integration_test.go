@@ -1,12 +1,12 @@
 package venue
 
 import (
-	"github.com/joesweeny/statshub/internal/config"
 	"database/sql"
 	"fmt"
-	"testing"
-	"github.com/stretchr/testify/assert"
+	"github.com/joesweeny/statshub/internal/config"
 	"github.com/joesweeny/statshub/internal/model"
+	"github.com/stretchr/testify/assert"
+	"testing"
 	"time"
 )
 
@@ -193,11 +193,11 @@ func newVenue(id int) *model.Venue {
 	var c = "London"
 
 	return &model.Venue{
-		ID:      	id,
-		Name:    	"London Stadium",
-		Surface: 	&s,
-		City: 		&c,
-		CreatedAt: 	time.Unix(1548086929, 0),
-		UpdatedAt: 	time.Unix(1548086929, 0),
+		ID:        id,
+		Name:      "London Stadium",
+		Surface:   &s,
+		City:      &c,
+		CreatedAt: time.Unix(1548086929, 0),
+		UpdatedAt: time.Unix(1548086929, 0),
 	}
 }

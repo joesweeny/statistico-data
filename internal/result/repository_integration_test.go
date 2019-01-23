@@ -1,13 +1,13 @@
 package result
 
 import (
-	"github.com/joesweeny/statshub/internal/config"
 	"database/sql"
-	"testing"
 	"fmt"
+	"github.com/joesweeny/statshub/internal/config"
 	"github.com/joesweeny/statshub/internal/model"
-	"time"
 	"github.com/stretchr/testify/assert"
+	"testing"
+	"time"
 )
 
 func TestInsert(t *testing.T) {
@@ -132,7 +132,7 @@ func TestUpdate(t *testing.T) {
 
 		var pitch = "Good"
 		var homeFormation = "4-2-3-1"
-		var awayFormation =  "5-3-2"
+		var awayFormation = "5-3-2"
 		var homeScore = 4
 		var awayScore = 1
 		var awayPenScore = 1
@@ -238,8 +238,8 @@ func getConnection(t *testing.T) (*sql.DB, func()) {
 
 func newResult(f int) *model.Result {
 	return &model.Result{
-		FixtureID:  f,
-		CreatedAt:  time.Unix(1546965200, 0),
-		UpdatedAt:  time.Unix(1546965200, 0),
+		FixtureID: f,
+		CreatedAt: time.Unix(1546965200, 0),
+		UpdatedAt: time.Unix(1546965200, 0),
 	}
 }

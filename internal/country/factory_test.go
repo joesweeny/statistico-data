@@ -1,11 +1,11 @@
 package country
 
 import (
-	"testing"
-	"github.com/jonboulle/clockwork"
-	"time"
 	"github.com/joesweeny/sportmonks-go-client"
+	"github.com/jonboulle/clockwork"
 	"github.com/stretchr/testify/assert"
+	"testing"
+	"time"
 )
 
 var t = time.Date(2019, 01, 14, 11, 25, 00, 00, time.UTC)
@@ -13,7 +13,7 @@ var clock = clockwork.NewFakeClockAt(t)
 var f = Factory{clock}
 
 func TestFactoryCreate(t *testing.T) {
-	t.Run("a new domain country struct is hydrated", func (t *testing.T) {
+	t.Run("a new domain country struct is hydrated", func(t *testing.T) {
 		t.Helper()
 
 		newCountry := f.createCountry(newClientCountry())
@@ -30,7 +30,7 @@ func TestFactoryCreate(t *testing.T) {
 }
 
 func TestFactoryUpdate(t *testing.T) {
-	t.Run("updates an existing country struct", func (t *testing.T) {
+	t.Run("updates an existing country struct", func(t *testing.T) {
 		t.Helper()
 
 		clientCountry := newClientCountry()
@@ -56,17 +56,17 @@ func TestFactoryUpdate(t *testing.T) {
 
 func newClientCountry() *sportmonks.Country {
 	country := sportmonks.Country{
-		ID: 180,
+		ID:   180,
 		Name: "England",
 		Extra: struct {
-			Continent string `json:"continent"`
-			SubRegion string `json:"sub_region"`
-			WorldRegion string `json:"world_region"`
-			Fifa interface{} `json:"fifa,string"`
-			ISO string `json:"iso"`
-			Longitude string `json:"longitude"`
-			Latitude string `json:"latitude"`
-		} {
+			Continent   string      `json:"continent"`
+			SubRegion   string      `json:"sub_region"`
+			WorldRegion string      `json:"world_region"`
+			Fifa        interface{} `json:"fifa,string"`
+			ISO         string      `json:"iso"`
+			Longitude   string      `json:"longitude"`
+			Latitude    string      `json:"latitude"`
+		}{
 			Continent:   "Europe",
 			SubRegion:   "Western Europe",
 			WorldRegion: "Europe",

@@ -1,18 +1,18 @@
 package country
 
 import (
-	"testing"
-	"github.com/stretchr/testify/mock"
-	"github.com/joesweeny/statshub/internal/model"
-	"net/http"
-	"github.com/stretchr/testify/assert"
-	"log"
-	"io/ioutil"
-	"github.com/joesweeny/sportmonks-go-client"
-	"github.com/jonboulle/clockwork"
+	"bytes"
 	"encoding/json"
 	"errors"
-	"bytes"
+	"github.com/joesweeny/sportmonks-go-client"
+	"github.com/joesweeny/statshub/internal/model"
+	"github.com/jonboulle/clockwork"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
+	"io/ioutil"
+	"log"
+	"net/http"
+	"testing"
 )
 
 func TestProcess(t *testing.T) {
@@ -40,14 +40,14 @@ func TestProcess(t *testing.T) {
 		Logger:     log.New(ioutil.Discard, "", 0),
 	}
 
-	t.Run("inserts new country", func (t *testing.T) {
+	t.Run("inserts new country", func(t *testing.T) {
 		repo.On("GetById", 1).Return(&model.Country{}, errors.New("not Found"))
 		repo.On("Insert", mock.Anything).Return(nil)
 		repo.AssertNotCalled(t, "Update", mock.Anything)
 		service.Process()
 	})
 
-	t.Run("updates existing country", func (t *testing.T) {
+	t.Run("updates existing country", func(t *testing.T) {
 		c := newCountry(1)
 		repo.On("GetById", 1).Return(c, nil)
 		repo.On("Update", &c).Return(nil)
@@ -108,17 +108,17 @@ func countryResponse() sportmonks.CountriesResponse {
 
 func clientCountry() sportmonks.Country {
 	return sportmonks.Country{
-		ID:    1,
-		Name:  "Brazil",
+		ID:   1,
+		Name: "Brazil",
 		Extra: struct {
-			Continent string `json:"continent"`
-			SubRegion string `json:"sub_region"`
-			WorldRegion string `json:"world_region"`
-			Fifa interface{} `json:"fifa,string"`
-			ISO string `json:"iso"`
-			Longitude string `json:"longitude"`
-			Latitude string `json:"latitude"`
-		} {
+			Continent   string      `json:"continent"`
+			SubRegion   string      `json:"sub_region"`
+			WorldRegion string      `json:"world_region"`
+			Fifa        interface{} `json:"fifa,string"`
+			ISO         string      `json:"iso"`
+			Longitude   string      `json:"longitude"`
+			Latitude    string      `json:"latitude"`
+		}{
 			Continent:   "South America",
 			SubRegion:   "South America",
 			WorldRegion: "South America",

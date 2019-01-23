@@ -1,9 +1,9 @@
 package season
 
 import (
-	"github.com/pkg/errors"
 	"database/sql"
 	"github.com/joesweeny/statshub/internal/model"
+	"github.com/pkg/errors"
 	"time"
 )
 
@@ -32,25 +32,25 @@ func (p *PostgresSeasonRepository) Insert(s *model.Season) error {
 }
 
 func (p *PostgresSeasonRepository) Update(s *model.Season) error {
-	 _, err := p.GetById(s.ID)
+	_, err := p.GetById(s.ID)
 
-	 if err != nil {
-	 	return err
-	 }
+	if err != nil {
+		return err
+	}
 
-	 query := `
+	query := `
 	 UPDATE sportmonks_season set name = $2, league_id = $3, is_current = $4, updated_at = $5 where id = $1`
 
-	 _, err = p.Connection.Exec(
-	 	query,
-	 	s.ID,
-	 	s.Name,
-	 	s.LeagueID,
-	 	s.IsCurrent,
-	 	s.UpdatedAt.Unix(),
-	 )
+	_, err = p.Connection.Exec(
+		query,
+		s.ID,
+		s.Name,
+		s.LeagueID,
+		s.IsCurrent,
+		s.UpdatedAt.Unix(),
+	)
 
-	 return err
+	return err
 }
 
 func (p *PostgresSeasonRepository) GetById(id int) (*model.Season, error) {

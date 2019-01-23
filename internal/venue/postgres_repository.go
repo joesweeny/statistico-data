@@ -34,7 +34,7 @@ func (p *PostgresVenueRepository) Insert(v *model.Venue) error {
 	return err
 }
 
-func (p *PostgresVenueRepository) Update (v *model.Venue) error {
+func (p *PostgresVenueRepository) Update(v *model.Venue) error {
 	_, err := p.GetById(v.ID)
 
 	if err != nil {
