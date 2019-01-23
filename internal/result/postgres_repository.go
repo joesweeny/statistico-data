@@ -1,10 +1,14 @@
 package result
 
 import (
+	"errors"
 	"database/sql"
 	"github.com/joesweeny/statshub/internal/model"
 	_ "github.com/lib/pq"
+	"time"
 )
+
+var ErrNotFound = errors.New("not found")
 
 type PostgresResultRepository struct {
 	Connection *sql.DB
@@ -42,4 +46,67 @@ func (p *PostgresResultRepository) Insert(r *model.Result) error {
 	)
 
 	return err
+}
+
+func (p *PostgresResultRepository) GetByFixtureId(id int) (*model.Result, error) {
+	query := `SELECT * FROM sportmonks_result where fixture_id = $1`
+	row := p.Connection.QueryRow(query, id)
+
+	return rowToResult(row)
+}
+
+func rowToResult(r *sql.Row) (*model.Result, error) {
+	var fixtureId         int
+	var pitch             *string
+	var homeFormation     *string
+	var awayFormation     *string
+	var homeScore         *int
+	var awayScore         *int
+	var homePenScore      *int
+	var awayPenScore      *int
+	var halfTimeScore     *int
+	var fullTimeScore     *int
+	var extraTimeScore    *int
+	var homePosition      *int
+	var awayPosition      *int
+	var mins              *int
+	var secs              *int
+	var added             *int
+	var extra             *int
+	var injury            *int
+	var created           int64
+	var updated           int64
+
+	m := model.Result{}
+
+	err := r.Scan(&fixtureId, &pitch, &homeFormation, &awayFormation, &homeScore, &awayScore, &homePenScore, &awayPenScore,
+		&halfTimeScore, &fullTimeScore, &extraTimeScore, &homePosition, &awayPosition, &mins, &secs, &added, &extra,
+		&injury, &created, &updated)
+
+	if err != nil {
+		return &m, ErrNotFound
+	}
+
+	m.FixtureID = fixtureId
+	m.PitchCondition = pitch
+	m.HomeFormation = homeFormation
+	m.AwayFormation = awayFormation
+	m.HomeScore = homeScore
+	m.AwayScore = awayScore
+	m.HomePenScore = homePenScore
+	m.AwayPenScore = awayPenScore
+	m.HalfTimeScore = halfTimeScore
+	m.FullTimeScore = fullTimeScore
+	m.ExtraTimeScore = extraTimeScore
+	m.HomeLeaguePosition = homePosition
+	m.AwayLeaguePosition = awayPosition
+	m.Minutes = mins
+	m.Seconds = secs
+	m.AddedTime = added
+	m.ExtraTime = extra
+	m.InjuryTime = injury
+	m.CreatedAt = time.Unix(created, 0)
+	m.UpdatedAt = time.Unix(updated, 0)
+
+	return &m, nil
 }

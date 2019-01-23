@@ -54,6 +54,68 @@ func TestInsert(t *testing.T) {
 	conn.Close()
 }
 
+func TestGetById(t *testing.T) {
+	conn, cleanUp := getConnection(t)
+	repo := PostgresResultRepository{Connection: conn}
+
+	t.Run("result can be retrieved by ID", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+
+		m := newResult(50)
+
+		if err := repo.Insert(m); err != nil {
+			t.Errorf("Error when inserting record into the database: %s", err.Error())
+		}
+
+		r, err := repo.GetByFixtureId(50)
+
+		if err != nil {
+			t.Errorf("Error when retrieving a record from the database: %s", err.Error())
+		}
+
+		a := assert.New(t)
+
+		a.Equal(50, r.FixtureID)
+		a.Nil(r.PitchCondition)
+		a.Nil(r.HomeFormation)
+		a.Nil(r.AwayFormation)
+		a.Nil(r.HomeScore)
+		a.Nil(r.AwayScore)
+		a.Nil(r.HomePenScore)
+		a.Nil(r.AwayPenScore)
+		a.Nil(r.HalfTimeScore)
+		a.Nil(r.FullTimeScore)
+		a.Nil(r.ExtraTimeScore)
+		a.Nil(r.HomeLeaguePosition)
+		a.Nil(r.AwayLeaguePosition)
+		a.Nil(r.Minutes)
+		a.Nil(r.Seconds)
+		a.Nil(r.AddedTime)
+		a.Nil(r.ExtraTime)
+		a.Nil(r.InjuryTime)
+		a.Equal("2019-01-08 16:33:20 +0000 UTC", r.CreatedAt.String())
+		a.Equal("2019-01-08 16:33:20 +0000 UTC", r.UpdatedAt.String())
+	})
+
+	t.Run("returns error if result does not exist", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+
+		_, err := repo.GetByFixtureId(99)
+
+		if err == nil {
+			t.Errorf("Test failed, expected %v, got nil", err)
+		}
+
+		if err != ErrNotFound {
+			t.Fatalf("Test failed, expected %v, got %s", ErrNotFound, err)
+		}
+	})
+
+	conn.Close()
+}
+
 var db = config.GetConfig().Database
 
 func getConnection(t *testing.T) (*sql.DB, func()) {
