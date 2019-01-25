@@ -82,6 +82,11 @@ func (m mockRepository) GetIds() ([]int, error) {
 	return args.Get(0).([]int), args.Error(1)
 }
 
+func (m mockRepository) GetCurrentSeasons() ([]model.Season, error) {
+	args := m.Called()
+	return args.Get(0).([]model.Season), args.Error(1)
+}
+
 type roundTripFunc func(req *http.Request) *http.Response
 
 func (r roundTripFunc) RoundTrip(req *http.Request) (*http.Response, error) {

@@ -98,6 +98,11 @@ func (m mockSeasonRepository) GetIds() ([]int, error) {
 	return args.Get(0).([]int), args.Error(1)
 }
 
+func (m mockSeasonRepository) GetCurrentSeasons() ([]model.Season, error) {
+	args := m.Called()
+	return args.Get(0).([]model.Season), args.Error(1)
+}
+
 type mockFixtureRepository struct {
 	mock.Mock
 }

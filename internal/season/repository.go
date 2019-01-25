@@ -7,4 +7,5 @@ type Repository interface {
 	Update(s *model.Season) error
 	GetById(id int) (*model.Season, error)
 	GetIds() ([]int, error)
+	GetCurrentSeasons() ([]model.Season, error)
 }
