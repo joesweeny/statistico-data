@@ -11,6 +11,7 @@ import (
 const competition = "competition"
 const country = "country"
 const fixture = "fixture"
+const fixtureCurrentSeason = "fixture:current-season"
 const season = "season"
 
 var option = flag.String("option", "", "Provide the model name to process")
