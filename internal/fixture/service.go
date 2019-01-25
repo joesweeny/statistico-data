@@ -18,7 +18,7 @@ type Service struct {
 func (s Service) Process() error {
 	q := []string{"fixtures"}
 
-	ids, err := s.SeasonRepo.GetIds()
+	ids, err := s.SeasonRepo.Ids()
 
 	if err != nil {
 		return err

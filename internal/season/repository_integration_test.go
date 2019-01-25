@@ -79,7 +79,7 @@ func TestUpdate(t *testing.T) {
 			t.Errorf("Error when updating a record in the database: %s", err.Error())
 		}
 
-		r, err := repo.GetById(50)
+		r, err := repo.Id(50)
 
 		if err != nil {
 			t.Errorf("Error when updating a record in the database: %s", err.Error())
@@ -128,7 +128,7 @@ func TestGetById(t *testing.T) {
 			t.Errorf("Error when inserting record into the database: %s", err.Error())
 		}
 
-		r, err := repo.GetById(146)
+		r, err := repo.Id(146)
 
 		if err != nil {
 			t.Errorf("Error when retrieving a record from the database: %s", err.Error())
@@ -148,7 +148,7 @@ func TestGetById(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
 
-		_, err := repo.GetById(4)
+		_, err := repo.Id(4)
 
 		if err == nil {
 			t.Errorf("Test failed, expected %v, got nil", err)
@@ -178,7 +178,7 @@ func TestGetIds(t *testing.T) {
 			}
 		}
 
-		ids, err := repo.GetIds()
+		ids, err := repo.Ids()
 
 		want := []int{1, 2, 3, 4}
 
@@ -190,7 +190,7 @@ func TestGetIds(t *testing.T) {
 	})
 }
 
-func TestGetCurrentSeasons(t *testing.T) {
+func TestCurrentSeasonIds(t *testing.T) {
 	conn, cleanUp := getConnection(t)
 	repo := PostgresSeasonRepository{Connection: conn}
 
@@ -214,13 +214,13 @@ func TestGetCurrentSeasons(t *testing.T) {
 			t.Errorf("Error when inserting record into the database: %s", err.Error())
 		}
 
-		retrieved, err := repo.GetCurrentSeasons()
+		retrieved, err := repo.CurrentSeasonIds()
 
 		if err != nil {
 			t.Fatalf("Test failed, expected %v, got %s", seasons, err.Error())
 		}
 
-		assert.Equal(t, seasons, retrieved)
+		assert.Equal(t, []int{1, 2, 3, 4}, retrieved)
 	})
 }
 

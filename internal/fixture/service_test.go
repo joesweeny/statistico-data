@@ -44,7 +44,7 @@ func TestProcess(t *testing.T) {
 	}
 
 	t.Run("inserts new fixture", func(t *testing.T) {
-		seasonRepo.On("GetIds").Return([]int{123}, nil)
+		seasonRepo.On("Ids").Return([]int{123}, nil)
 		fixtureRepo.On("GetById", 34).Return(&model.Fixture{}, errors.New("not found"))
 		fixtureRepo.On("Insert", mock.Anything).Return(nil)
 		fixtureRepo.AssertNotCalled(t, "Update", mock.Anything)
@@ -53,7 +53,7 @@ func TestProcess(t *testing.T) {
 
 	t.Run("updates existing fixture", func(t *testing.T) {
 		f := newFixture(34)
-		seasonRepo.On("GetIds").Return([]int{123}, nil)
+		seasonRepo.On("Ids").Return([]int{123}, nil)
 		fixtureRepo.On("GetById", 34).Return(f, nil)
 		fixtureRepo.On("Update", &f).Return(nil)
 		fixtureRepo.AssertNotCalled(t, "Insert", mock.Anything)
@@ -87,20 +87,20 @@ func (m mockSeasonRepository) Update(c *model.Season) error {
 	return args.Error(0)
 }
 
-func (m mockSeasonRepository) GetById(id int) (*model.Season, error) {
+func (m mockSeasonRepository) Id(id int) (*model.Season, error) {
 	args := m.Called(id)
 	c := args.Get(0).(*model.Season)
 	return c, args.Error(1)
 }
 
-func (m mockSeasonRepository) GetIds() ([]int, error) {
+func (m mockSeasonRepository) Ids() ([]int, error) {
 	args := m.Called()
 	return args.Get(0).([]int), args.Error(1)
 }
 
-func (m mockSeasonRepository) GetCurrentSeasons() ([]model.Season, error) {
+func (m mockSeasonRepository) CurrentSeasonIds() ([]int, error) {
 	args := m.Called()
-	return args.Get(0).([]model.Season), args.Error(1)
+	return args.Get(0).([]int), args.Error(1)
 }
 
 type mockFixtureRepository struct {
