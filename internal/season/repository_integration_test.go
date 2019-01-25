@@ -162,6 +162,34 @@ func TestGetById(t *testing.T) {
 	conn.Close()
 }
 
+func TestGetIds(t *testing.T) {
+	conn, cleanUp := getConnection(t)
+	repo := PostgresSeasonRepository{Connection: conn}
+
+	t.Run("test returns a slice of int ids", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+
+		for i := 1; i <= 4; i++ {
+			s := newSeason(i)
+
+			if err := repo.Insert(s); err != nil {
+				t.Errorf("Error when inserting record into the database: %s", err.Error())
+			}
+		}
+
+		ids, err := repo.GetIds()
+
+		want := []int{1, 2, 3, 4}
+
+		if err != nil {
+			t.Fatalf("Test failed, expected %v, got %s", want, err.Error())
+		}
+
+		assert.Equal(t, want, ids)
+	})
+}
+
 var db = config.GetConfig().Database
 
 func getConnection(t *testing.T) (*sql.DB, func()) {
