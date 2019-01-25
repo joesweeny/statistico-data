@@ -20,7 +20,7 @@ func TestInsert(t *testing.T) {
 		defer cleanUp()
 
 		for i := 1; i < 4; i++ {
-			s := newSeason(i)
+			s := newSeason(i, true)
 
 			if err := repo.Insert(s); err != nil {
 				t.Errorf("Error when inserting record into the database: %s", err.Error())
@@ -41,7 +41,7 @@ func TestInsert(t *testing.T) {
 	t.Run("returns error when ID primary key violates unique constraint", func(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
-		c := newSeason(10)
+		c := newSeason(10, true)
 
 		if err := repo.Insert(c); err != nil {
 			t.Errorf("Test failed, expected nil, got %s", err)
@@ -63,7 +63,7 @@ func TestUpdate(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
 
-		s := newSeason(50)
+		s := newSeason(50, true)
 
 		if err := repo.Insert(s); err != nil {
 			t.Errorf("Error when inserting record into the database: %s", err.Error())
@@ -96,7 +96,7 @@ func TestUpdate(t *testing.T) {
 	t.Run("returns an error if record does not exist", func(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
-		c := newSeason(146)
+		c := newSeason(146, true)
 
 		err := repo.Update(c)
 
@@ -116,7 +116,7 @@ func TestGetById(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
 
-		s := newSeason(146)
+		s := newSeason(146, true)
 
 		err := repo.Update(s)
 
@@ -171,7 +171,7 @@ func TestGetIds(t *testing.T) {
 		defer cleanUp()
 
 		for i := 1; i <= 4; i++ {
-			s := newSeason(i)
+			s := newSeason(i, true)
 
 			if err := repo.Insert(s); err != nil {
 				t.Errorf("Error when inserting record into the database: %s", err.Error())
@@ -187,6 +187,40 @@ func TestGetIds(t *testing.T) {
 		}
 
 		assert.Equal(t, want, ids)
+	})
+}
+
+func TestGetCurrentSeasons(t *testing.T) {
+	conn, cleanUp := getConnection(t)
+	repo := PostgresSeasonRepository{Connection: conn}
+
+	t.Run("returns records with is current season set to true", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+
+		seasons := []model.Season{}
+
+		for i := 1; i <= 4; i++ {
+			s := newSeason(i, true)
+
+			seasons = append(seasons, *s)
+
+			if err := repo.Insert(s); err != nil {
+				t.Errorf("Error when inserting record into the database: %s", err.Error())
+			}
+		}
+
+		if err := repo.Insert(newSeason(10, false)); err != nil {
+			t.Errorf("Error when inserting record into the database: %s", err.Error())
+		}
+
+		retrieved, err := repo.GetCurrentSeasons()
+
+		if err != nil {
+			t.Fatalf("Test failed, expected %v, got %s", seasons, err.Error())
+		}
+
+		assert.Equal(t, seasons, retrieved)
 	})
 }
 
@@ -211,12 +245,12 @@ func getConnection(t *testing.T) (*sql.DB, func()) {
 	}
 }
 
-func newSeason(id int) *model.Season {
+func newSeason(id int, current bool) *model.Season {
 	return &model.Season{
 		ID:        id,
 		Name:      "2018-2019",
 		LeagueID:  560,
-		IsCurrent: true,
+		IsCurrent: current,
 		CreatedAt: time.Unix(1546965200, 0),
 		UpdatedAt: time.Unix(1546965200, 0),
 	}

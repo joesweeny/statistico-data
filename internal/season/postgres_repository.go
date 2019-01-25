@@ -85,24 +85,51 @@ func (p *PostgresSeasonRepository) GetIds() ([]int, error) {
 	return ids, nil
 }
 
+func (p *PostgresSeasonRepository) GetCurrentSeasons() ([]model.Season, error) {
+	query := `SELECT * FROM sportmonks_season where is_current = true`
+
+	rows, err := p.Connection.Query(query)
+
+	if err != nil {
+		return []model.Season{}, err
+	}
+
+	defer rows.Close()
+
+	var seasons []model.Season
+
+	for rows.Next() {
+		var s model.Season
+		var created *int64
+		var updated *int64
+
+		if err := rows.Scan(&s.ID, &s.Name, &s.LeagueID, &s.IsCurrent, &created, &updated); err != nil {
+			return seasons, err
+		}
+
+		s.CreatedAt = time.Unix(*created, 0)
+		s.UpdatedAt = time.Unix(*updated, 0)
+
+		if err != nil {
+			return []model.Season{}, err
+		}
+
+		seasons = append(seasons, s)
+	}
+
+	return seasons, nil
+}
+
 func rowToSeason(r *sql.Row) (*model.Season, error) {
-	var id int
-	var name string
-	var leagueId int
-	var current bool
 	var created int64
 	var updated int64
 
 	s := model.Season{}
 
-	if err := r.Scan(&id, &name, &leagueId, &current, &created, &updated); err != nil {
+	if err := r.Scan(&s.ID, &s.Name, &s.LeagueID, &s.IsCurrent, &created, &updated); err != nil {
 		return &s, ErrNotFound
 	}
 
-	s.ID = id
-	s.Name = name
-	s.LeagueID = leagueId
-	s.IsCurrent = current
 	s.CreatedAt = time.Unix(created, 0)
 	s.UpdatedAt = time.Unix(updated, 0)
 

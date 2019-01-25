@@ -48,7 +48,7 @@ func TestProcess(t *testing.T) {
 	})
 
 	t.Run("updates existing competition", func(t *testing.T) {
-		c := newSeason(1)
+		c := newSeason(1, true)
 		repo.On("GetById", 100).Return(c, nil)
 		repo.On("Update", &c).Return(nil)
 		repo.MethodCalled("Update", &c)
