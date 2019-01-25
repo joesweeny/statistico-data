@@ -1,18 +1,18 @@
 package fixture
 
 import (
-	"github.com/stretchr/testify/mock"
-	"github.com/joesweeny/statshub/internal/model"
-	"testing"
-	"github.com/stretchr/testify/assert"
-	"encoding/json"
-	"io/ioutil"
 	"bytes"
-	"net/http"
+	"encoding/json"
 	"github.com/joesweeny/sportmonks-go-client"
+	"github.com/joesweeny/statshub/internal/model"
 	"github.com/jonboulle/clockwork"
-	"log"
 	"github.com/pkg/errors"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
+	"io/ioutil"
+	"log"
+	"net/http"
+	"testing"
 )
 
 func TestProcess(t *testing.T) {
@@ -122,12 +122,12 @@ func seasonResponse() sportmonks.SeasonResponse {
 	var round = 10
 	var stage = 567
 	s := sportmonks.Season{
-		ID:             100,
-		Name:           "2018-2019",
-		LeagueID:       231,
-		IsCurrentSeason:  true,
-		CurrentRoundID: &round,
-		CurrentStageID: &stage,
+		ID:              100,
+		Name:            "2018-2019",
+		LeagueID:        231,
+		IsCurrentSeason: true,
+		CurrentRoundID:  &round,
+		CurrentStageID:  &stage,
 		Fixtures: struct {
 			Data []sportmonks.Fixture `json:"data"`
 		}{},

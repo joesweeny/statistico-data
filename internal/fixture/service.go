@@ -3,13 +3,13 @@ package fixture
 import (
 	"github.com/joesweeny/sportmonks-go-client"
 	"github.com/joesweeny/statshub/internal/model"
-	"log"
 	"github.com/joesweeny/statshub/internal/season"
+	"log"
 )
 
 type Service struct {
 	Repository
-	SeasonRepo   season.Repository
+	SeasonRepo season.Repository
 	Factory
 	Client *sportmonks.Client
 	Logger *log.Logger
