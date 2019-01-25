@@ -85,7 +85,7 @@ func rowToFixture(r *sql.Row) (*model.Fixture, error) {
 		&f.HomeTeamID,
 		&f.AwayTeamID,
 		&f.RefereeID,
-		&date, 
+		&date,
 		&created,
 		&updated,
 	)
