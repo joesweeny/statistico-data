@@ -37,7 +37,7 @@ func (s Service) Process() error {
 }
 
 func (s Service) persistSeason(m *sportmonks.Season) {
-	season, err := s.GetById(m.ID)
+	season, err := s.Id(m.ID)
 
 	if err != nil && (model.Season{} == *season) {
 		created := s.createSeason(m)

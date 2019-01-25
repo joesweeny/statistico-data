@@ -41,15 +41,15 @@ func TestProcess(t *testing.T) {
 	}
 
 	t.Run("inserts new season", func(t *testing.T) {
-		repo.On("GetById", 100).Return(&model.Season{}, errors.New("not Found"))
+		repo.On("Id", 100).Return(&model.Season{}, errors.New("not Found"))
 		repo.On("Insert", mock.Anything).Return(nil)
 		repo.AssertNotCalled(t, "Update", mock.Anything)
 		service.Process()
 	})
 
 	t.Run("updates existing competition", func(t *testing.T) {
-		c := newSeason(1)
-		repo.On("GetById", 100).Return(c, nil)
+		c := newSeason(1, true)
+		repo.On("Id", 100).Return(c, nil)
 		repo.On("Update", &c).Return(nil)
 		repo.MethodCalled("Update", &c)
 		repo.AssertNotCalled(t, "Insert", mock.Anything)
@@ -71,13 +71,18 @@ func (m mockRepository) Update(c *model.Season) error {
 	return args.Error(0)
 }
 
-func (m mockRepository) GetById(id int) (*model.Season, error) {
+func (m mockRepository) Id(id int) (*model.Season, error) {
 	args := m.Called(id)
 	c := args.Get(0).(*model.Season)
 	return c, args.Error(1)
 }
 
-func (m mockRepository) GetIds() ([]int, error) {
+func (m mockRepository) Ids() ([]int, error) {
+	args := m.Called()
+	return args.Get(0).([]int), args.Error(1)
+}
+
+func (m mockRepository) CurrentSeasonIds() ([]int, error) {
 	args := m.Called()
 	return args.Get(0).([]int), args.Error(1)
 }

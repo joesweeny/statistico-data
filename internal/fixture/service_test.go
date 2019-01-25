@@ -44,7 +44,7 @@ func TestProcess(t *testing.T) {
 	}
 
 	t.Run("inserts new fixture", func(t *testing.T) {
-		seasonRepo.On("GetIds").Return([]int{123}, nil)
+		seasonRepo.On("Ids").Return([]int{123}, nil)
 		fixtureRepo.On("GetById", 34).Return(&model.Fixture{}, errors.New("not found"))
 		fixtureRepo.On("Insert", mock.Anything).Return(nil)
 		fixtureRepo.AssertNotCalled(t, "Update", mock.Anything)
@@ -53,11 +53,57 @@ func TestProcess(t *testing.T) {
 
 	t.Run("updates existing fixture", func(t *testing.T) {
 		f := newFixture(34)
-		seasonRepo.On("GetIds").Return([]int{123}, nil)
+		seasonRepo.On("Ids").Return([]int{123}, nil)
 		fixtureRepo.On("GetById", 34).Return(f, nil)
 		fixtureRepo.On("Update", &f).Return(nil)
 		fixtureRepo.AssertNotCalled(t, "Insert", mock.Anything)
 		service.Process()
+	})
+}
+
+func TestCurrentSeason(t *testing.T) {
+	t.Helper()
+	fixtureRepo := new(mockFixtureRepository)
+	seasonRepo := new(mockSeasonRepository)
+
+	server := newTestClient(func(req *http.Request) *http.Response {
+		assert.Equal(t, req.URL.String(), "http://example.com/api/v2.0/seasons/123?api_token=my-key&include=fixtures")
+		b, _ := json.Marshal(seasonResponse())
+		return &http.Response{
+			StatusCode: 200,
+			Body:       ioutil.NopCloser(bytes.NewBuffer(b)),
+		}
+	})
+
+	client := sportmonks.Client{
+		Client:  server,
+		BaseURL: "http://example.com",
+		ApiKey:  "my-key",
+	}
+
+	service := Service{
+		Repository: fixtureRepo,
+		SeasonRepo: seasonRepo,
+		Factory:    Factory{Clock: clockwork.NewFakeClock()},
+		Client:     &client,
+		Logger:     log.New(ioutil.Discard, "", 0),
+	}
+
+	t.Run("inserts new fixture", func(t *testing.T) {
+		seasonRepo.On("CurrentSeasonIds").Return([]int{123}, nil)
+		fixtureRepo.On("GetById", 34).Return(&model.Fixture{}, errors.New("not found"))
+		fixtureRepo.On("Insert", mock.Anything).Return(nil)
+		fixtureRepo.AssertNotCalled(t, "Update", mock.Anything)
+		service.CurrentSeason()
+	})
+
+	t.Run("updates existing fixture", func(t *testing.T) {
+		f := newFixture(34)
+		seasonRepo.On("CurrentSeasonIds").Return([]int{123}, nil)
+		fixtureRepo.On("GetById", 34).Return(f, nil)
+		fixtureRepo.On("Update", &f).Return(nil)
+		fixtureRepo.AssertNotCalled(t, "Insert", mock.Anything)
+		service.CurrentSeason()
 	})
 }
 
@@ -87,13 +133,18 @@ func (m mockSeasonRepository) Update(c *model.Season) error {
 	return args.Error(0)
 }
 
-func (m mockSeasonRepository) GetById(id int) (*model.Season, error) {
+func (m mockSeasonRepository) Id(id int) (*model.Season, error) {
 	args := m.Called(id)
 	c := args.Get(0).(*model.Season)
 	return c, args.Error(1)
 }
 
-func (m mockSeasonRepository) GetIds() ([]int, error) {
+func (m mockSeasonRepository) Ids() ([]int, error) {
+	args := m.Called()
+	return args.Get(0).([]int), args.Error(1)
+}
+
+func (m mockSeasonRepository) CurrentSeasonIds() ([]int, error) {
 	args := m.Called()
 	return args.Get(0).([]int), args.Error(1)
 }
