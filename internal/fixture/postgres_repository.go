@@ -71,32 +71,29 @@ func (p *PostgresFixtureRepository) GetById(id int) (*model.Fixture, error) {
 }
 
 func rowToFixture(r *sql.Row) (*model.Fixture, error) {
-	var id int
-	var seasonId int
-	var roundId *int
-	var venueId *int
-	var homeTeam int
-	var awayTeam int
-	var referee *int
 	var date int64
 	var created int64
 	var updated int64
 
 	f := model.Fixture{}
 
-	err := r.Scan(&id, &seasonId, &roundId, &venueId, &homeTeam, &awayTeam, &referee, &date, &created, &updated)
+	err := r.Scan(
+		&f.ID,
+		&f.SeasonID,
+		&f.RoundID,
+		&f.VenueID,
+		&f.HomeTeamID,
+		&f.AwayTeamID,
+		&f.RefereeID,
+		&date, 
+		&created,
+		&updated,
+	)
 
 	if err != nil {
 		return &f, ErrNotFound
 	}
 
-	f.ID = id
-	f.SeasonID = seasonId
-	f.RoundID = roundId
-	f.VenueID = venueId
-	f.HomeTeamID = homeTeam
-	f.AwayTeamID = awayTeam
-	f.RefereeID = referee
 	f.Date = time.Unix(date, 0)
 	f.CreatedAt = time.Unix(created, 0)
 	f.UpdatedAt = time.Unix(updated, 0)
