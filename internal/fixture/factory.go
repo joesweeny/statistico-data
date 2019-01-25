@@ -16,9 +16,9 @@ func (f Factory) createFixture(s *sportmonks.Fixture) *model.Fixture {
 		ID:         s.ID,
 		SeasonID:   s.SeasonID,
 		RoundID:    s.RoundID,
-		VenueID:    &s.VenueID,
-		HomeTeamID: s.LocalTeamID,
-		AwayTeamID: s.VisitorTeamID,
+		VenueID:    s.VenueID,
+		HomeTeamID: s.LocalteamID,
+		AwayTeamID: s.VisitorteamID,
 		RefereeID:  s.RefereeID,
 		Date:       time.Unix(s.Time.StartingAt.Timestamp, 0),
 		CreatedAt:  f.Clock.Now(),
@@ -28,7 +28,7 @@ func (f Factory) createFixture(s *sportmonks.Fixture) *model.Fixture {
 
 func (f Factory) updateFixture(s *sportmonks.Fixture, m *model.Fixture) *model.Fixture {
 	m.RoundID = s.RoundID
-	m.VenueID = &s.VenueID
+	m.VenueID = s.VenueID
 	m.RefereeID = s.RefereeID
 	m.Date = time.Unix(s.Time.StartingAt.Timestamp, 0)
 	m.UpdatedAt = f.Clock.Now()

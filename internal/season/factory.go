@@ -15,7 +15,7 @@ func (f Factory) createSeason(s *sportmonks.Season) *model.Season {
 		ID:        s.ID,
 		Name:      s.Name,
 		LeagueID:  s.LeagueID,
-		IsCurrent: s.CurrentSeason,
+		IsCurrent: s.IsCurrentSeason,
 		CreatedAt: f.Clock.Now(),
 		UpdatedAt: f.Clock.Now(),
 	}
@@ -23,7 +23,7 @@ func (f Factory) createSeason(s *sportmonks.Season) *model.Season {
 
 func (f Factory) updateSeason(s *sportmonks.Season, m *model.Season) *model.Season {
 	m.Name = s.Name
-	m.IsCurrent = s.CurrentSeason
+	m.IsCurrent = s.IsCurrentSeason
 	m.UpdatedAt = f.Clock.Now()
 
 	return m

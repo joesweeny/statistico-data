@@ -36,7 +36,7 @@ func TestFactoryCreateSeason(t *testing.T) {
 
 		clock.Advance(10 * time.Minute)
 
-		clientSeason.CurrentSeason = false
+		clientSeason.IsCurrentSeason = false
 
 		updated := f.updateSeason(clientSeason, s)
 
@@ -52,17 +52,16 @@ func TestFactoryCreateSeason(t *testing.T) {
 }
 
 func newClientSeason() *sportmonks.Season {
+	var round = 10
+	var stage = 567
 	return &sportmonks.Season{
 		ID:             100,
 		Name:           "2018-2019",
 		LeagueID:       231,
-		CurrentSeason:  true,
-		CurrentRoundID: 10,
-		CurrentStageID: 567,
+		IsCurrentSeason:  true,
+		CurrentRoundID: &round,
+		CurrentStageID: &stage,
 		Fixtures: struct {
-			Data []sportmonks.Fixture `json:"data"`
-		}{},
-		Results: struct {
 			Data []sportmonks.Fixture `json:"data"`
 		}{},
 	}

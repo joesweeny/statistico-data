@@ -48,7 +48,7 @@ func TestFactoryUpdateFixture(t *testing.T) {
 		clientFixture.Time.StartingAt.Timestamp = 1552420800
 		clientFixture.RefereeID = &ref
 		clientFixture.RoundID = &round
-		clientFixture.VenueID = ref
+		clientFixture.VenueID = &ref
 
 		updated := f.updateFixture(clientFixture, c)
 
@@ -67,9 +67,9 @@ func TestFactoryUpdateFixture(t *testing.T) {
 }
 
 func newClientFixture() *sportmonks.Fixture {
-	var status = "Live"
+	var venue = 451
 	var t = sportmonks.FixtureTime{
-		Status: &status,
+		Status: "Live",
 		StartingAt: struct {
 			DateTime  string `json:"date_time"`
 			Date      string `json:"date"`
@@ -89,9 +89,9 @@ func newClientFixture() *sportmonks.Fixture {
 		ID:            34,
 		LeagueID:      1356,
 		SeasonID:      987,
-		VenueID:       451,
-		LocalTeamID:   4,
-		VisitorTeamID: 98,
+		VenueID:       &venue,
+		LocalteamID:   4,
+		VisitorteamID: 98,
 		Time:          t,
 	}
 }

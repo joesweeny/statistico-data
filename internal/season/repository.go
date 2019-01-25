@@ -6,4 +6,5 @@ type Repository interface {
 	Insert(s *model.Season) error
 	Update(s *model.Season) error
 	GetById(id int) (*model.Season, error)
+	GetIds() ([]int, error)
 }

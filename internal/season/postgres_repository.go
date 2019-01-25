@@ -60,6 +60,31 @@ func (p *PostgresSeasonRepository) GetById(id int) (*model.Season, error) {
 	return rowToSeason(row)
 }
 
+func (p *PostgresSeasonRepository) GetIds() ([]int, error) {
+	query := `SELECT id FROM sportmonks_season`
+
+	rows, err := p.Connection.Query(query)
+
+	if err != nil {
+		return []int{}, err
+	}
+
+	defer rows.Close()
+
+	var id int
+	var ids []int
+
+	for rows.Next() {
+		if err := rows.Scan(&id); err != nil {
+			return ids, err
+		}
+
+		ids = append(ids, id)
+	}
+
+	return ids, nil
+}
+
 func rowToSeason(r *sql.Row) (*model.Season, error) {
 	var id int
 	var name string

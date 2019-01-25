@@ -10,6 +10,7 @@ import (
 
 const competition = "competition"
 const country = "country"
+const fixture = "fixture"
 const season = "season"
 
 var option = flag.String("option", "", "Provide the model name to process")
@@ -28,6 +29,9 @@ func main() {
 	case country:
 		service = app.GetCountryService()
 		break
+	case fixture:
+		service = app.GetFixtureService()
+		break
 	case season:
 		service = app.GetSeasonService()
 	default:
@@ -40,13 +44,13 @@ func main() {
 		os.Exit(1)
 	}
 
-	fmt.Printf("Processing complete for %s", *option)
+	fmt.Printf("Processing complete for %s\n", *option)
 	os.Exit(0)
 }
 
 func fail(model *string, err error) {
 	if err != nil {
-		fmt.Printf("Error when processing %s: %s", *model, err.Error())
+		fmt.Printf("Error when processing %s: %s\n", *model, err.Error())
 		os.Exit(1)
 	}
 }
