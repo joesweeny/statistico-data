@@ -16,13 +16,27 @@ type Service struct {
 }
 
 func (s Service) Process() error {
-	q := []string{"fixtures"}
-
 	ids, err := s.SeasonRepo.Ids()
 
 	if err != nil {
 		return err
 	}
+
+	return s.callClient(ids)
+}
+
+func (s Service) CurrentSeason() error {
+	ids, err := s.SeasonRepo.CurrentSeasonIds()
+
+	if err != nil {
+		return err
+	}
+
+	return s.callClient(ids)
+}
+
+func (s Service) callClient(ids []int) error {
+	q := []string{"fixtures"}
 
 	for _, id := range ids {
 		res, err := s.Client.SeasonById(id, q)
@@ -35,7 +49,6 @@ func (s Service) Process() error {
 			// Push method into Go routine
 			s.persistFixture(&fixture)
 		}
-
 	}
 
 	return nil
