@@ -95,55 +95,38 @@ func (p *PostgresResultRepository) GetByFixtureId(id int) (*model.Result, error)
 }
 
 func rowToResult(r *sql.Row) (*model.Result, error) {
-	var fixtureId int
-	var pitch *string
-	var homeFormation *string
-	var awayFormation *string
-	var homeScore *int
-	var awayScore *int
-	var homePenScore *int
-	var awayPenScore *int
-	var halfTimeScore *string
-	var fullTimeScore *string
-	var extraTimeScore *string
-	var homePosition *int
-	var awayPosition *int
-	var mins *int
-	var secs *int
-	var added *int
-	var extra *int
-	var injury *int
 	var created int64
 	var updated int64
 
 	m := model.Result{}
 
-	err := r.Scan(&fixtureId, &pitch, &homeFormation, &awayFormation, &homeScore, &awayScore, &homePenScore, &awayPenScore,
-		&halfTimeScore, &fullTimeScore, &extraTimeScore, &homePosition, &awayPosition, &mins, &secs, &added, &extra,
-		&injury, &created, &updated)
+	err := r.Scan(
+		&m.FixtureID,
+		&m.PitchCondition,
+		&m.HomeFormation,
+		&m.AwayFormation,
+		&m.HomeScore,
+		&m.AwayScore,
+		&m.HomePenScore,
+		&m.AwayPenScore,
+		&m.HalfTimeScore,
+		&m.FullTimeScore,
+		&m.ExtraTimeScore,
+		&m.HomeLeaguePosition,
+		&m.AwayLeaguePosition,
+		&m.Minutes,
+		&m.Seconds,
+		&m.AddedTime,
+		&m.ExtraTime,
+		&m.InjuryTime,
+		&created,
+		&updated,
+	)
 
 	if err != nil {
 		return &m, ErrNotFound
 	}
 
-	m.FixtureID = fixtureId
-	m.PitchCondition = pitch
-	m.HomeFormation = homeFormation
-	m.AwayFormation = awayFormation
-	m.HomeScore = homeScore
-	m.AwayScore = awayScore
-	m.HomePenScore = homePenScore
-	m.AwayPenScore = awayPenScore
-	m.HalfTimeScore = halfTimeScore
-	m.FullTimeScore = fullTimeScore
-	m.ExtraTimeScore = extraTimeScore
-	m.HomeLeaguePosition = homePosition
-	m.AwayLeaguePosition = awayPosition
-	m.Minutes = mins
-	m.Seconds = secs
-	m.AddedTime = added
-	m.ExtraTime = extra
-	m.InjuryTime = injury
 	m.CreatedAt = time.Unix(created, 0)
 	m.UpdatedAt = time.Unix(updated, 0)
 

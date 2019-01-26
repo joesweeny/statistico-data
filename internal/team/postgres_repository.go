@@ -71,31 +71,28 @@ func (p *PostgresTeamRepository) GetById(id int) (*model.Team, error) {
 }
 
 func rowToTeam(r *sql.Row) (*model.Team, error) {
-	var id int
-	var name string
-	var short *string
-	var country *int
-	var venue int
-	var national bool
-	var founded *int
-	var logo *string
 	var created int64
 	var updated int64
 
 	t := model.Team{}
 
-	if err := r.Scan(&id, &name, &short, &country, &venue, &national, &founded, &logo, &created, &updated); err != nil {
+	err := r.Scan(
+		&t.ID,
+		&t.Name,
+		&t.ShortCode,
+		&t.CountryID,
+		&t.VenueID,
+		&t.NationalTeam,
+		&t.Founded,
+		&t.Logo,
+		&created,
+		&updated,
+	)
+
+	if err != nil {
 		return &t, ErrNotFound
 	}
 
-	t.ID = id
-	t.Name = name
-	t.ShortCode = short
-	t.CountryID = country
-	t.VenueID = venue
-	t.NationalTeam = national
-	t.Founded = founded
-	t.Logo = logo
 	t.CreatedAt = time.Unix(created, 0)
 	t.UpdatedAt = time.Unix(updated, 0)
 

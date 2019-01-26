@@ -67,29 +67,17 @@ func (p *PostgresVenueRepository) GetById(id int) (*model.Venue, error) {
 }
 
 func rowToVenue(r *sql.Row) (*model.Venue, error) {
-	var id int
-	var name string
-	var surface *string
-	var address *string
-	var city *string
-	var capacity *int
 	var created int64
 	var updated int64
 
 	v := model.Venue{}
 
-	err := r.Scan(&id, &name, &surface, &address, &city, &capacity, &created, &updated)
+	err := r.Scan(&v.ID, &v.Name, &v.Surface, &v.Address, &v.City, &v.Capacity, &created, &updated)
 
 	if err != nil {
 		return &v, ErrNotFound
 	}
 
-	v.ID = id
-	v.Name = name
-	v.Surface = surface
-	v.Address = address
-	v.City = city
-	v.Capacity = capacity
 	v.CreatedAt = time.Unix(created, 0)
 	v.UpdatedAt = time.Unix(updated, 0)
 

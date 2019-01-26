@@ -65,9 +65,6 @@ func (p *PostgresRoundRepository) Update(r *model.Round) error {
 }
 
 func rowToRound(r *sql.Row) (*model.Round, error) {
-	var id int
-	var name string
-	var season int
 	var start int64
 	var end int64
 	var created int64
@@ -75,15 +72,12 @@ func rowToRound(r *sql.Row) (*model.Round, error) {
 
 	m := model.Round{}
 
-	err := r.Scan(&id, &name, &season, &start, &end, &created, &updated)
+	err := r.Scan(&m.ID, &m.Name, &m.SeasonID, &start, &end, &created, &updated)
 
 	if err != nil {
 		return &m, ErrNotFound
 	}
 
-	m.ID = id
-	m.Name = name
-	m.SeasonID = season
 	m.StartDate = time.Unix(start, 0)
 	m.EndDate = time.Unix(end, 0)
 	m.CreatedAt = time.Unix(created, 0)

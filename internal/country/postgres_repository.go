@@ -62,23 +62,15 @@ func (p *PostgresCountryRepository) GetById(id int) (*model.Country, error) {
 }
 
 func rowToCountry(r *sql.Row) (*model.Country, error) {
-	var id int
-	var name string
-	var continent string
-	var iso string
 	var created int64
 	var updated int64
 
 	c := model.Country{}
 
-	if err := r.Scan(&id, &name, &continent, &iso, &created, &updated); err != nil {
+	if err := r.Scan(&c.ID, &c.Name, &c.Continent, &c.ISO, &created, &updated); err != nil {
 		return &c, ErrNotFound
 	}
 
-	c.ID = id
-	c.Name = name
-	c.Continent = continent
-	c.ISO = iso
 	c.CreatedAt = time.Unix(created, 0)
 	c.UpdatedAt = time.Unix(updated, 0)
 

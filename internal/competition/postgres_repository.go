@@ -61,23 +61,15 @@ func (p *PostgresCompetitionRepository) GetById(id int) (*model.Competition, err
 }
 
 func rowToCompetition(r *sql.Row) (*model.Competition, error) {
-	var id int
-	var name string
-	var countryId int
-	var isCup bool
 	var created int64
 	var updated int64
 
 	c := model.Competition{}
 
-	if err := r.Scan(&id, &name, &countryId, &isCup, &created, &updated); err != nil {
+	if err := r.Scan(&c.ID, &c.Name, &c.CountryID, &c.IsCup, &created, &updated); err != nil {
 		return &c, ErrNotFound
 	}
 
-	c.ID = id
-	c.Name = name
-	c.CountryID = countryId
-	c.IsCup = isCup
 	c.CreatedAt = time.Unix(created, 0)
 	c.UpdatedAt = time.Unix(updated, 0)
 
