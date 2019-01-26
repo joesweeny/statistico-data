@@ -56,6 +56,51 @@ func (p *PostgresTeamStatsRepository) Insert(m *model.TeamStats) error {
 	return err
 }
 
+func (p *PostgresTeamStatsRepository) Update(m *model.TeamStats) error {
+	if _, err := p.ByFixtureAndTeam(m.FixtureID, m.TeamID); err != nil {
+		return err
+	}
+
+	query := `
+	UPDATE sportmonks_team_stats SET shots_total = $3, shots_on_goal = $4, shots_off_goal = $5, 
+	shots_blocked = $6, shots_inside_box = $7, shots_outside_box = $8, passes_total = $9, passes_accuracy = $10, 
+	passes_percentage = $11, attacks_total = $12, attacks_dangerous = $13, fouls = $14, corners = $15, offsides = $16, 
+	possession = $17, yellow_cards = $18, red_cards = $19, saves = $20, substitutions = $21, goal_kicks = $22, 
+	goal_attempts = $23, free_kicks = $24, throw_ins = $25, updated_at = $26 where fixture_id = $1 AND team_id = $2`
+
+	_, err := p.Connection.Exec(
+		query,
+		m.FixtureID,
+		m.TeamID,
+		m.Shots.Total,
+		m.Shots.OnGoal,
+		m.Shots.OffGoal,
+		m.Shots.Blocked,
+		m.Shots.InsideBox,
+		m.Shots.OutsideBox,
+		m.Passes.Total,
+		m.Passes.Accuracy,
+		m.Passes.Percentage,
+		m.Attacks.Total,
+		m.Attacks.Dangerous,
+		m.Fouls,
+		m.Corners,
+		m.Offsides,
+		m.Possession,
+		m.YellowCards,
+		m.RedCards,
+		m.Saves,
+		m.Substitutions,
+		m.GoalKicks,
+		m.GoalAttempts,
+		m.FreeKicks,
+		m.ThrowIns,
+		m.UpdatedAt.Unix(),
+	)
+
+	return err
+}
+
 func (p *PostgresTeamStatsRepository) ByFixtureAndTeam(fixtureId, teamId int) (*model.TeamStats, error) {
 	query := `SELECT * FROM sportmonks_team_stats where fixture_id = $1 AND team_id = $2`
 	row := p.Connection.QueryRow(query, fixtureId, teamId)
