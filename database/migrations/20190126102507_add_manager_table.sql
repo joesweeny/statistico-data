@@ -3,12 +3,10 @@
 CREATE TABLE sportmonks_manager (
   id INTEGER NOT NULL PRIMARY KEY,
   team_id INTEGER,
+  country_id INTEGER NOT NULL,
   first_name VARCHAR NOT NULL,
   last_name VARCHAR NOT NULL,
-  birth_country VARCHAR NOT NULL,
-  birthplace VARCHAR NOT NULL,
   nationality VARCHAR NOT NULL,
-  date_of_birth DATE NOT NULL,
   image VARCHAR,
   created_at INTEGER NOT NULL,
   updated_at INTEGER NOT NULL
