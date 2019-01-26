@@ -105,6 +105,68 @@ func TestId(t *testing.T) {
 	conn.Close()
 }
 
+func TestUpdate(t *testing.T) {
+	conn, cleanUp := getConnection(t)
+	repo := PostgresPlayerRepository{Connection: conn}
+
+	t.Run("modifies existing player", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+
+		m := newPlayer(46)
+
+		if err := repo.Insert(m); err != nil {
+			t.Errorf("Error when inserting record into the database: %s", err.Error())
+		}
+
+		var image *string
+		var d = time.Date(2019, 01, 14, 11, 25, 00, 00, time.UTC)
+
+		m.Image = image
+		m.UpdatedAt = d
+
+		if err := repo.Update(m); err != nil {
+			t.Errorf("Error when updating a record in the database: %s", err.Error())
+		}
+
+		r, err := repo.Id(46)
+
+		if err != nil {
+			t.Errorf("Error when updating a record in the database: %s", err.Error())
+		}
+
+		a := assert.New(t)
+		a.Equal(46, r.ID)
+		a.Equal(154, m.CountryId)
+		a.Equal("Manuel", m.FirstName)
+		a.Equal("Lanzini", m.LastName)
+		a.Equal("Buenos Aires", *m.BirthPlace)
+		a.Equal("1984-03-12", *m.DateOfBirth)
+		a.Equal(3, m.PositionID)
+		a.Nil(m.Image)
+		a.Equal("2019-01-08 16:33:20 +0000 UTC", r.CreatedAt.String())
+		a.Equal("2019-01-14 11:25:00 +0000 UTC", r.UpdatedAt.String())
+	})
+
+	t.Run("returns an error if player does not exist", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+		c := newPlayer(146)
+
+		err := repo.Update(c)
+
+		if err == nil {
+			t.Fatalf("Test failed, expected nil, got %v", err)
+		}
+
+		if err != ErrNotFound {
+			t.Fatalf("Test failed, expected %v, got %v", ErrNotFound, err)
+		}
+	})
+
+	conn.Close()
+}
+
 var db = config.GetConfig().Database
 
 func getConnection(t *testing.T) (*sql.DB, func()) {

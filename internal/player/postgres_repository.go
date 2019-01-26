@@ -36,6 +36,19 @@ func (p *PostgresPlayerRepository) Insert(m *model.Player) error {
 	return err
 }
 
+func (p *PostgresPlayerRepository) Update(m *model.Player) error {
+	if _, err := p.Id(m.ID); err != nil {
+		return err
+	}
+
+	query := `
+	UPDATE sportmonks_player set country_id = $2, position_id = $3, image = $4, updated_at = $5 where id = $1`
+
+	_, err := p.Connection.Exec(query, m.ID, m.CountryId, m.PositionID, m.Image, m.UpdatedAt.Unix())
+
+	return err
+}
+
 func (p *PostgresPlayerRepository) Id(id int) (*model.Player, error) {
 	query := `SELECT * FROM sportmonks_player where id = $1`
 	row := p.Connection.QueryRow(query, id)
