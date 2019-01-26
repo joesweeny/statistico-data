@@ -24,8 +24,8 @@ CREATE TABLE sportmonks_team_stats (
   substitutions INTEGER,
   goal_kicks INTEGER,
   goal_attempts INTEGER,
-  free_kick INTEGER,
-  throw_in INTEGER,
+  free_kicks INTEGER,
+  throw_ins INTEGER,
   created_at INTEGER NOT NULL,
   updated_at INTEGER NOT NULL
 );
