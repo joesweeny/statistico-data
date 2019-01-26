@@ -1,13 +1,13 @@
 package manager
 
 import (
-	"github.com/joesweeny/statshub/internal/config"
 	"database/sql"
 	"fmt"
-	"testing"
+	"github.com/joesweeny/statshub/internal/config"
 	"github.com/joesweeny/statshub/internal/model"
-	"time"
 	"github.com/stretchr/testify/assert"
+	"testing"
+	"time"
 )
 
 func TestInsert(t *testing.T) {
@@ -186,12 +186,12 @@ func getConnection(t *testing.T) (*sql.DB, func()) {
 
 func newManager(id int) *model.Manager {
 	return &model.Manager{
-		ID:     id,
-		CountryID: 167,
-		FirstName: "Manuel",
-		LastName: "Pellegrini",
+		ID:          id,
+		CountryID:   167,
+		FirstName:   "Manuel",
+		LastName:    "Pellegrini",
 		Nationality: "Chilean",
-		CreatedAt:  time.Unix(1546965200, 0),
-		UpdatedAt:  time.Unix(1546965200, 0),
+		CreatedAt:   time.Unix(1546965200, 0),
+		UpdatedAt:   time.Unix(1546965200, 0),
 	}
 }

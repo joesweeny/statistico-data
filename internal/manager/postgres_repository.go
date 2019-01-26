@@ -4,8 +4,8 @@ import (
 	"database/sql"
 	"github.com/joesweeny/statshub/internal/model"
 	_ "github.com/lib/pq"
-	"time"
 	"github.com/pkg/errors"
+	"time"
 )
 
 var ErrNotFound = errors.New("not found")
@@ -48,7 +48,7 @@ func (p *PostgresManagerRepository) Update(m *model.Manager) error {
 	return err
 }
 
-func (p *PostgresManagerRepository) Id (id int) (*model.Manager, error) {
+func (p *PostgresManagerRepository) Id(id int) (*model.Manager, error) {
 	query := `SELECT * FROM sportmonks_manager where id = $1`
 	row := p.Connection.QueryRow(query, id)
 
