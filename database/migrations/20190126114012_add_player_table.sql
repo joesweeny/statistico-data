@@ -6,10 +6,11 @@ CREATE TABLE sportmonks_player (
   first_name VARCHAR NOT NULL,
   last_name VARCHAR NOT NULL,
   birth_place VARCHAR,
-  date_of_birth DATE,
+  date_of_birth VARCHAR,
   position_id INTEGER NOT NULL,
   image VARCHAR,
-  created_at INTEGER NOT NULL
+  created_at INTEGER NOT NULL,
+  updated_at INTEGER NOT NULL
 );
 -- +goose Down
 -- SQL in this section is executed when the migration is rolled back.

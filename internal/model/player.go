@@ -8,8 +8,9 @@ type Player struct {
 	FirstName string `json:"first_name"`
 	LastName string `json:"last_name"`
 	BirthPlace *string `json:"birth_place"`
-	DateOfBirth time.Time `json:"date_of_birth"`
+	DateOfBirth *string `json:"date_of_birth"`
 	PositionID int `json:"position_id"`
 	Image *string `json:"image_path"`
 	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
 }
