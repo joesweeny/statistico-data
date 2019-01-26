@@ -103,6 +103,66 @@ func TestId(t *testing.T) {
 	conn.Close()
 }
 
+func TestUpdate(t *testing.T) {
+	conn, cleanUp := getConnection(t)
+	repo := PostgresManagerRepository{Connection: conn}
+
+	t.Run("modifies existing manager", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+
+		m := newManager(56)
+
+		if err := repo.Insert(m); err != nil {
+			t.Errorf("Error when inserting record into the database: %s", err.Error())
+		}
+
+		var teamId = 574
+		var d = time.Date(2019, 01, 14, 11, 25, 00, 00, time.UTC)
+
+		m.TeamID = &teamId
+		m.UpdatedAt = d
+
+		if err := repo.Update(m); err != nil {
+			t.Errorf("Error when updating a record in the database: %s", err.Error())
+		}
+
+		r, err := repo.Id(56)
+
+		if err != nil {
+			t.Errorf("Error when updating a record in the database: %s", err.Error())
+		}
+
+		a := assert.New(t)
+		a.Equal(56, r.ID)
+		a.Equal(574, *r.TeamID)
+		a.Equal(167, r.CountryID)
+		a.Equal("Manuel", r.FirstName)
+		a.Equal("Pellegrini", r.LastName)
+		a.Equal("Chilean", r.Nationality)
+		a.Equal("2019-01-08 16:33:20 +0000 UTC", r.CreatedAt.String())
+		a.Equal("2019-01-14 11:25:00 +0000 UTC", r.UpdatedAt.String())
+	})
+
+	t.Run("returns an error if manager does not exist", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+		c := newManager(146)
+
+		err := repo.Update(c)
+
+		if err == nil {
+			t.Fatalf("Test failed, expected nil, got %v", err)
+		}
+
+		if err != ErrNotFound {
+			t.Fatalf("Test failed, expected %v, got %v", ErrNotFound, err)
+		}
+	})
+
+	conn.Close()
+}
+
 var db = config.GetConfig().Database
 
 func getConnection(t *testing.T) (*sql.DB, func()) {

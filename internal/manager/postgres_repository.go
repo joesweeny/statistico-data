@@ -35,6 +35,19 @@ func (p *PostgresManagerRepository) Insert(m *model.Manager) error {
 	return err
 }
 
+func (p *PostgresManagerRepository) Update(m *model.Manager) error {
+	if _, err := p.Id(m.ID); err != nil {
+		return err
+	}
+
+	query := `
+	UPDATE sportmonks_manager set team_id = $2, image = $3, updated_at = $4 where id = $1`
+
+	_, err := p.Connection.Exec(query, m.ID, m.TeamID, m.Image, m.UpdatedAt.Unix())
+
+	return err
+}
+
 func (p *PostgresManagerRepository) Id (id int) (*model.Manager, error) {
 	query := `SELECT * FROM sportmonks_manager where id = $1`
 	row := p.Connection.QueryRow(query, id)
