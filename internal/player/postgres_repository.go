@@ -4,7 +4,11 @@ import (
 	"database/sql"
 	"github.com/joesweeny/statshub/internal/model"
 	_ "github.com/lib/pq"
+	"time"
+	"errors"
 )
+
+var ErrNotFound = errors.New("not found")
 
 type PostgresPlayerRepository struct {
 	Connection *sql.DB
@@ -30,4 +34,40 @@ func (p *PostgresPlayerRepository) Insert(m *model.Player) error {
 	)
 
 	return err
+}
+
+func (p *PostgresPlayerRepository) Id(id int) (*model.Player, error) {
+	query := `SELECT * FROM sportmonks_player where id = $1`
+	row := p.Connection.QueryRow(query, id)
+
+	return rowToPlayer(row)
+}
+
+func rowToPlayer(r *sql.Row) (*model.Player, error) {
+	var created int64
+	var updated int64
+
+	m := model.Player{}
+
+	err := r.Scan(
+		&m.ID,
+		&m.CountryId,
+		&m.FirstName,
+		&m.LastName,
+		&m.BirthPlace,
+		&m.DateOfBirth,
+		&m.PositionID,
+		&m.Image,
+		&created,
+		&updated,
+	)
+
+	if err != nil {
+		return &m, ErrNotFound
+	}
+
+	m.CreatedAt = time.Unix(created, 0)
+	m.UpdatedAt = time.Unix(updated, 0)
+
+	return &m, nil
 }

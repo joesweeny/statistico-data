@@ -54,6 +54,57 @@ func TestInsert(t *testing.T) {
 	conn.Close()
 }
 
+func TestId(t *testing.T) {
+	conn, cleanUp := getConnection(t)
+	repo := PostgresPlayerRepository{Connection: conn}
+
+	t.Run("player can be retrieved by ID", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+
+		m := newPlayer(43)
+
+		if err := repo.Insert(m); err != nil {
+			t.Errorf("Error when inserting record into the database: %s", err.Error())
+		}
+
+		r, err := repo.Id(43)
+
+		if err != nil {
+			t.Errorf("Error when retrieving a record from the database: %s", err.Error())
+		}
+
+		a := assert.New(t)
+		a.Equal(43, r.ID)
+		a.Equal(154, m.CountryId)
+		a.Equal("Manuel", m.FirstName)
+		a.Equal("Lanzini", m.LastName)
+		a.Equal("Buenos Aires", *m.BirthPlace)
+		a.Equal("1984-03-12", *m.DateOfBirth)
+		a.Equal(3, m.PositionID)
+		a.Equal("path/to/image", *m.Image)
+		a.Equal("2019-01-08 16:33:20 +0000 UTC", r.CreatedAt.String())
+		a.Equal("2019-01-08 16:33:20 +0000 UTC", r.UpdatedAt.String())
+	})
+
+	t.Run("returns error if player does not exist", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+
+		_, err := repo.Id(99)
+
+		if err == nil {
+			t.Errorf("Test failed, expected %v, got nil", err)
+		}
+
+		if err != ErrNotFound {
+			t.Fatalf("Test failed, expected %v, got %s", ErrNotFound, err)
+		}
+	})
+
+	conn.Close()
+}
+
 var db = config.GetConfig().Database
 
 func getConnection(t *testing.T) (*sql.DB, func()) {
