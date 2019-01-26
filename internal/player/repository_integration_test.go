@@ -1,13 +1,13 @@
 package player
 
 import (
-	"github.com/joesweeny/statshub/internal/config"
 	"database/sql"
-	"testing"
 	"fmt"
+	"github.com/joesweeny/statshub/internal/config"
 	"github.com/joesweeny/statshub/internal/model"
-	"time"
 	"github.com/stretchr/testify/assert"
+	"testing"
+	"time"
 )
 
 func TestInsert(t *testing.T) {
