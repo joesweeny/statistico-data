@@ -1,13 +1,13 @@
 package stats
 
 import (
-	"github.com/joesweeny/statshub/internal/config"
 	"database/sql"
-	"testing"
 	"fmt"
+	"github.com/joesweeny/statshub/internal/config"
 	"github.com/joesweeny/statshub/internal/model"
-	"time"
 	"github.com/stretchr/testify/assert"
+	"testing"
+	"time"
 )
 
 func TestInsert(t *testing.T) {
@@ -248,11 +248,11 @@ func getConnection(t *testing.T) (*sql.DB, func()) {
 func newTeamStats(fixtureId, teamId int) *model.TeamStats {
 	return &model.TeamStats{
 		FixtureID: fixtureId,
-		TeamID: teamId,
-		Shots: model.Shots{},
-		Passes: model.Passes{},
-		Attacks: model.Attacks{},
-		CreatedAt:   time.Unix(1546965200, 0),
-		UpdatedAt:   time.Unix(1546965200, 0),
+		TeamID:    teamId,
+		Shots:     model.Shots{},
+		Passes:    model.Passes{},
+		Attacks:   model.Attacks{},
+		CreatedAt: time.Unix(1546965200, 0),
+		UpdatedAt: time.Unix(1546965200, 0),
 	}
 }
