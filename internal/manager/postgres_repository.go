@@ -3,6 +3,7 @@ package manager
 import (
 	"database/sql"
 	"github.com/joesweeny/statshub/internal/model"
+	_ "github.com/lib/pq"
 )
 
 type PostgresManagerRepository struct {
