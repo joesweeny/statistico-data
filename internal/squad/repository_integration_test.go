@@ -2,12 +2,12 @@ package squad
 
 import (
 	"database/sql"
-	"testing"
 	"fmt"
 	"github.com/joesweeny/statshub/internal/config"
 	"github.com/joesweeny/statshub/internal/model"
-	"time"
 	"github.com/stretchr/testify/assert"
+	"testing"
+	"time"
 )
 
 func TestInsert(t *testing.T) {
@@ -19,7 +19,7 @@ func TestInsert(t *testing.T) {
 		defer cleanUp()
 
 		for i := 1; i < 4; i++ {
-			c := newSquad(i, i + 1)
+			c := newSquad(i, i+1)
 
 			if err := repo.Insert(c); err != nil {
 				t.Errorf("Error when inserting record into the database: %s", err.Error())
