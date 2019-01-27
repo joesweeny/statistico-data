@@ -5,9 +5,9 @@ import "time"
 type TeamStats struct {
 	FixtureID     int `json:"fixture_id"`
 	TeamID        int `json:"team_id"`
-	Shots         `json:"shots"`
-	Passes        `json:"passes"`
-	Attacks       `json:"attacks"`
+	TeamShots     `json:"shots"`
+	TeamPasses    `json:"passes"`
+	TeamAttacks   `json:"attacks"`
 	Fouls         *int      `json:"fouls"`
 	Corners       *int      `json:"corners"`
 	Offsides      *int      `json:"offsides"`
@@ -24,7 +24,7 @@ type TeamStats struct {
 	UpdatedAt     time.Time `json:"updated_at"`
 }
 
-type Shots struct {
+type TeamShots struct {
 	Total      *int `json:"total"`
 	OnGoal     *int `json:"on_goal"`
 	OffGoal    *int `json:"off_goal"`
@@ -33,13 +33,13 @@ type Shots struct {
 	OutsideBox *int `json:"outside_box"`
 }
 
-type Passes struct {
+type TeamPasses struct {
 	Total      *int `json:"total"`
 	Accuracy   *int `json:"accuracy"`
 	Percentage *int `json:"percentage"`
 }
 
-type Attacks struct {
+type TeamAttacks struct {
 	Total     *int `json:"total"`
 	Dangerous *int `json:"dangerous"`
 }
