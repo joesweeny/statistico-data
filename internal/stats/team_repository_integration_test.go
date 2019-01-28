@@ -10,8 +10,8 @@ import (
 	"time"
 )
 
-func TestInsert(t *testing.T) {
-	conn, cleanUp := getConnection(t)
+func TestTeamPlayerStats(t *testing.T) {
+	conn, cleanUp := getTeamConnection(t)
 	repo := PostgresTeamStatsRepository{Connection: conn}
 
 	t.Run("increases table count", func(t *testing.T) {
@@ -21,7 +21,7 @@ func TestInsert(t *testing.T) {
 		for i := 1; i < 4; i++ {
 			m := newTeamStats(42, 65)
 
-			if err := repo.Insert(m); err != nil {
+			if err := repo.InsertTeamStats(m); err != nil {
 				t.Errorf("Error when inserting record into the database: %s", err.Error())
 			}
 
@@ -39,7 +39,7 @@ func TestInsert(t *testing.T) {
 }
 
 func TestByFixtureAndTeam(t *testing.T) {
-	conn, cleanUp := getConnection(t)
+	conn, cleanUp := getTeamConnection(t)
 	repo := PostgresTeamStatsRepository{Connection: conn}
 
 	t.Run("team stats can be retrieved by fixture and team IDs", func(t *testing.T) {
@@ -48,7 +48,7 @@ func TestByFixtureAndTeam(t *testing.T) {
 
 		m := newTeamStats(42, 65)
 
-		if err := repo.Insert(m); err != nil {
+		if err := repo.InsertTeamStats(m); err != nil {
 			t.Errorf("Error when inserting record into the database: %s", err.Error())
 		}
 
@@ -106,8 +106,8 @@ func TestByFixtureAndTeam(t *testing.T) {
 	conn.Close()
 }
 
-func TestUpdate(t *testing.T) {
-	conn, cleanUp := getConnection(t)
+func TestUpdateTeamStats(t *testing.T) {
+	conn, cleanUp := getTeamConnection(t)
 	repo := PostgresTeamStatsRepository{Connection: conn}
 
 	t.Run("modifies existing team stats record", func(t *testing.T) {
@@ -116,7 +116,7 @@ func TestUpdate(t *testing.T) {
 
 		m := newTeamStats(42, 65)
 
-		if err := repo.Insert(m); err != nil {
+		if err := repo.InsertTeamStats(m); err != nil {
 			t.Errorf("Error when inserting record into the database: %s", err.Error())
 		}
 
@@ -166,7 +166,7 @@ func TestUpdate(t *testing.T) {
 		m.ThrowIns = &throwsIns
 		m.UpdatedAt = d
 
-		if err := repo.Update(m); err != nil {
+		if err := repo.UpdateTeamStats(m); err != nil {
 			t.Errorf("Error when updating a record in the database: %s", err.Error())
 		}
 
@@ -210,7 +210,7 @@ func TestUpdate(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
 
-		err := repo.Update(newTeamStats(1, 2))
+		err := repo.UpdateTeamStats(newTeamStats(1, 2))
 
 		if err == nil {
 			t.Fatalf("Test failed, expected nil, got %v", err)
@@ -224,12 +224,12 @@ func TestUpdate(t *testing.T) {
 	conn.Close()
 }
 
-var db = config.GetConfig().Database
+var teamDb = config.GetConfig().Database
 
-func getConnection(t *testing.T) (*sql.DB, func()) {
+func getTeamConnection(t *testing.T) (*sql.DB, func()) {
 	psqlInfo := fmt.Sprintf("host=%s port=%s user=%s "+
 		"password=%s dbname=%s sslmode=disable",
-		db.Host, db.Port, db.User, db.Password, db.Name)
+		teamDb.Host, teamDb.Port, teamDb.User, teamDb.Password, teamDb.Name)
 
 	db, err := sql.Open(db.Driver, psqlInfo)
 

@@ -4,7 +4,7 @@ import "time"
 
 type PlayerStats struct {
 	FixtureID         int    `json:"fixture_id"`
-	PLayerID          int    `json:"player_id"`
+	PlayerID          int    `json:"player_id"`
 	TeamID            int    `json:"team_id"`
 	Position          string `json:"position"`
 	FormationPosition *int   `json:"formation_position"`

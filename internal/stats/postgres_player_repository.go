@@ -9,18 +9,18 @@ type PostgresPlayerStatsRepository struct {
 	Connection *sql.DB
 }
 
-func (p *PostgresPlayerStatsRepository) Insert(m *model.PlayerStats) error {
+func (p *PostgresPlayerStatsRepository) InsertPlayerStats(m *model.PlayerStats) error {
 	query := `INSERT INTO sportmonks_player_stats (fixture_id, player_id, team_id, position, formation_position, substitute,
-	shots_total, shots_on_goal, goals_scored, goals_conceded, fouls_drawn, fouls_committed, yellow_cards, red_cards,
-	crosses_total, crosses_accuracy, passes_total, passes_accuracy, assists, offsides, saves, pen_scored, pen_missed,
+	shots_total, shots_on_goal, goals_scored, goals_conceded, fouls_drawn, fouls_committed, yellow_cards, red_card,
+	crosses_total, crosses_accuracy, passes_total, passes_accuracy, assists, offsides, saves, pen_scored, pen_missed, pen_saved,
 	pen_committed, pen_won, hit_woodwork, tackles, blocks, interceptions, clearances, minutes_played, created_at, updated_at)
-	VALUES $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24,
-	$25, $26, $27, $28, $29, $30, $31, $32, $33, $34`
+	VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24,
+	$25, $26, $27, $28, $29, $30, $31, $32, $33, $34)`
 
 	_, err := p.Connection.Exec(
 		query,
 		m.FixtureID,
-		m.PLayerID,
+		m.PlayerID,
 		m.TeamID,
 		m.Position,
 		m.FormationPosition,
@@ -33,8 +33,16 @@ func (p *PostgresPlayerStatsRepository) Insert(m *model.PlayerStats) error {
 		m.PlayerFouls.Committed,
 		m.YellowCards,
 		m.RedCard,
+		m.PlayerCrosses.Total,
+		m.PlayerCrosses.Accuracy,
+		m.PlayerPasses.Total,
+		m.PlayerPasses.Accuracy,
+		m.Assists,
+		m.Offsides,
+		m.Saves,
 		m.PlayerPenalties.Scored,
 		m.PlayerPenalties.Missed,
+		m.PlayerPenalties.Saved,
 		m.PlayerPenalties.Committed,
 		m.PlayerPenalties.Won,
 		m.HitWoodwork,

@@ -14,7 +14,7 @@ type PostgresTeamStatsRepository struct {
 	Connection *sql.DB
 }
 
-func (p *PostgresTeamStatsRepository) Insert(m *model.TeamStats) error {
+func (p *PostgresTeamStatsRepository) InsertTeamStats(m *model.TeamStats) error {
 	query := `
 	INSERT INTO sportmonks_team_stats (fixture_id, team_id, shots_total, shots_on_goal, shots_off_goal, shots_blocked, 
 	shots_inside_box, shots_outside_box, passes_total, passes_accuracy, passes_percentage, attacks_total, attacks_dangerous,
@@ -56,7 +56,7 @@ func (p *PostgresTeamStatsRepository) Insert(m *model.TeamStats) error {
 	return err
 }
 
-func (p *PostgresTeamStatsRepository) Update(m *model.TeamStats) error {
+func (p *PostgresTeamStatsRepository) UpdateTeamStats(m *model.TeamStats) error {
 	if _, err := p.ByFixtureAndTeam(m.FixtureID, m.TeamID); err != nil {
 		return err
 	}
