@@ -206,7 +206,7 @@ func TestUpdateTeamStats(t *testing.T) {
 		a.Equal("2019-01-14 11:25:00 +0000 UTC", r.UpdatedAt.String())
 	})
 
-	t.Run("returns an error if player does not exist", func(t *testing.T) {
+	t.Run("returns an error if stats does not exist", func(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
 
@@ -247,12 +247,12 @@ func getTeamConnection(t *testing.T) (*sql.DB, func()) {
 
 func newTeamStats(fixtureId, teamId int) *model.TeamStats {
 	return &model.TeamStats{
-		FixtureID: fixtureId,
-		TeamID:    teamId,
-		TeamShots:     model.TeamShots{},
-		TeamPasses:    model.TeamPasses{},
-		TeamAttacks:   model.TeamAttacks{},
-		CreatedAt: time.Unix(1546965200, 0),
-		UpdatedAt: time.Unix(1546965200, 0),
+		FixtureID:   fixtureId,
+		TeamID:      teamId,
+		TeamShots:   model.TeamShots{},
+		TeamPasses:  model.TeamPasses{},
+		TeamAttacks: model.TeamAttacks{},
+		CreatedAt:   time.Unix(1546965200, 0),
+		UpdatedAt:   time.Unix(1546965200, 0),
 	}
 }

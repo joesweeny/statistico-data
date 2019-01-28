@@ -59,6 +59,58 @@ func (p *PostgresPlayerStatsRepository) InsertPlayerStats(m *model.PlayerStats) 
 	return err
 }
 
+func (p *PostgresPlayerStatsRepository) UpdatePlayerStats(m *model.PlayerStats) error {
+	if _, err := p.ByFixtureAndPlayer(m.FixtureID, m.PlayerID); err != nil {
+		return err
+	}
+
+	query := `
+	UPDATE sportmonks_player_stats SET position = $3, formation_position = $4, substitute = $5, shots_total = $6, 
+	shots_on_goal = $7, goals_scored = $8, goals_conceded = $9, fouls_drawn = $10, fouls_committed = $11, yellow_cards = $12, 
+	red_card = $13, crosses_total = $14, crosses_accuracy = $15, passes_total = $16, passes_accuracy = $17, assists = $18, 
+	offsides = $19, saves = $20, pen_scored = $21, pen_missed = $22, pen_saved = $23, pen_committed = $24, pen_won = $25, 
+	hit_woodwork = $26, tackles = $27, blocks = $28, interceptions = $29, clearances = $30, minutes_played = $31, 
+	updated_at = $32 WHERE fixture_id = $1 AND player_id = $2`
+
+	_, err := p.Connection.Exec(
+		query,
+		m.FixtureID,
+		m.PlayerID,
+		m.Position,
+		m.FormationPosition,
+		m.IsSubstitute,
+		m.PlayerShots.Total,
+		m.PlayerShots.OnGoal,
+		m.PlayerGoals.Scored,
+		m.PlayerGoals.Conceded,
+		m.PlayerFouls.Drawn,
+		m.PlayerFouls.Committed,
+		m.YellowCards,
+		m.RedCard,
+		m.PlayerCrosses.Total,
+		m.PlayerCrosses.Accuracy,
+		m.PlayerPasses.Total,
+		m.PlayerPasses.Accuracy,
+		m.Assists,
+		m.Offsides,
+		m.Saves,
+		m.PlayerPenalties.Scored,
+		m.PlayerPenalties.Missed,
+		m.PlayerPenalties.Saved,
+		m.PlayerPenalties.Committed,
+		m.PlayerPenalties.Won,
+		m.HitWoodwork,
+		m.Tackles,
+		m.Blocks,
+		m.Interceptions,
+		m.Clearances,
+		m.MinutesPlayed,
+		m.UpdatedAt.Unix(),
+	)
+
+	return err
+}
+
 func (p *PostgresPlayerStatsRepository) ByFixtureAndPlayer(fixtureId, playerId int) (*model.PlayerStats, error) {
 	query := `SELECT * FROM sportmonks_player_stats WHERE fixture_id = $1 AND player_id = $2`
 	row := p.Connection.QueryRow(query, fixtureId, playerId)
