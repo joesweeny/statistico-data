@@ -3,6 +3,7 @@ package stats
 import (
 	"database/sql"
 	"github.com/joesweeny/statshub/internal/model"
+	"time"
 )
 
 type PostgresPlayerStatsRepository struct {
@@ -56,4 +57,64 @@ func (p *PostgresPlayerStatsRepository) InsertPlayerStats(m *model.PlayerStats) 
 	)
 
 	return err
+}
+
+func (p *PostgresPlayerStatsRepository) ByFixtureAndPlayer(fixtureId, playerId int) (*model.PlayerStats, error) {
+	query := `SELECT * FROM sportmonks_player_stats WHERE fixture_id = $1 AND player_id = $2`
+	row := p.Connection.QueryRow(query, fixtureId, playerId)
+
+	return rowToPlayerStats(row)
+}
+
+func rowToPlayerStats(r *sql.Row) (*model.PlayerStats, error) {
+	var created int64
+	var updated int64
+
+	m := model.PlayerStats{}
+
+	err := r.Scan(
+		&m.FixtureID,
+		&m.PlayerID,
+		&m.TeamID,
+		&m.Position,
+		&m.FormationPosition,
+		&m.IsSubstitute,
+		&m.PlayerShots.Total,
+		&m.PlayerShots.OnGoal,
+		&m.PlayerGoals.Scored,
+		&m.PlayerGoals.Conceded,
+		&m.PlayerFouls.Drawn,
+		&m.PlayerFouls.Committed,
+		&m.YellowCards,
+		&m.RedCard,
+		&m.PlayerCrosses.Total,
+		&m.PlayerCrosses.Accuracy,
+		&m.PlayerPasses.Total,
+		&m.PlayerPasses.Accuracy,
+		&m.Assists,
+		&m.Offsides,
+		&m.Saves,
+		&m.PlayerPenalties.Scored,
+		&m.PlayerPenalties.Missed,
+		&m.PlayerPenalties.Saved,
+		&m.PlayerPenalties.Committed,
+		&m.PlayerPenalties.Won,
+		&m.HitWoodwork,
+		&m.Tackles,
+		&m.Blocks,
+		&m.Interceptions,
+		&m.Clearances,
+		&m.MinutesPlayed,
+		&created,
+		&updated,
+	)
+
+	if err != nil {
+		return &m, ErrNotFound
+	}
+
+	m.CreatedAt = time.Unix(created, 0)
+	m.UpdatedAt = time.Unix(updated, 0)
+
+	return &m, nil
 }
