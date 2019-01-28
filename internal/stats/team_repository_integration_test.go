@@ -10,8 +10,8 @@ import (
 	"time"
 )
 
-func TestInsert(t *testing.T) {
-	conn, cleanUp := getConnection(t)
+func TestTeamPlayerStats(t *testing.T) {
+	conn, cleanUp := getTeamConnection(t)
 	repo := PostgresTeamStatsRepository{Connection: conn}
 
 	t.Run("increases table count", func(t *testing.T) {
@@ -21,7 +21,7 @@ func TestInsert(t *testing.T) {
 		for i := 1; i < 4; i++ {
 			m := newTeamStats(42, 65)
 
-			if err := repo.Insert(m); err != nil {
+			if err := repo.InsertTeamStats(m); err != nil {
 				t.Errorf("Error when inserting record into the database: %s", err.Error())
 			}
 
@@ -39,7 +39,7 @@ func TestInsert(t *testing.T) {
 }
 
 func TestByFixtureAndTeam(t *testing.T) {
-	conn, cleanUp := getConnection(t)
+	conn, cleanUp := getTeamConnection(t)
 	repo := PostgresTeamStatsRepository{Connection: conn}
 
 	t.Run("team stats can be retrieved by fixture and team IDs", func(t *testing.T) {
@@ -48,7 +48,7 @@ func TestByFixtureAndTeam(t *testing.T) {
 
 		m := newTeamStats(42, 65)
 
-		if err := repo.Insert(m); err != nil {
+		if err := repo.InsertTeamStats(m); err != nil {
 			t.Errorf("Error when inserting record into the database: %s", err.Error())
 		}
 
@@ -61,17 +61,17 @@ func TestByFixtureAndTeam(t *testing.T) {
 		a := assert.New(t)
 		a.Equal(42, m.FixtureID)
 		a.Equal(65, m.TeamID)
-		a.Nil(m.Shots.Total)
-		a.Nil(m.Shots.OnGoal)
-		a.Nil(m.Shots.OffGoal)
-		a.Nil(m.Shots.Blocked)
-		a.Nil(m.Shots.InsideBox)
-		a.Nil(m.Shots.OutsideBox)
-		a.Nil(m.Passes.Total)
-		a.Nil(m.Passes.Accuracy)
-		a.Nil(m.Passes.Percentage)
-		a.Nil(m.Attacks.Total)
-		a.Nil(m.Attacks.Dangerous)
+		a.Nil(m.TeamShots.Total)
+		a.Nil(m.TeamShots.OnGoal)
+		a.Nil(m.TeamShots.OffGoal)
+		a.Nil(m.TeamShots.Blocked)
+		a.Nil(m.TeamShots.InsideBox)
+		a.Nil(m.TeamShots.OutsideBox)
+		a.Nil(m.TeamPasses.Total)
+		a.Nil(m.TeamPasses.Accuracy)
+		a.Nil(m.TeamPasses.Percentage)
+		a.Nil(m.TeamAttacks.Total)
+		a.Nil(m.TeamAttacks.Dangerous)
 		a.Nil(m.Fouls)
 		a.Nil(m.Corners)
 		a.Nil(m.Offsides)
@@ -106,8 +106,8 @@ func TestByFixtureAndTeam(t *testing.T) {
 	conn.Close()
 }
 
-func TestUpdate(t *testing.T) {
-	conn, cleanUp := getConnection(t)
+func TestUpdateTeamStats(t *testing.T) {
+	conn, cleanUp := getTeamConnection(t)
 	repo := PostgresTeamStatsRepository{Connection: conn}
 
 	t.Run("modifies existing team stats record", func(t *testing.T) {
@@ -116,7 +116,7 @@ func TestUpdate(t *testing.T) {
 
 		m := newTeamStats(42, 65)
 
-		if err := repo.Insert(m); err != nil {
+		if err := repo.InsertTeamStats(m); err != nil {
 			t.Errorf("Error when inserting record into the database: %s", err.Error())
 		}
 
@@ -143,17 +143,17 @@ func TestUpdate(t *testing.T) {
 		var throwsIns = 9
 		var d = time.Date(2019, 01, 14, 11, 25, 00, 00, time.UTC)
 
-		m.Shots.Total = &shotTotal
-		m.Shots.OnGoal = &shotOnGoal
-		m.Shots.OffGoal = &shotOffGoal
-		m.Shots.Blocked = &shotBlocked
-		m.Shots.InsideBox = &shotInside
-		m.Shots.OutsideBox = &shotOutside
-		m.Passes.Total = &passTotal
-		m.Passes.Accuracy = &passAcc
-		m.Passes.Percentage = &passPer
-		m.Attacks.Total = &attTotal
-		m.Attacks.Dangerous = &attDan
+		m.TeamShots.Total = &shotTotal
+		m.TeamShots.OnGoal = &shotOnGoal
+		m.TeamShots.OffGoal = &shotOffGoal
+		m.TeamShots.Blocked = &shotBlocked
+		m.TeamShots.InsideBox = &shotInside
+		m.TeamShots.OutsideBox = &shotOutside
+		m.TeamPasses.Total = &passTotal
+		m.TeamPasses.Accuracy = &passAcc
+		m.TeamPasses.Percentage = &passPer
+		m.TeamAttacks.Total = &attTotal
+		m.TeamAttacks.Dangerous = &attDan
 		m.Fouls = &fouls
 		m.Corners = &corner
 		m.Offsides = &offside
@@ -166,7 +166,7 @@ func TestUpdate(t *testing.T) {
 		m.ThrowIns = &throwsIns
 		m.UpdatedAt = d
 
-		if err := repo.Update(m); err != nil {
+		if err := repo.UpdateTeamStats(m); err != nil {
 			t.Errorf("Error when updating a record in the database: %s", err.Error())
 		}
 
@@ -179,17 +179,17 @@ func TestUpdate(t *testing.T) {
 		a := assert.New(t)
 		a.Equal(42, m.FixtureID)
 		a.Equal(65, m.TeamID)
-		a.Equal(10, *m.Shots.Total)
-		a.Equal(2, *m.Shots.OnGoal)
-		a.Equal(1, *m.Shots.OffGoal)
-		a.Equal(5, *m.Shots.Blocked)
-		a.Equal(8, *m.Shots.InsideBox)
-		a.Equal(2, *m.Shots.OutsideBox)
-		a.Equal(156, *m.Passes.Total)
-		a.Equal(78, *m.Passes.Accuracy)
-		a.Equal(98, *m.Passes.Percentage)
-		a.Equal(50, *m.Attacks.Total)
-		a.Equal(50, *m.Attacks.Dangerous)
+		a.Equal(10, *m.TeamShots.Total)
+		a.Equal(2, *m.TeamShots.OnGoal)
+		a.Equal(1, *m.TeamShots.OffGoal)
+		a.Equal(5, *m.TeamShots.Blocked)
+		a.Equal(8, *m.TeamShots.InsideBox)
+		a.Equal(2, *m.TeamShots.OutsideBox)
+		a.Equal(156, *m.TeamPasses.Total)
+		a.Equal(78, *m.TeamPasses.Accuracy)
+		a.Equal(98, *m.TeamPasses.Percentage)
+		a.Equal(50, *m.TeamAttacks.Total)
+		a.Equal(50, *m.TeamAttacks.Dangerous)
 		a.Equal(56, *m.Fouls)
 		a.Equal(4, *m.Corners)
 		a.Equal(3, *m.Offsides)
@@ -206,11 +206,11 @@ func TestUpdate(t *testing.T) {
 		a.Equal("2019-01-14 11:25:00 +0000 UTC", r.UpdatedAt.String())
 	})
 
-	t.Run("returns an error if player does not exist", func(t *testing.T) {
+	t.Run("returns an error if stats does not exist", func(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
 
-		err := repo.Update(newTeamStats(1, 2))
+		err := repo.UpdateTeamStats(newTeamStats(1, 2))
 
 		if err == nil {
 			t.Fatalf("Test failed, expected nil, got %v", err)
@@ -224,12 +224,12 @@ func TestUpdate(t *testing.T) {
 	conn.Close()
 }
 
-var db = config.GetConfig().Database
+var teamDb = config.GetConfig().Database
 
-func getConnection(t *testing.T) (*sql.DB, func()) {
+func getTeamConnection(t *testing.T) (*sql.DB, func()) {
 	psqlInfo := fmt.Sprintf("host=%s port=%s user=%s "+
 		"password=%s dbname=%s sslmode=disable",
-		db.Host, db.Port, db.User, db.Password, db.Name)
+		teamDb.Host, teamDb.Port, teamDb.User, teamDb.Password, teamDb.Name)
 
 	db, err := sql.Open(db.Driver, psqlInfo)
 
@@ -247,12 +247,12 @@ func getConnection(t *testing.T) (*sql.DB, func()) {
 
 func newTeamStats(fixtureId, teamId int) *model.TeamStats {
 	return &model.TeamStats{
-		FixtureID: fixtureId,
-		TeamID:    teamId,
-		Shots:     model.Shots{},
-		Passes:    model.Passes{},
-		Attacks:   model.Attacks{},
-		CreatedAt: time.Unix(1546965200, 0),
-		UpdatedAt: time.Unix(1546965200, 0),
+		FixtureID:   fixtureId,
+		TeamID:      teamId,
+		TeamShots:   model.TeamShots{},
+		TeamPasses:  model.TeamPasses{},
+		TeamAttacks: model.TeamAttacks{},
+		CreatedAt:   time.Unix(1546965200, 0),
+		UpdatedAt:   time.Unix(1546965200, 0),
 	}
 }
