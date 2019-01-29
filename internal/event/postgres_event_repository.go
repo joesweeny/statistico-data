@@ -4,7 +4,11 @@ import (
 	"database/sql"
 	"github.com/joesweeny/statshub/internal/model"
 	_ "github.com/lib/pq"
+	"errors"
+	"time"
 )
+
+var ErrNotFound = errors.New("not found")
 
 type PostgresEventRepository struct {
 	Connection *sql.DB
@@ -46,4 +50,44 @@ func (p *PostgresEventRepository) InsertSubstitutionEvent(m *model.SubstitutionE
 	)
 
 	return err
+}
+
+func (p *PostgresEventRepository) GoalEventById(id int) (*model.GoalEvent, error) {
+	query := `SELECT * FROM sportmonks_goal_event WHERE id = $1`
+
+	m := model.GoalEvent{}
+
+	var created int64
+
+	row := p.Connection.QueryRow(query, id)
+
+	err := row.Scan(&m.ID, &m.TeamID, &m.PlayerID, &m.PlayerAssistID, &m.Minute, &m.Score, &created)
+
+	if err != nil {
+		return &m, ErrNotFound
+	}
+
+	m.CreatedAt = time.Unix(created, 0)
+
+	return &m, nil
+}
+
+func (p *PostgresEventRepository) SubstitutionEventById(id int) (*model.SubstitutionEvent, error) {
+	query := `SELECT * FROM sportmonks_substitution_event WHERE id = $1`
+
+	m := model.SubstitutionEvent{}
+
+	var created int64
+
+	row := p.Connection.QueryRow(query, id)
+
+	err := row.Scan(&m.ID, &m.TeamID, &m.PlayerInID, &m.PlayerOutID, &m.Minute, &m.Injured, &created)
+
+	if err != nil {
+		return &m, ErrNotFound
+	}
+
+	m.CreatedAt = time.Unix(created, 0)
+
+	return &m, nil
 }

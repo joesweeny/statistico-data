@@ -98,6 +98,102 @@ func TestInsertSubstitutionEvent(t *testing.T) {
 	conn.Close()
 }
 
+func TestGoalEventById(t *testing.T) {
+	conn, cleanUp := getConnection(t)
+	repo := PostgresEventRepository{Connection: conn}
+
+	t.Run("goal event can be retrieved by ID", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+
+		m := newGoalEvent(33)
+
+		if err := repo.InsertGoalEvent(m); err != nil {
+			t.Errorf("Test failed, expected nil, got %s", err)
+		}
+
+		r, err := repo.GoalEventById(33)
+
+		if err != nil {
+			t.Errorf("Error when retrieving a record from the database: %s", err.Error())
+		}
+
+		a := assert.New(t)
+		a.Equal(33, r.ID)
+		a.Equal(4509, r.TeamID)
+		a.Equal(3401, r.PlayerID)
+		a.Nil(r.PlayerAssistID)
+		a.Equal(82, r.Minute)
+		a.Equal("0-1", r.Score)
+		a.Equal("2019-01-08 16:33:20 +0000 UTC", r.CreatedAt.String())
+	})
+
+	t.Run("returns error if goal event does not exist", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+
+		_, err := repo.GoalEventById(99)
+
+		if err == nil {
+			t.Errorf("Test failed, expected %v, got nil", err)
+		}
+
+		if err != ErrNotFound {
+			t.Fatalf("Test failed, expected %v, got %s", ErrNotFound, err)
+		}
+	})
+
+	conn.Close()
+}
+
+func TestSubstitutionEventById(t *testing.T) {
+	conn, cleanUp := getConnection(t)
+	repo := PostgresEventRepository{Connection: conn}
+
+	t.Run("substitution event can be retrieved by ID", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+
+		m := newSubstitutionEvent(33)
+
+		if err := repo.InsertSubstitutionEvent(m); err != nil {
+			t.Errorf("Test failed, expected nil, got %s", err)
+		}
+
+		r, err := repo.SubstitutionEventById(33)
+
+		if err != nil {
+			t.Errorf("Error when retrieving a record from the database: %s", err.Error())
+		}
+
+		a := assert.New(t)
+		a.Equal(33, r.ID)
+		a.Equal(4509, r.TeamID)
+		a.Equal(3401, r.PlayerInID)
+		a.Equal(901, r.PlayerOutID)
+		a.Equal(82, r.Minute)
+		a.True(r.Injured)
+		a.Equal("2019-01-08 16:33:20 +0000 UTC", r.CreatedAt.String())
+	})
+
+	t.Run("returns error if substitution event does not exist", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+
+		_, err := repo.SubstitutionEventById(99)
+
+		if err == nil {
+			t.Errorf("Test failed, expected %v, got nil", err)
+		}
+
+		if err != ErrNotFound {
+			t.Fatalf("Test failed, expected %v, got %s", ErrNotFound, err)
+		}
+	})
+
+	conn.Close()
+}
+
 var db = config.GetConfig().Database
 
 func getConnection(t *testing.T) (*sql.DB, func()) {
