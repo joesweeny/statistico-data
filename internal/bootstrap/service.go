@@ -5,6 +5,7 @@ import (
 	"github.com/joesweeny/statshub/internal/country"
 	"github.com/joesweeny/statshub/internal/fixture"
 	"github.com/joesweeny/statshub/internal/season"
+	"github.com/joesweeny/statshub/internal/venue"
 )
 
 type Service interface {
@@ -80,4 +81,23 @@ func (b Bootstrap) GetSeasonService() season.Service {
 	}
 
 	return c
+}
+
+func (b Bootstrap) GetVenueService() venue.Service {
+	conn := b.databaseConnection()
+	client, err := b.sportmonksClient()
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	s := venue.Service{
+		Repository: &venue.PostgresVenueRepository{Connection: conn},
+		SeasonRepo: &season.PostgresSeasonRepository{Connection: conn},
+		Factory:    venue.Factory{Clock: clock()},
+		Client:     client,
+		Logger:     logger(),
+	}
+
+	return s
 }
