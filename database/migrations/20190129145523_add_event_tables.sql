@@ -24,10 +24,10 @@ CREATE TABLE sportmonks_substitution_event (
   created_at INTEGER NOT NULL
 );
 
-CREATE INDEX ON sportmonks_substitute_event (team_id);
-CREATE INDEX ON sportmonks_substitute_event (player_in_id);
-CREATE INDEX ON sportmonks_substitute_event (player_out_id);
+CREATE INDEX ON sportmonks_substitution_event (team_id);
+CREATE INDEX ON sportmonks_substitution_event (player_in_id);
+CREATE INDEX ON sportmonks_substitution_event (player_out_id);
 -- +goose Down
 -- SQL in this section is executed when the migration is rolled back.
 DROP TABLE sportmonks_goal_event
-DROP TABLE sportmonks_substitute_event
+DROP TABLE sportmonks_substitution_event
