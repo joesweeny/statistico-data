@@ -14,7 +14,7 @@ CREATE INDEX ON sportmonks_goal_event (team_id);
 CREATE INDEX ON sportmonks_goal_event (player_id);
 CREATE INDEX ON sportmonks_goal_event (player_assist_id);
 
-CREATE TABLE sportmonks_substitute_event (
+CREATE TABLE sportmonks_substitution_event (
   id INTEGER NOT NULL PRIMARY KEY,
   team_id INTEGER NOT NULL,
   player_in_id INTEGER NOT NULL,
