@@ -13,6 +13,8 @@ const country = "country"
 const fixture = "fixture"
 const fixtureCurrentSeason = "fixture:current-season"
 const season = "season"
+const venue = "venue"
+const venueCurrentSeason = "venue:current-season"
 
 var option = flag.String("option", "", "Provide the model name to process")
 
@@ -35,6 +37,8 @@ func main() {
 		break
 	case season:
 		service = app.GetSeasonService()
+	case venue:
+		service = app.GetVenueService()
 	default:
 		fmt.Println("The option provided is not supported")
 		os.Exit(1)
