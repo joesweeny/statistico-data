@@ -1,18 +1,18 @@
 package venue
 
 import (
-	"testing"
-	"github.com/stretchr/testify/mock"
-	"github.com/joesweeny/statshub/internal/model"
-	"github.com/stretchr/testify/assert"
-	"encoding/json"
-	"io/ioutil"
 	"bytes"
-	"net/http"
-	"github.com/joesweeny/sportmonks-go-client"
-	"github.com/jonboulle/clockwork"
-	"log"
+	"encoding/json"
 	"errors"
+	"github.com/joesweeny/sportmonks-go-client"
+	"github.com/joesweeny/statshub/internal/model"
+	"github.com/jonboulle/clockwork"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
+	"io/ioutil"
+	"log"
+	"net/http"
+	"testing"
 )
 
 func TestProcess(t *testing.T) {
@@ -120,7 +120,7 @@ func (m mockVenueRepository) Update(v *model.Venue) error {
 func (m mockVenueRepository) GetById(id int) (*model.Venue, error) {
 	args := m.Called(id)
 	v := args.Get(0).(*model.Venue)
-	return  v, args.Error(1)
+	return v, args.Error(1)
 }
 
 func venuesResponse() sportmonks.VenuesResponse {
