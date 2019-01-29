@@ -1,11 +1,11 @@
 package venue
 
 import (
-	"time"
-	"github.com/jonboulle/clockwork"
 	"github.com/joesweeny/sportmonks-go-client"
-	"testing"
+	"github.com/jonboulle/clockwork"
 	"github.com/stretchr/testify/assert"
+	"testing"
+	"time"
 )
 
 var t = time.Date(2019, 01, 14, 11, 25, 00, 00, time.UTC)
@@ -61,11 +61,11 @@ func TestUpdateVenue(t *testing.T) {
 
 func newClientVenue() *sportmonks.Venue {
 	return &sportmonks.Venue{
-		ID:      23,
-		Name:    "London Stadium",
-		Surface: "Grass",
-		City: "London",
+		ID:       23,
+		Name:     "London Stadium",
+		Surface:  "Grass",
+		City:     "London",
 		Capacity: 60000,
-		Image: "/path/to/image",
+		Image:    "/path/to/image",
 	}
 }
