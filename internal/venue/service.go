@@ -38,6 +38,8 @@ func (s Service) callClient(ids []int) error {
 			s.persistVenue(&venue)
 		}
 	}
+
+	return nil
 }
 
 func (s Service) persistVenue(v *sportmonks.Venue) {
