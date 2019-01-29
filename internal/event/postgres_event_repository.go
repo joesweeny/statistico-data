@@ -31,7 +31,7 @@ func (p *PostgresEventRepository) InsertGoalEvent(m *model.GoalEvent) error {
 
 func (p *PostgresEventRepository) InsertSubstitutionEvent(m *model.SubstitutionEvent) error {
 	query := `
-	INSERT INTO sportmonks_goal_event (id, team_id, player_in_id, player_out_id, minute, injured, created_at) VALUES
+	INSERT INTO sportmonks_substitution_event (id, team_id, player_in_id, player_out_id, minute, injured, created_at) VALUES
 	($1, $2, $3, $4, $5, $6, $7)`
 
 	_, err := p.Connection.Exec(
