@@ -62,6 +62,7 @@ func (s Service) persistRound(m *sportmonks.Round) {
 
 		if err != nil {
 			log.Printf("Error occurred when creating struct: %s", err.Error())
+			return
 		}
 
 		if err := s.Insert(created); err != nil {
