@@ -12,6 +12,8 @@ const competition = "competition"
 const country = "country"
 const fixture = "fixture"
 const fixtureCurrentSeason = "fixture:current-season"
+const round = "round"
+const roundCurrentSeason = "round:current-season"
 const season = "season"
 const venue = "venue"
 const venueCurrentSeason = "venue:current-season"
@@ -27,18 +29,21 @@ func main() {
 
 	switch *option {
 	case competition:
-		service = app.GetCompetitionService()
+		service = app.CompetitionService()
 		break
 	case country:
-		service = app.GetCountryService()
+		service = app.CountryService()
 		break
 	case fixture:
-		service = app.GetFixtureService()
+		service = app.FixtureService()
+		break
+	case round:
+		service = app.RoundService()
 		break
 	case season:
-		service = app.GetSeasonService()
+		service = app.SeasonService()
 	case venue:
-		service = app.GetVenueService()
+		service = app.VenueService()
 	default:
 		fmt.Println("The option provided is not supported")
 		os.Exit(1)
