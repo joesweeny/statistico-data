@@ -1,10 +1,10 @@
 package round
 
 import (
-	"github.com/joesweeny/statshub/internal/season"
 	"github.com/joesweeny/sportmonks-go-client"
-	"log"
 	"github.com/joesweeny/statshub/internal/model"
+	"github.com/joesweeny/statshub/internal/season"
+	"log"
 )
 
 type Service struct {

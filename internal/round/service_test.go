@@ -1,18 +1,18 @@
 package round
 
 import (
-	"testing"
-	"github.com/stretchr/testify/mock"
-	"github.com/joesweeny/statshub/internal/model"
-	"net/http"
-	"github.com/stretchr/testify/assert"
-	"encoding/json"
-	"io/ioutil"
 	"bytes"
-	"github.com/joesweeny/sportmonks-go-client"
-	"github.com/jonboulle/clockwork"
-	"log"
+	"encoding/json"
 	"errors"
+	"github.com/joesweeny/sportmonks-go-client"
+	"github.com/joesweeny/statshub/internal/model"
+	"github.com/jonboulle/clockwork"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
+	"io/ioutil"
+	"log"
+	"net/http"
+	"testing"
 )
 
 func TestProcess(t *testing.T) {
@@ -135,10 +135,10 @@ func seasonResponse() sportmonks.SeasonResponse {
 		CurrentStageID:  &stage,
 		Fixtures: struct {
 			Data []sportmonks.Fixture `json:"data"`
-		} {},
+		}{},
 		Rounds: struct {
 			Data []sportmonks.Round `json:"data"`
-		} {},
+		}{},
 	}
 
 	s.Rounds.Data = append(s.Rounds.Data, *newClientRound("2019-03-12", "2019-03-19"))
