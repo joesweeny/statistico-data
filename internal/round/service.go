@@ -1,4 +1,4 @@
-package fixture
+package round
 
 import (
 	"github.com/joesweeny/sportmonks-go-client"
@@ -36,7 +36,7 @@ func (s Service) CurrentSeason() error {
 }
 
 func (s Service) callClient(ids []int) error {
-	q := []string{"fixtures"}
+	q := []string{"rounds"}
 
 	for _, id := range ids {
 		res, err := s.Client.SeasonById(id, q)
@@ -45,29 +45,39 @@ func (s Service) callClient(ids []int) error {
 			return err
 		}
 
-		for _, fixture := range res.Data.Fixtures.Data {
+		for _, round := range res.Data.Rounds.Data {
 			// Push method into Go routine
-			s.persistFixture(&fixture)
+			s.persistRound(&round)
 		}
 	}
 
 	return nil
 }
 
-func (s Service) persistFixture(m *sportmonks.Fixture) {
-	fixture, err := s.GetById(m.ID)
+func (s Service) persistRound(m *sportmonks.Round) {
+	round, err := s.GetById(m.ID)
 
-	if err != nil && (model.Fixture{}) == *fixture {
-		created := s.createFixture(m)
+	if err != nil && (model.Round{}) == *round {
+		created, err := s.createRound(m)
+
+		if err != nil {
+			log.Printf("Error occurred when creating struct: %s", err.Error())
+			return
+		}
 
 		if err := s.Insert(created); err != nil {
-			log.Printf("Error occurred when creating struct %+v", created)
+			log.Printf("Error occurred when inserting struct %+v", created)
 		}
 
 		return
 	}
 
-	updated := s.updateFixture(m, fixture)
+	updated, err := s.updateRound(m, round)
+
+	if err != nil {
+		log.Printf("Error occurred when updating struct: %s", err.Error())
+		return
+	}
 
 	if err := s.Update(updated); err != nil {
 		log.Printf("Error occurred when updating struct: %+v, error %+v", updated, err)

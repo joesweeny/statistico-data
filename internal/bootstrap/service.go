@@ -6,13 +6,14 @@ import (
 	"github.com/joesweeny/statshub/internal/fixture"
 	"github.com/joesweeny/statshub/internal/season"
 	"github.com/joesweeny/statshub/internal/venue"
+	"github.com/joesweeny/statshub/internal/round"
 )
 
 type Service interface {
 	Process() error
 }
 
-func (b Bootstrap) GetCompetitionService() competition.Service {
+func (b Bootstrap) CompetitionService() competition.Service {
 	conn := b.databaseConnection()
 	client, err := b.sportmonksClient()
 
@@ -28,7 +29,7 @@ func (b Bootstrap) GetCompetitionService() competition.Service {
 	}
 }
 
-func (b Bootstrap) GetCountryService() country.Service {
+func (b Bootstrap) CountryService() country.Service {
 	conn := b.databaseConnection()
 	client, err := b.sportmonksClient()
 
@@ -46,7 +47,7 @@ func (b Bootstrap) GetCountryService() country.Service {
 	return c
 }
 
-func (b Bootstrap) GetFixtureService() fixture.Service {
+func (b Bootstrap) FixtureService() fixture.Service {
 	conn := b.databaseConnection()
 	client, err := b.sportmonksClient()
 
@@ -65,7 +66,26 @@ func (b Bootstrap) GetFixtureService() fixture.Service {
 	return c
 }
 
-func (b Bootstrap) GetSeasonService() season.Service {
+func (b Bootstrap) RoundService() round.Service {
+	conn := b.databaseConnection()
+	client, err := b.sportmonksClient()
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	s := round.Service{
+		Repository: &round.PostgresRoundRepository{Connection: conn},
+		SeasonRepo: &season.PostgresSeasonRepository{Connection: conn},
+		Factory:    round.Factory{Clock: clock()},
+		Client:     client,
+		Logger:     logger(),
+	}
+
+	return s
+}
+
+func (b Bootstrap) SeasonService() season.Service {
 	conn := b.databaseConnection()
 	client, err := b.sportmonksClient()
 
@@ -83,7 +103,7 @@ func (b Bootstrap) GetSeasonService() season.Service {
 	return c
 }
 
-func (b Bootstrap) GetVenueService() venue.Service {
+func (b Bootstrap) VenueService() venue.Service {
 	conn := b.databaseConnection()
 	client, err := b.sportmonksClient()
 
