@@ -69,7 +69,7 @@ func (s Service) persistFixture(m *sportmonks.Fixture) {
 
 	updated := s.updateFixture(m, fixture)
 
-	if err := s.Update(fixture); err != nil {
+	if err := s.Update(updated); err != nil {
 		log.Printf("Error occurred when updating struct: %+v, error %+v", updated, err)
 	}
 
