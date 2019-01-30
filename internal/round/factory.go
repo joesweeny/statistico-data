@@ -39,3 +39,24 @@ func (f Factory) createRound(s *sportmonks.Round) (*model.Round, error) {
 
 	return &round, nil
 }
+
+func (f Factory) updateRound(s *sportmonks.Round, m *model.Round) (*model.Round, error) {
+	start, err := time.Parse(dateFormat, s.Start)
+
+	if err != nil {
+		return &model.Round{}, err
+	}
+
+	end, err := time.Parse(dateFormat, s.End)
+
+	if err != nil {
+		return &model.Round{}, err
+	}
+
+	m.Name = strconv.Itoa(s.Name)
+	m.StartDate = start
+	m.EndDate = end
+	m.UpdatedAt = f.Clock.Now()
+
+	return m, nil
+}
