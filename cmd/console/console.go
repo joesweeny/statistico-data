@@ -6,6 +6,7 @@ import (
 	"github.com/joesweeny/statshub/internal/config"
 	"github.com/joesweeny/statshub/internal/bootstrap"
 	"os"
+	"time"
 )
 
 const competition = "competition"
@@ -49,12 +50,19 @@ func main() {
 		os.Exit(1)
 	}
 
+	start := time.Now()
+
 	if err := service.Process(); err != nil {
 		fail(option, err)
 		os.Exit(1)
 	}
 
 	fmt.Printf("Processing complete for %s\n", *option)
+
+	elapsed := time.Since(start)
+
+	fmt.Printf("%s command took %s", *option, elapsed)
+
 	os.Exit(0)
 }
 

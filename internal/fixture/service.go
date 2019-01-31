@@ -5,7 +5,10 @@ import (
 	"github.com/joesweeny/statshub/internal/model"
 	"github.com/joesweeny/statshub/internal/season"
 	"log"
+	"sync"
 )
+
+var waitGroup sync.WaitGroup
 
 type Service struct {
 	Repository
@@ -39,19 +42,33 @@ func (s Service) callClient(ids []int) error {
 	q := []string{"fixtures"}
 
 	for _, id := range ids {
-		res, err := s.Client.SeasonById(id, q)
+		go func(id int) {
+			waitGroup.Add(1)
+			res, err := s.Client.SeasonById(id, q)
 
-		if err != nil {
-			return err
-		}
+			s.handleSeason(res.Data)
 
-		for _, fixture := range res.Data.Fixtures.Data {
-			// Push method into Go routine
-			s.persistFixture(&fixture)
-		}
+			if err != nil {
+				log.Printf("Error when calling client '%s", err.Error())
+			}
+			defer waitGroup.Done()
+		}(id)
 	}
 
+	waitGroup.Wait()
+
 	return nil
+}
+
+func (s Service) handleSeason(m sportmonks.Season) {
+	for _, fixture := range m.Fixtures.Data {
+		waitGroup.Add(1)
+
+		go func(fixture sportmonks.Fixture) {
+			s.persistFixture(&fixture)
+			defer waitGroup.Done()
+		}(fixture)
+	}
 }
 
 func (s Service) persistFixture(m *sportmonks.Fixture) {
@@ -61,7 +78,7 @@ func (s Service) persistFixture(m *sportmonks.Fixture) {
 		created := s.createFixture(m)
 
 		if err := s.Insert(created); err != nil {
-			log.Printf("Error occurred when creating struct %+v", created)
+			log.Printf("Error '%s' occurred when inserting Fixture struct: %+v\n,", err.Error(), created)
 		}
 
 		return
@@ -70,7 +87,7 @@ func (s Service) persistFixture(m *sportmonks.Fixture) {
 	updated := s.updateFixture(m, fixture)
 
 	if err := s.Update(updated); err != nil {
-		log.Printf("Error occurred when updating struct: %+v, error %+v", updated, err)
+		log.Printf("Error '%s' occurred when updating Fixture struct: %+v\n,", err.Error(), updated)
 	}
 
 	return
