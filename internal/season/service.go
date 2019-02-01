@@ -4,7 +4,6 @@ import (
 	"github.com/joesweeny/sportmonks-go-client"
 	"github.com/joesweeny/statshub/internal/model"
 	"log"
-	"fmt"
 	"sync"
 )
 
@@ -47,7 +46,6 @@ func (s Service) Process() error {
 }
 
 func (s Service) persistSeason(m *sportmonks.Season) {
-	fmt.Printf("Season ID in persist method: %d\n", m.ID)
 	season, err := s.Id(m.ID)
 
 	if err != nil && (model.Season{} == *season) {

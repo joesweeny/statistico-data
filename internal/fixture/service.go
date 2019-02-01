@@ -42,15 +42,17 @@ func (s Service) callClient(ids []int) error {
 	q := []string{"fixtures"}
 
 	for _, id := range ids {
-		go func(id int) {
-			waitGroup.Add(1)
-			res, err := s.Client.SeasonById(id, q)
+		waitGroup.Add(1)
 
-			s.handleSeason(res.Data)
+		go func(id int) {
+			res, err := s.Client.SeasonById(id, q)
 
 			if err != nil {
 				log.Printf("Error when calling client '%s", err.Error())
 			}
+
+			s.handleFixtures(res.Data.Fixtures.Data)
+
 			defer waitGroup.Done()
 		}(id)
 	}
@@ -60,8 +62,8 @@ func (s Service) callClient(ids []int) error {
 	return nil
 }
 
-func (s Service) handleSeason(m sportmonks.Season) {
-	for _, fixture := range m.Fixtures.Data {
+func (s Service) handleFixtures(f []sportmonks.Fixture) {
+	for _, fixture := range f {
 		waitGroup.Add(1)
 
 		go func(fixture sportmonks.Fixture) {
