@@ -27,6 +27,9 @@ func (b Bootstrap) databaseConnection() *sql.DB {
 		panic(err)
 	}
 
+	conn.SetMaxOpenConns(50)
+	conn.SetMaxIdleConns(25)
+
 	return conn
 }
 

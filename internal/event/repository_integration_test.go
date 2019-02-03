@@ -1,13 +1,13 @@
 package event
 
 import (
-	"github.com/joesweeny/statshub/internal/config"
 	"database/sql"
-	"testing"
 	"fmt"
+	"github.com/joesweeny/statshub/internal/config"
 	"github.com/joesweeny/statshub/internal/model"
-	"time"
 	"github.com/stretchr/testify/assert"
+	"testing"
+	"time"
 )
 
 func TestInsertGoalEvent(t *testing.T) {
@@ -220,23 +220,23 @@ func getConnection(t *testing.T) (*sql.DB, func()) {
 
 func newGoalEvent(id int) *model.GoalEvent {
 	return &model.GoalEvent{
-		ID:       id,
-		TeamID:   4509,
-		PlayerID: 3401,
-		Minute: 82,
-		Score: "0-1",
-		CreatedAt:  time.Unix(1546965200, 0),
+		ID:        id,
+		TeamID:    4509,
+		PlayerID:  3401,
+		Minute:    82,
+		Score:     "0-1",
+		CreatedAt: time.Unix(1546965200, 0),
 	}
 }
 
 func newSubstitutionEvent(id int) *model.SubstitutionEvent {
 	return &model.SubstitutionEvent{
-		ID:       id,
-		TeamID:   4509,
-		PlayerInID: 3401,
+		ID:          id,
+		TeamID:      4509,
+		PlayerInID:  3401,
 		PlayerOutID: 901,
-		Minute: 82,
-		Injured: true,
-		CreatedAt:  time.Unix(1546965200, 0),
+		Minute:      82,
+		Injured:     true,
+		CreatedAt:   time.Unix(1546965200, 0),
 	}
 }

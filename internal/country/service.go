@@ -20,30 +20,50 @@ func (s Service) Process() error {
 		return err
 	}
 
-	for i := res.Meta.Pagination.CurrentPage; i <= res.Meta.Pagination.TotalPages; i++ {
-		res, err := s.Client.Countries(i, []string{})
+	countries := make(chan sportmonks.Country, res.Meta.Pagination.Total)
+	done := make(chan bool)
 
-		if err != nil {
-			return err
-		}
+	go s.parseCountries(countries, res.Meta)
+	go s.persistCountries(countries, done)
 
-		for _, country := range res.Data {
-			// Push method into a Go routine
-			s.persistCountry(&country)
-		}
-	}
+	<-done
 
 	return nil
 }
 
-func (s Service) persistCountry(c *sportmonks.Country) {
+func (s Service) parseCountries(ch chan<- sportmonks.Country, meta sportmonks.Meta) {
+	for i := meta.Pagination.CurrentPage; i <= meta.Pagination.TotalPages; i++ {
+		res, err := s.Client.Countries(i, []string{})
+
+		if err != nil {
+			log.Printf("Error when calling client '%s", err.Error())
+			continue
+		}
+
+		for _, country := range res.Data {
+			ch <- country
+		}
+	}
+
+	close(ch)
+}
+
+func (s Service) persistCountries(ch <-chan sportmonks.Country, done chan bool) {
+	for x := range ch {
+		s.persist(&x)
+	}
+
+	done <- true
+}
+
+func (s Service) persist(c *sportmonks.Country) {
 	country, err := s.GetById(c.ID)
 
 	if err != nil && (model.Country{}) == *country {
 		created := s.createCountry(c)
 
 		if err := s.Insert(created); err != nil {
-			log.Printf("Error occurred when creating struct %+v", created)
+			log.Printf("Error '%s' occurred when inserting Country struct: %+v\n,", err.Error(), created)
 		}
 
 		return
@@ -52,7 +72,7 @@ func (s Service) persistCountry(c *sportmonks.Country) {
 	updated := s.updateCountry(c, country)
 
 	if err := s.Update(updated); err != nil {
-		log.Printf("Error occurred when updating struct: %+v, error %+v", updated, err)
+		log.Printf("Error '%s' occurred when updating Competition struct: %+v\n,", err.Error(), updated)
 	}
 
 	return

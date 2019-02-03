@@ -2,9 +2,9 @@ package event
 
 import (
 	"database/sql"
+	"errors"
 	"github.com/joesweeny/statshub/internal/model"
 	_ "github.com/lib/pq"
-	"errors"
 	"time"
 )
 

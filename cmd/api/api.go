@@ -1,10 +1,10 @@
 package main
 
 import (
-	"net/http"
 	"fmt"
-	"log"
 	"github.com/gorilla/mux"
+	"log"
+	"net/http"
 	"os"
 )
 
@@ -19,7 +19,7 @@ func main() {
 
 func routePath(w http.ResponseWriter, r *http.Request) {
 	name := os.Getenv("NAME")
-	fmt.Fprint(w, "Hello " + name + " This actually works!!")
+	fmt.Fprint(w, "Hello "+name+" This actually works!!")
 	w.WriteHeader(http.StatusOK)
 }
 

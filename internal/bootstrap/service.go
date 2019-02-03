@@ -4,9 +4,9 @@ import (
 	"github.com/joesweeny/statshub/internal/competition"
 	"github.com/joesweeny/statshub/internal/country"
 	"github.com/joesweeny/statshub/internal/fixture"
+	"github.com/joesweeny/statshub/internal/round"
 	"github.com/joesweeny/statshub/internal/season"
 	"github.com/joesweeny/statshub/internal/venue"
-	"github.com/joesweeny/statshub/internal/round"
 )
 
 type Service interface {
