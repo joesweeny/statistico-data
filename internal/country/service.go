@@ -63,7 +63,7 @@ func (s Service) persist(c *sportmonks.Country) {
 		created := s.createCountry(c)
 
 		if err := s.Insert(created); err != nil {
-			log.Printf("Error occurred when creating struct %+v", created)
+			log.Printf("Error '%s' occurred when inserting Country struct: %+v\n,", err.Error(), created)
 		}
 
 		return
@@ -72,7 +72,7 @@ func (s Service) persist(c *sportmonks.Country) {
 	updated := s.updateCountry(c, country)
 
 	if err := s.Update(updated); err != nil {
-		log.Printf("Error occurred when updating struct: %+v, error %+v", updated, err)
+		log.Printf("Error '%s' occurred when updating Competition struct: %+v\n,", err.Error(), updated)
 	}
 
 	return

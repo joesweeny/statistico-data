@@ -80,12 +80,12 @@ func (s Service) persistRound(m *sportmonks.Round) {
 		created, err := s.createRound(m)
 
 		if err != nil {
-			log.Printf("Error occurred when creating struct: %s", err.Error())
+			log.Printf("Error '%s' occurred when creating Round struct: %+v\n,", err.Error(), created)
 			return
 		}
 
 		if err := s.Insert(created); err != nil {
-			log.Printf("Error occurred when inserting struct %+v", created)
+			log.Printf("Error '%s' occurred when inserting Round struct: %+v\n,", err.Error(), created)
 		}
 
 		return
@@ -94,12 +94,12 @@ func (s Service) persistRound(m *sportmonks.Round) {
 	updated, err := s.updateRound(m, round)
 
 	if err != nil {
-		log.Printf("Error occurred when updating struct: %s", err.Error())
+		log.Printf("Error '%s' occurred when updating Round struct: %+v\n,", err.Error(), updated)
 		return
 	}
 
 	if err := s.Update(updated); err != nil {
-		log.Printf("Error occurred when updating struct: %+v, error %+v", updated, err)
+		log.Printf("Error '%s' occurred when updating Round struct: %+v\n,", err.Error(), updated)
 	}
 
 	return
