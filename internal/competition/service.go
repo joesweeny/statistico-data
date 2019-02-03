@@ -20,23 +20,42 @@ func (s Service) Process() error {
 		return err
 	}
 
-	for i := res.Meta.Pagination.CurrentPage; i <= res.Meta.Pagination.TotalPages; i++ {
-		res, err := s.Client.Leagues(i, []string{})
+	comps := make(chan sportmonks.League, res.Meta.Pagination.Total)
+	done := make(chan bool)
 
-		if err != nil {
-			return err
-		}
+	go s.parseLeagues(comps, res.Meta)
+	go s.persistCompetitions(comps, done)
 
-		for _, comp := range res.Data {
-			// Push method into a Go routine
-			s.persistCompetition(&comp)
-		}
-	}
+	<- done
 
 	return nil
 }
 
-func (s Service) persistCompetition(l *sportmonks.League) {
+func (s Service) parseLeagues(ch chan<- sportmonks.League, meta sportmonks.Meta) {
+	for i := meta.Pagination.CurrentPage; i <= meta.Pagination.TotalPages; i++ {
+		res, err := s.Client.Leagues(i, []string{})
+
+		if err != nil {
+			log.Printf("Error when calling client '%s", err.Error())
+		}
+
+		for _, comp := range res.Data {
+			ch <- comp
+		}
+	}
+
+	close(ch)
+}
+
+func (s Service) persistCompetitions(ch <-chan sportmonks.League, done chan bool) {
+	for x := range ch {
+		s.persist(&x)
+	}
+
+	done <-true
+}
+
+func (s Service) persist(l *sportmonks.League) {
 	comp, err := s.GetById(l.ID)
 
 	if err != nil && (model.Competition{}) == *comp {
