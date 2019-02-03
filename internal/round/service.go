@@ -5,7 +5,10 @@ import (
 	"github.com/joesweeny/statshub/internal/model"
 	"github.com/joesweeny/statshub/internal/season"
 	"log"
+	"sync"
 )
+
+var waitGroup sync.WaitGroup
 
 type Service struct {
 	Repository
@@ -39,19 +42,35 @@ func (s Service) callClient(ids []int) error {
 	q := []string{"rounds"}
 
 	for _, id := range ids {
-		res, err := s.Client.SeasonById(id, q)
+		waitGroup.Add(1)
 
-		if err != nil {
-			return err
-		}
+		go func(id int) {
+			res, err := s.Client.SeasonById(id, q)
 
-		for _, round := range res.Data.Rounds.Data {
-			// Push method into Go routine
-			s.persistRound(&round)
-		}
+			if err != nil {
+				log.Printf("Error when calling client '%s", err.Error())
+			}
+
+			s.handleRounds(res.Data.Rounds.Data)
+
+			defer waitGroup.Done()
+		}(id)
 	}
 
+	waitGroup.Wait()
+
 	return nil
+}
+
+func (s Service) handleRounds(r []sportmonks.Round) {
+	for _, round := range r {
+		waitGroup.Add(1)
+
+		go func(round sportmonks.Round) {
+			s.persistRound(&round)
+			defer waitGroup.Done()
+		}(round)
+	}
 }
 
 func (s Service) persistRound(m *sportmonks.Round) {
