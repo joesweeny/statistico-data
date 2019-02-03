@@ -3,8 +3,8 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/joesweeny/statshub/internal/config"
 	"github.com/joesweeny/statshub/internal/bootstrap"
+	"github.com/joesweeny/statshub/internal/config"
 	"os"
 	"time"
 )
@@ -72,4 +72,3 @@ func fail(model *string, err error) {
 		os.Exit(1)
 	}
 }
-

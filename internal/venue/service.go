@@ -5,7 +5,10 @@ import (
 	"github.com/joesweeny/statshub/internal/model"
 	"github.com/joesweeny/statshub/internal/season"
 	"log"
+	"sync"
 )
+
+var waitGroup sync.WaitGroup
 
 type Service struct {
 	Repository

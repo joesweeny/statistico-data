@@ -26,7 +26,7 @@ func (s Service) Process() error {
 	go s.parseCountries(countries, res.Meta)
 	go s.persistCountries(countries, done)
 
-	<- done
+	<-done
 
 	return nil
 }

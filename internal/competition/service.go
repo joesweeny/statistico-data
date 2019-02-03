@@ -26,7 +26,7 @@ func (s Service) Process() error {
 	go s.parseLeagues(comps, res.Meta)
 	go s.persistCompetitions(comps, done)
 
-	<- done
+	<-done
 
 	return nil
 }
@@ -52,7 +52,7 @@ func (s Service) persistCompetitions(ch <-chan sportmonks.League, done chan bool
 		s.persist(&x)
 	}
 
-	done <-true
+	done <- true
 }
 
 func (s Service) persist(l *sportmonks.League) {

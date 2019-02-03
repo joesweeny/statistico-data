@@ -26,7 +26,7 @@ func (s Service) Process() error {
 	go s.parseSeasons(seasons, res.Meta)
 	go s.persistSeasons(seasons, done)
 
-	<- done
+	<-done
 
 	return nil
 }
