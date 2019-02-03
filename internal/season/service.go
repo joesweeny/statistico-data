@@ -37,6 +37,7 @@ func (s Service) parseSeasons(ch chan<- sportmonks.Season, meta sportmonks.Meta)
 
 		if err != nil {
 			log.Printf("Error when calling client '%s", err.Error())
+			continue
 		}
 
 		for _, season := range res.Data {
