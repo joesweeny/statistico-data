@@ -4,10 +4,7 @@ import (
 	"github.com/joesweeny/sportmonks-go-client"
 	"github.com/joesweeny/statshub/internal/model"
 	"log"
-	"sync"
 )
-
-var waitGroup sync.WaitGroup
 
 type Service struct {
 	Repository
@@ -23,29 +20,42 @@ func (s Service) Process() error {
 		return err
 	}
 
-	for i := res.Meta.Pagination.CurrentPage; i <= res.Meta.Pagination.TotalPages; i++ {
-		res, err := s.Client.Seasons(i, []string{})
+	seasons := make(chan sportmonks.Season, res.Meta.Pagination.Total)
+	done := make(chan bool)
 
-		if err != nil {
-			return err
-		}
+	go s.parseSeasons(seasons, res.Meta)
+	go s.persistSeasons(seasons, done)
 
-		for _, season := range res.Data {
-			waitGroup.Add(1)
-
-			go func(season sportmonks.Season) {
-				s.persistSeason(&season)
-				defer waitGroup.Done()
-			}(season)
-		}
-	}
-
-	waitGroup.Wait()
+	<- done
 
 	return nil
 }
 
-func (s Service) persistSeason(m *sportmonks.Season) {
+func (s Service) parseSeasons(ch chan<- sportmonks.Season, meta sportmonks.Meta) {
+	for i := meta.Pagination.CurrentPage; i <= meta.Pagination.TotalPages; i++ {
+		res, err := s.Client.Seasons(i, []string{})
+
+		if err != nil {
+			log.Printf("Error when calling client '%s", err.Error())
+		}
+
+		for _, season := range res.Data {
+			ch <- season
+		}
+	}
+
+	close(ch)
+}
+
+func (s Service) persistSeasons(ch <-chan sportmonks.Season, done chan bool) {
+	for x := range ch {
+		s.persist(&x)
+	}
+
+	done <- true
+}
+
+func (s Service) persist(m *sportmonks.Season) {
 	season, err := s.Id(m.ID)
 
 	if err != nil && (model.Season{} == *season) {
