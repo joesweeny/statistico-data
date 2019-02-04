@@ -27,11 +27,11 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:1d6a26e1e6ee51a86d7abdfd8eae5d463ff7142e75e3416a4e6cd162ce1d51f0"
+  digest = "1:9ef0de6ffc98153f2f16c0067e1fb7700b685f6f7bba61e258b6e478a2c3d676"
   name = "github.com/joesweeny/sportmonks-go-client"
   packages = ["."]
   pruneopts = "UT"
-  revision = "383248283e282c379b6a90c604a14944d412e30a"
+  revision = "977c425fd2146de65c24a9a763b5a7781d35e4a3"
 
 [[projects]]
   digest = "1:75ab90ae3f5d876167e60f493beadfe66f0ed861a710f283fb06c86437a09538"
