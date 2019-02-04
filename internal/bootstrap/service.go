@@ -6,6 +6,7 @@ import (
 	"github.com/joesweeny/statshub/internal/fixture"
 	"github.com/joesweeny/statshub/internal/round"
 	"github.com/joesweeny/statshub/internal/season"
+	"github.com/joesweeny/statshub/internal/team"
 	"github.com/joesweeny/statshub/internal/venue"
 )
 
@@ -101,6 +102,25 @@ func (b Bootstrap) SeasonService() season.Service {
 	}
 
 	return c
+}
+
+func (b Bootstrap) TeamService() team.Service {
+	conn := b.databaseConnection()
+	client, err := b.sportmonksClient()
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	s := team.Service{
+		Repository: &team.PostgresTeamRepository{Connection: conn},
+		SeasonRepo: &season.PostgresSeasonRepository{Connection: conn},
+		Factory:    team.Factory{Clock: clock()},
+		Client:     client,
+		Logger:     logger(),
+	}
+
+	return s
 }
 
 func (b Bootstrap) VenueService() venue.Service {

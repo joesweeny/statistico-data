@@ -33,7 +33,7 @@ func (s Service) callClient(ids []int) error {
 		waitGroup.Add(1)
 
 		go func(id int) {
-			res, err := s.Client.BySeasonId(id)
+			res, err := s.Client.VenuesBySeasonId(id)
 
 			if err != nil {
 				log.Printf("Error when calling client '%s", err.Error())
