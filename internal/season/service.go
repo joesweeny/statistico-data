@@ -14,7 +14,7 @@ type Service struct {
 }
 
 func (s Service) Process() error {
-	res, err := s.Client.Seasons(1, []string{})
+	res, err := s.Client.Seasons(1, []string{}, 5)
 
 	if err != nil {
 		return err
@@ -33,7 +33,7 @@ func (s Service) Process() error {
 
 func (s Service) parseSeasons(ch chan<- sportmonks.Season, meta sportmonks.Meta) {
 	for i := meta.Pagination.CurrentPage; i <= meta.Pagination.TotalPages; i++ {
-		res, err := s.Client.Seasons(i, []string{})
+		res, err := s.Client.Seasons(i, []string{}, 5)
 
 		if err != nil {
 			log.Printf("Error when calling client '%s", err.Error())

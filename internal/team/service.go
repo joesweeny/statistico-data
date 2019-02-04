@@ -43,7 +43,7 @@ func (s Service) callClient(ids []int) error {
 		waitGroup.Add(1)
 
 		go func(id int) {
-			res, err := s.Client.TeamsBySeasonId(id)
+			res, err := s.Client.TeamsBySeasonId(id, 5)
 
 			if err != nil {
 				log.Fatalf("Error when calling client. Message: %s", err.Error())
