@@ -46,7 +46,7 @@ func (s Service) callClient(ids []int) error {
 			res, err := s.Client.TeamsBySeasonId(id)
 
 			if err != nil {
-				log.Printf("Error when calling client '%s", err.Error())
+				log.Fatalf("Error when calling client. Message: %s", err.Error())
 			}
 
 			s.handleTeams(res.Data)
