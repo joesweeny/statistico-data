@@ -2,10 +2,10 @@ package team
 
 import (
 	"github.com/joesweeny/sportmonks-go-client"
-	"time"
 	"github.com/jonboulle/clockwork"
-	"testing"
 	"github.com/stretchr/testify/assert"
+	"testing"
+	"time"
 )
 
 var t = time.Date(2019, 01, 14, 11, 25, 00, 00, time.UTC)
@@ -68,15 +68,15 @@ func newClientTeam() *sportmonks.Team {
 	twitter := "westhamunited"
 
 	return &sportmonks.Team{
-		ID:       56,
-		LegacyID: 34,
-		Name:     "West Ham United",
-		ShortCode: "WHU",
-		Twitter: &twitter,
-		CountryID: 8,
+		ID:           56,
+		LegacyID:     34,
+		Name:         "West Ham United",
+		ShortCode:    "WHU",
+		Twitter:      &twitter,
+		CountryID:    8,
 		NationalTeam: false,
-		Founded: 1898,
-		LogoPath: &logo,
-		VenueID: 99,
+		Founded:      1898,
+		LogoPath:     &logo,
+		VenueID:      99,
 	}
 }

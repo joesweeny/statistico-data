@@ -1,18 +1,18 @@
 package team
 
 import (
-	"github.com/stretchr/testify/mock"
+	"bytes"
+	"encoding/json"
+	"errors"
+	"github.com/joesweeny/sportmonks-go-client"
 	"github.com/joesweeny/statshub/internal/model"
+	"github.com/jonboulle/clockwork"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
+	"io/ioutil"
+	"log"
 	"net/http"
 	"testing"
-	"github.com/stretchr/testify/assert"
-	"encoding/json"
-	"io/ioutil"
-	"bytes"
-	"github.com/joesweeny/sportmonks-go-client"
-	"github.com/jonboulle/clockwork"
-	"log"
-	"errors"
 )
 
 func TestProcess(t *testing.T) {

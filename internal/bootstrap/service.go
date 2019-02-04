@@ -6,8 +6,8 @@ import (
 	"github.com/joesweeny/statshub/internal/fixture"
 	"github.com/joesweeny/statshub/internal/round"
 	"github.com/joesweeny/statshub/internal/season"
-	"github.com/joesweeny/statshub/internal/venue"
 	"github.com/joesweeny/statshub/internal/team"
+	"github.com/joesweeny/statshub/internal/venue"
 )
 
 type Service interface {
