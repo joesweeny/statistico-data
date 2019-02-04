@@ -35,7 +35,7 @@ func (b Bootstrap) databaseConnection() *sql.DB {
 
 func (b Bootstrap) sportmonksClient() (*sportmonks.Client, error) {
 	s := b.Config.Services.SportsMonks
-	return sportmonks.NewClient(s.BaseUri, s.ApiKey)
+	return sportmonks.NewClient(s.BaseUri, s.ApiKey, logger())
 }
 
 func logger() *log.Logger {
