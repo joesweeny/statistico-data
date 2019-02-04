@@ -39,42 +39,51 @@ func (s Service) ProcessCurrentSeason() error {
 }
 
 func (s Service) callClient(ids []int) error {
-	for _, id := range ids {
-		waitGroup.Add(1)
+	teams := make(chan sportmonks.Team, len(ids))
+	done := make(chan bool)
 
-		go func(id int) {
-			res, err := s.Client.TeamsBySeasonId(id, 5)
+	go s.parseTeams(teams, ids)
+	go s.persistTeams(teams, done)
 
-			if err != nil {
-				log.Fatalf("Error when calling client. Message: %s", err.Error())
-			}
-
-			s.handleTeams(res.Data)
-
-			defer waitGroup.Done()
-		}(id)
-	}
-
-	waitGroup.Wait()
+	<-done
 
 	return nil
 }
 
-func (s Service) handleTeams(t []sportmonks.Team) {
-	for _, team := range t {
-		waitGroup.Add(1)
+func (s Service) parseTeams(ch chan<- sportmonks.Team, ids []int) {
+	for _, id := range ids {
+		res, err := s.Client.TeamsBySeasonId(id, 5)
 
-		go func(team sportmonks.Team) {
-			s.persistTeam(&team)
+		if err != nil {
+			log.Printf("Error when calling client. Message: %s", err.Error())
+		}
+
+		go func() {
+			waitGroup.Add(1)
+			for _, team := range res.Data {
+				ch <- team
+			}
 			defer waitGroup.Done()
-		}(team)
+		}()
 	}
+
+	waitGroup.Wait()
+
+	close(ch)
+}
+
+func (s Service) persistTeams(ch <-chan sportmonks.Team, done chan bool) {
+	for team := range ch {
+		s.persistTeam(&team)
+	}
+
+	done <- true
 }
 
 func (s Service) persistTeam(t *sportmonks.Team) {
 	team, err := s.GetById(t.ID)
 
-	if err != nil && (model.Team{} == *team) {
+	if (err == ErrNotFound && model.Team{} == *team) {
 		created := s.createTeam(t)
 
 		if err := s.Insert(created); err != nil {
