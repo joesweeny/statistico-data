@@ -16,6 +16,8 @@ const fixtureCurrentSeason = "fixture:current-season"
 const round = "round"
 const roundCurrentSeason = "round:current-season"
 const season = "season"
+const team = "team"
+const teamCurrentTeam = "team:current-season"
 const venue = "venue"
 const venueCurrentSeason = "venue:current-season"
 
@@ -43,6 +45,8 @@ func main() {
 		break
 	case season:
 		service = app.SeasonService()
+	case team:
+		service = app.TeamService()
 	case venue:
 		service = app.VenueService()
 	default:
