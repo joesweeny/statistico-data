@@ -16,6 +16,7 @@ const fixtureCurrentSeason = "fixture:current-season"
 const round = "round"
 const roundCurrentSeason = "round:current-season"
 const season = "season"
+const squad = "squad"
 const team = "team"
 const teamCurrentTeam = "team:current-season"
 const venue = "venue"
@@ -45,6 +46,9 @@ func main() {
 		break
 	case season:
 		service = app.SeasonService()
+	case squad:
+		service = app.SquadService()
+		break
 	case team:
 		service = app.TeamService()
 	case venue:
@@ -65,7 +69,7 @@ func main() {
 
 	elapsed := time.Since(start)
 
-	fmt.Printf("%s command took %s", *option, elapsed)
+	fmt.Printf("%s command took %s\n", *option, elapsed)
 
 	os.Exit(0)
 }

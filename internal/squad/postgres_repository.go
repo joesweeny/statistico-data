@@ -41,15 +41,16 @@ func (p *PostgresSquadRepository) Update(m *model.Squad) error {
 func (p *PostgresSquadRepository) BySeasonAndTeam(seasonId, teamId int) (*model.Squad, error) {
 	query := `SELECT * FROM sportmonks_squad where season_id = $1 AND team_id = $2`
 
+	m := model.Squad{}
+
 	var players []string
-	var m model.Squad
 	var created int64
 	var updated int64
 
 	err := p.Connection.QueryRow(query, seasonId, teamId).Scan(&m.SeasonID, &m.TeamID, pq.Array(&players), &created, &updated)
 
 	if err != nil {
-		return &model.Squad{}, ErrNotFound
+		return &m, ErrNotFound
 	}
 
 	for _, i := range players {
