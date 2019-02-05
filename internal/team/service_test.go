@@ -3,7 +3,6 @@ package team
 import (
 	"bytes"
 	"encoding/json"
-	"errors"
 	"github.com/joesweeny/sportmonks-go-client"
 	"github.com/joesweeny/statshub/internal/model"
 	"github.com/jonboulle/clockwork"
@@ -45,7 +44,7 @@ func TestProcess(t *testing.T) {
 
 	t.Run("inserts new round", func(t *testing.T) {
 		seasonRepo.On("Ids").Return([]int{100}, nil)
-		teamRepo.On("GetById", 56).Return(&model.Team{}, errors.New("not found"))
+		teamRepo.On("GetById", 56).Return(&model.Team{}, ErrNotFound)
 		teamRepo.On("Insert", mock.Anything).Return(nil)
 		teamRepo.AssertNotCalled(t, "Update", mock.Anything)
 		service.Process()

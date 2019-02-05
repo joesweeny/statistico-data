@@ -58,16 +58,10 @@ func (s Service) parseTeams(ch chan<- sportmonks.Team, ids []int) {
 			log.Printf("Error when calling client. Message: %s", err.Error())
 		}
 
-		go func() {
-			waitGroup.Add(1)
-			for _, team := range res.Data {
-				ch <- team
-			}
-			defer waitGroup.Done()
-		}()
+		for _, team := range res.Data {
+			ch <- team
+		}
 	}
-
-	waitGroup.Wait()
 
 	close(ch)
 }
