@@ -69,7 +69,7 @@ func main() {
 
 	elapsed := time.Since(start)
 
-	fmt.Printf("%s command took %s", *option, elapsed)
+	fmt.Printf("%s command took %s\n", *option, elapsed)
 
 	os.Exit(0)
 }
