@@ -20,6 +20,18 @@ services:
       SPORTMONKS_API_KEY: $SPORTMONKS_API_KEY
     tty: true
 
+  cron:
+    image: joesweeny/statshub_cron:$RELEASE
+    environment:
+      DB_DRIVER: $DB_DRIVER
+      DB_HOST: $DB_HOST
+      DB_NAME: $DB_NAME
+      DB_PASSWORD: $DB_PASSWORD
+      DB_PORT: $DB_PORT
+      DB_USER: $DB_USER
+      SPORTMONKS_API_KEY: $SPORTMONKS_API_KEY
+    tty: true
+
   migrate:
     image: joesweeny/statshub_migrate:$RELEASE
     environment:
