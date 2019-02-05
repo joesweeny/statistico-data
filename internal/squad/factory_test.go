@@ -2,10 +2,10 @@ package squad
 
 import (
 	"github.com/joesweeny/sportmonks-go-client"
-	"time"
 	"github.com/jonboulle/clockwork"
-	"testing"
 	"github.com/stretchr/testify/assert"
+	"testing"
+	"time"
 )
 
 var t = time.Date(2019, 01, 14, 11, 25, 00, 00, time.UTC)
@@ -48,10 +48,10 @@ func TestUpdateSquad(t *testing.T) {
 
 func newClientSquad(id1, id2, id3 int) *sportmonks.Squad {
 	player1 := sportmonks.SquadPlayer{
-			PlayerID:   id1,
-			PositionID: 2,
-			Number:     34,
-		}
+		PlayerID:   id1,
+		PositionID: 2,
+		Number:     34,
+	}
 
 	player2 := sportmonks.SquadPlayer{
 		PlayerID:   id2,

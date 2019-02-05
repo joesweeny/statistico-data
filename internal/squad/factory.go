@@ -1,9 +1,9 @@
 package squad
 
 import (
-	"github.com/jonboulle/clockwork"
 	"github.com/joesweeny/sportmonks-go-client"
 	"github.com/joesweeny/statshub/internal/model"
+	"github.com/jonboulle/clockwork"
 )
 
 type Factory struct {
@@ -12,8 +12,8 @@ type Factory struct {
 
 func (f Factory) createSquad(seasonId int, teamId int, s *sportmonks.Squad) *model.Squad {
 	squad := model.Squad{
-		SeasonID: seasonId,
-		TeamID:   teamId,
+		SeasonID:  seasonId,
+		TeamID:    teamId,
 		PlayerIDs: []int{},
 		CreatedAt: f.Clock.Now(),
 		UpdatedAt: f.Clock.Now(),
