@@ -74,6 +74,10 @@ func TestGetById(t *testing.T) {
 			t.Errorf("Error when retrieving a record from the database: %s", err.Error())
 		}
 
+		if err == ErrNotFound {
+			t.Errorf("Expected nil, got %s", ErrNotFound)
+		}
+
 		a := assert.New(t)
 
 		a.Equal(43, r.ID)
