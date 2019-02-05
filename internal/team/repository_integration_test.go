@@ -75,7 +75,7 @@ func TestGetById(t *testing.T) {
 		}
 
 		if err == ErrNotFound {
-			t.Errorf("Expected %s, got %s", ErrNotFound, err.Error())
+			t.Errorf("Expected nil, got %s", ErrNotFound)
 		}
 
 		a := assert.New(t)
