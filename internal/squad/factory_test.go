@@ -46,7 +46,7 @@ func TestUpdateSquad(t *testing.T) {
 	})
 }
 
-func newClientSquad(id1, id2, id3 int) *sportmonks.Squad {
+func newClientSquad(id1, id2, id3 int) *[]sportmonks.SquadPlayer {
 	player1 := sportmonks.SquadPlayer{
 		PlayerID:   id1,
 		PositionID: 2,
@@ -67,5 +67,5 @@ func newClientSquad(id1, id2, id3 int) *sportmonks.Squad {
 
 	players := []sportmonks.SquadPlayer{player1, player2, player3}
 
-	return &sportmonks.Squad{Data: players}
+	return &players
 }

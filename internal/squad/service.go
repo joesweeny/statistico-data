@@ -50,7 +50,7 @@ func (s Service) handleTeams(seasonId int, t []sportmonks.Team) {
 	for _, team := range t {
 		waitGroup.Add(1)
 
-		_, err := s.Repository.BySeasonAndTeam(seasonId, team.ID)
+		_, err := s.BySeasonAndTeam(seasonId, team.ID)
 
 		if err != ErrNotFound {
 			continue

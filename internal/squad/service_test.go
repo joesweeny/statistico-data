@@ -20,12 +20,25 @@ func TestProcess(t *testing.T) {
 	seasonRepo := new(mockSeasonRepository)
 
 	server := newTestClient(func(req *http.Request) *http.Response {
-		assert.Equal(t, req.URL.String(), "http://example.com/api/v2.0/teams/season/100?api_token=my-key&include=squad")
-		b, _ := json.Marshal(teamSquadResponse())
-		return &http.Response{
-			StatusCode: 200,
-			Body:       ioutil.NopCloser(bytes.NewBuffer(b)),
+		if req.URL.String() == "http://example.com/api/v2.0/teams/season/100?api_token=my-key" {
+			assert.Equal(t, req.URL.String(), "http://example.com/api/v2.0/teams/season/100?api_token=my-key")
+			b, _ := json.Marshal(teamsResponse())
+			return &http.Response{
+				StatusCode: 200,
+				Body:       ioutil.NopCloser(bytes.NewBuffer(b)),
+			}
 		}
+
+		if req.URL.String() == "http://example.com/api/v2.0/squad/season/100/team/56?api_token=my-key" {
+			assert.Equal(t, req.URL.String(), "http://example.com/api/v2.0/squad/season/100/team/56?api_token=my-key")
+			b, _ := json.Marshal(squadResponse())
+			return &http.Response{
+				StatusCode: 200,
+				Body:       ioutil.NopCloser(bytes.NewBuffer(b)),
+			}
+		}
+
+		return &http.Response{}
 	})
 
 	client := sportmonks.Client{
@@ -47,15 +60,6 @@ func TestProcess(t *testing.T) {
 		squadRepo.On("BySeasonAndTeam", 100, 56).Return(&model.Squad{}, ErrNotFound)
 		squadRepo.On("Insert", mock.Anything).Return(nil)
 		squadRepo.AssertNotCalled(t, "Update", mock.Anything)
-		service.Process()
-	})
-
-	t.Run("updates existing squad", func(t *testing.T) {
-		r := newSquad(34, 45)
-		seasonRepo.On("Ids").Return([]int{100}, nil)
-		squadRepo.On("BySeasonAndTeam", 34, 45).Return(r, nil)
-		squadRepo.On("Update", &r).Return(nil)
-		squadRepo.AssertNotCalled(t, "Insert", mock.Anything)
 		service.Process()
 	})
 }
@@ -122,8 +126,17 @@ func (m mockSquadRepository) BySeasonAndTeam(seasonId, teamId int) (*model.Squad
 	return c, args.Error(1)
 }
 
-func teamSquadResponse() sportmonks.TeamsResponse {
-	t := sportmonks.Team{
+func squadResponse() sportmonks.SquadResponse {
+	squad := newClientSquad(45, 43, 3)
+
+	res := sportmonks.SquadResponse{}
+	res.Data = *squad
+
+	return res
+}
+
+func teamsResponse() sportmonks.TeamsResponse {
+	t := &sportmonks.Team{
 		ID:           56,
 		LegacyID:     34,
 		Name:         "West Ham United",
@@ -134,10 +147,8 @@ func teamSquadResponse() sportmonks.TeamsResponse {
 		VenueID:      99,
 	}
 
-	t.Squad = *newClientSquad(45, 43, 3)
-
 	res := sportmonks.TeamsResponse{}
-	res.Data = append(res.Data, t)
+	res.Data = append(res.Data, *t)
 
 	return res
 }
