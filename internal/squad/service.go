@@ -28,10 +28,11 @@ func (s Service) Process() error {
 		waitGroup.Add(1)
 
 		go func(id int) {
-			res, err := s.Client.TeamsBySeasonId(id, []string{"squad"}, 5)
+			res, err := s.Client.TeamsBySeasonId(id, []string{}, 5)
 
 			if err != nil {
 				log.Printf("Error when calling client. Message: %s", err.Error())
+				return
 			}
 
 			s.handleTeams(id, res.Data)
@@ -49,14 +50,27 @@ func (s Service) handleTeams(seasonId int, t []sportmonks.Team) {
 	for _, team := range t {
 		waitGroup.Add(1)
 
-		go func(seasonId int, team sportmonks.Team) {
-			s.persistSquad(seasonId, team.ID, &team.Squad)
+		_, err := s.BySeasonAndTeam(seasonId, team.ID)
+
+		if err != ErrNotFound {
+			continue
+		}
+
+		res, err := s.Client.SquadBySeasonAndTeam(seasonId, team.ID, []string{}, 5)
+
+		if err != nil {
+			log.Printf("Error when calling client. Message: %s", err.Error())
+			return
+		}
+
+		go func(seasonId, teamID int, squad []sportmonks.SquadPlayer) {
+			s.persistSquad(seasonId, team.ID, &squad)
 			defer waitGroup.Done()
-		}(seasonId, team)
+		}(seasonId, team.ID, res.Data)
 	}
 }
 
-func (s Service) persistSquad(seasonId, teamId int, m *sportmonks.Squad) {
+func (s Service) persistSquad(seasonId, teamId int, m *[]sportmonks.SquadPlayer) {
 	squad, err := s.BySeasonAndTeam(seasonId, teamId)
 
 	if err == ErrNotFound {

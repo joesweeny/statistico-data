@@ -10,7 +10,7 @@ type Factory struct {
 	Clock clockwork.Clock
 }
 
-func (f Factory) createSquad(seasonId int, teamId int, s *sportmonks.Squad) *model.Squad {
+func (f Factory) createSquad(seasonId int, teamId int, s *[]sportmonks.SquadPlayer) *model.Squad {
 	squad := model.Squad{
 		SeasonID:  seasonId,
 		TeamID:    teamId,
@@ -19,17 +19,17 @@ func (f Factory) createSquad(seasonId int, teamId int, s *sportmonks.Squad) *mod
 		UpdatedAt: f.Clock.Now(),
 	}
 
-	for _, player := range s.Data {
+	for _, player := range *s {
 		squad.PlayerIDs = append(squad.PlayerIDs, player.PlayerID)
 	}
 
 	return &squad
 }
 
-func (f Factory) updateSquad(s *sportmonks.Squad, m *model.Squad) *model.Squad {
+func (f Factory) updateSquad(s *[]sportmonks.SquadPlayer, m *model.Squad) *model.Squad {
 	var x []int
 
-	for _, player := range s.Data {
+	for _, player := range *s {
 		x = append(x, player.PlayerID)
 	}
 
