@@ -51,7 +51,7 @@ func (s Service) ProcessCurrentSeason() error {
 
 func (s Service) parseTeamsSync(ch chan<- sportmonks.Team, ids []int) {
 	for _, id := range ids {
-		res, err := s.Client.TeamsBySeasonId(id, 5)
+		res, err := s.Client.TeamsBySeasonId(id, []string{},5)
 
 		if err != nil {
 			log.Printf("Error when calling client. Message: %s", err.Error())
@@ -70,7 +70,7 @@ func (s Service) parseTeamsAsync(ids []int) {
 		waitGroup.Add(1)
 
 		go func(id int) {
-			res, err := s.Client.TeamsBySeasonId(id, 5)
+			res, err := s.Client.TeamsBySeasonId(id, []string{},5)
 
 			if err != nil {
 				log.Printf("Error when calling client. Message: %s", err.Error())
