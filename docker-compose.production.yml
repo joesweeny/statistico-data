@@ -21,9 +21,7 @@ services:
     tty: true
 
   cron:
-    build:
-      dockerfile: ./docker/cron/Dockerfile
-      context: .
+    image: joesweeny/statshub_cron:$RELEASE
     environment:
       DB_DRIVER: $DB_DRIVER
       DB_HOST: $DB_HOST
