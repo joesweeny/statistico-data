@@ -8,6 +8,7 @@ import (
 	"github.com/joesweeny/statshub/internal/season"
 	"github.com/joesweeny/statshub/internal/team"
 	"github.com/joesweeny/statshub/internal/venue"
+	"github.com/joesweeny/statshub/internal/squad"
 )
 
 type Service interface {
@@ -102,6 +103,25 @@ func (b Bootstrap) SeasonService() season.Service {
 	}
 
 	return c
+}
+
+func (b Bootstrap) SquadService() squad.Service {
+	conn := b.databaseConnection()
+	client, err := b.sportmonksClient()
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	s := squad.Service{
+		Repository: &squad.PostgresSquadRepository{Connection: conn},
+		SeasonRepo: &season.PostgresSeasonRepository{Connection: conn},
+		Factory:    squad.Factory{Clock: clock()},
+		Client:     client,
+		Logger:     logger(),
+	}
+
+	return s
 }
 
 func (b Bootstrap) TeamService() team.Service {
