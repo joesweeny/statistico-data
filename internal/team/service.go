@@ -25,7 +25,15 @@ func (s Service) Process() error {
 		return err
 	}
 
-	return s.callClient(ids)
+	teams := make(chan sportmonks.Team, len(ids))
+	done := make(chan bool)
+
+	go s.parseTeamsSync(teams, ids)
+	go s.persistTeams(teams, done)
+
+	<-done
+
+	return nil
 }
 
 func (s Service) ProcessCurrentSeason() error {
@@ -35,22 +43,13 @@ func (s Service) ProcessCurrentSeason() error {
 		return err
 	}
 
-	return s.callClient(ids)
-}
-
-func (s Service) callClient(ids []int) error {
-	teams := make(chan sportmonks.Team, len(ids))
-	done := make(chan bool)
-
-	go s.parseTeams(teams, ids)
-	go s.persistTeams(teams, done)
-
-	<-done
+	s.parseTeamsAsync(ids)
+	waitGroup.Wait()
 
 	return nil
 }
 
-func (s Service) parseTeams(ch chan<- sportmonks.Team, ids []int) {
+func (s Service) parseTeamsSync(ch chan<- sportmonks.Team, ids []int) {
 	for _, id := range ids {
 		res, err := s.Client.TeamsBySeasonId(id, 5)
 
@@ -64,6 +63,30 @@ func (s Service) parseTeams(ch chan<- sportmonks.Team, ids []int) {
 	}
 
 	close(ch)
+}
+
+func (s Service) parseTeamsAsync(ids []int) {
+	for _, id := range ids {
+		waitGroup.Add(1)
+
+		go func(id int) {
+			res, err := s.Client.TeamsBySeasonId(id, 5)
+
+			if err != nil {
+				log.Printf("Error when calling client. Message: %s", err.Error())
+			}
+
+			for _, team := range res.Data {
+				waitGroup.Add(1)
+				go func(team sportmonks.Team) {
+					s.persistTeam(&team)
+					defer waitGroup.Done()
+				}(team)
+			}
+
+			defer waitGroup.Done()
+		}(id)
+	}
 }
 
 func (s Service) persistTeams(ch <-chan sportmonks.Team, done chan bool) {
