@@ -58,11 +58,11 @@ func (s Service) handleTeams(seasonId int, t []sportmonks.Team) {
 		_, err := s.BySeasonAndTeam(seasonId, team.ID)
 
 		if err != ErrNotFound {
-			continue
+			break
 		}
 
 		if apiCalls < 1 {
-			continue
+			break
 		}
 
 		res, err := s.Client.SquadBySeasonAndTeam(seasonId, team.ID, []string{}, 5)
@@ -93,6 +93,6 @@ func (s Service) persistSquad(seasonId, teamId int, m *[]sportmonks.SquadPlayer)
 
 		return
 	}
-	
+
 	return
 }
