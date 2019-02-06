@@ -23,7 +23,6 @@ services:
       DB_PORT: $DB_PORT
       DB_USER: $DB_USER
       SPORTMONKS_API_KEY: $SPORTMONKS_API_KEY
-    tty: true
 
   migrate:
     image: joesweeny/statshub_migrate:$RELEASE
