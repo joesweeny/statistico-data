@@ -13,22 +13,27 @@ type Service struct {
 	Logger *log.Logger
 }
 
-func (s Service) Process() error {
+const season = "season"
+
+func (s Service) Process(command string, done chan bool) {
+	if command != season {
+		s.Logger.Fatalf("Command %s is not supported", command)
+		return
+	}
+
 	res, err := s.Client.Seasons(1, []string{}, 5)
 
 	if err != nil {
-		return err
+		s.Logger.Fatalf("Error when calling client '%s", err.Error())
+		return
 	}
 
 	seasons := make(chan sportmonks.Season, res.Meta.Pagination.Total)
-	done := make(chan bool)
 
 	go s.parseSeasons(seasons, res.Meta)
 	go s.persistSeasons(seasons, done)
 
-	<-done
-
-	return nil
+	return
 }
 
 func (s Service) parseSeasons(ch chan<- sportmonks.Season, meta sportmonks.Meta) {
@@ -36,8 +41,8 @@ func (s Service) parseSeasons(ch chan<- sportmonks.Season, meta sportmonks.Meta)
 		res, err := s.Client.Seasons(i, []string{}, 5)
 
 		if err != nil {
-			log.Printf("Error when calling client '%s", err.Error())
-			continue
+			s.Logger.Fatalf("Error when calling client '%s", err.Error())
+			return
 		}
 
 		for _, season := range res.Data {

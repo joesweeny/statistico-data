@@ -6,6 +6,7 @@ import (
 	"github.com/joesweeny/statshub/internal/season"
 	"log"
 	"sync"
+	"fmt"
 )
 
 var waitGroup sync.WaitGroup
@@ -18,17 +19,42 @@ type Service struct {
 	Logger *log.Logger
 }
 
-func (s Service) Process() error {
+const venue = "venue"
+const venueCurrentSeason = "venue:current-season"
+
+func (s Service) Process(command string, done chan bool) {
+	if command == venue {
+		go s.allSeasons(done)
+	}
+
+	if command == venueCurrentSeason {
+		go s.currentSeason(done)
+	}
+}
+
+func (s Service) allSeasons(done chan bool) {
 	ids, err := s.SeasonRepo.Ids()
 
 	if err != nil {
-		return err
+		s.Logger.Fatalf("Error when retrieving Season IDs: %s", err.Error())
+		return
 	}
 
-	return s.callClient(ids)
+	go s.callClient(ids, done)
 }
 
-func (s Service) callClient(ids []int) error {
+func (s Service) currentSeason(done chan bool) {
+	ids, err := s.SeasonRepo.CurrentSeasonIds()
+
+	if err != nil {
+		s.Logger.Fatalf("Error when retrieving Season IDs: %s", err.Error())
+		return
+	}
+
+	go s.callClient(ids, done)
+}
+
+func (s Service) callClient(ids []int, done chan bool) {
 	for _, id := range ids {
 		waitGroup.Add(1)
 
@@ -47,7 +73,7 @@ func (s Service) callClient(ids []int) error {
 
 	waitGroup.Wait()
 
-	return nil
+	done <- true
 }
 
 func (s Service) handleVenues(v []sportmonks.Venue) {

@@ -4,9 +4,12 @@ import (
 	"github.com/joesweeny/statshub/internal/season"
 	"github.com/joesweeny/sportmonks-go-client"
 	"log"
+	"fmt"
 )
 
 const callLimit = 1500
+const squad = "squad"
+const squadCurrentSeason = "squad:current-season"
 
 type Service struct {
 	Repository
@@ -18,25 +21,47 @@ type Service struct {
 
 var counter int
 
-func (s Service) Process() error {
+func (s Service) Process(command string, done chan bool) {
+	if command == squad {
+		go s.allSquads(done)
+	}
+
+	if command == squadCurrentSeason {
+		go s.currentSeason(done)
+	}
+
+	s.Logger.Fatalf("Command %s is not supported", command)
+
+	return
+}
+
+func (s Service) allSquads(done chan bool) {
 	ids, err := s.SeasonRepo.Ids()
 
 	if err != nil {
-		return err
+		s.Logger.Fatalf("Error when retrieving Season IDs: %s", err.Error())
+		return
 	}
 
-	done := make(chan bool)
-
-	go s.handleSeasons(ids, done, &counter)
-
-	<-done
-
-	return nil
-}
-
-func (s Service) handleSeasons(ids []int, done chan bool, c *int) {
 	teams := make(chan sportmonks.Team, callLimit)
 
+	go s.handleSeasons(ids, teams, done, &counter)
+}
+
+func (s Service) currentSeason(done chan bool) {
+	ids, err := s.SeasonRepo.CurrentSeasonIds()
+
+	if err != nil {
+		s.Logger.Fatalf("Error when retrieving Season IDs: %s", err.Error())
+		return
+	}
+
+	teams := make(chan sportmonks.Team, callLimit)
+
+	go s.handleSeasons(ids, teams, done, &counter)
+}
+
+func (s Service) handleSeasons(ids []int, teams chan sportmonks.Team, done chan bool, c *int) {
 	for _, id := range ids {
 		if *c >= callLimit {
 			s.Logger.Printf("Api call limited reached %d calls\n", *c)
@@ -54,8 +79,14 @@ func (s Service) handleSeasons(ids []int, done chan bool, c *int) {
 			teams <- t
 		}
 
+		fmt.Printf("Parsed all teams for Season %d\n", id)
+
 		go s.handleTeams(id, teams, c, done)
 	}
+
+	fmt.Println("Not in Season ID loop anymore")
+
+	close(teams)
 }
 
 func (s Service) handleTeams(seasonId int, teams chan sportmonks.Team, c *int, done chan bool) {
@@ -82,6 +113,8 @@ func (s Service) handleTeams(seasonId int, teams chan sportmonks.Team, c *int, d
 
 		go s.persistSquad(seasonId, t.ID, &res.Data)
 	}
+
+	done <- true
 }
 
 func (s Service) persistSquad(seasonId, teamId int, m *[]sportmonks.SquadPlayer) {

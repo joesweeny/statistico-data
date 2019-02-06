@@ -3,75 +3,64 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/joesweeny/statshub/internal/bootstrap"
 	"github.com/joesweeny/statshub/internal/config"
+	"github.com/joesweeny/statshub/internal/container"
 	"os"
 	"time"
 )
 
-const competition = "competition"
-const country = "country"
-const fixture = "fixture"
-const fixtureCurrentSeason = "fixture:current-season"
-const round = "round"
-const roundCurrentSeason = "round:current-season"
-const season = "season"
-const squad = "squad"
-const team = "team"
-const teamCurrentTeam = "team:current-season"
-const venue = "venue"
-const venueCurrentSeason = "venue:current-season"
-
-var option = flag.String("option", "", "Provide the model name to process")
+var command = flag.String("command", "", "Provide the model name to process")
 
 func main() {
-	app := bootstrap.Bootstrap{Config: config.GetConfig()}
+	app := container.Bootstrap(config.GetConfig())
 
 	flag.Parse()
 
-	var service bootstrap.Service
+	var service container.Service
 
-	switch *option {
-	case competition:
+	switch *command {
+	case Competition:
 		service = app.CompetitionService()
 		break
-	case country:
+	case Country:
 		service = app.CountryService()
 		break
-	case fixture:
+	case Fixture, FixtureCurrentSeason:
 		service = app.FixtureService()
 		break
-	case round:
+	case Round, RoundCurrentSeason:
 		service = app.RoundService()
 		break
-	case season:
+	case Season:
 		service = app.SeasonService()
-	case squad:
+		break
+	case Squad, SquadCurrentSeason:
 		service = app.SquadService()
 		break
-	case team:
+	case Team, TeamCurrentSeason:
 		service = app.TeamService()
-	case venue:
+		break
+	case Venue, VenueCurrentSeason:
 		service = app.VenueService()
+		break
 	default:
-		fmt.Println("The option provided is not supported")
+		fmt.Println("The command provided is not supported")
 		os.Exit(1)
 	}
+
+	done := make(chan bool)
 
 	start := time.Now()
 
-	fmt.Printf("%s: Processing started for %s\n", start.String(), *option)
+	fmt.Printf("%s: Processing started for %s\n", start.String(), *command)
 
-	if err := service.Process(); err != nil {
-		fail(option, err)
-		os.Exit(1)
-	}
+	service.Process(*command, done)
 
-	fmt.Printf("Processing complete for %s\n", *option)
+	<-done
 
 	elapsed := time.Since(start)
 
-	fmt.Printf("%s command took %s\n", *option, elapsed)
+	fmt.Printf("Processing complete for %s: Duration %s\n", *command, elapsed)
 
 	os.Exit(0)
 }

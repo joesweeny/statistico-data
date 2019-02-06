@@ -13,22 +13,25 @@ type Service struct {
 	Logger *log.Logger
 }
 
-func (s Service) Process() error {
+const competition = "competition"
+
+func (s Service) Process(command string, done chan bool) {
+	if command != competition {
+		s.Logger.Fatalf("Command %s is not supported", command)
+		return
+	}
+
 	res, err := s.Client.Leagues(1, []string{}, 5)
 
 	if err != nil {
-		return err
+		s.Logger.Fatalf("Error when calling client '%s", err.Error())
+		return
 	}
 
 	comps := make(chan sportmonks.League, res.Meta.Pagination.Total)
-	done := make(chan bool)
 
 	go s.parseLeagues(comps, res.Meta)
 	go s.persistCompetitions(comps, done)
-
-	<-done
-
-	return nil
 }
 
 func (s Service) parseLeagues(ch chan<- sportmonks.League, meta sportmonks.Meta) {
@@ -36,7 +39,8 @@ func (s Service) parseLeagues(ch chan<- sportmonks.League, meta sportmonks.Meta)
 		res, err := s.Client.Leagues(i, []string{}, 5)
 
 		if err != nil {
-			log.Printf("Error when calling client '%s", err.Error())
+			s.Logger.Fatalf("Error when calling client '%s", err.Error())
+			return
 		}
 
 		for _, comp := range res.Data {
