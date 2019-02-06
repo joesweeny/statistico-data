@@ -39,7 +39,7 @@ func (s Service) handleSeasons(ids []int, done chan bool, c *int) {
 
 	for _, id := range ids {
 		if *c >= callLimit {
-			s.Logger.Printf("Api call limited reached %s calls\n", *c)
+			s.Logger.Printf("Api call limited reached %d calls\n", *c)
 			done <- true
 		}
 
@@ -61,7 +61,7 @@ func (s Service) handleSeasons(ids []int, done chan bool, c *int) {
 func (s Service) handleTeams(seasonId int, teams chan sportmonks.Team, c *int, done chan bool) {
 	for t := range teams {
 		if *c >= callLimit {
-			s.Logger.Printf("Api call limited reached %s calls\n", *c)
+			s.Logger.Printf("Api call limited reached %d calls\n", *c)
 			done <- true
 		}
 
