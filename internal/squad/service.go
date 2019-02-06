@@ -6,7 +6,7 @@ import (
 	"log"
 )
 
-const callLimit = 2000
+const callLimit = 1500
 
 type Service struct {
 	Repository
@@ -47,7 +47,7 @@ func (s Service) handleSeasons(ids []int, done chan bool, c *int) {
 
 		if err != nil {
 			s.Logger.Printf("Error when calling client. Message: %s\n", err.Error())
-			return
+			done <- true
 		}
 
 		for _, t := range res.Data {
@@ -77,7 +77,7 @@ func (s Service) handleTeams(seasonId int, teams chan sportmonks.Team, c *int, d
 
 		if err != nil {
 			s.Logger.Printf("Error when calling client. Message: %s", err.Error())
-			return
+			done <- true
 		}
 
 		go s.persistSquad(seasonId, t.ID, &res.Data)
