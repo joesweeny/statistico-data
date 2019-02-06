@@ -1,1 +1,1 @@
-35 * * * * /opt/console -option=squad > /proc/1/fd/1 2> /proc/1/fd/2
+45 * * * * /opt/console -option=squad > /proc/1/fd/1 2> /proc/1/fd/2

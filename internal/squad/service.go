@@ -9,6 +9,9 @@ import (
 
 var waitGroup sync.WaitGroup
 
+const callLimit = 2000
+var apiCalls int
+
 type Service struct {
 	Repository
 	SeasonRepo season.Repository
@@ -23,6 +26,8 @@ func (s Service) Process() error {
 	if err != nil {
 		return err
 	}
+
+	apiCalls = callLimit
 
 	for _, id := range ids {
 		waitGroup.Add(1)
@@ -53,10 +58,16 @@ func (s Service) handleTeams(seasonId int, t []sportmonks.Team) {
 		_, err := s.BySeasonAndTeam(seasonId, team.ID)
 
 		if err != ErrNotFound {
-			continue
+			break
+		}
+
+		if apiCalls < 1 {
+			break
 		}
 
 		res, err := s.Client.SquadBySeasonAndTeam(seasonId, team.ID, []string{}, 5)
+
+		apiCalls--
 
 		if err != nil {
 			log.Printf("Error when calling client. Message: %s", err.Error())
@@ -71,7 +82,7 @@ func (s Service) handleTeams(seasonId int, t []sportmonks.Team) {
 }
 
 func (s Service) persistSquad(seasonId, teamId int, m *[]sportmonks.SquadPlayer) {
-	squad, err := s.BySeasonAndTeam(seasonId, teamId)
+	_, err := s.BySeasonAndTeam(seasonId, teamId)
 
 	if err == ErrNotFound {
 		created := s.createSquad(seasonId, teamId, m)
@@ -81,12 +92,6 @@ func (s Service) persistSquad(seasonId, teamId int, m *[]sportmonks.SquadPlayer)
 		}
 
 		return
-	}
-
-	updated := s.updateSquad(m, squad)
-
-	if err := s.Update(updated); err != nil {
-		log.Printf("Error '%s' occurred when updating Squad struct: %+v\n,", err.Error(), updated)
 	}
 
 	return
