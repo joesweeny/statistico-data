@@ -82,7 +82,7 @@ func (s Service) handleTeams(seasonId int, t []sportmonks.Team) {
 }
 
 func (s Service) persistSquad(seasonId, teamId int, m *[]sportmonks.SquadPlayer) {
-	squad, err := s.BySeasonAndTeam(seasonId, teamId)
+	_, err := s.BySeasonAndTeam(seasonId, teamId)
 
 	if err == ErrNotFound {
 		created := s.createSquad(seasonId, teamId, m)
@@ -93,12 +93,6 @@ func (s Service) persistSquad(seasonId, teamId int, m *[]sportmonks.SquadPlayer)
 
 		return
 	}
-
-	updated := s.updateSquad(m, squad)
-
-	if err := s.Update(updated); err != nil {
-		log.Printf("Error '%s' occurred when updating Squad struct: %+v\n,", err.Error(), updated)
-	}
-
+	
 	return
 }
