@@ -61,7 +61,7 @@ func (p *PostgresSeasonRepository) Id(id int) (*model.Season, error) {
 }
 
 func (p *PostgresSeasonRepository) Ids() ([]int, error) {
-	query := `SELECT id FROM sportmonks_season`
+	query := `SELECT id FROM sportmonks_season ORDER BY id ASC`
 
 	rows, err := p.Connection.Query(query)
 
