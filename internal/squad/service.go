@@ -9,6 +9,9 @@ import (
 
 var waitGroup sync.WaitGroup
 
+const callLimit = 2000
+var apiCalls int
+
 type Service struct {
 	Repository
 	SeasonRepo season.Repository
@@ -23,6 +26,8 @@ func (s Service) Process() error {
 	if err != nil {
 		return err
 	}
+
+	apiCalls = callLimit
 
 	for _, id := range ids {
 		waitGroup.Add(1)
@@ -56,7 +61,13 @@ func (s Service) handleTeams(seasonId int, t []sportmonks.Team) {
 			continue
 		}
 
+		if apiCalls < 1 {
+			continue
+		}
+
 		res, err := s.Client.SquadBySeasonAndTeam(seasonId, team.ID, []string{}, 5)
+
+		apiCalls--
 
 		if err != nil {
 			log.Printf("Error when calling client. Message: %s", err.Error())
