@@ -9,17 +9,6 @@ services:
     ports:
       - 5432:5432
 
-#  api:
-#    build:
-#      dockerfile: ./docker/api/Dockerfile
-#      context: .
-#    ports:
-#      - "8000:8000"
-#    environment:
-#      NAME: "Joe"
-#    links:
-#      - postgres
-
   console:
     build:
       dockerfile: ./docker/console/Dockerfile
