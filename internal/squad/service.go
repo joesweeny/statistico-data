@@ -4,13 +4,9 @@ import (
 	"github.com/joesweeny/statshub/internal/season"
 	"github.com/joesweeny/sportmonks-go-client"
 	"log"
-	"sync"
 )
 
-var waitGroup sync.WaitGroup
-
 const callLimit = 2000
-var apiCalls int
 
 type Service struct {
 	Repository
@@ -20,6 +16,8 @@ type Service struct {
 	Logger *log.Logger
 }
 
+var counter int
+
 func (s Service) Process() error {
 	ids, err := s.SeasonRepo.Ids()
 
@@ -27,57 +25,62 @@ func (s Service) Process() error {
 		return err
 	}
 
-	apiCalls = callLimit
+	done := make(chan bool)
 
-	for _, id := range ids {
-		waitGroup.Add(1)
+	go s.handleSeasons(ids, done, &counter)
 
-		go func(id int) {
-			res, err := s.Client.TeamsBySeasonId(id, []string{}, 5)
-
-			if err != nil {
-				log.Printf("Error when calling client. Message: %s", err.Error())
-				return
-			}
-
-			s.handleTeams(id, res.Data)
-
-			defer waitGroup.Done()
-		}(id)
-	}
-
-	waitGroup.Wait()
+	<-done
 
 	return nil
 }
 
-func (s Service) handleTeams(seasonId int, t []sportmonks.Team) {
-	for _, team := range t {
-		waitGroup.Add(1)
+func (s Service) handleSeasons(ids []int, done chan bool, c *int) {
+	teams := make(chan sportmonks.Team, callLimit)
 
-		_, err := s.BySeasonAndTeam(seasonId, team.ID)
-
-		if err != ErrNotFound {
-			break
+	for _, id := range ids {
+		if *c >= callLimit {
+			s.Logger.Printf("Api call limited reached %s calls\n", *c)
+			done <- true
 		}
 
-		if apiCalls < 1 {
-			break
-		}
-
-		res, err := s.Client.SquadBySeasonAndTeam(seasonId, team.ID, []string{}, 5)
-
-		apiCalls--
+		res, err := s.Client.TeamsBySeasonId(id, []string{}, 5)
 
 		if err != nil {
-			log.Printf("Error when calling client. Message: %s", err.Error())
+			s.Logger.Printf("Error when calling client. Message: %s\n", err.Error())
 			return
 		}
 
-		go func(seasonId, teamID int, squad []sportmonks.SquadPlayer) {
-			s.persistSquad(seasonId, team.ID, &squad)
-			defer waitGroup.Done()
-		}(seasonId, team.ID, res.Data)
+		for _, t := range res.Data {
+			teams <- t
+		}
+
+		go s.handleTeams(id, teams, c, done)
+	}
+}
+
+func (s Service) handleTeams(seasonId int, teams chan sportmonks.Team, c *int, done chan bool) {
+	for t := range teams {
+		if *c >= callLimit {
+			s.Logger.Printf("Api call limited reached %s calls\n", *c)
+			done <- true
+		}
+
+		_, err := s.BySeasonAndTeam(seasonId, t.ID)
+
+		if err != ErrNotFound {
+			continue
+		}
+
+		res, err := s.Client.SquadBySeasonAndTeam(seasonId, t.ID, []string{}, 5)
+
+		*c++
+
+		if err != nil {
+			s.Logger.Printf("Error when calling client. Message: %s", err.Error())
+			return
+		}
+
+		go s.persistSquad(seasonId, t.ID, &res.Data)
 	}
 }
 
@@ -88,7 +91,7 @@ func (s Service) persistSquad(seasonId, teamId int, m *[]sportmonks.SquadPlayer)
 		created := s.createSquad(seasonId, teamId, m)
 
 		if err := s.Insert(created); err != nil {
-			log.Printf("Error '%s' occurred when inserting Squad struct: %+v\n,", err.Error(), created)
+			s.Logger.Printf("Error '%s' occurred when inserting Squad struct: %+v\n,", err.Error(), created)
 		}
 
 		return
