@@ -60,6 +60,8 @@ func main() {
 
 	start := time.Now()
 
+	fmt.Printf("%s: Processing started for %s\n", start.String(), *option)
+
 	if err := service.Process(); err != nil {
 		fail(option, err)
 		os.Exit(1)

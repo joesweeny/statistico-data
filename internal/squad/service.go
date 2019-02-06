@@ -6,7 +6,7 @@ import (
 	"log"
 )
 
-const callLimit = 1800
+const callLimit = 1500
 
 type Service struct {
 	Repository
