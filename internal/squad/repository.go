@@ -6,4 +6,5 @@ type Repository interface {
 	Insert(m *model.Squad) error
 	Update(m *model.Squad) error
 	BySeasonAndTeam(seasonId, teamId int) (*model.Squad, error)
+	All() (*[]model.Squad, error)
 }
