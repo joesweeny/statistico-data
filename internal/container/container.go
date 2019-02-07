@@ -11,10 +11,10 @@ import (
 )
 
 type Container struct {
-	Clock clockwork.Clock
-	Config *config.Config
-	Database *sql.DB
-	Logger *log.Logger
+	Clock            clockwork.Clock
+	Config           *config.Config
+	Database         *sql.DB
+	Logger           *log.Logger
 	SportMonksClient *sportmonks.Client
 }
 

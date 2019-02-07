@@ -1,17 +1,17 @@
 package squad
 
 import (
+	"bytes"
+	"encoding/json"
+	"github.com/joesweeny/sportmonks-go-client"
+	"github.com/joesweeny/statshub/internal/model"
+	"github.com/jonboulle/clockwork"
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
+	"io/ioutil"
+	"log"
 	"net/http"
 	"testing"
-	"github.com/joesweeny/statshub/internal/model"
-	"github.com/joesweeny/sportmonks-go-client"
-	"github.com/stretchr/testify/assert"
-	"encoding/json"
-	"io/ioutil"
-	"bytes"
-	"github.com/jonboulle/clockwork"
-	"log"
 )
 
 func TestProcess(t *testing.T) {

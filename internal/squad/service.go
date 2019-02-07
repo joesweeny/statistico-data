@@ -1,8 +1,8 @@
 package squad
 
 import (
-	"github.com/joesweeny/statshub/internal/season"
 	"github.com/joesweeny/sportmonks-go-client"
+	"github.com/joesweeny/statshub/internal/season"
 	"log"
 )
 
