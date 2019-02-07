@@ -22,17 +22,15 @@ const round = "round"
 const roundCurrentSeason = "round:current-season"
 
 func (s Service) Process(command string, done chan bool)  {
-	if command == round {
+	switch command {
+	case round:
 		go s.allSeasons(done)
-	}
-
-	if command == roundCurrentSeason {
+	case roundCurrentSeason:
 		go s.currentSeason(done)
+	default:
+		s.Logger.Fatalf("Command %s is not supported", command)
+		return
 	}
-
-	s.Logger.Fatalf("Command %s is not supported", command)
-
-	return
 }
 
 func (s Service) allSeasons(done chan bool) {

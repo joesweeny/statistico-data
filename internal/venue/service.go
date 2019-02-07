@@ -6,7 +6,6 @@ import (
 	"github.com/joesweeny/statshub/internal/season"
 	"log"
 	"sync"
-	"fmt"
 )
 
 var waitGroup sync.WaitGroup
@@ -23,12 +22,14 @@ const venue = "venue"
 const venueCurrentSeason = "venue:current-season"
 
 func (s Service) Process(command string, done chan bool) {
-	if command == venue {
+	switch command {
+	case venue:
 		go s.allSeasons(done)
-	}
-
-	if command == venueCurrentSeason {
+	case venueCurrentSeason:
 		go s.currentSeason(done)
+	default:
+		s.Logger.Fatalf("Command %s is not supported", command)
+		return
 	}
 }
 

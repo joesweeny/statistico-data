@@ -22,17 +22,15 @@ const teamCurrentSeason = "team:current-season"
 var waitGroup sync.WaitGroup
 
 func (s Service) Process(command string, done chan bool) {
-	if command == team {
+	switch command {
+	case team:
 		go s.allSeasons(done)
-	}
-
-	if command == teamCurrentSeason {
+	case teamCurrentSeason:
 		go s.currentSeason(done)
+	default:
+		s.Logger.Fatalf("Command %s is not supported", command)
+		return
 	}
-
-	s.Logger.Fatalf("Command %s is not supported", command)
-
-	return
 }
 
 func (s Service) allSeasons(done chan bool) {
@@ -58,6 +56,7 @@ func (s Service) currentSeason(done chan bool) {
 	}
 
 	s.parseTeamsAsync(ids)
+
 	waitGroup.Wait()
 
 	done <- true

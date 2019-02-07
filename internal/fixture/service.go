@@ -22,17 +22,15 @@ const fixture = "fixture"
 const fixtureCurrentSeason = "fixture:current-season"
 
 func (s Service) Process(command string, done chan bool) {
-	if command == fixture {
+	switch command {
+	case fixture:
 		go s.allSeasons(done)
-	}
-
-	if command == fixtureCurrentSeason {
+	case fixtureCurrentSeason:
 		go s.currentSeason(done)
+	default:
+		s.Logger.Fatalf("Command %s is not supported", command)
+		return
 	}
-
-	s.Logger.Fatalf("Command %s is not supported", command)
-
-	return
 }
 
 func (s Service) allSeasons(done chan bool) {
@@ -57,7 +55,7 @@ func (s Service) currentSeason(done chan bool) {
 	go s.callClient(ids, done)
 }
 
-func (s Service) callClient(ids []int, done chan bool) error {
+func (s Service) callClient(ids []int, done chan bool) {
 	q := []string{"fixtures"}
 
 	for _, id := range ids {
@@ -79,8 +77,6 @@ func (s Service) callClient(ids []int, done chan bool) error {
 	waitGroup.Wait()
 
 	done <- true
-
-	return nil
 }
 
 func (s Service) handleFixtures(f []sportmonks.Fixture) {

@@ -54,7 +54,7 @@ func main() {
 
 	fmt.Printf("%s: Processing started for %s\n", start.String(), *command)
 
-	service.Process(*command, done)
+	go service.Process(*command, done)
 
 	<-done
 
@@ -63,11 +63,4 @@ func main() {
 	fmt.Printf("Processing complete for %s: Duration %s\n", *command, elapsed)
 
 	os.Exit(0)
-}
-
-func fail(model *string, err error) {
-	if err != nil {
-		fmt.Printf("Error when processing %s: %s\n", *model, err.Error())
-		os.Exit(1)
-	}
 }
