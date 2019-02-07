@@ -16,37 +16,50 @@ type Service struct {
 	Logger *log.Logger
 }
 
+const team = "team"
+const teamCurrentSeason = "team:current-season"
+
 var waitGroup sync.WaitGroup
 
-func (s Service) Process() error {
+func (s Service) Process(command string, done chan bool) {
+	switch command {
+	case team:
+		go s.allSeasons(done)
+	case teamCurrentSeason:
+		go s.currentSeason(done)
+	default:
+		s.Logger.Fatalf("Command %s is not supported", command)
+		return
+	}
+}
+
+func (s Service) allSeasons(done chan bool) {
 	ids, err := s.SeasonRepo.Ids()
 
 	if err != nil {
-		return err
+		s.Logger.Fatalf("Error when retrieving Season IDs: %s", err.Error())
+		return
 	}
 
 	teams := make(chan sportmonks.Team, len(ids))
-	done := make(chan bool)
 
 	go s.parseTeamsSync(teams, ids)
 	go s.persistTeams(teams, done)
-
-	<-done
-
-	return nil
 }
 
-func (s Service) ProcessCurrentSeason() error {
+func (s Service) currentSeason(done chan bool) {
 	ids, err := s.SeasonRepo.CurrentSeasonIds()
 
 	if err != nil {
-		return err
+		s.Logger.Fatalf("Error when retrieving Season IDs: %s", err.Error())
+		return
 	}
 
 	s.parseTeamsAsync(ids)
+
 	waitGroup.Wait()
 
-	return nil
+	done <- true
 }
 
 func (s Service) parseTeamsSync(ch chan<- sportmonks.Team, ids []int) {

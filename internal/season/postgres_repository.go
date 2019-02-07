@@ -86,7 +86,7 @@ func (p *PostgresSeasonRepository) Ids() ([]int, error) {
 }
 
 func (p *PostgresSeasonRepository) CurrentSeasonIds() ([]int, error) {
-	query := `SELECT id FROM sportmonks_season where is_current = true`
+	query := `SELECT id FROM sportmonks_season where is_current = true ORDER BY id ASC`
 
 	rows, err := p.Connection.Query(query)
 

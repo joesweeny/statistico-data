@@ -13,22 +13,25 @@ type Service struct {
 	Logger *log.Logger
 }
 
-func (s Service) Process() error {
+const country = "country"
+
+func (s Service) Process(command string, done chan bool) {
+	if command != country {
+		s.Logger.Fatalf("Command %s is not supported", command)
+		return
+	}
+
 	res, err := s.Client.Countries(1, []string{}, 5)
 
 	if err != nil {
-		return err
+		s.Logger.Fatalf("Error when calling client '%s", err.Error())
+		return
 	}
 
 	countries := make(chan sportmonks.Country, res.Meta.Pagination.Total)
-	done := make(chan bool)
 
 	go s.parseCountries(countries, res.Meta)
 	go s.persistCountries(countries, done)
-
-	<-done
-
-	return nil
 }
 
 func (s Service) parseCountries(ch chan<- sportmonks.Country, meta sportmonks.Meta) {
@@ -36,8 +39,8 @@ func (s Service) parseCountries(ch chan<- sportmonks.Country, meta sportmonks.Me
 		res, err := s.Client.Countries(i, []string{}, 5)
 
 		if err != nil {
-			log.Printf("Error when calling client '%s", err.Error())
-			continue
+			s.Logger.Fatalf("Error when calling client '%s", err.Error())
+			return
 		}
 
 		for _, country := range res.Data {

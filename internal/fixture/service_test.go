@@ -44,66 +44,45 @@ func TestProcess(t *testing.T) {
 	}
 
 	t.Run("inserts new fixture", func(t *testing.T) {
+		done := make(chan bool)
+
 		seasonRepo.On("Ids").Return([]int{123}, nil)
 		fixtureRepo.On("GetById", 34).Return(&model.Fixture{}, errors.New("not found"))
 		fixtureRepo.On("Insert", mock.Anything).Return(nil)
 		fixtureRepo.AssertNotCalled(t, "Update", mock.Anything)
-		service.Process()
+		service.Process("fixture", done)
 	})
 
 	t.Run("updates existing fixture", func(t *testing.T) {
+		done := make(chan bool)
+
 		f := newFixture(34)
 		seasonRepo.On("Ids").Return([]int{123}, nil)
 		fixtureRepo.On("GetById", 34).Return(f, nil)
 		fixtureRepo.On("Update", &f).Return(nil)
 		fixtureRepo.AssertNotCalled(t, "Insert", mock.Anything)
-		service.Process()
+		service.Process("fixture", done)
 	})
-}
-
-func TestCurrentSeason(t *testing.T) {
-	t.Helper()
-	fixtureRepo := new(mockFixtureRepository)
-	seasonRepo := new(mockSeasonRepository)
-
-	server := newTestClient(func(req *http.Request) *http.Response {
-		assert.Equal(t, req.URL.String(), "http://example.com/api/v2.0/seasons/123?api_token=my-key&include=fixtures")
-		b, _ := json.Marshal(seasonResponse())
-		return &http.Response{
-			StatusCode: 200,
-			Body:       ioutil.NopCloser(bytes.NewBuffer(b)),
-		}
-	})
-
-	client := sportmonks.Client{
-		Client:  server,
-		BaseURL: "http://example.com",
-		ApiKey:  "my-key",
-	}
-
-	service := Service{
-		Repository: fixtureRepo,
-		SeasonRepo: seasonRepo,
-		Factory:    Factory{Clock: clockwork.NewFakeClock()},
-		Client:     &client,
-		Logger:     log.New(ioutil.Discard, "", 0),
-	}
 
 	t.Run("inserts new fixture", func(t *testing.T) {
+		done := make(chan bool)
+
 		seasonRepo.On("CurrentSeasonIds").Return([]int{123}, nil)
 		fixtureRepo.On("GetById", 34).Return(&model.Fixture{}, errors.New("not found"))
 		fixtureRepo.On("Insert", mock.Anything).Return(nil)
 		fixtureRepo.AssertNotCalled(t, "Update", mock.Anything)
-		service.CurrentSeason()
+		service.Process("fixture:current-season", done)
 	})
 
 	t.Run("updates existing fixture", func(t *testing.T) {
+		done := make(chan bool)
+
 		f := newFixture(34)
 		seasonRepo.On("CurrentSeasonIds").Return([]int{123}, nil)
 		fixtureRepo.On("GetById", 34).Return(f, nil)
 		fixtureRepo.On("Update", &f).Return(nil)
 		fixtureRepo.AssertNotCalled(t, "Insert", mock.Anything)
-		service.CurrentSeason()
+		service.Process("fixture:current-season", done)
 	})
 }
 

@@ -1,69 +1,69 @@
 package squad
 
 import (
-	"github.com/stretchr/testify/mock"
-	//"github.com/joesweeny/statshub/internal/model"
-	"net/http"
-	//"github.com/joesweeny/sportmonks-go-client"
-	"testing"
-	//"github.com/stretchr/testify/assert"
-	//"encoding/json"
-	//"io/ioutil"
-	//"bytes"
-	//"github.com/jonboulle/clockwork"
-	//"log"
-	"github.com/joesweeny/statshub/internal/model"
+	"bytes"
+	"encoding/json"
 	"github.com/joesweeny/sportmonks-go-client"
+	"github.com/joesweeny/statshub/internal/model"
+	"github.com/jonboulle/clockwork"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
+	"io/ioutil"
+	"log"
+	"net/http"
+	"testing"
 )
 
 func TestProcess(t *testing.T) {
-	//t.Helper()
-	//squadRepo := new(mockSquadRepository)
-	//seasonRepo := new(mockSeasonRepository)
-	//
-	//server := newTestClient(func(req *http.Request) *http.Response {
-	//	if req.URL.String() == "http://example.com/api/v2.0/teams/season/100?api_token=my-key" {
-	//		assert.Equal(t, req.URL.String(), "http://example.com/api/v2.0/teams/season/100?api_token=my-key")
-	//		b, _ := json.Marshal(teamsResponse())
-	//		return &http.Response{
-	//			StatusCode: 200,
-	//			Body:       ioutil.NopCloser(bytes.NewBuffer(b)),
-	//		}
-	//	}
-	//
-	//	if req.URL.String() == "http://example.com/api/v2.0/squad/season/100/team/56?api_token=my-key" {
-	//		assert.Equal(t, req.URL.String(), "http://example.com/api/v2.0/squad/season/100/team/56?api_token=my-key")
-	//		b, _ := json.Marshal(squadResponse())
-	//		return &http.Response{
-	//			StatusCode: 200,
-	//			Body:       ioutil.NopCloser(bytes.NewBuffer(b)),
-	//		}
-	//	}
-	//
-	//	return &http.Response{}
-	//})
-	//
-	//client := sportmonks.Client{
-	//	Client:  server,
-	//	BaseURL: "http://example.com",
-	//	ApiKey:  "my-key",
-	//}
-	//
-	//service := Service{
-	//	Repository: squadRepo,
-	//	SeasonRepo: seasonRepo,
-	//	Factory:    Factory{Clock: clockwork.NewFakeClock()},
-	//	Client:     &client,
-	//	Logger:     log.New(ioutil.Discard, "", 0),
-	//}
-	//
-	//t.Run("inserts new squad", func(t *testing.T) {
-	//	seasonRepo.On("Ids").Return([]int{100}, nil)
-	//	squadRepo.On("BySeasonAndTeam", 100, 56).Return(&model.Squad{}, ErrNotFound)
-	//	squadRepo.On("Insert", mock.Anything).Return(nil)
-	//	squadRepo.AssertNotCalled(t, "Update", mock.Anything)
-	//	service.Process()
-	//})
+	t.Helper()
+	squadRepo := new(mockSquadRepository)
+	seasonRepo := new(mockSeasonRepository)
+
+	server := newTestClient(func(req *http.Request) *http.Response {
+		if req.URL.String() == "http://example.com/api/v2.0/teams/season/100?api_token=my-key" {
+			assert.Equal(t, req.URL.String(), "http://example.com/api/v2.0/teams/season/100?api_token=my-key")
+			b, _ := json.Marshal(teamsResponse())
+			return &http.Response{
+				StatusCode: 200,
+				Body:       ioutil.NopCloser(bytes.NewBuffer(b)),
+			}
+		}
+
+		if req.URL.String() == "http://example.com/api/v2.0/squad/season/100/team/56?api_token=my-key" {
+			assert.Equal(t, req.URL.String(), "http://example.com/api/v2.0/squad/season/100/team/56?api_token=my-key")
+			b, _ := json.Marshal(squadResponse())
+			return &http.Response{
+				StatusCode: 200,
+				Body:       ioutil.NopCloser(bytes.NewBuffer(b)),
+			}
+		}
+
+		return &http.Response{}
+	})
+
+	client := sportmonks.Client{
+		Client:  server,
+		BaseURL: "http://example.com",
+		ApiKey:  "my-key",
+	}
+
+	service := Service{
+		Repository: squadRepo,
+		SeasonRepo: seasonRepo,
+		Factory:    Factory{Clock: clockwork.NewFakeClock()},
+		Client:     &client,
+		Logger:     log.New(ioutil.Discard, "", 0),
+	}
+
+	t.Run("inserts new squad", func(t *testing.T) {
+		done := make(chan bool)
+
+		seasonRepo.On("Ids").Return([]int{100}, nil)
+		squadRepo.On("BySeasonAndTeam", 100, 56).Return(&model.Squad{}, ErrNotFound)
+		squadRepo.On("Insert", mock.Anything).Return(nil)
+		squadRepo.AssertNotCalled(t, "Update", mock.Anything)
+		service.Process("squad", done)
+	})
 }
 
 type roundTripFunc func(req *http.Request) *http.Response

@@ -18,27 +18,44 @@ type Service struct {
 	Logger *log.Logger
 }
 
-func (s Service) Process() error {
+const fixture = "fixture"
+const fixtureCurrentSeason = "fixture:current-season"
+
+func (s Service) Process(command string, done chan bool) {
+	switch command {
+	case fixture:
+		go s.allSeasons(done)
+	case fixtureCurrentSeason:
+		go s.currentSeason(done)
+	default:
+		s.Logger.Fatalf("Command %s is not supported", command)
+		return
+	}
+}
+
+func (s Service) allSeasons(done chan bool) {
 	ids, err := s.SeasonRepo.Ids()
 
 	if err != nil {
-		return err
+		s.Logger.Fatalf("Error when retrieving Season IDs: %s", err.Error())
+		return
 	}
 
-	return s.callClient(ids)
+	go s.callClient(ids, done)
 }
 
-func (s Service) CurrentSeason() error {
+func (s Service) currentSeason(done chan bool) {
 	ids, err := s.SeasonRepo.CurrentSeasonIds()
 
 	if err != nil {
-		return err
+		s.Logger.Fatalf("Error when retrieving Season IDs: %s", err.Error())
+		return
 	}
 
-	return s.callClient(ids)
+	go s.callClient(ids, done)
 }
 
-func (s Service) callClient(ids []int) error {
+func (s Service) callClient(ids []int, done chan bool) {
 	q := []string{"fixtures"}
 
 	for _, id := range ids {
@@ -59,7 +76,7 @@ func (s Service) callClient(ids []int) error {
 
 	waitGroup.Wait()
 
-	return nil
+	done <- true
 }
 
 func (s Service) handleFixtures(f []sportmonks.Fixture) {
