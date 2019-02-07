@@ -41,19 +41,23 @@ func TestProcess(t *testing.T) {
 	}
 
 	t.Run("inserts new season", func(t *testing.T) {
+		done := make(chan bool)
+
 		repo.On("Id", 100).Return(&model.Season{}, errors.New("not Found"))
 		repo.On("Insert", mock.Anything).Return(nil)
 		repo.AssertNotCalled(t, "Update", mock.Anything)
-		service.Process()
+		service.Process("season", done)
 	})
 
 	t.Run("updates existing competition", func(t *testing.T) {
+		done := make(chan bool)
+
 		c := newSeason(1, true)
 		repo.On("Id", 100).Return(c, nil)
 		repo.On("Update", &c).Return(nil)
 		repo.MethodCalled("Update", &c)
 		repo.AssertNotCalled(t, "Insert", mock.Anything)
-		service.Process()
+		service.Process("season", done)
 	})
 }
 

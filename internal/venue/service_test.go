@@ -44,20 +44,24 @@ func TestProcess(t *testing.T) {
 	}
 
 	t.Run("inserts new venue", func(t *testing.T) {
+		done := make(chan bool)
+
 		seasonRepo.On("Ids").Return([]int{123}, nil)
 		venueRepo.On("GetById", 23).Return(&model.Venue{}, errors.New("not found"))
 		venueRepo.On("Insert", mock.Anything).Return(nil)
 		venueRepo.AssertNotCalled(t, "Update", mock.Anything)
-		service.Process()
+		service.Process("venue", done)
 	})
 
 	t.Run("updates existing venue", func(t *testing.T) {
+		done := make(chan bool)
+
 		v := newVenue(34)
 		seasonRepo.On("Ids").Return([]int{123}, nil)
 		venueRepo.On("GetById", 23).Return(v, nil)
 		venueRepo.On("Update", &v).Return(nil)
 		venueRepo.AssertNotCalled(t, "Insert", mock.Anything)
-		service.Process()
+		service.Process("venue", done)
 	})
 }
 

@@ -41,19 +41,23 @@ func TestProcess(t *testing.T) {
 	}
 
 	t.Run("inserts new competition", func(t *testing.T) {
+		done := make(chan bool)
+
 		repo.On("GetById", 564).Return(&model.Competition{}, errors.New("not Found"))
 		repo.On("Insert", mock.Anything).Return(nil)
 		repo.AssertNotCalled(t, "Update", mock.Anything)
-		service.Process()
+		service.Process("competition", done)
 	})
 
 	t.Run("updates existing competition", func(t *testing.T) {
+		done := make(chan bool)
+
 		c := newCompetition(1)
 		repo.On("GetById", 564).Return(c, nil)
 		repo.On("Update", &c).Return(nil)
 		repo.MethodCalled("Update", &c)
 		repo.AssertNotCalled(t, "Insert", mock.Anything)
-		service.Process()
+		service.Process("competition", done)
 	})
 }
 

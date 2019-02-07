@@ -43,20 +43,24 @@ func TestProcess(t *testing.T) {
 	}
 
 	t.Run("inserts new round", func(t *testing.T) {
+		done := make(chan bool)
+
 		seasonRepo.On("Ids").Return([]int{100}, nil)
 		teamRepo.On("GetById", 56).Return(&model.Team{}, ErrNotFound)
 		teamRepo.On("Insert", mock.Anything).Return(nil)
 		teamRepo.AssertNotCalled(t, "Update", mock.Anything)
-		service.Process()
+		service.Process("team", done)
 	})
 
 	t.Run("updates existing round", func(t *testing.T) {
+		done := make(chan bool)
+
 		r := newTeam(34)
 		seasonRepo.On("Ids").Return([]int{100}, nil)
 		teamRepo.On("GetById", 34).Return(r, nil)
 		teamRepo.On("Update", &r).Return(nil)
 		teamRepo.AssertNotCalled(t, "Insert", mock.Anything)
-		service.Process()
+		service.Process("team", done)
 	})
 }
 
