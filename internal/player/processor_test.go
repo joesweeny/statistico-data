@@ -4,15 +4,15 @@ import (
 	"github.com/stretchr/testify/mock"
 	"github.com/joesweeny/statshub/internal/model"
 	"testing"
-	"github.com/stretchr/testify/assert"
+	"github.com/joesweeny/sportmonks-go-client"
+	"net/http"
+	"time"
 	"encoding/json"
 	"io/ioutil"
 	"bytes"
-	"github.com/joesweeny/sportmonks-go-client"
-	"net/http"
 	"github.com/jonboulle/clockwork"
 	"log"
-	"time"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestProcess(t *testing.T) {
@@ -21,7 +21,7 @@ func TestProcess(t *testing.T) {
 	playerRepo := new(mockPlayerRepository)
 
 	server := newTestClient(func(req *http.Request) *http.Response {
-		assert.Equal(t, req.URL.String(), "http://example.com/api/v2.0/players/5?api_token=my-key&page=1")
+		assert.Equal(t, req.URL.String(), "http://example.com/api/v2.0/players/5?api_token=my-key")
 		b, _ := json.Marshal(playerResponse())
 		return &http.Response{
 			StatusCode: 200,
@@ -46,8 +46,8 @@ func TestProcess(t *testing.T) {
 	t.Run("inserts a new player if not already present", func(t *testing.T) {
 		done := make(chan bool)
 
-		squadRepo.On("All").Return(*newSquad(), nil)
-		playerRepo.On("Id", 5).Return(model.Player{}, ErrNotFound)
+		squadRepo.On("All").Return(newSquad(), nil)
+		playerRepo.On("Id", 5).Return(&model.Player{}, ErrNotFound)
 		playerRepo.On("Insert", mock.Anything).Return(nil)
 		processor.Process("player", done)
 	})
@@ -55,7 +55,7 @@ func TestProcess(t *testing.T) {
 	t.Run("player is not inserted if already present", func(t *testing.T) {
 		done := make(chan bool)
 
-		squadRepo.On("All").Return(*newSquad(), nil)
+		squadRepo.On("All").Return(newSquad(), nil)
 		playerRepo.On("Id", 5).Return(newPlayer(5), nil)
 		playerRepo.AssertNotCalled(t,"Insert", mock.Anything)
 		processor.Process("player", done)
@@ -125,12 +125,18 @@ func playerResponse() sportmonks.PlayerResponse {
 	return r
 }
 
-func newSquad() *model.Squad {
-	return &model.Squad{
+func newSquad() []model.Squad {
+	var squads []model.Squad
+
+	s := model.Squad{
 		SeasonID:  45,
 		TeamID:    98,
 		PlayerIDs: []int{5},
 		CreatedAt: time.Now(),
 		UpdatedAt: time.Now(),
 	}
+
+	squads = append(squads, s)
+
+	return squads
 }
