@@ -25,14 +25,6 @@ services:
     links:
       - postgres
 
-  cron:
-    build:
-      dockerfile: ./docker/cron/Dockerfile
-      context: .
-    tty: true
-    links:
-      - postgres
-
   migrate:
     build:
       dockerfile: ./docker/migrate/Dockerfile
