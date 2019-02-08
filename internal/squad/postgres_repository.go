@@ -75,14 +75,33 @@ func (p *PostgresSquadRepository) All() ([]model.Squad, error) {
 		return squads, err
 	}
 
-	for rows.Next() {
+	return parseRows(rows, squads)
+}
+
+func (p *PostgresSquadRepository) CurrentSeason() ([]model.Squad, error) {
+	query := `SELECT * FROM sportmonks_squad WHERE season_id in (SELECT id from sportmonks_season WHERE is_current = true)
+ 	order by season_id ASC, team_id ASC`
+
+	var squads []model.Squad
+
+	rows, err := p.Connection.Query(query)
+
+	if err != nil {
+		return squads, err
+	}
+
+	return parseRows(rows, squads)
+}
+
+func parseRows(r *sql.Rows, m []model.Squad) ([]model.Squad, error) {
+	for r.Next() {
 		var players []string
 		var created int64
 		var updated int64
 		var squad model.Squad
 
-		if err := rows.Scan(&squad.SeasonID, &squad.TeamID, pq.Array(&players), &created, &updated); err != nil {
-			return squads, err
+		if err := r.Scan(&squad.SeasonID, &squad.TeamID, pq.Array(&players), &created, &updated); err != nil {
+			return m, err
 		}
 
 		for _, i := range players {
@@ -93,8 +112,8 @@ func (p *PostgresSquadRepository) All() ([]model.Squad, error) {
 		squad.CreatedAt = time.Unix(created, 0)
 		squad.UpdatedAt = time.Unix(updated, 0)
 
-		squads = append(squads, squad)
+		m = append(m, squad)
 	}
 
-	return squads, nil
+	return m, nil
 }

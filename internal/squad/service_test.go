@@ -133,6 +133,11 @@ func (m mockSquadRepository) All() ([]model.Squad, error) {
 	return args.Get(0).([]model.Squad), args.Error(1)
 }
 
+func (m mockSquadRepository) CurrentSeason() ([]model.Squad, error) {
+	args := m.Called()
+	return args.Get(0).([]model.Squad), args.Error(1)
+}
+
 func squadResponse() sportmonks.SquadResponse {
 	squad := newClientSquad(45, 43, 3)
 
