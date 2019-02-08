@@ -1,4 +1,4 @@
-package fixture
+package venue
 
 import (
 	"github.com/joesweeny/sportmonks-go-client"
@@ -10,7 +10,7 @@ import (
 
 var waitGroup sync.WaitGroup
 
-type Service struct {
+type Processor struct {
 	Repository
 	SeasonRepo season.Repository
 	Factory
@@ -18,14 +18,14 @@ type Service struct {
 	Logger *log.Logger
 }
 
-const fixture = "fixture"
-const fixtureCurrentSeason = "fixture:current-season"
+const venue = "venue"
+const venueCurrentSeason = "venue:current-season"
 
-func (s Service) Process(command string, done chan bool) {
+func (s Processor) Process(command string, done chan bool) {
 	switch command {
-	case fixture:
+	case venue:
 		go s.allSeasons(done)
-	case fixtureCurrentSeason:
+	case venueCurrentSeason:
 		go s.currentSeason(done)
 	default:
 		s.Logger.Fatalf("Command %s is not supported", command)
@@ -33,7 +33,7 @@ func (s Service) Process(command string, done chan bool) {
 	}
 }
 
-func (s Service) allSeasons(done chan bool) {
+func (s Processor) allSeasons(done chan bool) {
 	ids, err := s.SeasonRepo.Ids()
 
 	if err != nil {
@@ -44,7 +44,7 @@ func (s Service) allSeasons(done chan bool) {
 	go s.callClient(ids, done)
 }
 
-func (s Service) currentSeason(done chan bool) {
+func (s Processor) currentSeason(done chan bool) {
 	ids, err := s.SeasonRepo.CurrentSeasonIds()
 
 	if err != nil {
@@ -55,20 +55,18 @@ func (s Service) currentSeason(done chan bool) {
 	go s.callClient(ids, done)
 }
 
-func (s Service) callClient(ids []int, done chan bool) {
-	q := []string{"fixtures"}
-
+func (s Processor) callClient(ids []int, done chan bool) {
 	for _, id := range ids {
 		waitGroup.Add(1)
 
 		go func(id int) {
-			res, err := s.Client.SeasonById(id, q, 5)
+			res, err := s.Client.VenuesBySeasonId(id, 5)
 
 			if err != nil {
 				log.Printf("Error when calling client '%s", err.Error())
 			}
 
-			s.handleFixtures(res.Data.Fixtures.Data)
+			s.handleVenues(res.Data)
 
 			defer waitGroup.Done()
 		}(id)
@@ -79,34 +77,34 @@ func (s Service) callClient(ids []int, done chan bool) {
 	done <- true
 }
 
-func (s Service) handleFixtures(f []sportmonks.Fixture) {
-	for _, fixture := range f {
+func (s Processor) handleVenues(v []sportmonks.Venue) {
+	for _, venue := range v {
 		waitGroup.Add(1)
 
-		go func(fixture sportmonks.Fixture) {
-			s.persistFixture(&fixture)
+		go func(venue sportmonks.Venue) {
+			s.persistVenue(&venue)
 			defer waitGroup.Done()
-		}(fixture)
+		}(venue)
 	}
 }
 
-func (s Service) persistFixture(m *sportmonks.Fixture) {
-	fixture, err := s.GetById(m.ID)
+func (s Processor) persistVenue(v *sportmonks.Venue) {
+	venue, err := s.GetById(v.ID)
 
-	if err != nil && (model.Fixture{}) == *fixture {
-		created := s.createFixture(m)
+	if err != nil && (model.Venue{}) == *venue {
+		created := s.createVenue(v)
 
 		if err := s.Insert(created); err != nil {
-			log.Printf("Error '%s' occurred when inserting Fixture struct: %+v\n,", err.Error(), created)
+			log.Printf("Error '%s' occurred when inserting Venue struct: %+v\n,", err.Error(), created)
 		}
 
 		return
 	}
 
-	updated := s.updateFixture(m, fixture)
+	updated := s.updateVenue(v, venue)
 
-	if err := s.Update(updated); err != nil {
-		log.Printf("Error '%s' occurred when updating Fixture struct: %+v\n,", err.Error(), updated)
+	if err := s.Update(venue); err != nil {
+		log.Printf("Error '%s' occurred when updating Venue struct: %+v\n,", err.Error(), updated)
 	}
 
 	return

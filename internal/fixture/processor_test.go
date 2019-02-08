@@ -1,12 +1,12 @@
-package round
+package fixture
 
 import (
 	"bytes"
 	"encoding/json"
-	"errors"
 	"github.com/joesweeny/sportmonks-go-client"
 	"github.com/joesweeny/statshub/internal/model"
 	"github.com/jonboulle/clockwork"
+	"github.com/pkg/errors"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"io/ioutil"
@@ -17,11 +17,11 @@ import (
 
 func TestProcess(t *testing.T) {
 	t.Helper()
-	roundRepo := new(mockRoundRepository)
+	fixtureRepo := new(mockFixtureRepository)
 	seasonRepo := new(mockSeasonRepository)
 
 	server := newTestClient(func(req *http.Request) *http.Response {
-		assert.Equal(t, req.URL.String(), "http://example.com/api/v2.0/seasons/100?api_token=my-key&include=rounds")
+		assert.Equal(t, req.URL.String(), "http://example.com/api/v2.0/seasons/123?api_token=my-key&include=fixtures")
 		b, _ := json.Marshal(seasonResponse())
 		return &http.Response{
 			StatusCode: 200,
@@ -35,33 +35,54 @@ func TestProcess(t *testing.T) {
 		ApiKey:  "my-key",
 	}
 
-	service := Service{
-		Repository: roundRepo,
+	processor := Processor{
+		Repository: fixtureRepo,
 		SeasonRepo: seasonRepo,
 		Factory:    Factory{Clock: clockwork.NewFakeClock()},
 		Client:     &client,
 		Logger:     log.New(ioutil.Discard, "", 0),
 	}
 
-	t.Run("inserts new round", func(t *testing.T) {
+	t.Run("inserts new fixture", func(t *testing.T) {
 		done := make(chan bool)
 
-		seasonRepo.On("Ids").Return([]int{100}, nil)
-		roundRepo.On("GetById", 54).Return(&model.Round{}, errors.New("not found"))
-		roundRepo.On("Insert", mock.Anything).Return(nil)
-		roundRepo.AssertNotCalled(t, "Update", mock.Anything)
-		service.Process("round", done)
+		seasonRepo.On("Ids").Return([]int{123}, nil)
+		fixtureRepo.On("GetById", 34).Return(&model.Fixture{}, errors.New("not found"))
+		fixtureRepo.On("Insert", mock.Anything).Return(nil)
+		fixtureRepo.AssertNotCalled(t, "Update", mock.Anything)
+		processor.Process("fixture", done)
 	})
 
-	t.Run("updates existing round", func(t *testing.T) {
+	t.Run("updates existing fixture", func(t *testing.T) {
 		done := make(chan bool)
 
-		r := newRound(34)
-		seasonRepo.On("Ids").Return([]int{100}, nil)
-		roundRepo.On("GetById", 34).Return(r, nil)
-		roundRepo.On("Update", &r).Return(nil)
-		roundRepo.AssertNotCalled(t, "Insert", mock.Anything)
-		service.Process("round", done)
+		f := newFixture(34)
+		seasonRepo.On("Ids").Return([]int{123}, nil)
+		fixtureRepo.On("GetById", 34).Return(f, nil)
+		fixtureRepo.On("Update", &f).Return(nil)
+		fixtureRepo.AssertNotCalled(t, "Insert", mock.Anything)
+		processor.Process("fixture", done)
+	})
+
+	t.Run("inserts new fixture", func(t *testing.T) {
+		done := make(chan bool)
+
+		seasonRepo.On("CurrentSeasonIds").Return([]int{123}, nil)
+		fixtureRepo.On("GetById", 34).Return(&model.Fixture{}, errors.New("not found"))
+		fixtureRepo.On("Insert", mock.Anything).Return(nil)
+		fixtureRepo.AssertNotCalled(t, "Update", mock.Anything)
+		processor.Process("fixture:current-season", done)
+	})
+
+	t.Run("updates existing fixture", func(t *testing.T) {
+		done := make(chan bool)
+
+		f := newFixture(34)
+		seasonRepo.On("CurrentSeasonIds").Return([]int{123}, nil)
+		fixtureRepo.On("GetById", 34).Return(f, nil)
+		fixtureRepo.On("Update", &f).Return(nil)
+		fixtureRepo.AssertNotCalled(t, "Insert", mock.Anything)
+		processor.Process("fixture:current-season", done)
 	})
 }
 
@@ -107,23 +128,23 @@ func (m mockSeasonRepository) CurrentSeasonIds() ([]int, error) {
 	return args.Get(0).([]int), args.Error(1)
 }
 
-type mockRoundRepository struct {
+type mockFixtureRepository struct {
 	mock.Mock
 }
 
-func (m mockRoundRepository) Insert(c *model.Round) error {
+func (m mockFixtureRepository) Insert(c *model.Fixture) error {
 	args := m.Called(c)
 	return args.Error(0)
 }
 
-func (m mockRoundRepository) Update(c *model.Round) error {
+func (m mockFixtureRepository) Update(c *model.Fixture) error {
 	args := m.Called(&c)
 	return args.Error(0)
 }
 
-func (m mockRoundRepository) GetById(id int) (*model.Round, error) {
+func (m mockFixtureRepository) GetById(id int) (*model.Fixture, error) {
 	args := m.Called(id)
-	c := args.Get(0).(*model.Round)
+	c := args.Get(0).(*model.Fixture)
 	return c, args.Error(1)
 }
 
@@ -140,12 +161,9 @@ func seasonResponse() sportmonks.SeasonResponse {
 		Fixtures: struct {
 			Data []sportmonks.Fixture `json:"data"`
 		}{},
-		Rounds: struct {
-			Data []sportmonks.Round `json:"data"`
-		}{},
 	}
 
-	s.Rounds.Data = append(s.Rounds.Data, *newClientRound("2019-03-12", "2019-03-19"))
+	s.Fixtures.Data = append(s.Fixtures.Data, *newClientFixture())
 
 	res := sportmonks.SeasonResponse{}
 	res.Data = s

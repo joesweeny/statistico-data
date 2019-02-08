@@ -34,7 +34,7 @@ func TestProcess(t *testing.T) {
 		ApiKey:  "my-key",
 	}
 
-	service := Service{
+	processor := Processor{
 		Repository: teamRepo,
 		SeasonRepo: seasonRepo,
 		Factory:    Factory{Clock: clockwork.NewFakeClock()},
@@ -49,7 +49,7 @@ func TestProcess(t *testing.T) {
 		teamRepo.On("GetById", 56).Return(&model.Team{}, ErrNotFound)
 		teamRepo.On("Insert", mock.Anything).Return(nil)
 		teamRepo.AssertNotCalled(t, "Update", mock.Anything)
-		service.Process("team", done)
+		processor.Process("team", done)
 	})
 
 	t.Run("updates existing round", func(t *testing.T) {
@@ -60,7 +60,7 @@ func TestProcess(t *testing.T) {
 		teamRepo.On("GetById", 34).Return(r, nil)
 		teamRepo.On("Update", &r).Return(nil)
 		teamRepo.AssertNotCalled(t, "Insert", mock.Anything)
-		service.Process("team", done)
+		processor.Process("team", done)
 	})
 }
 

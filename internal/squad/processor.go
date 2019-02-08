@@ -11,7 +11,7 @@ const callLimit = 1800
 const squad = "squad"
 const squadCurrentSeason = "squad:current-season"
 
-type Service struct {
+type Processor struct {
 	Repository
 	SeasonRepo season.Repository
 	Factory
@@ -21,7 +21,7 @@ type Service struct {
 
 var counter int
 
-func (s Service) Process(command string, done chan bool) {
+func (s Processor) Process(command string, done chan bool) {
 	switch command {
 	case squad:
 		go s.allSeasons(done)
@@ -33,7 +33,7 @@ func (s Service) Process(command string, done chan bool) {
 	}
 }
 
-func (s Service) allSeasons(done chan bool) {
+func (s Processor) allSeasons(done chan bool) {
 	ids, err := s.SeasonRepo.Ids()
 
 	if err != nil {
@@ -44,7 +44,7 @@ func (s Service) allSeasons(done chan bool) {
 	go s.handleSeasons(ids, done, &counter)
 }
 
-func (s Service) currentSeason(done chan bool) {
+func (s Processor) currentSeason(done chan bool) {
 	squads, err := s.CurrentSeason()
 
 	if err != nil {
@@ -55,7 +55,7 @@ func (s Service) currentSeason(done chan bool) {
 	go s.updateSquads(squads, done, &counter)
 }
 
-func (s Service) handleSeasons(ids []int, done chan bool, c *int) {
+func (s Processor) handleSeasons(ids []int, done chan bool, c *int) {
 	for _, id := range ids {
 		res, err := s.Client.TeamsBySeasonId(id, []string{}, 5)
 
@@ -77,7 +77,7 @@ func (s Service) handleSeasons(ids []int, done chan bool, c *int) {
 	done <- true
 }
 
-func (s Service) updateSquads(squads []model.Squad, done chan bool, c *int) {
+func (s Processor) updateSquads(squads []model.Squad, done chan bool, c *int) {
 	for _, sq := range squads {
 		if *c >= callLimit {
 			s.Logger.Printf("Api call limited reached %d calls\n", *c)
@@ -99,7 +99,7 @@ func (s Service) updateSquads(squads []model.Squad, done chan bool, c *int) {
 	done <- true
 }
 
-func (s Service) handleTeam(seasonId int, t sportmonks.Team, c *int, done chan bool) {
+func (s Processor) handleTeam(seasonId int, t sportmonks.Team, c *int, done chan bool) {
 	if _, err := s.BySeasonAndTeam(seasonId, t.ID); err != ErrNotFound {
 		return
 	}
@@ -118,7 +118,7 @@ func (s Service) handleTeam(seasonId int, t sportmonks.Team, c *int, done chan b
 	return
 }
 
-func (s Service) insertSquad(seasonId, teamId int, m *[]sportmonks.SquadPlayer) {
+func (s Processor) insertSquad(seasonId, teamId int, m *[]sportmonks.SquadPlayer) {
 	_, err := s.BySeasonAndTeam(seasonId, teamId)
 
 	if err == ErrNotFound {
@@ -134,7 +134,7 @@ func (s Service) insertSquad(seasonId, teamId int, m *[]sportmonks.SquadPlayer) 
 	return
 }
 
-func (s Service) updateSquad(sq *[]sportmonks.SquadPlayer, m *model.Squad) {
+func (s Processor) updateSquad(sq *[]sportmonks.SquadPlayer, m *model.Squad) {
 	updated := s.Factory.updateSquad(sq, m)
 
 	if err := s.Update(updated); err != nil {
