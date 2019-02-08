@@ -6,7 +6,7 @@ import (
 	"log"
 )
 
-type Service struct {
+type Processor struct {
 	Repository
 	Factory
 	Client *sportmonks.Client
@@ -15,7 +15,7 @@ type Service struct {
 
 const country = "country"
 
-func (s Service) Process(command string, done chan bool) {
+func (s Processor) Process(command string, done chan bool) {
 	if command != country {
 		s.Logger.Fatalf("Command %s is not supported", command)
 		return
@@ -34,7 +34,7 @@ func (s Service) Process(command string, done chan bool) {
 	go s.persistCountries(countries, done)
 }
 
-func (s Service) parseCountries(ch chan<- sportmonks.Country, meta sportmonks.Meta) {
+func (s Processor) parseCountries(ch chan<- sportmonks.Country, meta sportmonks.Meta) {
 	for i := meta.Pagination.CurrentPage; i <= meta.Pagination.TotalPages; i++ {
 		res, err := s.Client.Countries(i, []string{}, 5)
 
@@ -51,7 +51,7 @@ func (s Service) parseCountries(ch chan<- sportmonks.Country, meta sportmonks.Me
 	close(ch)
 }
 
-func (s Service) persistCountries(ch <-chan sportmonks.Country, done chan bool) {
+func (s Processor) persistCountries(ch <-chan sportmonks.Country, done chan bool) {
 	for x := range ch {
 		s.persist(&x)
 	}
@@ -59,7 +59,7 @@ func (s Service) persistCountries(ch <-chan sportmonks.Country, done chan bool) 
 	done <- true
 }
 
-func (s Service) persist(c *sportmonks.Country) {
+func (s Processor) persist(c *sportmonks.Country) {
 	country, err := s.GetById(c.ID)
 
 	if err != nil && (model.Country{}) == *country {

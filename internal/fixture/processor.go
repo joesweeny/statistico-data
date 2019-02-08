@@ -1,4 +1,4 @@
-package round
+package fixture
 
 import (
 	"github.com/joesweeny/sportmonks-go-client"
@@ -10,7 +10,7 @@ import (
 
 var waitGroup sync.WaitGroup
 
-type Service struct {
+type Processor struct {
 	Repository
 	SeasonRepo season.Repository
 	Factory
@@ -18,14 +18,14 @@ type Service struct {
 	Logger *log.Logger
 }
 
-const round = "round"
-const roundCurrentSeason = "round:current-season"
+const fixture = "fixture"
+const fixtureCurrentSeason = "fixture:current-season"
 
-func (s Service) Process(command string, done chan bool) {
+func (s Processor) Process(command string, done chan bool) {
 	switch command {
-	case round:
+	case fixture:
 		go s.allSeasons(done)
-	case roundCurrentSeason:
+	case fixtureCurrentSeason:
 		go s.currentSeason(done)
 	default:
 		s.Logger.Fatalf("Command %s is not supported", command)
@@ -33,7 +33,7 @@ func (s Service) Process(command string, done chan bool) {
 	}
 }
 
-func (s Service) allSeasons(done chan bool) {
+func (s Processor) allSeasons(done chan bool) {
 	ids, err := s.SeasonRepo.Ids()
 
 	if err != nil {
@@ -44,7 +44,7 @@ func (s Service) allSeasons(done chan bool) {
 	go s.callClient(ids, done)
 }
 
-func (s Service) currentSeason(done chan bool) {
+func (s Processor) currentSeason(done chan bool) {
 	ids, err := s.SeasonRepo.CurrentSeasonIds()
 
 	if err != nil {
@@ -55,8 +55,8 @@ func (s Service) currentSeason(done chan bool) {
 	go s.callClient(ids, done)
 }
 
-func (s Service) callClient(ids []int, done chan bool) {
-	q := []string{"rounds"}
+func (s Processor) callClient(ids []int, done chan bool) {
+	q := []string{"fixtures"}
 
 	for _, id := range ids {
 		waitGroup.Add(1)
@@ -68,7 +68,7 @@ func (s Service) callClient(ids []int, done chan bool) {
 				log.Printf("Error when calling client '%s", err.Error())
 			}
 
-			s.handleRounds(res.Data.Rounds.Data)
+			s.handleFixtures(res.Data.Fixtures.Data)
 
 			defer waitGroup.Done()
 		}(id)
@@ -79,44 +79,34 @@ func (s Service) callClient(ids []int, done chan bool) {
 	done <- true
 }
 
-func (s Service) handleRounds(r []sportmonks.Round) {
-	for _, round := range r {
+func (s Processor) handleFixtures(f []sportmonks.Fixture) {
+	for _, fixture := range f {
 		waitGroup.Add(1)
 
-		go func(round sportmonks.Round) {
-			s.persistRound(&round)
+		go func(fixture sportmonks.Fixture) {
+			s.persistFixture(&fixture)
 			defer waitGroup.Done()
-		}(round)
+		}(fixture)
 	}
 }
 
-func (s Service) persistRound(m *sportmonks.Round) {
-	round, err := s.GetById(m.ID)
+func (s Processor) persistFixture(m *sportmonks.Fixture) {
+	fixture, err := s.GetById(m.ID)
 
-	if err != nil && (model.Round{}) == *round {
-		created, err := s.createRound(m)
-
-		if err != nil {
-			log.Printf("Error '%s' occurred when creating Round struct: %+v\n,", err.Error(), created)
-			return
-		}
+	if err != nil && (model.Fixture{}) == *fixture {
+		created := s.createFixture(m)
 
 		if err := s.Insert(created); err != nil {
-			log.Printf("Error '%s' occurred when inserting Round struct: %+v\n,", err.Error(), created)
+			log.Printf("Error '%s' occurred when inserting Fixture struct: %+v\n,", err.Error(), created)
 		}
 
 		return
 	}
 
-	updated, err := s.updateRound(m, round)
-
-	if err != nil {
-		log.Printf("Error '%s' occurred when updating Round struct: %+v\n,", err.Error(), updated)
-		return
-	}
+	updated := s.updateFixture(m, fixture)
 
 	if err := s.Update(updated); err != nil {
-		log.Printf("Error '%s' occurred when updating Round struct: %+v\n,", err.Error(), updated)
+		log.Printf("Error '%s' occurred when updating Fixture struct: %+v\n,", err.Error(), updated)
 	}
 
 	return

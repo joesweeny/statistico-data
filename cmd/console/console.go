@@ -16,34 +16,34 @@ func main() {
 
 	flag.Parse()
 
-	var service container.Service
+	var processor container.Processor
 
 	switch *command {
 	case Competition:
-		service = app.CompetitionService()
+		processor = app.CompetitionProcessor()
 		break
 	case Country:
-		service = app.CountryService()
+		processor = app.CountryProcessor()
 		break
 	case Fixture, FixtureCurrentSeason:
-		service = app.FixtureService()
+		processor = app.FixtureProcessor()
 		break
 	case Player:
-		service = app.PlayerProcessor()
+		processor = app.PlayerProcessor()
 	case Round, RoundCurrentSeason:
-		service = app.RoundService()
+		processor = app.RoundProcessor()
 		break
 	case Season:
-		service = app.SeasonService()
+		processor = app.SeasonProcessor()
 		break
 	case Squad, SquadCurrentSeason:
-		service = app.SquadService()
+		processor = app.SquadProcessor()
 		break
 	case Team, TeamCurrentSeason:
-		service = app.TeamService()
+		processor = app.TeamProcessor()
 		break
 	case Venue, VenueCurrentSeason:
-		service = app.VenueService()
+		processor = app.VenueProcessor()
 		break
 	default:
 		fmt.Println("The command provided is not supported")
@@ -56,7 +56,7 @@ func main() {
 
 	fmt.Printf("%s: Processing started for %s\n", start.String(), *command)
 
-	go service.Process(*command, done)
+	go processor.Process(*command, done)
 
 	<-done
 

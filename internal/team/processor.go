@@ -8,7 +8,7 @@ import (
 	"sync"
 )
 
-type Service struct {
+type Processor struct {
 	Repository
 	SeasonRepo season.Repository
 	Factory
@@ -21,7 +21,7 @@ const teamCurrentSeason = "team:current-season"
 
 var waitGroup sync.WaitGroup
 
-func (s Service) Process(command string, done chan bool) {
+func (s Processor) Process(command string, done chan bool) {
 	switch command {
 	case team:
 		go s.allSeasons(done)
@@ -33,7 +33,7 @@ func (s Service) Process(command string, done chan bool) {
 	}
 }
 
-func (s Service) allSeasons(done chan bool) {
+func (s Processor) allSeasons(done chan bool) {
 	ids, err := s.SeasonRepo.Ids()
 
 	if err != nil {
@@ -47,7 +47,7 @@ func (s Service) allSeasons(done chan bool) {
 	go s.persistTeams(teams, done)
 }
 
-func (s Service) currentSeason(done chan bool) {
+func (s Processor) currentSeason(done chan bool) {
 	ids, err := s.SeasonRepo.CurrentSeasonIds()
 
 	if err != nil {
@@ -62,7 +62,7 @@ func (s Service) currentSeason(done chan bool) {
 	done <- true
 }
 
-func (s Service) parseTeamsSync(ch chan<- sportmonks.Team, ids []int) {
+func (s Processor) parseTeamsSync(ch chan<- sportmonks.Team, ids []int) {
 	for _, id := range ids {
 		res, err := s.Client.TeamsBySeasonId(id, []string{}, 5)
 
@@ -78,7 +78,7 @@ func (s Service) parseTeamsSync(ch chan<- sportmonks.Team, ids []int) {
 	close(ch)
 }
 
-func (s Service) parseTeamsAsync(ids []int) {
+func (s Processor) parseTeamsAsync(ids []int) {
 	for _, id := range ids {
 		waitGroup.Add(1)
 
@@ -102,7 +102,7 @@ func (s Service) parseTeamsAsync(ids []int) {
 	}
 }
 
-func (s Service) persistTeams(ch <-chan sportmonks.Team, done chan bool) {
+func (s Processor) persistTeams(ch <-chan sportmonks.Team, done chan bool) {
 	for team := range ch {
 		s.persistTeam(&team)
 	}
@@ -110,7 +110,7 @@ func (s Service) persistTeams(ch <-chan sportmonks.Team, done chan bool) {
 	done <- true
 }
 
-func (s Service) persistTeam(t *sportmonks.Team) {
+func (s Processor) persistTeam(t *sportmonks.Team) {
 	team, err := s.GetById(t.ID)
 
 	if (err == ErrNotFound && model.Team{} == *team) {

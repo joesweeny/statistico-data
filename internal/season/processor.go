@@ -6,7 +6,7 @@ import (
 	"log"
 )
 
-type Service struct {
+type Processor struct {
 	Repository
 	Factory
 	Client *sportmonks.Client
@@ -15,7 +15,7 @@ type Service struct {
 
 const season = "season"
 
-func (s Service) Process(command string, done chan bool) {
+func (s Processor) Process(command string, done chan bool) {
 	if command != season {
 		s.Logger.Fatalf("Command %s is not supported", command)
 		return
@@ -36,7 +36,7 @@ func (s Service) Process(command string, done chan bool) {
 	return
 }
 
-func (s Service) parseSeasons(ch chan<- sportmonks.Season, meta sportmonks.Meta) {
+func (s Processor) parseSeasons(ch chan<- sportmonks.Season, meta sportmonks.Meta) {
 	for i := meta.Pagination.CurrentPage; i <= meta.Pagination.TotalPages; i++ {
 		res, err := s.Client.Seasons(i, []string{}, 5)
 
@@ -53,7 +53,7 @@ func (s Service) parseSeasons(ch chan<- sportmonks.Season, meta sportmonks.Meta)
 	close(ch)
 }
 
-func (s Service) persistSeasons(ch <-chan sportmonks.Season, done chan bool) {
+func (s Processor) persistSeasons(ch <-chan sportmonks.Season, done chan bool) {
 	for x := range ch {
 		s.persist(&x)
 	}
@@ -61,7 +61,7 @@ func (s Service) persistSeasons(ch <-chan sportmonks.Season, done chan bool) {
 	done <- true
 }
 
-func (s Service) persist(m *sportmonks.Season) {
+func (s Processor) persist(m *sportmonks.Season) {
 	season, err := s.Id(m.ID)
 
 	if err != nil && (model.Season{} == *season) {

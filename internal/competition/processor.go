@@ -6,7 +6,7 @@ import (
 	"log"
 )
 
-type Service struct {
+type Processor struct {
 	Repository
 	Factory
 	Client *sportmonks.Client
@@ -15,7 +15,7 @@ type Service struct {
 
 const competition = "competition"
 
-func (s Service) Process(command string, done chan bool) {
+func (s Processor) Process(command string, done chan bool) {
 	if command != competition {
 		s.Logger.Fatalf("Command %s is not supported", command)
 		return
@@ -34,7 +34,7 @@ func (s Service) Process(command string, done chan bool) {
 	go s.persistCompetitions(comps, done)
 }
 
-func (s Service) parseLeagues(ch chan<- sportmonks.League, meta sportmonks.Meta) {
+func (s Processor) parseLeagues(ch chan<- sportmonks.League, meta sportmonks.Meta) {
 	for i := meta.Pagination.CurrentPage; i <= meta.Pagination.TotalPages; i++ {
 		res, err := s.Client.Leagues(i, []string{}, 5)
 
@@ -51,7 +51,7 @@ func (s Service) parseLeagues(ch chan<- sportmonks.League, meta sportmonks.Meta)
 	close(ch)
 }
 
-func (s Service) persistCompetitions(ch <-chan sportmonks.League, done chan bool) {
+func (s Processor) persistCompetitions(ch <-chan sportmonks.League, done chan bool) {
 	for x := range ch {
 		s.persist(&x)
 	}
@@ -59,7 +59,7 @@ func (s Service) persistCompetitions(ch <-chan sportmonks.League, done chan bool
 	done <- true
 }
 
-func (s Service) persist(l *sportmonks.League) {
+func (s Processor) persist(l *sportmonks.League) {
 	comp, err := s.GetById(l.ID)
 
 	if err != nil && (model.Competition{}) == *comp {

@@ -12,12 +12,12 @@ import (
 	"github.com/joesweeny/statshub/internal/venue"
 )
 
-type Service interface {
+type Processor interface {
 	Process(command string, done chan bool)
 }
 
-func (c Container) CompetitionService() *competition.Service {
-	return &competition.Service{
+func (c Container) CompetitionProcessor() *competition.Processor {
+	return &competition.Processor{
 		Repository: &competition.PostgresCompetitionRepository{Connection: c.Database},
 		Factory:    competition.Factory{Clock: clock()},
 		Client:     c.SportMonksClient,
@@ -25,8 +25,8 @@ func (c Container) CompetitionService() *competition.Service {
 	}
 }
 
-func (c Container) CountryService() *country.Service {
-	return &country.Service{
+func (c Container) CountryProcessor() *country.Processor {
+	return &country.Processor{
 		Repository: &country.PostgresCountryRepository{Connection: c.Database},
 		Factory:    country.Factory{Clock: clock()},
 		Client:     c.SportMonksClient,
@@ -34,8 +34,8 @@ func (c Container) CountryService() *country.Service {
 	}
 }
 
-func (c Container) FixtureService() *fixture.Service {
-	return &fixture.Service{
+func (c Container) FixtureProcessor() *fixture.Processor {
+	return &fixture.Processor{
 		Repository: &fixture.PostgresFixtureRepository{Connection: c.Database},
 		SeasonRepo: &season.PostgresSeasonRepository{Connection: c.Database},
 		Factory:    fixture.Factory{Clock: clock()},
@@ -54,8 +54,8 @@ func (c Container) PlayerProcessor() *player.Processor {
 	}
 }
 
-func (c Container) RoundService() *round.Service {
-	return &round.Service{
+func (c Container) RoundProcessor() *round.Processor {
+	return &round.Processor{
 		Repository: &round.PostgresRoundRepository{Connection: c.Database},
 		SeasonRepo: &season.PostgresSeasonRepository{Connection: c.Database},
 		Factory:    round.Factory{Clock: clock()},
@@ -64,8 +64,8 @@ func (c Container) RoundService() *round.Service {
 	}
 }
 
-func (c Container) SeasonService() *season.Service {
-	return &season.Service{
+func (c Container) SeasonProcessor() *season.Processor {
+	return &season.Processor{
 		Repository: &season.PostgresSeasonRepository{Connection: c.Database},
 		Factory:    season.Factory{Clock: clock()},
 		Client:     c.SportMonksClient,
@@ -73,8 +73,8 @@ func (c Container) SeasonService() *season.Service {
 	}
 }
 
-func (c Container) SquadService() *squad.Service {
-	return &squad.Service{
+func (c Container) SquadProcessor() *squad.Processor {
+	return &squad.Processor{
 		Repository: &squad.PostgresSquadRepository{Connection: c.Database},
 		SeasonRepo: &season.PostgresSeasonRepository{Connection: c.Database},
 		Factory:    squad.Factory{Clock: clock()},
@@ -83,8 +83,8 @@ func (c Container) SquadService() *squad.Service {
 	}
 }
 
-func (c Container) TeamService() *team.Service {
-	return &team.Service{
+func (c Container) TeamProcessor() *team.Processor {
+	return &team.Processor{
 		Repository: &team.PostgresTeamRepository{Connection: c.Database},
 		SeasonRepo: &season.PostgresSeasonRepository{Connection: c.Database},
 		Factory:    team.Factory{Clock: clock()},
@@ -93,8 +93,8 @@ func (c Container) TeamService() *team.Service {
 	}
 }
 
-func (c Container) VenueService() *venue.Service {
-	return &venue.Service{
+func (c Container) VenueProcessor() *venue.Processor {
+	return &venue.Processor{
 		Repository: &venue.PostgresVenueRepository{Connection: c.Database},
 		SeasonRepo: &season.PostgresSeasonRepository{Connection: c.Database},
 		Factory:    venue.Factory{Clock: clock()},

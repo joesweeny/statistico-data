@@ -1,4 +1,4 @@
-package venue
+package round
 
 import (
 	"bytes"
@@ -17,12 +17,12 @@ import (
 
 func TestProcess(t *testing.T) {
 	t.Helper()
-	venueRepo := new(mockVenueRepository)
+	roundRepo := new(mockRoundRepository)
 	seasonRepo := new(mockSeasonRepository)
 
 	server := newTestClient(func(req *http.Request) *http.Response {
-		assert.Equal(t, req.URL.String(), "http://example.com/api/v2.0/venues/season/123?api_token=my-key")
-		b, _ := json.Marshal(venuesResponse())
+		assert.Equal(t, req.URL.String(), "http://example.com/api/v2.0/seasons/100?api_token=my-key&include=rounds")
+		b, _ := json.Marshal(seasonResponse())
 		return &http.Response{
 			StatusCode: 200,
 			Body:       ioutil.NopCloser(bytes.NewBuffer(b)),
@@ -35,33 +35,33 @@ func TestProcess(t *testing.T) {
 		ApiKey:  "my-key",
 	}
 
-	service := Service{
-		Repository: venueRepo,
+	processor := Processor{
+		Repository: roundRepo,
 		SeasonRepo: seasonRepo,
 		Factory:    Factory{Clock: clockwork.NewFakeClock()},
 		Client:     &client,
 		Logger:     log.New(ioutil.Discard, "", 0),
 	}
 
-	t.Run("inserts new venue", func(t *testing.T) {
+	t.Run("inserts new round", func(t *testing.T) {
 		done := make(chan bool)
 
-		seasonRepo.On("Ids").Return([]int{123}, nil)
-		venueRepo.On("GetById", 23).Return(&model.Venue{}, errors.New("not found"))
-		venueRepo.On("Insert", mock.Anything).Return(nil)
-		venueRepo.AssertNotCalled(t, "Update", mock.Anything)
-		service.Process("venue", done)
+		seasonRepo.On("Ids").Return([]int{100}, nil)
+		roundRepo.On("GetById", 54).Return(&model.Round{}, errors.New("not found"))
+		roundRepo.On("Insert", mock.Anything).Return(nil)
+		roundRepo.AssertNotCalled(t, "Update", mock.Anything)
+		processor.Process("round", done)
 	})
 
-	t.Run("updates existing venue", func(t *testing.T) {
+	t.Run("updates existing round", func(t *testing.T) {
 		done := make(chan bool)
 
-		v := newVenue(34)
-		seasonRepo.On("Ids").Return([]int{123}, nil)
-		venueRepo.On("GetById", 23).Return(v, nil)
-		venueRepo.On("Update", &v).Return(nil)
-		venueRepo.AssertNotCalled(t, "Insert", mock.Anything)
-		service.Process("venue", done)
+		r := newRound(34)
+		seasonRepo.On("Ids").Return([]int{100}, nil)
+		roundRepo.On("GetById", 34).Return(r, nil)
+		roundRepo.On("Update", &r).Return(nil)
+		roundRepo.AssertNotCalled(t, "Insert", mock.Anything)
+		processor.Process("round", done)
 	})
 }
 
@@ -107,39 +107,48 @@ func (m mockSeasonRepository) CurrentSeasonIds() ([]int, error) {
 	return args.Get(0).([]int), args.Error(1)
 }
 
-type mockVenueRepository struct {
+type mockRoundRepository struct {
 	mock.Mock
 }
 
-func (m mockVenueRepository) Insert(v *model.Venue) error {
-	args := m.Called(v)
+func (m mockRoundRepository) Insert(c *model.Round) error {
+	args := m.Called(c)
 	return args.Error(0)
 }
 
-func (m mockVenueRepository) Update(v *model.Venue) error {
-	args := m.Called(v)
+func (m mockRoundRepository) Update(c *model.Round) error {
+	args := m.Called(&c)
 	return args.Error(0)
 }
 
-func (m mockVenueRepository) GetById(id int) (*model.Venue, error) {
+func (m mockRoundRepository) GetById(id int) (*model.Round, error) {
 	args := m.Called(id)
-	v := args.Get(0).(*model.Venue)
-	return v, args.Error(1)
+	c := args.Get(0).(*model.Round)
+	return c, args.Error(1)
 }
 
-func venuesResponse() sportmonks.VenuesResponse {
-	r := sportmonks.Venue{
-		ID:       23,
-		Name:     "London Stadium",
-		Surface:  "Grass",
-		City:     "London",
-		Capacity: 60000,
-		Image:    "/path/to/image",
+func seasonResponse() sportmonks.SeasonResponse {
+	var round = 10
+	var stage = 567
+	s := sportmonks.Season{
+		ID:              100,
+		Name:            "2018-2019",
+		LeagueID:        231,
+		IsCurrentSeason: true,
+		CurrentRoundID:  &round,
+		CurrentStageID:  &stage,
+		Fixtures: struct {
+			Data []sportmonks.Fixture `json:"data"`
+		}{},
+		Rounds: struct {
+			Data []sportmonks.Round `json:"data"`
+		}{},
 	}
 
-	res := sportmonks.VenuesResponse{}
+	s.Rounds.Data = append(s.Rounds.Data, *newClientRound("2019-03-12", "2019-03-19"))
 
-	res.Data = append(res.Data, r)
+	res := sportmonks.SeasonResponse{}
+	res.Data = s
 
 	return res
 }
