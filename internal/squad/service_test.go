@@ -64,6 +64,16 @@ func TestProcess(t *testing.T) {
 		squadRepo.AssertNotCalled(t, "Update", mock.Anything)
 		service.Process("squad", done)
 	})
+
+	t.Run("updates existing squad", func(t *testing.T) {
+		done := make(chan bool)
+
+		squad := newSquad(34, 44)
+
+		squadRepo.On("CurrentSeason").Return([]model.Squad{*squad}, nil)
+		squadRepo.On("Update", mock.Anything).Return(nil)
+		service.Process("squad", done)
+	})
 }
 
 type roundTripFunc func(req *http.Request) *http.Response
