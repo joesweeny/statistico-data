@@ -1,10 +1,10 @@
 package player
 
 import (
-	"github.com/joesweeny/statshub/internal/squad"
 	"github.com/joesweeny/sportmonks-go-client"
-	"log"
 	"github.com/joesweeny/statshub/internal/model"
+	"github.com/joesweeny/statshub/internal/squad"
+	"log"
 )
 
 const callLimit = 1800

@@ -1,18 +1,18 @@
 package player
 
 import (
-	"github.com/stretchr/testify/mock"
-	"github.com/joesweeny/statshub/internal/model"
-	"testing"
-	"github.com/joesweeny/sportmonks-go-client"
-	"net/http"
-	"time"
-	"encoding/json"
-	"io/ioutil"
 	"bytes"
+	"encoding/json"
+	"github.com/joesweeny/sportmonks-go-client"
+	"github.com/joesweeny/statshub/internal/model"
 	"github.com/jonboulle/clockwork"
-	"log"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
+	"io/ioutil"
+	"log"
+	"net/http"
+	"testing"
+	"time"
 )
 
 func TestProcess(t *testing.T) {
@@ -37,7 +37,7 @@ func TestProcess(t *testing.T) {
 
 	processor := Processor{
 		Repository: playerRepo,
-		SquadRepo: squadRepo,
+		SquadRepo:  squadRepo,
 		Factory:    Factory{clockwork.NewFakeClock()},
 		Client:     &client,
 		Logger:     log.New(ioutil.Discard, "", 0),
@@ -57,7 +57,7 @@ func TestProcess(t *testing.T) {
 
 		squadRepo.On("All").Return(newSquad(), nil)
 		playerRepo.On("Id", 5).Return(newPlayer(5), nil)
-		playerRepo.AssertNotCalled(t,"Insert", mock.Anything)
+		playerRepo.AssertNotCalled(t, "Insert", mock.Anything)
 		processor.Process("player", done)
 	})
 }

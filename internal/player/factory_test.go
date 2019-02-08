@@ -1,11 +1,11 @@
 package player
 
 import (
-	"time"
-	"github.com/jonboulle/clockwork"
 	"github.com/joesweeny/sportmonks-go-client"
-	"testing"
+	"github.com/jonboulle/clockwork"
 	"github.com/stretchr/testify/assert"
+	"testing"
+	"time"
 )
 
 var t = time.Date(2019, 01, 14, 11, 25, 00, 00, time.UTC)
@@ -31,20 +31,20 @@ func TestCreatePlayer(t *testing.T) {
 
 func newClientPlayer() *sportmonks.Player {
 	return &sportmonks.Player{
-		PlayerID: 58,
-		TeamID: 999,
-		CountryID: 462,
-		PositionID: 3,
-		CommonName: "Felipe Anderson",
-		FullName: "Felipe Anderson",
-		FirstName: "Felipe",
-		LastName: "Anderson",
-		Nationality: "Brazilian",
-		BirthDate: "1984-03-12",
+		PlayerID:     58,
+		TeamID:       999,
+		CountryID:    462,
+		PositionID:   3,
+		CommonName:   "Felipe Anderson",
+		FullName:     "Felipe Anderson",
+		FirstName:    "Felipe",
+		LastName:     "Anderson",
+		Nationality:  "Brazilian",
+		BirthDate:    "1984-03-12",
 		BirthCountry: "Brazil",
-		Birthplace: "Sao Paulo",
-		Height: "A Giant",
-		Weight: "Skinny",
-		ImagePath: "/path/to/image",
+		Birthplace:   "Sao Paulo",
+		Height:       "A Giant",
+		Weight:       "Skinny",
+		ImagePath:    "/path/to/image",
 	}
 }
