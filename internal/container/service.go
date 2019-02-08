@@ -9,6 +9,7 @@ import (
 	"github.com/joesweeny/statshub/internal/squad"
 	"github.com/joesweeny/statshub/internal/team"
 	"github.com/joesweeny/statshub/internal/venue"
+	"github.com/joesweeny/statshub/internal/player"
 )
 
 type Service interface {
@@ -38,6 +39,16 @@ func (c Container) FixtureService() *fixture.Service {
 		Repository: &fixture.PostgresFixtureRepository{Connection: c.Database},
 		SeasonRepo: &season.PostgresSeasonRepository{Connection: c.Database},
 		Factory:    fixture.Factory{Clock: clock()},
+		Client:     c.SportMonksClient,
+		Logger:     c.Logger,
+	}
+}
+
+func (c Container) PlayerProcessor() *player.Processor {
+	return &player.Processor{
+		Repository: &player.PostgresPlayerRepository{Connection: c.Database},
+		SquadRepo:  &squad.PostgresSquadRepository{Connection: c.Database},
+		Factory:    player.Factory{Clock: clock()},
 		Client:     c.SportMonksClient,
 		Logger:     c.Logger,
 	}

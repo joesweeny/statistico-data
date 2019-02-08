@@ -28,6 +28,8 @@ func main() {
 	case Fixture, FixtureCurrentSeason:
 		service = app.FixtureService()
 		break
+	case Player:
+		service = app.PlayerProcessor()
 	case Round, RoundCurrentSeason:
 		service = app.RoundService()
 		break
