@@ -64,7 +64,7 @@ func (p *PostgresSquadRepository) BySeasonAndTeam(seasonId, teamId int) (*model.
 	return &m, err
 }
 
-func (p *PostgresSquadRepository) All() (*[]model.Squad, error) {
+func (p *PostgresSquadRepository) All() ([]model.Squad, error) {
 	query := `SELECT * FROM sportmonks_squad order by season_id ASC, team_id ASC`
 
 	var squads []model.Squad
@@ -72,7 +72,7 @@ func (p *PostgresSquadRepository) All() (*[]model.Squad, error) {
 	rows, err := p.Connection.Query(query)
 
 	if err != nil {
-		return &squads, err
+		return squads, err
 	}
 
 	for rows.Next() {
@@ -82,7 +82,7 @@ func (p *PostgresSquadRepository) All() (*[]model.Squad, error) {
 		var squad model.Squad
 
 		if err := rows.Scan(&squad.SeasonID, &squad.TeamID, pq.Array(&players), &created, &updated); err != nil {
-			return &squads, err
+			return squads, err
 		}
 
 		for _, i := range players {
@@ -96,5 +96,5 @@ func (p *PostgresSquadRepository) All() (*[]model.Squad, error) {
 		squads = append(squads, squad)
 	}
 
-	return &squads, nil
+	return squads, nil
 }
