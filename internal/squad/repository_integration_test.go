@@ -138,6 +138,43 @@ func TestUpdate(t *testing.T) {
 	conn.Close()
 }
 
+func TestAll(t *testing.T) {
+	conn, cleanUp := getConnection(t)
+	repo := PostgresSquadRepository{Connection: conn}
+
+	t.Run("returns all squad records from the database", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+
+		squads := []model.Squad{
+			*newSquad(39, 25067),
+			*newSquad(99, 98),
+			*newSquad(301, 2),
+			*newSquad(23, 6),
+			*newSquad(39, 1902),
+		}
+
+		for _, squad := range squads {
+			repo.Insert(&squad)
+		}
+
+		all, err := repo.All()
+
+		if err != nil {
+			t.Fatalf("Test failed, expected nil, got %v", err)
+		}
+
+		a := assert.New(t)
+
+		a.Equal(5, len(all))
+		a.Equal(all[:1], squads[3:4])
+		a.Equal(all[1:2], squads[4:5])
+		a.Equal(all[2:3], squads[0:1])
+		a.Equal(all[3:4], squads[1:2])
+		a.Equal(all[4:], squads[2:3])
+	})
+}
+
 var db = config.GetConfig().Database
 
 func getConnection(t *testing.T) (*sql.DB, func()) {

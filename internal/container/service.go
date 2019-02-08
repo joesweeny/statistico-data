@@ -4,6 +4,7 @@ import (
 	"github.com/joesweeny/statshub/internal/competition"
 	"github.com/joesweeny/statshub/internal/country"
 	"github.com/joesweeny/statshub/internal/fixture"
+	"github.com/joesweeny/statshub/internal/player"
 	"github.com/joesweeny/statshub/internal/round"
 	"github.com/joesweeny/statshub/internal/season"
 	"github.com/joesweeny/statshub/internal/squad"
@@ -38,6 +39,16 @@ func (c Container) FixtureService() *fixture.Service {
 		Repository: &fixture.PostgresFixtureRepository{Connection: c.Database},
 		SeasonRepo: &season.PostgresSeasonRepository{Connection: c.Database},
 		Factory:    fixture.Factory{Clock: clock()},
+		Client:     c.SportMonksClient,
+		Logger:     c.Logger,
+	}
+}
+
+func (c Container) PlayerProcessor() *player.Processor {
+	return &player.Processor{
+		Repository: &player.PostgresPlayerRepository{Connection: c.Database},
+		SquadRepo:  &squad.PostgresSquadRepository{Connection: c.Database},
+		Factory:    player.Factory{Clock: clock()},
 		Client:     c.SportMonksClient,
 		Logger:     c.Logger,
 	}

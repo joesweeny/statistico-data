@@ -63,3 +63,38 @@ func (p *PostgresSquadRepository) BySeasonAndTeam(seasonId, teamId int) (*model.
 
 	return &m, err
 }
+
+func (p *PostgresSquadRepository) All() ([]model.Squad, error) {
+	query := `SELECT * FROM sportmonks_squad order by season_id ASC, team_id ASC`
+
+	var squads []model.Squad
+
+	rows, err := p.Connection.Query(query)
+
+	if err != nil {
+		return squads, err
+	}
+
+	for rows.Next() {
+		var players []string
+		var created int64
+		var updated int64
+		var squad model.Squad
+
+		if err := rows.Scan(&squad.SeasonID, &squad.TeamID, pq.Array(&players), &created, &updated); err != nil {
+			return squads, err
+		}
+
+		for _, i := range players {
+			text, _ := strconv.Atoi(i)
+			squad.PlayerIDs = append(squad.PlayerIDs, text)
+		}
+
+		squad.CreatedAt = time.Unix(created, 0)
+		squad.UpdatedAt = time.Unix(updated, 0)
+
+		squads = append(squads, squad)
+	}
+
+	return squads, nil
+}
