@@ -8,6 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"testing"
 	"time"
+	"github.com/joesweeny/statshub/internal/season"
 )
 
 func TestInsert(t *testing.T) {
@@ -175,6 +176,47 @@ func TestAll(t *testing.T) {
 	})
 }
 
+func TestCurrentSeason(t *testing.T) {
+	conn, cleanUp := getConnection(t)
+	repo := PostgresSquadRepository{Connection: conn}
+	seasonRepo := season.PostgresSeasonRepository{Connection: conn}
+
+	t.Run("returns squads only for current season", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+
+		seasonRepo.Insert(newSeason(true, 39))
+		seasonRepo.Insert(newSeason(false, 99))
+		seasonRepo.Insert(newSeason(false, 4502))
+		seasonRepo.Insert(newSeason(true, 23))
+
+		squads := []model.Squad{
+			*newSquad(39, 25067),
+			*newSquad(99, 98),
+			*newSquad(301, 2),
+			*newSquad(23, 6),
+			*newSquad(39, 1902),
+		}
+
+		for _, squad := range squads {
+			repo.Insert(&squad)
+		}
+
+		current, err := repo.CurrentSeason()
+
+		if err != nil {
+			t.Fatalf("Test failed, expected nil, got %v", err)
+		}
+
+		a := assert.New(t)
+
+		a.Equal(3, len(current))
+		a.Equal(current[:1], squads[3:4])
+		a.Equal(current[1:2], squads[4:])
+		a.Equal(current[2:3], squads[0:1])
+	})
+}
+
 var db = config.GetConfig().Database
 
 func getConnection(t *testing.T) (*sql.DB, func()) {
@@ -196,11 +238,22 @@ func getConnection(t *testing.T) (*sql.DB, func()) {
 	}
 }
 
-func newSquad(squad, team int) *model.Squad {
+func newSquad(season, team int) *model.Squad {
 	return &model.Squad{
-		SeasonID:  squad,
+		SeasonID:  season,
 		TeamID:    team,
 		PlayerIDs: []int{34, 57, 89},
+		CreatedAt: time.Unix(1546965200, 0),
+		UpdatedAt: time.Unix(1546965200, 0),
+	}
+}
+
+func newSeason(current bool, seasonId int) *model.Season {
+	return &model.Season{
+		ID:        seasonId,
+		Name:      "Current Season",
+		LeagueID:  4,
+		IsCurrent: current,
 		CreatedAt: time.Unix(1546965200, 0),
 		UpdatedAt: time.Unix(1546965200, 0),
 	}

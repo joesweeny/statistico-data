@@ -4,6 +4,7 @@ import (
 	"github.com/joesweeny/sportmonks-go-client"
 	"github.com/joesweeny/statshub/internal/season"
 	"log"
+	"github.com/joesweeny/statshub/internal/model"
 )
 
 const callLimit = 1800
@@ -44,14 +45,14 @@ func (s Service) allSeasons(done chan bool) {
 }
 
 func (s Service) currentSeason(done chan bool) {
-	ids, err := s.SeasonRepo.CurrentSeasonIds()
+	squads, err := s.CurrentSeason()
 
 	if err != nil {
 		s.Logger.Fatalf("Error when retrieving Season IDs: %s", err.Error())
 		return
 	}
 
-	go s.handleSeasons(ids, done, &counter)
+	go s.updateSquads(squads, done, &counter)
 }
 
 func (s Service) handleSeasons(ids []int, done chan bool, c *int) {
@@ -76,6 +77,28 @@ func (s Service) handleSeasons(ids []int, done chan bool, c *int) {
 	done <- true
 }
 
+func (s Service) updateSquads(squads []model.Squad, done chan bool, c *int) {
+	for _, sq := range squads {
+		if *c >= callLimit {
+			s.Logger.Printf("Api call limited reached %d calls\n", *c)
+			done <- true
+		}
+
+		res, err := s.Client.SquadBySeasonAndTeam(sq.SeasonID, sq.TeamID, []string{}, 5)
+
+		*c++
+
+		if err != nil {
+			s.Logger.Printf("Error when calling client. Message: %s", err.Error())
+			done <- true
+		}
+
+		s.updateSquad(&res.Data, &sq)
+	}
+
+	done <- true
+}
+
 func (s Service) handleTeam(seasonId int, t sportmonks.Team, c *int, done chan bool) {
 	if _, err := s.BySeasonAndTeam(seasonId, t.ID); err != ErrNotFound {
 		return
@@ -90,12 +113,12 @@ func (s Service) handleTeam(seasonId int, t sportmonks.Team, c *int, done chan b
 		done <- true
 	}
 
-	s.persistSquad(seasonId, t.ID, &res.Data)
+	s.insertSquad(seasonId, t.ID, &res.Data)
 
 	return
 }
 
-func (s Service) persistSquad(seasonId, teamId int, m *[]sportmonks.SquadPlayer) {
+func (s Service) insertSquad(seasonId, teamId int, m *[]sportmonks.SquadPlayer) {
 	_, err := s.BySeasonAndTeam(seasonId, teamId)
 
 	if err == ErrNotFound {
@@ -106,6 +129,16 @@ func (s Service) persistSquad(seasonId, teamId int, m *[]sportmonks.SquadPlayer)
 		}
 
 		return
+	}
+
+	return
+}
+
+func (s Service) updateSquad(sq *[]sportmonks.SquadPlayer, m *model.Squad) {
+	updated := s.Factory.updateSquad(sq, m)
+
+	if err := s.Update(updated); err != nil {
+		s.Logger.Printf("Error '%s' occurred when updating Squad struct: %+v\n,", err.Error(), updated)
 	}
 
 	return

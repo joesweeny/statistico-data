@@ -106,6 +106,11 @@ func (m mockSquadRepository) All() ([]model.Squad, error) {
 	return args.Get(0).([]model.Squad), args.Error(1)
 }
 
+func (m mockSquadRepository) CurrentSeason() ([]model.Squad, error) {
+	args := m.Called()
+	return args.Get(0).([]model.Squad), args.Error(1)
+}
+
 type roundTripFunc func(req *http.Request) *http.Response
 
 func (r roundTripFunc) RoundTrip(req *http.Request) (*http.Response, error) {
