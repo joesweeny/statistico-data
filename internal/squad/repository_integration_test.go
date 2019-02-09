@@ -235,6 +235,10 @@ func getConnection(t *testing.T) (*sql.DB, func()) {
 		if err != nil {
 			t.Fatalf("Failed to clear database. %s", err.Error())
 		}
+		_, err = db.Exec("delete from sportmonks_season")
+		if err != nil {
+			t.Fatalf("Failed to clear database. %s", err.Error())
+		}
 	}
 }
 
