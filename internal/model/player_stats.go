@@ -3,12 +3,12 @@ package model
 import "time"
 
 type PlayerStats struct {
-	FixtureID         int    `json:"fixture_id"`
-	PlayerID          int    `json:"player_id"`
-	TeamID            int    `json:"team_id"`
+	FixtureID         int     `json:"fixture_id"`
+	PlayerID          int     `json:"player_id"`
+	TeamID            int     `json:"team_id"`
 	Position          *string `json:"position"`
-	FormationPosition *int   `json:"formation_position"`
-	IsSubstitute      bool   `json:"is_substitute"`
+	FormationPosition *int    `json:"formation_position"`
+	IsSubstitute      bool    `json:"is_substitute"`
 	PlayerShots       `json:"shots"`
 	PlayerGoals       `json:"goals"`
 	PlayerFouls       `json:"fouls"`
@@ -17,9 +17,9 @@ type PlayerStats struct {
 	PlayerPenalties   `json:"penalties"`
 	PlayerCrosses     `json:"crosses"`
 	PlayerPasses      `json:"passes"`
-	Assists           *int `json:"assists"`
-	Offsides          *int `json:"offsides"`
-	Saves             *int `json:"saves"`
+	Assists           *int      `json:"assists"`
+	Offsides          *int      `json:"offsides"`
+	Saves             *int      `json:"saves"`
 	HitWoodwork       *int      `json:"hit_woodwork"`
 	Tackles           *int      `json:"tackles"`
 	Blocks            *int      `json:"blocks"`

@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"github.com/joesweeny/statshub/internal/config"
 	"github.com/joesweeny/statshub/internal/model"
+	"github.com/joesweeny/statshub/internal/season"
 	"github.com/stretchr/testify/assert"
 	"testing"
 	"time"
-	"github.com/joesweeny/statshub/internal/season"
 )
 
 func TestInsert(t *testing.T) {

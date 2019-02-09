@@ -1,11 +1,11 @@
 package result
 
 import (
-	"time"
-	"github.com/jonboulle/clockwork"
 	"github.com/joesweeny/sportmonks-go-client"
-	"testing"
+	"github.com/jonboulle/clockwork"
 	"github.com/stretchr/testify/assert"
+	"testing"
+	"time"
 )
 
 var t = time.Date(2019, 01, 14, 11, 25, 00, 00, time.UTC)
@@ -48,33 +48,33 @@ func newClientFixture(id int) *sportmonks.Fixture {
 	score := "2-0"
 	pitch := "Good"
 	return &sportmonks.Fixture{
-		ID: id,
-		LeagueID: 25,
-		SeasonID: 590,
-		LocalTeamID: 1,
+		ID:            id,
+		LeagueID:      25,
+		SeasonID:      590,
+		LocalTeamID:   1,
 		VisitorTeamID: 9,
-		Pitch: &pitch,
+		Pitch:         &pitch,
 		Formations: sportmonks.Formations{
-			LocalteamFormation: "4-4-2",
+			LocalteamFormation:   "4-4-2",
 			VisitorteamFormation: "4-3-2-1",
 		},
 		Scores: sportmonks.Scores{
-			LocalteamScore: 2,
-			VisitorteamScore: 0,
-			LocalteamPenScore: &zero,
+			LocalteamScore:      2,
+			VisitorteamScore:    0,
+			LocalteamPenScore:   &zero,
 			VisitorteamPenScore: &zero,
-			HtScore: &score,
-			FtScore: &score,
+			HtScore:             &score,
+			FtScore:             &score,
 		},
 		Time: sportmonks.FixtureTime{
-			Minute: 90,
-			Second: &zero,
-			AddedTime: &zero,
+			Minute:      90,
+			Second:      &zero,
+			AddedTime:   &zero,
 			ExtraMinute: &zero,
-			InjuryTime: &zero,
+			InjuryTime:  &zero,
 		},
 		Standings: sportmonks.Standings{
-			LocalteamPosition: 1,
+			LocalteamPosition:   1,
 			VisitorteamPosition: 5,
 		},
 	}

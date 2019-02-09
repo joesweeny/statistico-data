@@ -1,11 +1,11 @@
 package stats
 
 import (
-	"time"
-	"github.com/jonboulle/clockwork"
 	"github.com/joesweeny/sportmonks-go-client"
-	"testing"
+	"github.com/jonboulle/clockwork"
 	"github.com/stretchr/testify/assert"
+	"testing"
+	"time"
 )
 
 var t = time.Date(2019, 01, 14, 11, 25, 00, 00, time.UTC)
@@ -88,9 +88,9 @@ func newClientLineupPlayer() *sportmonks.LineupPlayer {
 		HitWoodwork:  &i,
 	}
 	stats := sportmonks.PlayerStats{
-		Shots: shots,
-		Fouls: fouls,
-		Passes: passes,
+		Shots:             shots,
+		Fouls:             fouls,
+		Passes:            passes,
 		ExtraPlayersStats: extra,
 	}
 
@@ -101,6 +101,6 @@ func newClientLineupPlayer() *sportmonks.LineupPlayer {
 		PlayerName: "Mark Noble",
 		Number:     &num,
 		Position:   &pos,
-		Stats: stats,
+		Stats:      stats,
 	}
 }

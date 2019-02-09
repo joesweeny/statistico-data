@@ -2,9 +2,9 @@ package squad
 
 import (
 	"github.com/joesweeny/sportmonks-go-client"
+	"github.com/joesweeny/statshub/internal/model"
 	"github.com/joesweeny/statshub/internal/season"
 	"log"
-	"github.com/joesweeny/statshub/internal/model"
 )
 
 const callLimit = 1800
