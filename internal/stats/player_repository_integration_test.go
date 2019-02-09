@@ -273,11 +273,12 @@ func getPlayerConnection(t *testing.T) (*sql.DB, func()) {
 }
 
 func newPlayerStats(fixtureId, playerId int) *model.PlayerStats {
+	pos := "M"
 	return &model.PlayerStats{
 		FixtureID:       fixtureId,
 		PlayerID:        playerId,
 		TeamID:          100,
-		Position:        "M",
+		Position:        &pos,
 		IsSubstitute:    false,
 		PlayerShots:     model.PlayerShots{},
 		PlayerGoals:     model.PlayerGoals{},
