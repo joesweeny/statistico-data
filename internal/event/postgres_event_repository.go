@@ -16,8 +16,8 @@ type PostgresEventRepository struct {
 
 func (p *PostgresEventRepository) InsertGoalEvent(m *model.GoalEvent) error {
 	query := `
-	INSERT INTO sportmonks_goal_event (id, team_id, player_id, player_assist_id, minute, score, created_at) VALUES
-	($1, $2, $3, $4, $5, $6, $7)`
+	INSERT INTO sportmonks_goal_event (id, team_id, player_id, player_assist_id, minute, score, created_at, fixture_id) 
+	VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`
 
 	_, err := p.Connection.Exec(
 		query,
@@ -28,6 +28,7 @@ func (p *PostgresEventRepository) InsertGoalEvent(m *model.GoalEvent) error {
 		m.Minute,
 		m.Score,
 		m.CreatedAt.Unix(),
+		m.FixtureID,
 	)
 
 	return err
@@ -35,8 +36,8 @@ func (p *PostgresEventRepository) InsertGoalEvent(m *model.GoalEvent) error {
 
 func (p *PostgresEventRepository) InsertSubstitutionEvent(m *model.SubstitutionEvent) error {
 	query := `
-	INSERT INTO sportmonks_substitution_event (id, team_id, player_in_id, player_out_id, minute, injured, created_at) VALUES
-	($1, $2, $3, $4, $5, $6, $7)`
+	INSERT INTO sportmonks_substitution_event (id, team_id, player_in_id, player_out_id, minute, injured, created_at, 
+	fixture_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`
 
 	_, err := p.Connection.Exec(
 		query,
@@ -47,6 +48,7 @@ func (p *PostgresEventRepository) InsertSubstitutionEvent(m *model.SubstitutionE
 		m.Minute,
 		m.Injured,
 		m.CreatedAt.Unix(),
+		m.FixtureID,
 	)
 
 	return err
@@ -61,7 +63,7 @@ func (p *PostgresEventRepository) GoalEventById(id int) (*model.GoalEvent, error
 
 	row := p.Connection.QueryRow(query, id)
 
-	err := row.Scan(&m.ID, &m.TeamID, &m.PlayerID, &m.PlayerAssistID, &m.Minute, &m.Score, &created)
+	err := row.Scan(&m.ID, &m.TeamID, &m.PlayerID, &m.PlayerAssistID, &m.Minute, &m.Score, &created, &m.FixtureID)
 
 	if err != nil {
 		return &m, ErrNotFound
@@ -81,7 +83,7 @@ func (p *PostgresEventRepository) SubstitutionEventById(id int) (*model.Substitu
 
 	row := p.Connection.QueryRow(query, id)
 
-	err := row.Scan(&m.ID, &m.TeamID, &m.PlayerInID, &m.PlayerOutID, &m.Minute, &m.Injured, &created)
+	err := row.Scan(&m.ID, &m.TeamID, &m.PlayerInID, &m.PlayerOutID, &m.Minute, &m.Injured, &created, &m.FixtureID)
 
 	if err != nil {
 		return &m, ErrNotFound
