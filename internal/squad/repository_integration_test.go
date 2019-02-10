@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"github.com/joesweeny/statshub/internal/config"
 	"github.com/joesweeny/statshub/internal/model"
+	"github.com/joesweeny/statshub/internal/season"
 	"github.com/stretchr/testify/assert"
 	"testing"
 	"time"
-	"github.com/joesweeny/statshub/internal/season"
 )
 
 func TestInsert(t *testing.T) {
@@ -232,6 +232,10 @@ func getConnection(t *testing.T) (*sql.DB, func()) {
 
 	return db, func() {
 		_, err := db.Exec("delete from sportmonks_squad")
+		if err != nil {
+			t.Fatalf("Failed to clear database. %s", err.Error())
+		}
+		_, err = db.Exec("delete from sportmonks_season")
 		if err != nil {
 			t.Fatalf("Failed to clear database. %s", err.Error())
 		}

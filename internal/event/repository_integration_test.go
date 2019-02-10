@@ -120,6 +120,7 @@ func TestGoalEventById(t *testing.T) {
 
 		a := assert.New(t)
 		a.Equal(33, r.ID)
+		a.Equal(45, r.FixtureID)
 		a.Equal(4509, r.TeamID)
 		a.Equal(3401, r.PlayerID)
 		a.Nil(r.PlayerAssistID)
@@ -168,11 +169,12 @@ func TestSubstitutionEventById(t *testing.T) {
 
 		a := assert.New(t)
 		a.Equal(33, r.ID)
+		a.Equal(45, r.FixtureID)
 		a.Equal(4509, r.TeamID)
 		a.Equal(3401, r.PlayerInID)
 		a.Equal(901, r.PlayerOutID)
 		a.Equal(82, r.Minute)
-		a.True(r.Injured)
+		a.True(*r.Injured)
 		a.Equal("2019-01-08 16:33:20 +0000 UTC", r.CreatedAt.String())
 	})
 
@@ -221,6 +223,7 @@ func getConnection(t *testing.T) (*sql.DB, func()) {
 func newGoalEvent(id int) *model.GoalEvent {
 	return &model.GoalEvent{
 		ID:        id,
+		FixtureID: 45,
 		TeamID:    4509,
 		PlayerID:  3401,
 		Minute:    82,
@@ -230,13 +233,15 @@ func newGoalEvent(id int) *model.GoalEvent {
 }
 
 func newSubstitutionEvent(id int) *model.SubstitutionEvent {
+	true := true
 	return &model.SubstitutionEvent{
 		ID:          id,
+		FixtureID:   45,
 		TeamID:      4509,
 		PlayerInID:  3401,
 		PlayerOutID: 901,
 		Minute:      82,
-		Injured:     true,
+		Injured:     &true,
 		CreatedAt:   time.Unix(1546965200, 0),
 	}
 }

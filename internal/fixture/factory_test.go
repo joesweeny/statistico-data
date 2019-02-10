@@ -90,8 +90,8 @@ func newClientFixture() *sportmonks.Fixture {
 		LeagueID:      1356,
 		SeasonID:      987,
 		VenueID:       &venue,
-		LocalteamID:   4,
-		VisitorteamID: 98,
+		LocalTeamID:   4,
+		VisitorTeamID: 98,
 		Time:          t,
 	}
 }

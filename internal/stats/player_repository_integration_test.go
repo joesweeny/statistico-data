@@ -62,7 +62,7 @@ func TestByFixtureAndPlayer(t *testing.T) {
 		a.Equal(30, r.FixtureID)
 		a.Equal(672, r.PlayerID)
 		a.Equal(100, r.TeamID)
-		a.Equal("M", r.Position)
+		a.Equal("M", *r.Position)
 		a.Nil(r.FormationPosition)
 		a.False(r.IsSubstitute)
 		a.Nil(m.PlayerShots.Total)
@@ -200,7 +200,7 @@ func TestUpdatePlayerStats(t *testing.T) {
 		a.Equal(30, r.FixtureID)
 		a.Equal(672, r.PlayerID)
 		a.Equal(100, r.TeamID)
-		a.Equal("M", r.Position)
+		a.Equal("M", *r.Position)
 		a.Equal(3, *r.FormationPosition)
 		a.True(r.IsSubstitute)
 		a.Equal(4, *m.PlayerShots.Total)
@@ -273,11 +273,12 @@ func getPlayerConnection(t *testing.T) (*sql.DB, func()) {
 }
 
 func newPlayerStats(fixtureId, playerId int) *model.PlayerStats {
+	pos := "M"
 	return &model.PlayerStats{
 		FixtureID:       fixtureId,
 		PlayerID:        playerId,
 		TeamID:          100,
-		Position:        "M",
+		Position:        &pos,
 		IsSubstitute:    false,
 		PlayerShots:     model.PlayerShots{},
 		PlayerGoals:     model.PlayerGoals{},
