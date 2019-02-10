@@ -2,8 +2,8 @@ package stats
 
 import (
 	"github.com/joesweeny/sportmonks-go-client"
-	"testing"
 	"github.com/stretchr/testify/assert"
+	"testing"
 )
 
 var factory = TeamFactory{Clock: clock}
@@ -58,15 +58,15 @@ func newClientTeamStats() *sportmonks.TeamStats {
 	}
 
 	return &sportmonks.TeamStats{
-		TeamID:    960,
-		FixtureID: 34019,
-		Shots:     shots,
-		Passes:    passes,
-		Fouls: &total,
-		Corners: &zero,
-		Offsides: &total,
-		Saves: &zero,
+		TeamID:        960,
+		FixtureID:     34019,
+		Shots:         shots,
+		Passes:        passes,
+		Fouls:         &total,
+		Corners:       &zero,
+		Offsides:      &total,
+		Saves:         &zero,
 		Substitutions: &zero,
-		FreeKick: &total,
+		FreeKick:      &total,
 	}
 }

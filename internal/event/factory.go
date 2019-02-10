@@ -1,9 +1,9 @@
 package event
 
 import (
-	"github.com/jonboulle/clockwork"
 	"github.com/joesweeny/sportmonks-go-client"
 	"github.com/joesweeny/statshub/internal/model"
+	"github.com/jonboulle/clockwork"
 	"strconv"
 )
 

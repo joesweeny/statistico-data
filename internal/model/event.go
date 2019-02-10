@@ -15,11 +15,11 @@ type GoalEvent struct {
 
 type SubstitutionEvent struct {
 	ID          int       `json:"id"`
-	FixtureID      int       `json:"fixture_id"`
+	FixtureID   int       `json:"fixture_id"`
 	TeamID      int       `json:"team_id"`
 	PlayerInID  int       `json:"player_in_id"`
 	PlayerOutID int       `json:"player_out_id"`
 	Minute      int       `json:"minute"`
-	Injured     *bool      `json:"injured"`
+	Injured     *bool     `json:"injured"`
 	CreatedAt   time.Time `json:"created_at"`
 }

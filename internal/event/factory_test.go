@@ -1,11 +1,11 @@
 package event
 
 import (
-	"time"
-	"github.com/jonboulle/clockwork"
 	"github.com/joesweeny/sportmonks-go-client"
-	"testing"
+	"github.com/jonboulle/clockwork"
 	"github.com/stretchr/testify/assert"
+	"testing"
+	"time"
 )
 
 var t = time.Date(2019, 01, 14, 11, 25, 00, 00, time.UTC)
@@ -61,7 +61,7 @@ func newClientGoalEvent() *sportmonks.GoalEvent {
 		PlayerAssistID:   &assistId,
 		PlayerAssistName: &assistName,
 		Minute:           89,
-		Result:      "1-0",
+		Result:           "1-0",
 	}
 }
 

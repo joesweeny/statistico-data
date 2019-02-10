@@ -236,7 +236,7 @@ func newSubstitutionEvent(id int) *model.SubstitutionEvent {
 	true := true
 	return &model.SubstitutionEvent{
 		ID:          id,
-		FixtureID: 45,
+		FixtureID:   45,
 		TeamID:      4509,
 		PlayerInID:  3401,
 		PlayerOutID: 901,
