@@ -6,11 +6,11 @@ import (
 	"github.com/jonboulle/clockwork"
 )
 
-type Factory struct {
+type PlayerFactory struct {
 	Clock clockwork.Clock
 }
 
-func (f Factory) createPlayerStats(s *sportmonks.LineupPlayer, sub bool) *model.PlayerStats {
+func (f PlayerFactory) createPlayerStats(s *sportmonks.LineupPlayer, sub bool) *model.PlayerStats {
 	shots := model.PlayerShots{
 		Total:  s.Stats.Shots.ShotsTotal,
 		OnGoal: s.Stats.Shots.ShotsOnGoal,

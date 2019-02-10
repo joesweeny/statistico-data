@@ -10,7 +10,7 @@ import (
 
 var t = time.Date(2019, 01, 14, 11, 25, 00, 00, time.UTC)
 var clock = clockwork.NewFakeClockAt(t)
-var f = Factory{clock}
+var f = PlayerFactory{clock}
 
 func TestCreatePlayerStats(t *testing.T) {
 	t.Run("a new player stats struct is hydrated", func(t *testing.T) {
