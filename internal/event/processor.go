@@ -1,8 +1,8 @@
 package event
 
 import (
-	"log"
 	"github.com/joesweeny/sportmonks-go-client"
+	"log"
 )
 
 type Processor struct {
@@ -24,7 +24,6 @@ func (p Processor) ProcessGoalEvent(s *sportmonks.GoalEvent) {
 
 	return
 }
-
 
 func (p Processor) ProcessSubstitutionEvent(s *sportmonks.SubstitutionEvent) {
 	if _, err := p.Repository.SubstitutionEventById(s.ID); err != ErrNotFound {

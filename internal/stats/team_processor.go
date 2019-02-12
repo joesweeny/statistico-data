@@ -1,8 +1,8 @@
 package stats
 
 import (
-	"log"
 	"github.com/joesweeny/sportmonks-go-client"
+	"log"
 )
 
 type TeamProcessor struct {

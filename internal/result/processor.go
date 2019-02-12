@@ -1,16 +1,17 @@
 package result
 
 import (
-	"github.com/joesweeny/statshub/internal/fixture"
 	"github.com/joesweeny/sportmonks-go-client"
-	"log"
 	"github.com/joesweeny/statshub/internal/event"
+	"github.com/joesweeny/statshub/internal/fixture"
 	"github.com/joesweeny/statshub/internal/stats"
+	"log"
 	"sync"
 )
 
 const result = "result"
 const callLimit = 1800
+
 var counter int
 var waitGroup sync.WaitGroup
 
@@ -18,11 +19,11 @@ type Processor struct {
 	Repository
 	FixtureRepo fixture.Repository
 	Factory
-	Client *sportmonks.Client
-	Logger *log.Logger
+	Client          *sportmonks.Client
+	Logger          *log.Logger
 	PlayerProcessor stats.PlayerProcessor
-	TeamProcessor stats.TeamProcessor
-	EventProcessor event.Processor
+	TeamProcessor   stats.TeamProcessor
+	EventProcessor  event.Processor
 }
 
 func (p Processor) Process(command string, done chan bool) {

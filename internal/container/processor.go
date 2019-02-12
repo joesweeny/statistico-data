@@ -3,16 +3,16 @@ package container
 import (
 	"github.com/joesweeny/statshub/internal/competition"
 	"github.com/joesweeny/statshub/internal/country"
+	"github.com/joesweeny/statshub/internal/event"
 	"github.com/joesweeny/statshub/internal/fixture"
 	"github.com/joesweeny/statshub/internal/player"
+	"github.com/joesweeny/statshub/internal/result"
 	"github.com/joesweeny/statshub/internal/round"
 	"github.com/joesweeny/statshub/internal/season"
 	"github.com/joesweeny/statshub/internal/squad"
+	"github.com/joesweeny/statshub/internal/stats"
 	"github.com/joesweeny/statshub/internal/team"
 	"github.com/joesweeny/statshub/internal/venue"
-	"github.com/joesweeny/statshub/internal/stats"
-	"github.com/joesweeny/statshub/internal/event"
-	"github.com/joesweeny/statshub/internal/result"
 )
 
 type Processor interface {
@@ -129,7 +129,7 @@ func (c Container) teamStatsProcessor() stats.TeamProcessor {
 	return stats.TeamProcessor{
 		TeamRepository: &stats.PostgresTeamStatsRepository{Connection: c.Database},
 		TeamFactory:    stats.TeamFactory{Clock: clock()},
-		Logger:           c.Logger,
+		Logger:         c.Logger,
 	}
 }
 
