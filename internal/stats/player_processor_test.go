@@ -10,7 +10,7 @@ import (
 )
 
 func TestProcessPlayerStats(t *testing.T) {
-	repo := new(mockRepository)
+	repo := new(mockPlayerRepository)
 	processor := PlayerProcessor{
 		PlayerRepository: repo,
 		PlayerFactory:    PlayerFactory{clockwork.NewFakeClock()},
@@ -32,21 +32,21 @@ func TestProcessPlayerStats(t *testing.T) {
 	})
 }
 
-type mockRepository struct {
+type mockPlayerRepository struct {
 	mock.Mock
 }
 
-func (m mockRepository) InsertPlayerStats(s *model.PlayerStats) error {
+func (m mockPlayerRepository) InsertPlayerStats(s *model.PlayerStats) error {
 	args := m.Called(s)
 	return args.Error(0)
 }
 
-func (m mockRepository) UpdatePlayerStats(s *model.PlayerStats) error {
+func (m mockPlayerRepository) UpdatePlayerStats(s *model.PlayerStats) error {
 	args := m.Called(s)
 	return args.Error(0)
 }
 
-func (m mockRepository) ByFixtureAndPlayer(fixtureId, playerId int) (*model.PlayerStats, error) {
+func (m mockPlayerRepository) ByFixtureAndPlayer(fixtureId, playerId int) (*model.PlayerStats, error) {
 	args := m.Called(fixtureId, playerId)
 	return args.Get(0).(*model.PlayerStats), args.Error(1)
 }
