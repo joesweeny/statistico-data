@@ -70,6 +70,31 @@ func (p *PostgresFixtureRepository) GetById(id int) (*model.Fixture, error) {
 	return rowToFixture(row)
 }
 
+func (p *PostgresFixtureRepository) Ids() ([]int, error) {
+	query := `SELECT id FROM sportmonks_fixture ORDER BY id ASC`
+
+	rows, err := p.Connection.Query(query)
+
+	if err != nil {
+		return []int{}, err
+	}
+
+	defer rows.Close()
+
+	var id int
+	var ids []int
+
+	for rows.Next() {
+		if err := rows.Scan(&id); err != nil {
+			return ids, err
+		}
+
+		ids = append(ids, id)
+	}
+
+	return ids, nil
+}
+
 func rowToFixture(r *sql.Row) (*model.Fixture, error) {
 	var date int64
 	var created int64
