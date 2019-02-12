@@ -172,6 +172,34 @@ func TestUpdate(t *testing.T) {
 	conn.Close()
 }
 
+func TestIds(t *testing.T) {
+	conn, cleanUp := getConnection(t)
+	repo := PostgresFixtureRepository{Connection: conn}
+
+	t.Run("test returns a slice of int ids", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+
+		for i := 1; i <= 4; i++ {
+			s := newFixture(i)
+
+			if err := repo.Insert(s); err != nil {
+				t.Errorf("Error when inserting record into the database: %s", err.Error())
+			}
+		}
+
+		ids, err := repo.Ids()
+
+		want := []int{1, 2, 3, 4}
+
+		if err != nil {
+			t.Fatalf("Test failed, expected %v, got %s", want, err.Error())
+		}
+
+		assert.Equal(t, want, ids)
+	})
+}
+
 var db = config.GetConfig().Database
 
 func getConnection(t *testing.T) (*sql.DB, func()) {

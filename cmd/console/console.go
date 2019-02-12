@@ -30,6 +30,10 @@ func main() {
 		break
 	case Player:
 		processor = app.PlayerProcessor()
+		break
+	case Result:
+		processor = app.ResultProcessor()
+		break
 	case Round, RoundCurrentSeason:
 		processor = app.RoundProcessor()
 		break

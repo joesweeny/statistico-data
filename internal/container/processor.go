@@ -3,11 +3,14 @@ package container
 import (
 	"github.com/joesweeny/statshub/internal/competition"
 	"github.com/joesweeny/statshub/internal/country"
+	"github.com/joesweeny/statshub/internal/event"
 	"github.com/joesweeny/statshub/internal/fixture"
 	"github.com/joesweeny/statshub/internal/player"
+	"github.com/joesweeny/statshub/internal/result"
 	"github.com/joesweeny/statshub/internal/round"
 	"github.com/joesweeny/statshub/internal/season"
 	"github.com/joesweeny/statshub/internal/squad"
+	"github.com/joesweeny/statshub/internal/stats"
 	"github.com/joesweeny/statshub/internal/team"
 	"github.com/joesweeny/statshub/internal/venue"
 )
@@ -34,6 +37,14 @@ func (c Container) CountryProcessor() *country.Processor {
 	}
 }
 
+func (c Container) eventProcessor() event.Processor {
+	return event.Processor{
+		Repository: &event.PostgresEventRepository{Connection: c.Database},
+		Factory:    event.Factory{Clock: clock()},
+		Logger:     c.Logger,
+	}
+}
+
 func (c Container) FixtureProcessor() *fixture.Processor {
 	return &fixture.Processor{
 		Repository: &fixture.PostgresFixtureRepository{Connection: c.Database},
@@ -51,6 +62,27 @@ func (c Container) PlayerProcessor() *player.Processor {
 		Factory:    player.Factory{Clock: clock()},
 		Client:     c.SportMonksClient,
 		Logger:     c.Logger,
+	}
+}
+
+func (c Container) playerStatsProcessor() stats.PlayerProcessor {
+	return stats.PlayerProcessor{
+		PlayerRepository: &stats.PostgresPlayerStatsRepository{Connection: c.Database},
+		PlayerFactory:    stats.PlayerFactory{Clock: clock()},
+		Logger:           c.Logger,
+	}
+}
+
+func (c Container) ResultProcessor() *result.Processor {
+	return &result.Processor{
+		Repository:      &result.PostgresResultRepository{Connection: c.Database},
+		FixtureRepo:     &fixture.PostgresFixtureRepository{Connection: c.Database},
+		Factory:         result.Factory{Clock: c.Clock},
+		Client:          c.SportMonksClient,
+		Logger:          c.Logger,
+		PlayerProcessor: c.playerStatsProcessor(),
+		TeamProcessor:   c.teamStatsProcessor(),
+		EventProcessor:  c.eventProcessor(),
 	}
 }
 
@@ -90,6 +122,14 @@ func (c Container) TeamProcessor() *team.Processor {
 		Factory:    team.Factory{Clock: clock()},
 		Client:     c.SportMonksClient,
 		Logger:     c.Logger,
+	}
+}
+
+func (c Container) teamStatsProcessor() stats.TeamProcessor {
+	return stats.TeamProcessor{
+		TeamRepository: &stats.PostgresTeamStatsRepository{Connection: c.Database},
+		TeamFactory:    stats.TeamFactory{Clock: clock()},
+		Logger:         c.Logger,
 	}
 }
 
