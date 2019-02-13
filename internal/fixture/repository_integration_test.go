@@ -176,7 +176,7 @@ func TestIds(t *testing.T) {
 	conn, cleanUp := getConnection(t)
 	repo := PostgresFixtureRepository{Connection: conn}
 
-	t.Run("test returns a slice of int ids", func(t *testing.T) {
+	t.Run("returns a slice of int ids", func(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
 
@@ -196,6 +196,57 @@ func TestIds(t *testing.T) {
 			t.Fatalf("Test failed, expected %v, got %s", want, err.Error())
 		}
 
+		assert.Equal(t, want, ids)
+	})
+}
+
+func TestIdsBetween(t *testing.T) {
+	conn, cleanUp := getConnection(t)
+	repo := PostgresFixtureRepository{Connection: conn}
+
+	t.Run("returns int slice of fixture ids where date is between two dates", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+
+		for i := 1; i <= 4; i++ {
+			s := newFixture(i)
+
+			if err := repo.Insert(s); err != nil {
+				t.Errorf("Error when inserting record into the database: %s", err.Error())
+			}
+		}
+
+		for i := 5; i <= 8; i++ {
+			s := model.Fixture{
+				ID:         i,
+				SeasonID:   14567,
+				HomeTeamID: 451,
+				AwayTeamID: 924,
+				Date:       time.Unix(1550066305, 0),
+				CreatedAt:  time.Unix(1546965200, 0),
+				UpdatedAt:  time.Unix(1546965200, 0),
+			}
+
+			if err := repo.Insert(&s); err != nil {
+				t.Errorf("Error when inserting record into the database: %s", err.Error())
+			}
+		}
+
+		ids, err := repo.IdsBetween(time.Unix(1548086910, 0), time.Unix(1548086950, 0))
+
+		want := []int{1, 2, 3, 4}
+
+		if err != nil {
+			t.Fatalf("Test failed, expected %v, got %s", want, err.Error())
+		}
+
+		all, err := repo.Ids()
+
+		if err != nil {
+			t.Fatalf("Test failed, expected %v, got %s", want, err.Error())
+		}
+
+		assert.Equal(t,8, len(all))
 		assert.Equal(t, want, ids)
 	})
 }

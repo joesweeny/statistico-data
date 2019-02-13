@@ -79,6 +79,22 @@ func (p *PostgresFixtureRepository) Ids() ([]int, error) {
 		return []int{}, err
 	}
 
+	return rowsToSlice(rows)
+}
+
+func (p *PostgresFixtureRepository) IdsBetween(from, to time.Time) ([]int, error) {
+	query := `SELECT id FROM sportmonks_fixture where date BETWEEN $1 AND $2 ORDER BY id ASC`
+
+	rows, err := p.Connection.Query(query, from.Unix(), to.Unix())
+
+	if err != nil {
+		return []int{}, err
+	}
+
+	return rowsToSlice(rows)
+}
+
+func rowsToSlice(rows *sql.Rows) ([]int, error) {
 	defer rows.Close()
 
 	var id int
