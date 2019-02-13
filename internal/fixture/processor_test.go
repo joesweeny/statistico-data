@@ -13,6 +13,7 @@ import (
 	"log"
 	"net/http"
 	"testing"
+	"time"
 )
 
 func TestProcess(t *testing.T) {
@@ -150,6 +151,11 @@ func (m mockFixtureRepository) GetById(id int) (*model.Fixture, error) {
 
 func (m mockFixtureRepository) Ids() ([]int, error) {
 	args := m.Called()
+	return args.Get(0).([]int), args.Error(1)
+}
+
+func (m mockFixtureRepository) IdsBetween(from, to time.Time) ([]int, error) {
+	args := m.Called(from, to)
 	return args.Get(0).([]int), args.Error(1)
 }
 
