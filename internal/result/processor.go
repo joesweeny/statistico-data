@@ -10,7 +10,7 @@ import (
 )
 
 const result = "result"
-const callLimit = 1800
+const callLimit = 1500
 
 var counter int
 var waitGroup sync.WaitGroup
@@ -89,11 +89,33 @@ func (p Processor) parseResults(ch <-chan sportmonks.Fixture, done chan bool) {
 }
 
 func (p Processor) handleResult(fix sportmonks.Fixture) {
-	go p.handleTeams(fix.TeamStats.Data)
-	go p.handlePlayers(fix.Lineup.Data, false)
-	go p.handlePlayers(fix.Bench.Data, true)
-	go p.handleGoalEvents(fix.Goals.Data)
-	go p.handleSubstitutionEvents(fix.Subs.Data)
+	waitGroup.Add(5)
+
+	go func(stats []sportmonks.TeamStats) {
+		p.handleTeams(stats)
+		defer waitGroup.Done()
+	}(fix.TeamStats.Data)
+
+	go func(players []sportmonks.LineupPlayer) {
+		p.handlePlayers(players, false)
+		defer waitGroup.Done()
+	}(fix.Lineup.Data)
+
+	go func(players []sportmonks.LineupPlayer) {
+		p.handlePlayers(players, true)
+		defer waitGroup.Done()
+	}(fix.Bench.Data)
+
+	go func(goals []sportmonks.GoalEvent) {
+		p.handleGoalEvents(goals)
+		defer waitGroup.Done()
+	}(fix.Goals.Data)
+
+
+	go func(subs []sportmonks.SubstitutionEvent) {
+		p.handleSubstitutionEvents(subs)
+		defer waitGroup.Done()
+	}(fix.Subs.Data)
 
 	created := p.Factory.createResult(&fix)
 
@@ -104,44 +126,24 @@ func (p Processor) handleResult(fix sportmonks.Fixture) {
 
 func (p Processor) handleTeams(t []sportmonks.TeamStats) {
 	for _, team := range t {
-		waitGroup.Add(1)
-
-		go func(s sportmonks.TeamStats) {
-			p.TeamProcessor.ProcessTeamStats(&s)
-			defer waitGroup.Done()
-		}(team)
+		p.TeamProcessor.ProcessTeamStats(&team)
 	}
 }
 
 func (p Processor) handlePlayers(lineups []sportmonks.LineupPlayer, bench bool) {
 	for _, player := range lineups {
-		waitGroup.Add(1)
-
-		go func(s sportmonks.LineupPlayer) {
-			p.PlayerProcessor.ProcessPlayerStats(&s, bench)
-			defer waitGroup.Done()
-		}(player)
+		p.PlayerProcessor.ProcessPlayerStats(&player, bench)
 	}
 }
 
 func (p Processor) handleGoalEvents(g []sportmonks.GoalEvent) {
 	for _, goal := range g {
-		waitGroup.Add(1)
-
-		go func(s sportmonks.GoalEvent) {
-			p.EventProcessor.ProcessGoalEvent(&s)
-			defer waitGroup.Done()
-		}(goal)
+		p.EventProcessor.ProcessGoalEvent(&goal)
 	}
 }
 
 func (p Processor) handleSubstitutionEvents(s []sportmonks.SubstitutionEvent) {
 	for _, sub := range s {
-		waitGroup.Add(1)
-
-		go func(e sportmonks.SubstitutionEvent) {
-			p.EventProcessor.ProcessSubstitutionEvent(&e)
-			defer waitGroup.Done()
-		}(sub)
+		p.EventProcessor.ProcessSubstitutionEvent(&sub)
 	}
 }
