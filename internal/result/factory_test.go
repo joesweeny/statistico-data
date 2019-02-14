@@ -55,7 +55,7 @@ func TestUpdateResult(t *testing.T) {
 
 		c.Pitch = &pitch
 		c.Formations = sportmonks.Formations{
-			LocalteamFormation: "5-3-2",
+			LocalteamFormation:   "5-3-2",
 			VisitorteamFormation: "4-2-2-2",
 		}
 

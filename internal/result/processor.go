@@ -111,7 +111,6 @@ func (p Processor) handleResult(fix sportmonks.Fixture) {
 		defer waitGroup.Done()
 	}(fix.Goals.Data)
 
-
 	go func(subs []sportmonks.SubstitutionEvent) {
 		p.handleSubstitutionEvents(subs)
 		defer waitGroup.Done()

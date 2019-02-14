@@ -35,22 +35,22 @@ func (f TeamFactory) createTeamStats(s *sportmonks.TeamStats) *model.TeamStats {
 }
 
 func (f TeamFactory) updateTeamStats(s *sportmonks.TeamStats, m *model.TeamStats) *model.TeamStats {
-	m.TeamShots =     *handleTeamShots(&s.Shots)
-	m.TeamPasses =    *handleTeamPasses(&s.Passes)
-	m.TeamAttacks =   *handleTeamAttacks(&s.Attacks)
-	m.Fouls =         s.Fouls
-	m.Corners =       s.Corners
-	m.Offsides =      s.Offsides
-	m.Possession =    s.Possessiontime
-	m.YellowCards =   s.Yellowcards
-	m.RedCards =      s.Redcards
-	m.Saves =         s.Saves
+	m.TeamShots = *handleTeamShots(&s.Shots)
+	m.TeamPasses = *handleTeamPasses(&s.Passes)
+	m.TeamAttacks = *handleTeamAttacks(&s.Attacks)
+	m.Fouls = s.Fouls
+	m.Corners = s.Corners
+	m.Offsides = s.Offsides
+	m.Possession = s.Possessiontime
+	m.YellowCards = s.Yellowcards
+	m.RedCards = s.Redcards
+	m.Saves = s.Saves
 	m.Substitutions = s.Substitutions
-	m.GoalKicks =     s.GoalKick
-	m.GoalAttempts =  s.GoalAttempts
-	m.FreeKicks =     s.FreeKick
-	m.ThrowIns =      s.ThrowIn
-	m.UpdatedAt =     f.Clock.Now()
+	m.GoalKicks = s.GoalKick
+	m.GoalAttempts = s.GoalAttempts
+	m.FreeKicks = s.FreeKick
+	m.ThrowIns = s.ThrowIn
+	m.UpdatedAt = f.Clock.Now()
 
 	return m
 }

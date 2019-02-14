@@ -2,10 +2,10 @@ package stats
 
 import (
 	"github.com/joesweeny/sportmonks-go-client"
+	"github.com/jonboulle/clockwork"
 	"github.com/stretchr/testify/assert"
 	"testing"
 	"time"
-	"github.com/jonboulle/clockwork"
 )
 
 var t = time.Date(2019, 01, 14, 11, 25, 00, 00, time.UTC)

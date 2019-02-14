@@ -246,7 +246,7 @@ func TestIdsBetween(t *testing.T) {
 			t.Fatalf("Test failed, expected %v, got %s", want, err.Error())
 		}
 
-		assert.Equal(t,8, len(all))
+		assert.Equal(t, 8, len(all))
 		assert.Equal(t, want, ids)
 	})
 }
