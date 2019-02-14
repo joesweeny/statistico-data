@@ -18,13 +18,13 @@ func (f PlayerFactory) createPlayerStats(s *sportmonks.LineupPlayer, sub bool) *
 		Position:          s.Position,
 		FormationPosition: s.FormationPosition,
 		IsSubstitute:      sub,
-		PlayerShots:       *handleShots(&s.Stats.Shots),
-		PlayerGoals:       *handleGoals(&s.Stats.Goals),
-		PlayerFouls:       *handleFouls(&s.Stats.Fouls),
+		PlayerShots:       *handlePlayerShots(&s.Stats.Shots),
+		PlayerGoals:       *handlePlayerGoals(&s.Stats.Goals),
+		PlayerFouls:       *handlePlayerFouls(&s.Stats.Fouls),
 		YellowCards:       s.Stats.Cards.YellowCards,
 		RedCard:           s.Stats.Cards.RedCards,
-		PlayerCrosses:     *handleCrosses(&s.Stats.Passes),
-		PlayerPasses:      *handlePasses(&s.Stats.Passes),
+		PlayerCrosses:     *handlePlayerCrosses(&s.Stats.Passes),
+		PlayerPasses:      *handlePlayerPasses(&s.Stats.Passes),
 		Assists:           s.Stats.ExtraPlayersStats.Assists,
 		Offsides:          s.Stats.ExtraPlayersStats.Offsides,
 		Saves:             s.Stats.ExtraPlayersStats.Saves,
@@ -43,13 +43,13 @@ func (f PlayerFactory) createPlayerStats(s *sportmonks.LineupPlayer, sub bool) *
 func (f PlayerFactory) updatePlayerStats(s *sportmonks.LineupPlayer, m *model.PlayerStats) *model.PlayerStats {
 	m.Position = s.Position
 	m.FormationPosition = s.FormationPosition
-	m.PlayerShots = *handleShots(&s.Stats.Shots)
-	m.PlayerGoals = *handleGoals(&s.Stats.Goals)
-	m.PlayerFouls = *handleFouls(&s.Stats.Fouls)
+	m.PlayerShots = *handlePlayerShots(&s.Stats.Shots)
+	m.PlayerGoals = *handlePlayerGoals(&s.Stats.Goals)
+	m.PlayerFouls = *handlePlayerFouls(&s.Stats.Fouls)
 	m.YellowCards = s.Stats.Cards.YellowCards
 	m.RedCard = s.Stats.Cards.RedCards
-	m.PlayerCrosses = *handleCrosses(&s.Stats.Passes)
-	m.PlayerPasses = *handlePasses(&s.Stats.Passes)
+	m.PlayerCrosses = *handlePlayerCrosses(&s.Stats.Passes)
+	m.PlayerPasses = *handlePlayerPasses(&s.Stats.Passes)
 	m.Assists = s.Stats.ExtraPlayersStats.Assists
 	m.Offsides = s.Stats.ExtraPlayersStats.Offsides
 	m.Saves = s.Stats.ExtraPlayersStats.Saves
@@ -65,35 +65,35 @@ func (f PlayerFactory) updatePlayerStats(s *sportmonks.LineupPlayer, m *model.Pl
 	return m
 }
 
-func handleShots(s *sportmonks.PlayerShots) *model.PlayerShots {
+func handlePlayerShots(s *sportmonks.PlayerShots) *model.PlayerShots {
 	return &model.PlayerShots{
 		Total:  s.ShotsTotal,
 		OnGoal: s.ShotsOnGoal,
 	}
 }
 
-func handleGoals(s *sportmonks.PlayerGoals) *model.PlayerGoals {
+func handlePlayerGoals(s *sportmonks.PlayerGoals) *model.PlayerGoals {
 	return &model.PlayerGoals{
 		Scored:   s.Scored,
 		Conceded: s.Conceded,
 	}
 }
 
-func handleFouls(s *sportmonks.PlayerFouls) *model.PlayerFouls {
+func handlePlayerFouls(s *sportmonks.PlayerFouls) *model.PlayerFouls {
 	return &model.PlayerFouls{
 		Drawn:     s.Drawn,
 		Committed: s.Committed,
 	}
 }
 
-func handleCrosses(s *sportmonks.PlayerPasses) *model.PlayerCrosses {
+func handlePlayerCrosses(s *sportmonks.PlayerPasses) *model.PlayerCrosses {
 	return &model.PlayerCrosses{
 		Total:    s.TotalCrosses,
 		Accuracy: s.CrossesAccuracy,
 	}
 }
 
-func handlePasses(s *sportmonks.PlayerPasses) *model.PlayerPasses {
+func handlePlayerPasses(s *sportmonks.PlayerPasses) *model.PlayerPasses {
 	return &model.PlayerPasses{
 		Total:    s.Passes,
 		Accuracy: s.PassesAccuracy,

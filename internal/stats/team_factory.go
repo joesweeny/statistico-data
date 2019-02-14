@@ -11,31 +11,12 @@ type TeamFactory struct {
 }
 
 func (f TeamFactory) createTeamStats(s *sportmonks.TeamStats) *model.TeamStats {
-	shots := model.TeamShots{
-		Total:      s.Shots.Total,
-		OnGoal:     s.Shots.Ongoal,
-		OffGoal:    s.Shots.Offgoal,
-		Blocked:    s.Shots.Blocked,
-		InsideBox:  s.Shots.Insidebox,
-		OutsideBox: s.Shots.Outsidebox,
-	}
-
-	passes := model.TeamPasses{
-		Total:      s.Passes.Total,
-		Accuracy:   s.Passes.Accurate,
-		Percentage: s.Passes.Percentage,
-	}
-
-	attacks := model.TeamAttacks{
-		Total:     s.Attacks.Attacks,
-		Dangerous: s.Attacks.DangerousAttacks,
-	}
 	return &model.TeamStats{
 		FixtureID:     s.FixtureID,
 		TeamID:        s.TeamID,
-		TeamShots:     shots,
-		TeamPasses:    passes,
-		TeamAttacks:   attacks,
+		TeamShots:     *handleTeamShots(&s.Shots),
+		TeamPasses:    *handleTeamPasses(&s.Passes),
+		TeamAttacks:   *handleTeamAttacks(&s.Attacks),
 		Fouls:         s.Fouls,
 		Corners:       s.Corners,
 		Offsides:      s.Offsides,
@@ -50,5 +31,52 @@ func (f TeamFactory) createTeamStats(s *sportmonks.TeamStats) *model.TeamStats {
 		ThrowIns:      s.ThrowIn,
 		CreatedAt:     f.Clock.Now(),
 		UpdatedAt:     f.Clock.Now(),
+	}
+}
+
+func (f TeamFactory) updateTeamStats(s *sportmonks.TeamStats, m *model.TeamStats) *model.TeamStats {
+	m.TeamShots =     *handleTeamShots(&s.Shots)
+	m.TeamPasses =    *handleTeamPasses(&s.Passes)
+	m.TeamAttacks =   *handleTeamAttacks(&s.Attacks)
+	m.Fouls =         s.Fouls
+	m.Corners =       s.Corners
+	m.Offsides =      s.Offsides
+	m.Possession =    s.Possessiontime
+	m.YellowCards =   s.Yellowcards
+	m.RedCards =      s.Redcards
+	m.Saves =         s.Saves
+	m.Substitutions = s.Substitutions
+	m.GoalKicks =     s.GoalKick
+	m.GoalAttempts =  s.GoalAttempts
+	m.FreeKicks =     s.FreeKick
+	m.ThrowIns =      s.ThrowIn
+	m.UpdatedAt =     f.Clock.Now()
+
+	return m
+}
+
+func handleTeamShots(s *sportmonks.TeamShots) *model.TeamShots {
+	return &model.TeamShots{
+		Total:      s.Total,
+		OnGoal:     s.Ongoal,
+		OffGoal:    s.Offgoal,
+		Blocked:    s.Blocked,
+		InsideBox:  s.Insidebox,
+		OutsideBox: s.Outsidebox,
+	}
+}
+
+func handleTeamPasses(s *sportmonks.TeamPasses) *model.TeamPasses {
+	return &model.TeamPasses{
+		Total:      s.Total,
+		Accuracy:   s.Accurate,
+		Percentage: s.Percentage,
+	}
+}
+
+func handleTeamAttacks(s *sportmonks.TeamAttacks) *model.TeamAttacks {
+	return &model.TeamAttacks{
+		Total:     s.Attacks,
+		Dangerous: s.DangerousAttacks,
 	}
 }
