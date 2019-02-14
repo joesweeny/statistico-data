@@ -71,9 +71,11 @@ func (p *PostgresFixtureRepository) GetById(id int) (*model.Fixture, error) {
 }
 
 func (p *PostgresFixtureRepository) Ids() ([]int, error) {
-	query := `SELECT id FROM sportmonks_fixture ORDER BY id ASC`
+	t := time.Now()
+	then := t.AddDate(0, 0, -1)
+	query := `SELECT id FROM sportmonks_fixture where date < $1 ORDER BY id ASC`
 
-	rows, err := p.Connection.Query(query)
+	rows, err := p.Connection.Query(query, then.Unix())
 
 	if err != nil {
 		return []int{}, err
