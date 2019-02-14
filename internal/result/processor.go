@@ -10,7 +10,7 @@ import (
 )
 
 const result = "result"
-const callLimit = 1500
+const callLimit = 2000
 
 var counter int
 var waitGroup sync.WaitGroup
