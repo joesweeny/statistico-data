@@ -7,9 +7,11 @@ import (
 	"github.com/joesweeny/statshub/internal/stats"
 	"log"
 	"sync"
+	"time"
 )
 
 const result = "result"
+const resultToday = "result:today"
 const callLimit = 1500
 
 var counter int
@@ -30,6 +32,8 @@ func (p Processor) Process(command string, done chan bool) {
 	switch command {
 	case result:
 		go p.allResults(done)
+	case resultToday:
+		go p.resultsToday(done)
 	default:
 		p.Logger.Fatalf("Command %s is not supported", command)
 		return
@@ -44,6 +48,27 @@ func (p Processor) allResults(done chan bool) {
 		return
 	}
 
+	go p.processResults(ids, done)
+}
+
+func (p Processor) resultsToday(done chan bool) {
+	now := p.Clock.Now()
+	y, m, d := now.Date()
+
+	from := time.Date(y, m, d, 0, 0, 0, 0, now.Location())
+	to := time.Date(y, m, d, 23, 59, 59, 59, now.Location())
+
+	ids, err := p.FixtureRepo.IdsBetween(from, to)
+
+	if err != nil {
+		p.Logger.Fatalf("Error when retrieving Season IDs: %s", err.Error())
+		return
+	}
+
+	go p.processResults(ids, done)
+}
+
+func (p Processor) processResults(ids []int, done chan bool) {
 	results := make(chan sportmonks.Fixture, len(ids))
 
 	go p.callClient(ids, results, done, &counter)
@@ -125,13 +150,22 @@ func (p Processor) handleResult(fix sportmonks.Fixture) {
 
 func (p Processor) handleTeams(t []sportmonks.TeamStats) {
 	for _, team := range t {
-		p.TeamProcessor.ProcessTeamStats(&team)
+		waitGroup.Add(1)
+
+		go func(stats sportmonks.TeamStats) {
+			p.TeamProcessor.ProcessTeamStats(&stats)
+			defer waitGroup.Done()
+		}(team)
 	}
 }
 
 func (p Processor) handlePlayers(lineups []sportmonks.LineupPlayer, bench bool) {
 	for _, player := range lineups {
-		p.PlayerProcessor.ProcessPlayerStats(&player, bench)
+		waitGroup.Add(1)
+
+		go func(stats sportmonks.LineupPlayer) {
+			p.PlayerProcessor.ProcessPlayerStats(&stats, bench)
+		}(player)
 	}
 }
 

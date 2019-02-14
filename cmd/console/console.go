@@ -31,7 +31,7 @@ func main() {
 	case Player:
 		processor = app.PlayerProcessor()
 		break
-	case Result:
+	case Result, ResultToday:
 		processor = app.ResultProcessor()
 		break
 	case Round, RoundCurrentSeason:
