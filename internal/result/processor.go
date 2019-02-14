@@ -138,6 +138,8 @@ func (p Processor) handlePlayers(lineups []sportmonks.LineupPlayer, bench bool) 
 
 func (p Processor) handleGoalEvents(g []sportmonks.GoalEvent) {
 	for _, goal := range g {
+		waitGroup.Add(1)
+
 		go func(e sportmonks.GoalEvent) {
 			p.EventProcessor.ProcessGoalEvent(&e)
 			defer waitGroup.Done()
@@ -147,6 +149,8 @@ func (p Processor) handleGoalEvents(g []sportmonks.GoalEvent) {
 
 func (p Processor) handleSubstitutionEvents(s []sportmonks.SubstitutionEvent) {
 	for _, sub := range s {
+		waitGroup.Add(1)
+		
 		go func(e sportmonks.SubstitutionEvent) {
 			p.EventProcessor.ProcessSubstitutionEvent(&e)
 			defer waitGroup.Done()
