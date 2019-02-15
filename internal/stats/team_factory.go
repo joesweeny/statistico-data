@@ -94,11 +94,20 @@ func parseInt(i interface{}) *int {
 		return &val
 	}
 
-	x, err := strconv.Atoi(i.(string))
-
-	if err != nil {
-		panic(err)
+	if x, ok := i.(float64); ok {
+		val := int(x)
+		return &val
 	}
 
-	return &x
+	if _, ok := i.(string); ok {
+		val, err := strconv.Atoi(i.(string))
+
+		if err != nil {
+			panic(err)
+		}
+
+		return &val
+	}
+
+	return nil
 }
