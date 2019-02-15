@@ -90,14 +90,14 @@ func TestFactoryUpdateTeamStats(t *testing.T) {
 func newClientTeamStats(total int) *sportmonks.TeamStats {
 	zero := 0
 	shots := sportmonks.TeamShots{
-		Total:   &total,
-		Ongoal:  &total,
-		Offgoal: &total,
+		Total:   total,
+		Ongoal:  total,
+		Offgoal: total,
 	}
 
 	passes := sportmonks.TeamPasses{
-		Total:    &total,
-		Accurate: &total,
+		Total:    total,
+		Accurate: total,
 	}
 
 	attacks := sportmonks.TeamAttacks{
@@ -111,11 +111,11 @@ func newClientTeamStats(total int) *sportmonks.TeamStats {
 		Shots:         shots,
 		Passes:        passes,
 		Attacks:       attacks,
-		Fouls:         &total,
-		Corners:       &zero,
-		Offsides:      &total,
-		Saves:         &zero,
-		Substitutions: &zero,
-		FreeKick:      &total,
+		Fouls:         total,
+		Corners:       zero,
+		Offsides:      total,
+		Saves:         zero,
+		Substitutions: zero,
+		FreeKick:      total,
 	}
 }
