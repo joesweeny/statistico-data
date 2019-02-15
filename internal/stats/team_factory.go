@@ -87,9 +87,11 @@ func handleTeamAttacks(s *sportmonks.TeamAttacks) *model.TeamAttacks {
 // Some stats are being sent as either int or string, this function here is a helper
 // to ensure the property value is consistent as an int
 func parseInt(i interface{}) int {
-	_, ok := i.(int)
+	if i == nil {
+		return 0
+	}
 
-	if ok {
+	if _, ok := i.(int); ok {
 		return i.(int)
 	}
 

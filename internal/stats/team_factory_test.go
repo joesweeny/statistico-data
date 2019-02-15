@@ -29,7 +29,7 @@ func TestFactoryCreateTeamStats(t *testing.T) {
 		a.Equal(5, *m.TeamPasses.Total)
 		a.Equal(5, *m.TeamPasses.Accuracy)
 		a.Nil(m.TeamPasses.Percentage)
-		a.Equal(5, *m.TeamAttacks.Total)
+		a.Equal(0, *m.TeamAttacks.Total)
 		a.Equal(5, *m.TeamAttacks.Dangerous)
 		a.Equal(5, *m.Fouls)
 		a.Equal(0, *m.Corners)
@@ -68,7 +68,7 @@ func TestFactoryUpdateTeamStats(t *testing.T) {
 		a.Equal(25, *m.TeamPasses.Total)
 		a.Equal(25, *m.TeamPasses.Accuracy)
 		a.Nil(m.TeamPasses.Percentage)
-		a.Equal(25, *m.TeamAttacks.Total)
+		a.Equal(0, *m.TeamAttacks.Total)
 		a.Equal(25, *m.TeamAttacks.Dangerous)
 		a.Equal(25, *m.Fouls)
 		a.Equal(0, *m.Corners)
@@ -101,7 +101,6 @@ func newClientTeamStats(total int) *sportmonks.TeamStats {
 	}
 
 	attacks := sportmonks.TeamAttacks{
-		Attacks: total,
 		DangerousAttacks: strconv.Itoa(total),
 	}
 
