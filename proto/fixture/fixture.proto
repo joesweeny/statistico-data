@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package statshub.fixture;
+
+service FixtureService {
+    rpc ListDaysFixtures(Request) returns (FixtureResponse) {}
+}
+
+message Request {
+    string date_from = 1;
+    string date_to = 2;
+}
+
+message Team {
+    int64 id = 1;
+    string name = 2;
+}
+
+message Fixture {
+    int64 id = 1;
+    oneof venue_id {
+        bool venue_id_null = 2;
+        int64 venue_id_value = 3;
+    }
+    Team home_team = 4;
+    Team away_team = 5;
+    oneof referee_id {
+        bool referee_id_null = 6;
+        int64 referee_id_value = 7;
+    }
+    int64 date_time = 8;
+}
+
+message FixtureResponse {
+    repeated Fixture Fixture = 1;
+}
