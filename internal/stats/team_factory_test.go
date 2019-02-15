@@ -6,6 +6,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"testing"
 	"time"
+	"strconv"
 )
 
 var t = time.Date(2019, 01, 14, 11, 25, 00, 00, time.UTC)
@@ -28,8 +29,8 @@ func TestFactoryCreateTeamStats(t *testing.T) {
 		a.Equal(5, *m.TeamPasses.Total)
 		a.Equal(5, *m.TeamPasses.Accuracy)
 		a.Nil(m.TeamPasses.Percentage)
-		a.Nil(m.TeamAttacks.Total)
-		a.Nil(m.TeamAttacks.Dangerous)
+		a.Equal(5, *m.TeamAttacks.Total)
+		a.Equal(5, *m.TeamAttacks.Dangerous)
 		a.Equal(5, *m.Fouls)
 		a.Equal(0, *m.Corners)
 		a.Equal(5, *m.Offsides)
@@ -67,8 +68,8 @@ func TestFactoryUpdateTeamStats(t *testing.T) {
 		a.Equal(25, *m.TeamPasses.Total)
 		a.Equal(25, *m.TeamPasses.Accuracy)
 		a.Nil(m.TeamPasses.Percentage)
-		a.Nil(m.TeamAttacks.Total)
-		a.Nil(m.TeamAttacks.Dangerous)
+		a.Equal(25, *m.TeamAttacks.Total)
+		a.Equal(25, *m.TeamAttacks.Dangerous)
 		a.Equal(25, *m.Fouls)
 		a.Equal(0, *m.Corners)
 		a.Equal(25, *m.Offsides)
@@ -99,11 +100,17 @@ func newClientTeamStats(total int) *sportmonks.TeamStats {
 		Accurate: &total,
 	}
 
+	attacks := sportmonks.TeamAttacks{
+		Attacks: total,
+		DangerousAttacks: strconv.Itoa(total),
+	}
+
 	return &sportmonks.TeamStats{
 		TeamID:        960,
 		FixtureID:     34019,
 		Shots:         shots,
 		Passes:        passes,
+		Attacks:       attacks,
 		Fouls:         &total,
 		Corners:       &zero,
 		Offsides:      &total,
