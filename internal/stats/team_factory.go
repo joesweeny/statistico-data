@@ -4,6 +4,7 @@ import (
 	"github.com/joesweeny/sportmonks-go-client"
 	"github.com/joesweeny/statshub/internal/model"
 	"github.com/jonboulle/clockwork"
+	"strconv"
 )
 
 type TeamFactory struct {
@@ -76,7 +77,28 @@ func handleTeamPasses(s *sportmonks.TeamPasses) *model.TeamPasses {
 
 func handleTeamAttacks(s *sportmonks.TeamAttacks) *model.TeamAttacks {
 	return &model.TeamAttacks{
-		Total:     s.Attacks,
-		Dangerous: s.DangerousAttacks,
+		Total:     parseInt(s.Attacks),
+		Dangerous: parseInt(s.DangerousAttacks),
 	}
+}
+
+// Some stats are being sent as either int or string, this function here is a helper
+// to ensure the property value is consistent as an int
+func parseInt(i interface{}) *int {
+	if i == nil {
+		return nil
+	}
+
+	if _, ok := i.(int); ok {
+		val := i.(int)
+		return &val
+	}
+
+	x, err := strconv.Atoi(i.(string))
+
+	if err != nil {
+		panic(err)
+	}
+
+	return &x
 }
