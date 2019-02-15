@@ -76,23 +76,22 @@ func handleTeamPasses(s *sportmonks.TeamPasses) *model.TeamPasses {
 }
 
 func handleTeamAttacks(s *sportmonks.TeamAttacks) *model.TeamAttacks {
-	t := parseInt(s.Attacks)
-	d := parseInt(s.DangerousAttacks)
 	return &model.TeamAttacks{
-		Total:     &t,
-		Dangerous: &d,
+		Total:     parseInt(s.Attacks),
+		Dangerous: parseInt(s.DangerousAttacks),
 	}
 }
 
 // Some stats are being sent as either int or string, this function here is a helper
 // to ensure the property value is consistent as an int
-func parseInt(i interface{}) int {
+func parseInt(i interface{}) *int {
 	if i == nil {
-		return 0
+		return nil
 	}
 
 	if _, ok := i.(int); ok {
-		return i.(int)
+		val := i.(int)
+		return &val
 	}
 
 	x, err := strconv.Atoi(i.(string))
@@ -101,5 +100,5 @@ func parseInt(i interface{}) int {
 		panic(err)
 	}
 
-	return x
+	return &x
 }
