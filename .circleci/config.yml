@@ -20,18 +20,10 @@ jobs:
             $GOPATH/bin/dep ensure
 
       - run:
-          name: Install protoc
-          command: |
-            rm -rf vendor/github.com/golang/protobuf
-            cd vendor/github.com/golang/
-            git clone https://github.com/golang/protobuf.git
-            go install
-
-      - run:
           name: Build Release Image
           command: |
             $GOPATH/bin/dep ensure
-            go install ./vendor/github.com/golang/protobuf/protoc-gen-go/
+            go install
             docker-compose -f docker-compose.dev.yml up -d --build
 
       - run:
