@@ -14,7 +14,7 @@ jobs:
           fingerprints:
             - "3f:66:e4:bb:f0:43:80:a8:78:1f:e5:36:7b:41:34:56"
 
-       - run:
+      - run:
           name: Install protoc
           command: |
             apt-get update
