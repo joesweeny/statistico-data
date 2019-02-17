@@ -3,6 +3,7 @@ FROM golang:1.11-alpine3.8 AS builder
 WORKDIR /go/src/github.com/joesweeny/statshub
 COPY . .
 RUN apk update && apk add git
+RUN ls -la
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo ./cmd/console
 
 # Step 2
