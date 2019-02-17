@@ -1,3 +1,3 @@
 build:
-	protoc -I. --go_out=plugins=grpc:$(GOPATH)/src/github.com/joesweeny/statshub \
-		proto/fixture/fixture.proto
+	protoc -I/usr/local/include -I. proto/fixture/fixture.proto \
+		--go_out=plugins=grpc:$(GOPATH)/src/github.com/joesweeny/statshub
