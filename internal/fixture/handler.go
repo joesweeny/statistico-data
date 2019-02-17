@@ -6,50 +6,65 @@ import(
 	"github.com/joesweeny/statshub/internal/team"
 	"github.com/joesweeny/statshub/internal/competition"
 	"github.com/joesweeny/statshub/internal/season"
+	"github.com/joesweeny/statshub/internal/venue"
 	"github.com/golang/protobuf/ptypes/wrappers"
 )
 
 type Handler struct {
-	TeamRepo team.Repository
 	CompetitionRepo competition.Repository
 	SeasonRepo season.Repository
+	TeamRepo team.Repository
+	VenueRepo venue.Repository
 }
 
-func (h Handler) handleFixture(f *model.Fixture) (*pb.Fixture, error) {
+func (h Handler) HandleFixture(f *model.Fixture) (*pb.Fixture, error) {
 	s, err := h.SeasonRepo.Id(f.SeasonID)
 
 	if err != nil {
-		return nil, nil
+		return nil, err
 	}
 
 	c, err := h.CompetitionRepo.GetById(s.LeagueID)
 
 	if err != nil {
-		return nil, nil
+		return nil, err
 	}
 
 	home, err := h.TeamRepo.GetById(f.HomeTeamID)
 
 	if err != nil {
-		return nil, nil
+		return nil, err
 	}
 
 	away, err := h.TeamRepo.GetById(f.AwayTeamID)
 
 	if err != nil {
-		return nil, nil
+		return nil, err
 	}
 
-	return &pb.Fixture{
+	v, err := h.VenueRepo.GetById(*f.VenueID)
+
+	if err != nil {
+		return nil, err
+	}
+
+	proto := pb.Fixture{
 		Id: int64(f.ID),
 		Competition: competitionToProto(c),
 		Season: seasonToProto(s),
 		HomeTeam: teamToProto(home),
 		AwayTeam: teamToProto(away),
-		VenueId: idToWrapperValue(f.VenueID),
-		RefereeId: idToWrapperValue(f.RefereeID),
+		Venue: venueToProto(v),
 		DateTime: f.Date.Unix(),
-	}, nil
+	}
+
+	if f.RefereeID != nil {
+		ref := wrappers.Int64Value{}
+		ref.Value = int64(*f.RefereeID)
+		proto.RefereeId = &ref
+	}
+
+	return &proto, nil
 }
 
 func teamToProto(t *model.Team) *pb.Team {
@@ -76,9 +91,10 @@ func seasonToProto(s *model.Season) *pb.Season {
 	return &x
 }
 
-func idToWrapperValue(id *int) *wrappers.Int32Value {
-	var v wrappers.Int32Value
-	v.Value = int32(*id)
+func venueToProto(v *model.Venue) *pb.Venue {
+	var x pb.Venue
+	x.Id = int64(v.ID)
+	x.Name = v.Name
 
-	return &v
+	return &x
 }
