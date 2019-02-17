@@ -18,6 +18,7 @@ jobs:
           command: |
             go get -u github.com/golang/dep/cmd/dep
             go get -u github.com/golang/protobuf/protoc-gen-go
+            $GOPATH/bin/dep ensure
             go install ./vendor/github.com/golang/protobuf/protoc-gen-go
 
       - run:
