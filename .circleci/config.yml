@@ -5,7 +5,6 @@ jobs:
     machine: true
     environment:
       GOPATH: /home/circleci/go
-      PROTOBUF_VERSION: "3.7.0"
 
     steps:
       - checkout
@@ -17,6 +16,7 @@ jobs:
       - run:
           name: Install dependencies
           command: |
+            go version
             go get -u github.com/golang/dep/cmd/dep
 
       - run:
