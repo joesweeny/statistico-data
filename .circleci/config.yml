@@ -22,8 +22,8 @@ jobs:
       - run:
           name: Build Release Image
           command: |
-            $GOPATH/bin/dep ensure
             go get -u github.com/golang/protobuf/protoc-gen-go
+            $GOPATH/bin/dep ensure
             go install ./vendor/github.com/golang/protobuf/protoc-gen-go
             docker-compose -f docker-compose.dev.yml up -d --build
 
