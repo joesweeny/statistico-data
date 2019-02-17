@@ -5,6 +5,7 @@ jobs:
     machine: true
     environment:
       GOPATH: /home/circleci/go
+      PROTOBUF_VERSION: "3.7.0"
 
     steps:
       - checkout
@@ -15,9 +16,7 @@ jobs:
 
        - run:
           name: Install protoc
-          environment:
-            PROTOBUF_VERSION: "3.7.0"
-          command: >
+          command: |
             apt-get update
 
             apt-get install -y unzip git wget python3
