@@ -17,14 +17,12 @@ jobs:
           name: Install dependencies
           command: |
             go get -u github.com/golang/dep/cmd/dep
-            go get -u github.com/golang/protobuf/protoc-gen-go
-            $GOPATH/bin/dep ensure
-            go install ./vendor/github.com/golang/protobuf/protoc-gen-go
 
       - run:
           name: Build Release Image
           command: |
             $GOPATH/bin/dep ensure
+            ls -la
             docker-compose -f docker-compose.dev.yml up -d --build
 
       - run:
