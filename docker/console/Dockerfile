@@ -5,7 +5,7 @@ COPY . .
 RUN apk update && apk add git
 RUN go version
 RUN go get -u github.com/golang/dep/cmd/dep
-RUN dep ensure -add github.com/golang/protobuf/protoc-gen-go
+RUN go get -u github.com/golang/protobuf/protoc-gen-go
 RUN go install ./vendor/github.com/golang/protobuf/protoc-gen-go
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo ./cmd/console
 
