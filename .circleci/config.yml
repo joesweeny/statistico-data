@@ -17,6 +17,15 @@ jobs:
           name: Install dependencies
           command: |
             go get -u github.com/golang/dep/cmd/dep
+            $GOPATH/bin/dep ensure
+
+      - run:
+          name: Install protoc
+          command: |
+            rm -rf vendor/github.com/golang/protobuf
+            cd vendor/github.com/golang/
+            git clone https://github.com/golang/protobuf.git
+            go install
 
       - run:
           name: Build Release Image
