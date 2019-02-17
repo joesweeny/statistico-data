@@ -3,6 +3,7 @@ FROM golang:1.11-alpine3.8 AS builder
 WORKDIR /go/src/github.com/joesweeny/statshub
 COPY . .
 RUN apk update && apk add git
+RUN go version
 RUN go install ./vendor/github.com/golang/protobuf/protoc-gen-go
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo ./cmd/console
 
