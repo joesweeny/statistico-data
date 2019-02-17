@@ -1,5 +1,5 @@
 # Step 1
-FROM golang:1.11-alpine3.8 AS builder
+FROM golang:latest AS builder
 WORKDIR /go/src/github.com/joesweeny/statshub
 COPY . .
 RUN apk update && apk add git
