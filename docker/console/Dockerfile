@@ -2,7 +2,7 @@
 FROM golang:latest AS builder
 WORKDIR /go/src/github.com/joesweeny/statshub
 COPY . .
-RUN apk update && apk add git
+RUN apt-get update && apt-get install git
 RUN go version
 RUN go get -u github.com/golang/dep/cmd/dep
 RUN go get -u github.com/golang/protobuf/protoc-gen-go
