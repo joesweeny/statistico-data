@@ -4,9 +4,9 @@ import (
 	"github.com/joesweeny/sportmonks-go-client"
 	"github.com/jonboulle/clockwork"
 	"github.com/stretchr/testify/assert"
+	"strconv"
 	"testing"
 	"time"
-	"strconv"
 )
 
 var t = time.Date(2019, 01, 14, 11, 25, 00, 00, time.UTC)
@@ -101,7 +101,7 @@ func newClientTeamStats(total int) *sportmonks.TeamStats {
 	}
 
 	attacks := sportmonks.TeamAttacks{
-		Attacks: float64(total),
+		Attacks:          float64(total),
 		DangerousAttacks: strconv.Itoa(total),
 	}
 

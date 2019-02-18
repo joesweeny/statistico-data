@@ -149,7 +149,7 @@ func (p Processor) handleGoalEvents(g []sportmonks.GoalEvent) {
 func (p Processor) handleSubstitutionEvents(s []sportmonks.SubstitutionEvent) {
 	for _, sub := range s {
 		waitGroup.Add(1)
-		
+
 		go func(e sportmonks.SubstitutionEvent) {
 			p.EventProcessor.ProcessSubstitutionEvent(&e)
 			defer waitGroup.Done()

@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+package statshub;
+
+import "google/protobuf/wrappers.proto";
+
+service FixtureService {
+    rpc ListFixtures(Request) returns (stream Fixture) {}
+}
+
+message Request {
+    string date_from = 1;
+    string date_to = 2;
+}
+
+message Competition {
+    int64 id = 1;
+    string name = 2;
+}
+
+message Season {
+    int64 id = 1;
+    string name = 2;
+}
+
+message Team {
+    int64 id = 1;
+    string name = 2;
+}
+
+message Venue {
+    int64 id = 1;
+    string name = 2;
+}
+
+message Fixture {
+    int64 id = 1;
+    Competition competition = 2;
+    Season season = 3;
+    Team home_team = 4;
+    Team away_team = 5;
+    Venue venue = 6;
+    google.protobuf.Int64Value referee_id = 7;
+    int64 date_time = 8;
+}
