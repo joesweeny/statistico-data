@@ -59,8 +59,8 @@ func (s Processor) callClient(ids []int, done chan bool) {
 	for _, id := range ids {
 		waitGroup.Add(1)
 
-		go func(id int) {
-			res, err := s.Client.VenuesBySeasonId(id, 5)
+		go func(i int) {
+			res, err := s.Client.VenuesBySeasonId(i, 5)
 
 			if err != nil {
 				log.Printf("Error when calling client '%s", err.Error())
@@ -81,8 +81,8 @@ func (s Processor) handleVenues(v []sportmonks.Venue) {
 	for _, venue := range v {
 		waitGroup.Add(1)
 
-		go func(venue sportmonks.Venue) {
-			s.persistVenue(&venue)
+		go func(ven sportmonks.Venue) {
+			s.persistVenue(&ven)
 			defer waitGroup.Done()
 		}(venue)
 	}
