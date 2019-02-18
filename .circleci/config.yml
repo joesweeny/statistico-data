@@ -21,6 +21,7 @@ jobs:
       - run:
           name: Build Release Image
           command: |
+            $GOPATH/bin/dep ensure
             docker-compose -f docker-compose.dev.yml up -d --build
 
       - run:

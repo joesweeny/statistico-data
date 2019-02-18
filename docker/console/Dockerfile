@@ -1,13 +1,8 @@
 # Step 1
-FROM golang:latest AS builder
+FROM golang:1.11-alpine3.8 AS builder
 WORKDIR /go/src/github.com/joesweeny/statshub
 COPY . .
-RUN apt-get update && apt-get install git
-RUN go version
-RUN go get -u github.com/golang/dep/cmd/dep
-RUN go get -u github.com/golang/protobuf/protoc-gen-go
-RUN dep ensure
-RUN go install ./vendor/github.com/golang/protobuf/protoc-gen-go
+RUN apk update && apk add git
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo ./cmd/console
 
 # Step 2
