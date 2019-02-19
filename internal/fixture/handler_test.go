@@ -51,22 +51,19 @@ func TestHandleFixture(t *testing.T) {
 		a.Equal("West Ham", proto.HomeTeam.GetName())
 		a.Equal(int64(924), proto.AwayTeam.GetId())
 		a.Equal("Chelsea", proto.AwayTeam.GetName())
-		a.Equal(int64(87), proto.Venue.GetId())
-		a.Equal("London Stadium", proto.Venue.GetName())
+		a.Equal(int64(87), proto.Venue.GetId().GetValue())
+		a.Equal("London Stadium", proto.Venue.GetName().GetValue())
 		a.Equal(int64(5), proto.RefereeId.GetValue())
 		a.Equal(int64(1548086929), proto.GetDateTime())
 	})
 
-	t.Run("can handle nullable referee field", func(t *testing.T) {
-		ven := 87
+	t.Run("can handle nullable fields", func(t *testing.T) {
 		fixture := newFixture(99)
-		fixture.VenueID = &ven
 
 		seasonRepo.On("Id", 14567).Return(newSeason(), nil)
 		compRepo.On("GetById", 45).Return(newCompetition(), nil)
 		teamRepo.On("GetById", 451).Return(newTeam(451, "West Ham"), nil)
 		teamRepo.On("GetById", 924).Return(newTeam(924, "Chelsea"), nil)
-		venueRepo.On("GetById", 87).Return(newVenue(), nil)
 
 		proto, err := handler.HandleFixture(fixture)
 
@@ -85,8 +82,8 @@ func TestHandleFixture(t *testing.T) {
 		a.Equal("West Ham", proto.HomeTeam.GetName())
 		a.Equal(int64(924), proto.AwayTeam.GetId())
 		a.Equal("Chelsea", proto.AwayTeam.GetName())
-		a.Equal(int64(87), proto.Venue.GetId())
-		a.Equal("London Stadium", proto.Venue.GetName())
+		a.Nil(proto.Venue.GetId())
+		a.Nil(proto.Venue.GetName())
 		a.Nil(proto.RefereeId)
 		a.Equal(int64(1548086929), proto.GetDateTime())
 	})
