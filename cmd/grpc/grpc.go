@@ -7,6 +7,7 @@ import (
 	"github.com/joesweeny/statshub/internal/container"
 	"github.com/joesweeny/statshub/internal/config"
 	pb "github.com/joesweeny/statshub/proto/fixture"
+	"google.golang.org/grpc/reflection"
 )
 
 func main() {
@@ -21,6 +22,8 @@ func main() {
 	server := grpc.NewServer()
 
 	pb.RegisterFixtureServiceServer(server, app.FixtureService())
+
+	reflection.Register(server)
 
 	if err := server.Serve(lis); err != nil {
 		log.Fatalf("Failed to serve: %v", err)

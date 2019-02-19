@@ -21,5 +21,7 @@ docker-compose -f ./docker-compose.production.yml pull migrate && \
 
 docker-compose -f ./docker-compose.production.yml pull cron && \
 
+docker-compose -f ./docker-compose.production.yml pull grpc && \
+
 docker-compose -f ./docker-compose.production.yml up -d'
 
