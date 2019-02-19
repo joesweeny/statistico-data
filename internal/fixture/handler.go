@@ -42,20 +42,23 @@ func (h Handler) HandleFixture(f *model.Fixture) (*pb.Fixture, error) {
 		return nil, err
 	}
 
-	v, err := h.VenueRepo.GetById(*f.VenueID)
-
-	if err != nil {
-		return nil, err
-	}
-
 	proto := pb.Fixture{
 		Id: int64(f.ID),
 		Competition: competitionToProto(c),
 		Season: seasonToProto(s),
 		HomeTeam: teamToProto(home),
 		AwayTeam: teamToProto(away),
-		Venue: venueToProto(v),
 		DateTime: f.Date.Unix(),
+	}
+
+	if f.VenueID != nil {
+		v, err := h.VenueRepo.GetById(*f.VenueID)
+
+		if err != nil {
+			return nil, err
+		}
+		
+		proto.Venue = venueToProto(v)
 	}
 
 	if f.RefereeID != nil {
@@ -92,9 +95,14 @@ func seasonToProto(s *model.Season) *pb.Season {
 }
 
 func venueToProto(v *model.Venue) *pb.Venue {
-	var x pb.Venue
-	x.Id = int64(v.ID)
-	x.Name = v.Name
+	id := wrappers.Int64Value{}
+	id.Value = int64(v.ID)
+	name := wrappers.StringValue{}
+	name.Value = v.Name
 
-	return &x
+	ven := pb.Venue{}
+	ven.Id = &id
+	ven.Name = &name
+
+	return &ven
 }

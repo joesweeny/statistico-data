@@ -81,7 +81,7 @@ func (p *PostgresFixtureRepository) Ids() ([]int, error) {
 		return []int{}, err
 	}
 
-	return rowsToSlice(rows)
+	return rowsToIntSlice(rows)
 }
 
 func (p *PostgresFixtureRepository) IdsBetween(from, to time.Time) ([]int, error) {
@@ -93,10 +93,22 @@ func (p *PostgresFixtureRepository) IdsBetween(from, to time.Time) ([]int, error
 		return []int{}, err
 	}
 
-	return rowsToSlice(rows)
+	return rowsToIntSlice(rows)
 }
 
-func rowsToSlice(rows *sql.Rows) ([]int, error) {
+func (p *PostgresFixtureRepository) Between(from, to time.Time) ([]model.Fixture, error) {
+	query := `SELECT * FROM sportmonks_fixture where date BETWEEN $1 AND $2 ORDER BY id ASC`
+
+	rows, err := p.Connection.Query(query, from.Unix(), to.Unix())
+
+	if err != nil {
+		return []model.Fixture{}, err
+	}
+
+	return rowsToFixtureSlice(rows)
+}
+
+func rowsToIntSlice(rows *sql.Rows) ([]int, error) {
 	defer rows.Close()
 
 	var id int
@@ -111,6 +123,43 @@ func rowsToSlice(rows *sql.Rows) ([]int, error) {
 	}
 
 	return ids, nil
+}
+
+func rowsToFixtureSlice(rows *sql.Rows) ([]model.Fixture, error) {
+	defer rows.Close()
+
+	var date int64
+	var created int64
+	var updated int64
+	var fixtures []model.Fixture
+	var f model.Fixture
+
+	for rows.Next() {
+		err := rows.Scan(
+			&f.ID,
+			&f.SeasonID,
+			&f.RoundID,
+			&f.VenueID,
+			&f.HomeTeamID,
+			&f.AwayTeamID,
+			&f.RefereeID,
+			&date,
+			&created,
+			&updated,
+		)
+
+		if err != nil {
+			return fixtures, err
+		}
+
+		f.Date = time.Unix(date, 0)
+		f.CreatedAt = time.Unix(created, 0)
+		f.UpdatedAt = time.Unix(updated, 0)
+
+		fixtures = append(fixtures, f)
+	}
+
+	return fixtures, nil
 }
 
 func rowToFixture(r *sql.Row) (*model.Fixture, error) {
