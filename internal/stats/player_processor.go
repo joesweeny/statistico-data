@@ -12,7 +12,7 @@ type PlayerProcessor struct {
 }
 
 func (p PlayerProcessor) ProcessPlayerStats(s *sportmonks.LineupPlayer, isSub bool) {
-	_, err := p.PlayerRepository.ByFixtureAndPlayer(s.FixtureID, s.PlayerID)
+	x, err := p.PlayerRepository.ByFixtureAndPlayer(s.FixtureID, s.PlayerID)
 
 	if err == ErrNotFound {
 		created := p.PlayerFactory.createPlayerStats(s, isSub)
@@ -23,4 +23,12 @@ func (p PlayerProcessor) ProcessPlayerStats(s *sportmonks.LineupPlayer, isSub bo
 
 		return
 	}
+
+	updated := p.PlayerFactory.updatePlayerStats(s, x)
+
+	if err := p.PlayerRepository.UpdatePlayerStats(updated); err != nil {
+		log.Printf("Error '%s' occurred when Updating Player Stats struct: %+v\n,", err.Error(), updated)
+	}
+
+	return
 }

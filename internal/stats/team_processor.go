@@ -12,7 +12,7 @@ type TeamProcessor struct {
 }
 
 func (p TeamProcessor) ProcessTeamStats(s *sportmonks.TeamStats) {
-	_, err := p.TeamRepository.ByFixtureAndTeam(s.FixtureID, s.TeamID)
+	x, err := p.TeamRepository.ByFixtureAndTeam(s.FixtureID, s.TeamID)
 
 	if err == ErrNotFound {
 		created := p.TeamFactory.createTeamStats(s)
@@ -23,4 +23,12 @@ func (p TeamProcessor) ProcessTeamStats(s *sportmonks.TeamStats) {
 
 		return
 	}
+
+	updated := p.TeamFactory.updateTeamStats(s, x)
+
+	if err := p.TeamRepository.UpdateTeamStats(updated); err != nil {
+		log.Printf("Error '%s' occurred when updating Team Stats struct: %+v\n,", err.Error(), updated)
+	}
+
+	return
 }
