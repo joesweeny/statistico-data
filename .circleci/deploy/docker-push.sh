@@ -13,3 +13,6 @@ docker push "joesweeny/statshub_migrate:$CIRCLE_SHA1"
 
 docker tag "statshub_cron" "joesweeny/statshub_cron:$CIRCLE_SHA1"
 docker push "joesweeny/statshub_cron:$CIRCLE_SHA1"
+
+docker tag "statshub_grpc" "joesweeny/statshub_grpc:$CIRCLE_SHA1"
+docker push "joesweeny/statshub_grpc:$CIRCLE_SHA1"

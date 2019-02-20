@@ -25,6 +25,24 @@ services:
     links:
       - postgres
 
+  grpc:
+    build:
+      dockerfile: ./docker/grpc/Dockerfile
+      context: .
+    environment:
+      DB_DRIVER: postgres
+      DB_HOST: postgres
+      DB_NAME: statshub
+      DB_PASSWORD: password
+      DB_USER: dev
+      DB_PORT: 5432
+      SPORTMONKS_API_KEY: hMNoq0c2fMjipNWEeG7IMmDF9bMNKeVoRi8lJ0qZDhg125U1IormejZKfwua
+    ports:
+      - "50051:50051"
+    tty: true
+    links:
+      - postgres
+
   cron:
     build:
       dockerfile: ./docker/cron/Dockerfile

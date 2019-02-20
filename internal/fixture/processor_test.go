@@ -159,6 +159,11 @@ func (m mockFixtureRepository) IdsBetween(from, to time.Time) ([]int, error) {
 	return args.Get(0).([]int), args.Error(1)
 }
 
+func (m mockFixtureRepository) Between(from, to time.Time) ([]model.Fixture, error) {
+	args := m.Called(from, to)
+	return args.Get(0).([]model.Fixture), args.Error(1)
+}
+
 func seasonResponse() sportmonks.SeasonResponse {
 	var round = 10
 	var stage = 567

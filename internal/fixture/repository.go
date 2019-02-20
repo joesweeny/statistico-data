@@ -11,4 +11,5 @@ type Repository interface {
 	GetById(id int) (*model.Fixture, error)
 	Ids() ([]int, error)
 	IdsBetween(from, to time.Time) ([]int, error)
+	Between(from, to time.Time) ([]model.Fixture, error)
 }
