@@ -79,10 +79,6 @@ func (p Processor) callClient(ids []int, ch chan<- sportmonks.Fixture, done chan
 	q := []string{"lineup,bench,stats,goals,substitutions"}
 
 	for _, id := range ids {
-		if _, err := p.Repository.GetByFixtureId(id); err != ErrNotFound {
-			continue
-		}
-
 		if *c >= callLimit {
 			p.Logger.Printf("Api call limited reached %d calls\n", *c)
 			break
@@ -141,11 +137,25 @@ func (p Processor) handleResult(fix sportmonks.Fixture) {
 		defer waitGroup.Done()
 	}(fix.Subs.Data)
 
-	created := p.Factory.createResult(&fix)
+	x, err := p.Repository.GetByFixtureId(fix.ID)
 
-	if err := p.Repository.Insert(created); err != nil {
-		log.Printf("Error '%s' occurred when inserting Result struct: %+v\n,", err.Error(), created)
+	if err == ErrNotFound {
+		created := p.Factory.createResult(&fix)
+
+		if err := p.Repository.Insert(created); err != nil {
+			log.Printf("Error '%s' occurred when inserting Result struct: %+v\n,", err.Error(), created)
+		}
+
+		return
 	}
+
+	updated := p.Factory.updateResult(&fix, x)
+
+	if err := p.Repository.Update(updated); err != nil {
+		log.Printf("Error '%s' occurred when updating Result struct: %+v\n,", err.Error(), updated)
+	}
+
+	return
 }
 
 func (p Processor) handleTeams(t []sportmonks.TeamStats) {
@@ -165,6 +175,7 @@ func (p Processor) handlePlayers(lineups []sportmonks.LineupPlayer, bench bool) 
 
 		go func(stats sportmonks.LineupPlayer) {
 			p.PlayerProcessor.ProcessPlayerStats(&stats, bench)
+			defer waitGroup.Done()
 		}(player)
 	}
 }
