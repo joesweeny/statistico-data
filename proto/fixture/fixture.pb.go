@@ -25,7 +25,9 @@ var _ = math.Inf
 const _ = proto.ProtoPackageIsVersion2 // please upgrade the proto package
 
 type Request struct {
-	DateFrom             string   `protobuf:"bytes,1,opt,name=date_from,json=dateFrom,proto3" json:"date_from,omitempty"`
+	// RFC3339 formatted string i.e. "2006-01-02T15:04:05Z07:00"
+	DateFrom string `protobuf:"bytes,1,opt,name=date_from,json=dateFrom,proto3" json:"date_from,omitempty"`
+	// RFC3339 formatted string i.e "2006-01-02T15:04:05Z07:00"
 	DateTo               string   `protobuf:"bytes,2,opt,name=date_to,json=dateTo,proto3" json:"date_to,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
@@ -36,7 +38,7 @@ func (m *Request) Reset()         { *m = Request{} }
 func (m *Request) String() string { return proto.CompactTextString(m) }
 func (*Request) ProtoMessage()    {}
 func (*Request) Descriptor() ([]byte, []int) {
-	return fileDescriptor_fixture_e2556ab46002d9b6, []int{0}
+	return fileDescriptor_fixture_8ddb326d256df484, []int{0}
 }
 func (m *Request) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Request.Unmarshal(m, b)
@@ -82,7 +84,7 @@ func (m *Competition) Reset()         { *m = Competition{} }
 func (m *Competition) String() string { return proto.CompactTextString(m) }
 func (*Competition) ProtoMessage()    {}
 func (*Competition) Descriptor() ([]byte, []int) {
-	return fileDescriptor_fixture_e2556ab46002d9b6, []int{1}
+	return fileDescriptor_fixture_8ddb326d256df484, []int{1}
 }
 func (m *Competition) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Competition.Unmarshal(m, b)
@@ -128,7 +130,7 @@ func (m *Season) Reset()         { *m = Season{} }
 func (m *Season) String() string { return proto.CompactTextString(m) }
 func (*Season) ProtoMessage()    {}
 func (*Season) Descriptor() ([]byte, []int) {
-	return fileDescriptor_fixture_e2556ab46002d9b6, []int{2}
+	return fileDescriptor_fixture_8ddb326d256df484, []int{2}
 }
 func (m *Season) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Season.Unmarshal(m, b)
@@ -174,7 +176,7 @@ func (m *Team) Reset()         { *m = Team{} }
 func (m *Team) String() string { return proto.CompactTextString(m) }
 func (*Team) ProtoMessage()    {}
 func (*Team) Descriptor() ([]byte, []int) {
-	return fileDescriptor_fixture_e2556ab46002d9b6, []int{3}
+	return fileDescriptor_fixture_8ddb326d256df484, []int{3}
 }
 func (m *Team) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Team.Unmarshal(m, b)
@@ -220,7 +222,7 @@ func (m *Venue) Reset()         { *m = Venue{} }
 func (m *Venue) String() string { return proto.CompactTextString(m) }
 func (*Venue) ProtoMessage()    {}
 func (*Venue) Descriptor() ([]byte, []int) {
-	return fileDescriptor_fixture_e2556ab46002d9b6, []int{4}
+	return fileDescriptor_fixture_8ddb326d256df484, []int{4}
 }
 func (m *Venue) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Venue.Unmarshal(m, b)
@@ -272,7 +274,7 @@ func (m *Fixture) Reset()         { *m = Fixture{} }
 func (m *Fixture) String() string { return proto.CompactTextString(m) }
 func (*Fixture) ProtoMessage()    {}
 func (*Fixture) Descriptor() ([]byte, []int) {
-	return fileDescriptor_fixture_e2556ab46002d9b6, []int{5}
+	return fileDescriptor_fixture_8ddb326d256df484, []int{5}
 }
 func (m *Fixture) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Fixture.Unmarshal(m, b)
@@ -457,10 +459,10 @@ var _FixtureService_serviceDesc = grpc.ServiceDesc{
 }
 
 func init() {
-	proto.RegisterFile("proto/fixture/fixture.proto", fileDescriptor_fixture_e2556ab46002d9b6)
+	proto.RegisterFile("proto/fixture/fixture.proto", fileDescriptor_fixture_8ddb326d256df484)
 }
 
-var fileDescriptor_fixture_e2556ab46002d9b6 = []byte{
+var fileDescriptor_fixture_8ddb326d256df484 = []byte{
 	// 411 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x92, 0x51, 0x8b, 0xd3, 0x40,
 	0x10, 0xc7, 0x6d, 0xaf, 0x4d, 0x93, 0x89, 0x54, 0x5d, 0x10, 0xc3, 0x55, 0x44, 0x02, 0xc2, 0x61,

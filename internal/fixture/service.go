@@ -7,7 +7,6 @@ import (
 	"log"
 )
 
-const dateFormat = "2006-01-02"
 var ErrTimeParse = errors.New("unable to parse date provided in Request")
 
 type Service struct {
@@ -17,17 +16,13 @@ type Service struct {
 }
 
 func (s *Service) ListFixtures(r *pb.Request, stream pb.FixtureService_ListFixturesServer) error {
-	from, err := time.Parse(dateFormat, r.DateFrom)
-	y, m, d := from.Date()
-	from = time.Date(y, m, d, 0, 0, 0, 0, from.Location())
+	from, err := time.Parse(time.RFC3339, r.DateFrom)
 
 	if err != nil {
 		return ErrTimeParse
 	}
 
-	to, err := time.Parse(dateFormat, r.DateTo)
-	y, m, d = to.Date()
-	to = time.Date(y, m, d, 23, 59, 59, 59, to.Location())
+	to, err := time.Parse(time.RFC3339, r.DateTo)
 
 	if err != nil {
 		return ErrTimeParse
