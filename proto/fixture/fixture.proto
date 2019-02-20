@@ -9,7 +9,9 @@ service FixtureService {
 }
 
 message Request {
+    // RFC3339 formatted string i.e. "2006-01-02T15:04:05Z07:00"
     string date_from = 1;
+    // RFC3339 formatted string i.e "2006-01-02T15:04:05Z07:00"
     string date_to = 2;
 }
 
