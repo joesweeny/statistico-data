@@ -2,7 +2,7 @@ package manager
 
 import (
 	"database/sql"
-	"github.com/joesweeny/statshub/internal/model"
+	"github.com/joesweeny/statistico-data/internal/model"
 	_ "github.com/lib/pq"
 	"github.com/pkg/errors"
 	"time"

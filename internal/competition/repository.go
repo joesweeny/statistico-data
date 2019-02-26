@@ -1,6 +1,6 @@
 package competition
 
-import "github.com/joesweeny/statshub/internal/model"
+import "github.com/joesweeny/statistico-data/internal/model"
 
 type Repository interface {
 	Insert(c *model.Competition) error

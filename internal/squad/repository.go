@@ -1,6 +1,6 @@
 package squad
 
-import "github.com/joesweeny/statshub/internal/model"
+import "github.com/joesweeny/statistico-data/internal/model"
 
 type Repository interface {
 	Insert(m *model.Squad) error

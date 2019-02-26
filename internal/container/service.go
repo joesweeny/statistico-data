@@ -1,11 +1,11 @@
 package container
 
 import (
-	"github.com/joesweeny/statshub/internal/fixture"
-	"github.com/joesweeny/statshub/internal/competition"
-	"github.com/joesweeny/statshub/internal/season"
-	"github.com/joesweeny/statshub/internal/team"
-	"github.com/joesweeny/statshub/internal/venue"
+	"github.com/joesweeny/statistico-data/internal/fixture"
+	"github.com/joesweeny/statistico-data/internal/competition"
+	"github.com/joesweeny/statistico-data/internal/season"
+	"github.com/joesweeny/statistico-data/internal/team"
+	"github.com/joesweeny/statistico-data/internal/venue"
 )
 
 func (c Container) FixtureService() *fixture.Service {

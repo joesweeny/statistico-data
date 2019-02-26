@@ -1,12 +1,12 @@
 package fixture
 
 import(
-	"github.com/joesweeny/statshub/internal/model"
-	pb "github.com/joesweeny/statshub/proto/fixture"
-	"github.com/joesweeny/statshub/internal/team"
-	"github.com/joesweeny/statshub/internal/competition"
-	"github.com/joesweeny/statshub/internal/season"
-	"github.com/joesweeny/statshub/internal/venue"
+	"github.com/joesweeny/statistico-data/internal/model"
+	pb "github.com/joesweeny/statistico-data/proto/fixture"
+	"github.com/joesweeny/statistico-data/internal/team"
+	"github.com/joesweeny/statistico-data/internal/competition"
+	"github.com/joesweeny/statistico-data/internal/season"
+	"github.com/joesweeny/statistico-data/internal/venue"
 	"github.com/golang/protobuf/ptypes/wrappers"
 )
 

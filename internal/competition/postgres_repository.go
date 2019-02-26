@@ -3,7 +3,7 @@ package competition
 import (
 	"database/sql"
 	"errors"
-	"github.com/joesweeny/statshub/internal/model"
+	"github.com/joesweeny/statistico-data/internal/model"
 	_ "github.com/lib/pq"
 	"time"
 )

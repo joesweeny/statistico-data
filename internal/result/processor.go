@@ -2,9 +2,9 @@ package result
 
 import (
 	"github.com/joesweeny/sportmonks-go-client"
-	"github.com/joesweeny/statshub/internal/event"
-	"github.com/joesweeny/statshub/internal/fixture"
-	"github.com/joesweeny/statshub/internal/stats"
+	"github.com/joesweeny/statistico-data/internal/event"
+	"github.com/joesweeny/statistico-data/internal/fixture"
+	"github.com/joesweeny/statistico-data/internal/stats"
 	"log"
 	"sync"
 	"time"

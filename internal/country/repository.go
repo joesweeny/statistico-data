@@ -1,7 +1,7 @@
 package country
 
 import (
-	"github.com/joesweeny/statshub/internal/model"
+	"github.com/joesweeny/statistico-data/internal/model"
 )
 
 type Repository interface {

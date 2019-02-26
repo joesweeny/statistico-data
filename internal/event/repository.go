@@ -1,6 +1,6 @@
 package event
 
-import "github.com/joesweeny/statshub/internal/model"
+import "github.com/joesweeny/statistico-data/internal/model"
 
 type Repository interface {
 	InsertGoalEvent(m *model.GoalEvent) error

@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"github.com/joesweeny/sportmonks-go-client"
-	"github.com/joesweeny/statshub/internal/config"
+	"github.com/joesweeny/statistico-data/internal/config"
 	"github.com/jonboulle/clockwork"
 	"log"
 	"os"

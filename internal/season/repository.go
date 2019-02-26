@@ -1,6 +1,6 @@
 package season
 
-import "github.com/joesweeny/statshub/internal/model"
+import "github.com/joesweeny/statistico-data/internal/model"
 
 type Repository interface {
 	Insert(s *model.Season) error

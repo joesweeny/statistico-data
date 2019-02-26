@@ -2,7 +2,7 @@ package fixture
 
 import (
 	"github.com/joesweeny/sportmonks-go-client"
-	"github.com/joesweeny/statshub/internal/model"
+	"github.com/joesweeny/statistico-data/internal/model"
 	"github.com/jonboulle/clockwork"
 	"time"
 )
