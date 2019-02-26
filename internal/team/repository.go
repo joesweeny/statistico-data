@@ -1,6 +1,6 @@
 package team
 
-import "github.com/joesweeny/statshub/internal/model"
+import "github.com/joesweeny/statistico-data/internal/model"
 
 type Repository interface {
 	Insert(t *model.Team) error

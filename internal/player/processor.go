@@ -2,8 +2,8 @@ package player
 
 import (
 	"github.com/joesweeny/sportmonks-go-client"
-	"github.com/joesweeny/statshub/internal/model"
-	"github.com/joesweeny/statshub/internal/squad"
+	"github.com/joesweeny/statistico-data/internal/model"
+	"github.com/joesweeny/statistico-data/internal/squad"
 	"log"
 )
 

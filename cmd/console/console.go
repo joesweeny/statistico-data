@@ -3,8 +3,8 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/joesweeny/statshub/internal/config"
-	"github.com/joesweeny/statshub/internal/container"
+	"github.com/joesweeny/statistico-data/internal/config"
+	"github.com/joesweeny/statistico-data/internal/container"
 	"os"
 	"time"
 )

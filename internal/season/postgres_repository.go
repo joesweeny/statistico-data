@@ -2,7 +2,7 @@ package season
 
 import (
 	"database/sql"
-	"github.com/joesweeny/statshub/internal/model"
+	"github.com/joesweeny/statistico-data/internal/model"
 	"github.com/pkg/errors"
 	"time"
 )

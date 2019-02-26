@@ -3,8 +3,8 @@ package competition
 import (
 	"database/sql"
 	"fmt"
-	"github.com/joesweeny/statshub/internal/config"
-	"github.com/joesweeny/statshub/internal/model"
+	"github.com/joesweeny/statistico-data/internal/config"
+	"github.com/joesweeny/statistico-data/internal/model"
 	"github.com/stretchr/testify/assert"
 	"testing"
 	"time"

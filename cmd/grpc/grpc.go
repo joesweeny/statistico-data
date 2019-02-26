@@ -4,9 +4,9 @@ import (
 	"net"
 	"log"
 	"google.golang.org/grpc"
-	"github.com/joesweeny/statshub/internal/container"
-	"github.com/joesweeny/statshub/internal/config"
-	pb "github.com/joesweeny/statshub/proto/fixture"
+	"github.com/joesweeny/statistico-data/internal/container"
+	"github.com/joesweeny/statistico-data/internal/config"
+	pb "github.com/joesweeny/statistico-data/proto/fixture"
 	"google.golang.org/grpc/reflection"
 )
 

@@ -2,7 +2,7 @@ package stats
 
 import (
 	"database/sql"
-	"github.com/joesweeny/statshub/internal/model"
+	"github.com/joesweeny/statistico-data/internal/model"
 	"time"
 )
 

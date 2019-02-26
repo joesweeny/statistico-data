@@ -2,7 +2,7 @@ version: "3.5"
 services:
 
   console:
-    image: joesweeny/statshub_console:$RELEASE
+    image: joesweeny/statisticodata_console:$RELEASE
     environment:
       DB_DRIVER: $DB_DRIVER
       DB_HOST: $DB_HOST
@@ -14,7 +14,7 @@ services:
     tty: true
 
   cron:
-    image: joesweeny/statshub_cron:$RELEASE
+    image: joesweeny/statisticodata_cron:$RELEASE
     environment:
       DB_DRIVER: $DB_DRIVER
       DB_HOST: $DB_HOST
@@ -25,7 +25,7 @@ services:
       SPORTMONKS_API_KEY: $SPORTMONKS_API_KEY
 
   grpc:
-    image: joesweeny/statshub_grpc:$RELEASE
+    image: joesweeny/statisticodata_grpc:$RELEASE
     environment:
       DB_DRIVER: $DB_DRIVER
       DB_HOST: $DB_HOST
@@ -39,7 +39,7 @@ services:
     tty: true
 
   migrate:
-    image: joesweeny/statshub_migrate:$RELEASE
+    image: joesweeny/statisticodata_migrate:$RELEASE
     environment:
       DB_HOST: $DB_HOST
       DB_NAME: $DB_NAME

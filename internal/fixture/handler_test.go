@@ -2,10 +2,10 @@ package fixture
 
 import (
 	"github.com/stretchr/testify/mock"
-	"github.com/joesweeny/statshub/internal/model"
+	"github.com/joesweeny/statistico-data/internal/model"
 	"testing"
 	"time"
-	"github.com/joesweeny/statshub/internal/season"
+	"github.com/joesweeny/statistico-data/internal/season"
 	"github.com/stretchr/testify/assert"
 )
 

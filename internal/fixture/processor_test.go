@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"github.com/joesweeny/sportmonks-go-client"
-	"github.com/joesweeny/statshub/internal/model"
+	"github.com/joesweeny/statistico-data/internal/model"
 	"github.com/jonboulle/clockwork"
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/assert"
