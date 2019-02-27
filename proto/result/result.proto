@@ -38,8 +38,8 @@ message MatchStats {
     google.protobuf.StringValue away_formation = 3;
     int32 home_score = 4;
     int32 away_score = 5;
-    int32 home_pen_score = 6;
-    int32 away_pen_score = 7;
+    google.protobuf.Int32Value home_pen_score = 6;
+    google.protobuf.Int32Value away_pen_score = 7;
     google.protobuf.StringValue half_time_score = 8;
     google.protobuf.StringValue full_time_score = 9;
     google.protobuf.StringValue extra_time_score = 10;

@@ -128,8 +128,18 @@ func toMatchStats(res *model.Result) *pb.MatchStats {
 	stats := pb.MatchStats{
 		HomeScore: int32(*res.HomeScore),
 		AwayScore: int32(*res.AwayScore),
-		HomePenScore: int32(*res.HomePenScore),
-		AwayPenScore: int32(*res.AwayPenScore),
+	}
+
+	if res.HomePenScore != nil {
+		a := wrappers.Int32Value{}
+		a.Value = int32(*res.HomePenScore)
+		stats.HomePenScore = &a
+	}
+
+	if res.AwayPenScore != nil {
+		a := wrappers.Int32Value{}
+		a.Value = int32(*res.AwayPenScore)
+		stats.AwayPenScore = &a
 	}
 
 	if res.PitchCondition != nil {
