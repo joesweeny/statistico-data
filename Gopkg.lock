@@ -47,14 +47,6 @@
   revision = "4987f381cfabe3c92bef442b381cd4b5dde4f57b"
 
 [[projects]]
-  branch = "master"
-  digest = "1:3d913ec5203202da7f39413be2342edd31d00d743b1e47237c066979db9157fa"
-  name = "github.com/joesweeny/statshub"
-  packages = ["internal/model"]
-  pruneopts = "UT"
-  revision = "3431e95344579b1e53136b781ffdcc212ac078e4"
-
-[[projects]]
   digest = "1:75ab90ae3f5d876167e60f493beadfe66f0ed861a710f283fb06c86437a09538"
   name = "github.com/jonboulle/clockwork"
   packages = ["."]
@@ -209,16 +201,17 @@
   analyzer-name = "dep"
   analyzer-version = 1
   input-imports = [
+    "github.com/golang/protobuf/proto",
     "github.com/golang/protobuf/protoc-gen-go",
     "github.com/golang/protobuf/ptypes/wrappers",
     "github.com/gorilla/mux",
     "github.com/joesweeny/sportmonks-go-client",
-    "github.com/joesweeny/statshub/internal/model",
     "github.com/jonboulle/clockwork",
     "github.com/lib/pq",
     "github.com/pkg/errors",
     "github.com/stretchr/testify/assert",
     "github.com/stretchr/testify/mock",
+    "golang.org/x/net/context",
     "google.golang.org/grpc",
     "google.golang.org/grpc/reflection",
   ]
