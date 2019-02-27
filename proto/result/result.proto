@@ -21,7 +21,9 @@ message Result {
     Competition competition = 2;
     Season season = 3;
     Venue venue = 4;
-    MatchData match_data = 5;
+    google.protobuf.Int64Value referee_id = 5;
+    int64 date_time = 6;
+    MatchData match_data = 7;
 }
 
 message MatchData {
@@ -38,9 +40,9 @@ message MatchStats {
     int32 away_score = 5;
     int32 home_pen_score = 6;
     int32 away_pen_score = 7;
-    int32 half_time_score = 8;
-    int32 full_time_score = 9;
-    int32 extra_time_score = 10;
+    google.protobuf.StringValue half_time_score = 8;
+    google.protobuf.StringValue full_time_score = 9;
+    google.protobuf.StringValue extra_time_score = 10;
     google.protobuf.Int32Value home_league_position = 11;
     google.protobuf.Int32Value away_league_position = 12;
     google.protobuf.Int32Value minutes = 13;
@@ -58,13 +60,13 @@ message Team {
 message Competition {
     int64 id = 1;
     string name = 2;
-    int32 is_cup = 3;
+    bool is_cup = 3;
 }
 
 message Season {
     int64 id = 1;
     string name = 2;
-    int32 is_current = 3;
+    bool is_current = 3;
 }
 
 message Venue {
