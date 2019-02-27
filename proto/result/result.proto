@@ -1,0 +1,73 @@
+syntax = "proto3";
+
+package statistico_data;
+
+import "google/protobuf/wrappers.proto";
+
+service ResultService {
+    rpc GetResults(ResultRequest) returns (stream Result) {}
+}
+
+message ResultRequest {
+    // The Team ID that the Result set relates to
+    int64 team_id = 1;
+    // The number of results to return. If limit is not set the whole Result set for the Team
+    // will be returned
+    google.protobuf.Int32Value limit = 2;
+}
+
+message Result {
+    int64 id = 1;
+    Competition competition = 2;
+    Season season = 3;
+    Venue venue = 4;
+    MatchData match_data = 5;
+}
+
+message MatchData {
+    Team home_team = 1;
+    Team away_team = 2;
+    MatchStats stats = 3;
+}
+
+message MatchStats {
+    google.protobuf.StringValue pitch = 1;
+    google.protobuf.StringValue home_formation = 2;
+    google.protobuf.StringValue away_formation = 3;
+    int32 home_score = 4;
+    int32 away_score = 5;
+    int32 home_pen_score = 6;
+    int32 away_pen_score = 7;
+    int32 half_time_score = 8;
+    int32 full_time_score = 9;
+    int32 extra_time_score = 10;
+    google.protobuf.Int32Value home_league_position = 11;
+    google.protobuf.Int32Value away_league_position = 12;
+    google.protobuf.Int32Value minutes = 13;
+    google.protobuf.Int32Value seconds = 14;
+    google.protobuf.Int32Value added_time = 15;
+    google.protobuf.Int32Value extra_time = 16;
+    google.protobuf.Int32Value injury_time = 17;
+}
+
+message Team {
+    int64 id = 1;
+    string name = 2;
+}
+
+message Competition {
+    int64 id = 1;
+    string name = 2;
+    int32 is_cup = 3;
+}
+
+message Season {
+    int64 id = 1;
+    string name = 2;
+    int32 is_current = 3;
+}
+
+message Venue {
+    google.protobuf.Int64Value id = 1;
+    google.protobuf.StringValue name = 2;
+}
