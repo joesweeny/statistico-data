@@ -307,7 +307,78 @@ func TestBetween(t *testing.T) {
 			assert.Equal(t, int64(1548086929), f.Date.Unix())
 		}
 	})
+}
 
+func TestByTeamId(t *testing.T) {
+	conn, cleanUp := getConnection(t)
+	repo := PostgresFixtureRepository{Connection: conn}
+
+	t.Run("returns slice of fixture structs matching parameters provided", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+
+		insertFixtures(t, &repo)
+
+		fix, err := repo.ByTeamId(66, 100, time.Unix(1550066317, 0))
+
+		if err != nil {
+			t.Fatalf("Test failed, expected nil, got %s", err.Error())
+		}
+
+		all, err := repo.Ids()
+
+		if err != nil {
+			t.Fatalf("Test failed, expected nil, got %s", err.Error())
+		}
+
+		assert.Equal(t, 9, len(all))
+		assert.Equal(t, 3, len(fix))
+	})
+
+	t.Run("results can be filtered by limit", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+
+		insertFixtures(t, &repo)
+
+		fix, err := repo.ByTeamId(66, 1, time.Unix(1550066317, 0))
+
+		if err != nil {
+			t.Fatalf("Test failed, expected nil, got %s", err.Error())
+		}
+
+		all, err := repo.Ids()
+
+		if err != nil {
+			t.Fatalf("Test failed, expected nil, got %s", err.Error())
+		}
+
+		assert.Equal(t, 9, len(all))
+		assert.Equal(t, 1, len(fix))
+		assert.Equal(t, 6, fix[0].ID)
+	})
+
+	t.Run("empty result set returned if no results match parameters", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+
+		insertFixtures(t, &repo)
+
+		fix, err := repo.ByTeamId(14059, 1, time.Unix(1550066317, 0))
+
+		if err != nil {
+			t.Fatalf("Test failed, expected nil, got %s", err.Error())
+		}
+
+		all, err := repo.Ids()
+
+		if err != nil {
+			t.Fatalf("Test failed, expected nil, got %s", err.Error())
+		}
+
+		assert.Equal(t, 9, len(all))
+		assert.Equal(t, 0, len(fix))
+	})
 }
 
 var db = config.GetConfig().Database
@@ -343,5 +414,46 @@ func newFixture(id int) *model.Fixture {
 		Date:       time.Unix(1548086929, 0),
 		CreatedAt:  time.Unix(1546965200, 0),
 		UpdatedAt:  time.Unix(1546965200, 0),
+	}
+}
+
+func insertFixtures(t *testing.T, repo Repository) {
+	for i := 1; i <= 4; i++ {
+		s := newFixture(i)
+
+		if err := repo.Insert(s); err != nil {
+			t.Errorf("Error when inserting record into the database: %s", err.Error())
+		}
+	}
+
+	for i := 5; i <= 8; i++ {
+		x := 1550066310 + i
+		s := model.Fixture{
+			ID:         i,
+			SeasonID:   14567,
+			HomeTeamID: 66,
+			AwayTeamID: 924,
+			Date:       time.Unix(int64(x), 0),
+			CreatedAt:  time.Unix(1546965200, 0),
+			UpdatedAt:  time.Unix(1546965200, 0),
+		}
+
+		if err := repo.Insert(&s); err != nil {
+			t.Errorf("Error when inserting record into the database: %s", err.Error())
+		}
+	}
+
+	s := model.Fixture{
+		ID:         99,
+		SeasonID:   14567,
+		HomeTeamID: 32,
+		AwayTeamID: 66,
+		Date:       time.Unix(1550066312, 0),
+		CreatedAt:  time.Unix(1546965200, 0),
+		UpdatedAt:  time.Unix(1546965200, 0),
+	}
+
+	if err := repo.Insert(&s); err != nil {
+		t.Errorf("Error when inserting record into the database: %s", err.Error())
 	}
 }
