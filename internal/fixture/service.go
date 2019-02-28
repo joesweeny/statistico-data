@@ -3,8 +3,8 @@ package fixture
 import (
 	pb "github.com/joesweeny/statistico-data/proto/fixture"
 	"time"
-	"github.com/pkg/errors"
 	"log"
+	"errors"
 )
 
 var ErrTimeParse = errors.New("unable to parse date provided in Request")

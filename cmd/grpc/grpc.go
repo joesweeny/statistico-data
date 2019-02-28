@@ -6,7 +6,8 @@ import (
 	"google.golang.org/grpc"
 	"github.com/joesweeny/statistico-data/internal/container"
 	"github.com/joesweeny/statistico-data/internal/config"
-	pb "github.com/joesweeny/statistico-data/proto/fixture"
+	fix "github.com/joesweeny/statistico-data/proto/fixture"
+	res "github.com/joesweeny/statistico-data/proto/result"
 	"google.golang.org/grpc/reflection"
 )
 
@@ -21,7 +22,8 @@ func main() {
 
 	server := grpc.NewServer()
 
-	pb.RegisterFixtureServiceServer(server, app.FixtureService())
+	fix.RegisterFixtureServiceServer(server, app.FixtureService())
+	res.RegisterResultServiceServer(server, app.ResultService())
 
 	reflection.Register(server)
 
