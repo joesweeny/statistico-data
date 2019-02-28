@@ -14,6 +14,9 @@ message ResultRequest {
     // The number of results to return. If limit is not set the whole Result set for the Team
     // will be returned
     google.protobuf.Int32Value limit = 2;
+    // A filter to return Results before a specific date
+    // RFC3339 formatted string i.e "2006-01-02T15:04:05Z07:00"
+    string date_before = 3;
 }
 
 message Result {
