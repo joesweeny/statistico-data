@@ -357,6 +357,28 @@ func TestByTeamId(t *testing.T) {
 		assert.Equal(t, 1, len(fix))
 		assert.Equal(t, 6, fix[0].ID)
 	})
+
+	t.Run("empty result set returned if no results match parameters", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+
+		insertFixtures(t, &repo)
+
+		fix, err := repo.ByTeamId(14059, 1, time.Unix(1550066317, 0))
+
+		if err != nil {
+			t.Fatalf("Test failed, expected nil, got %s", err.Error())
+		}
+
+		all, err := repo.Ids()
+
+		if err != nil {
+			t.Fatalf("Test failed, expected nil, got %s", err.Error())
+		}
+
+		assert.Equal(t, 9, len(all))
+		assert.Equal(t, 0, len(fix))
+	})
 }
 
 var db = config.GetConfig().Database
