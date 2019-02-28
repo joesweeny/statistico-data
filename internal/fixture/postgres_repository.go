@@ -108,6 +108,20 @@ func (p *PostgresFixtureRepository) Between(from, to time.Time) ([]model.Fixture
 	return rowsToFixtureSlice(rows)
 }
 
+func (p *PostgresFixtureRepository) ByTeamId(id, limit int, before time.Time) ([]model.Fixture, error) {
+	query := `SELECT * FROM sportmonks_fixture WHERE date < $2 AND (home_team_id = $1 OR away_team_id = $1)
+	ORDER BY date DESC LIMIT $3`
+
+	rows, err := p.Connection.Query(query, id, before.Unix(), limit)
+
+	if err != nil {
+		return []model.Fixture{}, err
+	}
+
+	return rowsToFixtureSlice(rows)
+}
+
+
 func rowsToIntSlice(rows *sql.Rows) ([]int, error) {
 	defer rows.Close()
 
