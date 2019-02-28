@@ -13,7 +13,6 @@ func TestHandleResult(t *testing.T) {
 	compRepo := new(mockCompetitionRepository)
 	seasonRepo := new(mockSeasonRepository)
 	venueRepo := new(mockVenueRepository)
-	fixtureRepo := new(mockFixtureRepository)
 	handler := Handler{
 		CompetitionRepo: compRepo,
 		SeasonRepo: seasonRepo,
