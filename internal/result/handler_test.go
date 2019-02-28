@@ -13,9 +13,7 @@ func TestHandleResult(t *testing.T) {
 	compRepo := new(mockCompetitionRepository)
 	seasonRepo := new(mockSeasonRepository)
 	venueRepo := new(mockVenueRepository)
-	fixtureRepo := new(mockFixtureRepository)
 	handler := Handler{
-		FixtureRepo: fixtureRepo,
 		CompetitionRepo: compRepo,
 		SeasonRepo: seasonRepo,
 		TeamRepo: teamRepo,
@@ -47,9 +45,8 @@ func TestHandleResult(t *testing.T) {
 		teamRepo.On("GetById", 451).Return(newTeam(451, "West Ham"), nil)
 		teamRepo.On("GetById", 924).Return(newTeam(924, "Chelsea"), nil)
 		venueRepo.On("GetById", 87).Return(newVenue(), nil)
-		fixtureRepo.On("GetById", 92).Return(newFixture(), nil)
 
-		proto, err := handler.HandleResult(&res)
+		proto, err := handler.HandleResult(newFixture(), &res)
 
 		if err != nil {
 			t.Fatalf("Test failed, expected nil, got %s", err.Error())
@@ -183,42 +180,6 @@ func (m mockSeasonRepository) CurrentSeasonIds() ([]int, error) {
 
 type mockFixtureRepository struct {
 	mock.Mock
-}
-
-func (m mockFixtureRepository) Insert(c *model.Fixture) error {
-	args := m.Called(c)
-	return args.Error(0)
-}
-
-func (m mockFixtureRepository) Update(c *model.Fixture) error {
-	args := m.Called(&c)
-	return args.Error(0)
-}
-
-func (m mockFixtureRepository) GetById(id int) (*model.Fixture, error) {
-	args := m.Called(id)
-	c := args.Get(0).(*model.Fixture)
-	return c, args.Error(1)
-}
-
-func (m mockFixtureRepository) Ids() ([]int, error) {
-	args := m.Called()
-	return args.Get(0).([]int), args.Error(1)
-}
-
-func (m mockFixtureRepository) IdsBetween(from, to time.Time) ([]int, error) {
-	args := m.Called(from, to)
-	return args.Get(0).([]int), args.Error(1)
-}
-
-func (m mockFixtureRepository) Between(from, to time.Time) ([]model.Fixture, error) {
-	args := m.Called(from, to)
-	return args.Get(0).([]model.Fixture), args.Error(1)
-}
-
-func (m mockFixtureRepository) ByTeamId(id, limit int, before time.Time) ([]model.Fixture, error) {
-	args := m.Called(id, limit, before)
-	return args.Get(0).([]model.Fixture), args.Error(1)
 }
 
 func newCompetition() *model.Competition {

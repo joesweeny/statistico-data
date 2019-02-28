@@ -7,25 +7,17 @@ import (
 	"github.com/joesweeny/statistico-data/internal/venue"
 	"github.com/joesweeny/statistico-data/internal/model"
 	pb "github.com/joesweeny/statistico-data/proto/result"
-	"github.com/joesweeny/statistico-data/internal/fixture"
 	"github.com/golang/protobuf/ptypes/wrappers"
 )
 
 type Handler struct {
-	FixtureRepo fixture.Repository
 	CompetitionRepo competition.Repository
 	SeasonRepo season.Repository
 	TeamRepo team.Repository
 	VenueRepo venue.Repository
 }
 
-func (h Handler) HandleResult(r *model.Result) (*pb.Result, error) {
-	f, err := h.FixtureRepo.GetById(r.FixtureID)
-
-	if err != nil {
-		return nil, err
-	}
-
+func (h Handler) HandleResult(f *model.Fixture, r *model.Result) (*pb.Result, error) {
 	s, err := h.SeasonRepo.Id(f.SeasonID)
 
 	if err != nil {
