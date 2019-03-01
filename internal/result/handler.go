@@ -138,87 +138,87 @@ func toMatchStats(res *model.Result) *pb.MatchStats {
 	}
 
 	if res.AwayPenScore != nil {
-		a := wrappers.Int32Value{}
-		a.Value = int32(*res.AwayPenScore)
-		stats.AwayPenScore = &a
+		stats.AwayPenScore = &wrappers.Int32Value{
+			Value: int32(*res.AwayPenScore),
+		}
 	}
 
 	if res.PitchCondition != nil {
-		pitch := wrappers.StringValue{}
-		pitch.Value = *res.PitchCondition
-		stats.Pitch = &pitch
+		stats.Pitch = &wrappers.StringValue{
+			Value: *res.PitchCondition,
+		}
 	}
 
 	if res.HomeFormation != nil {
-		h := wrappers.StringValue{}
-		h.Value = *res.HomeFormation
-		stats.HomeFormation = &h
+		stats.HomeFormation = &wrappers.StringValue{
+			Value: *res.HomeFormation,
+		}
 	}
 
 	if res.AwayFormation != nil {
-		a := wrappers.StringValue{}
-		a.Value = *res.AwayFormation
-		stats.AwayFormation = &a
+		stats.AwayFormation = &wrappers.StringValue{
+			Value: *res.AwayFormation,
+		}
 	}
 
 	if res.HalfTimeScore != nil {
-		a := wrappers.StringValue{}
-		a.Value = *res.HalfTimeScore
-		stats.HalfTimeScore = &a
+		stats.HalfTimeScore = &wrappers.StringValue{
+			Value: *res.HalfTimeScore,
+		}
 	}
 
 	if res.FullTimeScore != nil {
-		a := wrappers.StringValue{}
-		a.Value = *res.FullTimeScore
-		stats.FullTimeScore = &a
+		stats.FullTimeScore = &wrappers.StringValue{
+			Value: *res.FullTimeScore,
+		}
 	}
 
 	if res.ExtraTimeScore != nil {
-		a := wrappers.StringValue{}
-		a.Value = *res.ExtraTimeScore
-		stats.ExtraTimeScore = &a
+		stats.ExtraTimeScore = &wrappers.StringValue{
+			Value: *res.ExtraTimeScore,
+		}
 	}
 
 	if res.HomeLeaguePosition != nil {
-		a := wrappers.Int32Value{}
-		a.Value = int32(*res.HomeLeaguePosition)
-		stats.HomeLeaguePosition = &a
+		stats.HomeLeaguePosition = &wrappers.Int32Value{
+			Value: int32(*res.HomeLeaguePosition),
+		}
 	}
 
 	if res.AwayLeaguePosition != nil {
-		a := wrappers.Int32Value{}
-		a.Value = int32(*res.AwayLeaguePosition)
-		stats.AwayLeaguePosition = &a
+		stats.AwayLeaguePosition = &wrappers.Int32Value{
+			Value: int32(*res.AwayLeaguePosition),
+		}
 	}
 
 	if res.Minutes != nil {
-		a := wrappers.Int32Value{}
-		a.Value = int32(*res.Minutes)
-		stats.Minutes = &a
+		stats.Minutes = &wrappers.Int32Value{
+			Value: int32(*res.Minutes),
+		}
 	}
 
 	if res.Seconds != nil {
-		a := wrappers.Int32Value{}
-		a.Value = int32(*res.Seconds)
-		stats.Seconds = &a
+		stats.Seconds = &wrappers.Int32Value{
+			Value: int32(*res.Seconds),
+		}
 	}
 
 	if res.AddedTime != nil {
-		a := wrappers.Int32Value{}
-		a.Value = int32(*res.AddedTime)
-		stats.AddedTime = &a
+		stats.AddedTime = &wrappers.Int32Value{
+			Value: int32(*res.AddedTime),
+		}
 	}
 
 	if res.ExtraTime != nil {
-		a := wrappers.Int32Value{}
-		a.Value = int32(*res.ExtraTime)
-		stats.ExtraTime = &a
+		stats.ExtraTime = &wrappers.Int32Value{
+			Value: int32(*res.ExtraTime),
+		}
 	}
 
 	if res.InjuryTime != nil {
-		a := wrappers.Int32Value{}
-		a.Value = int32(*res.InjuryTime)
-		stats.InjuryTime = &a
+		stats.InjuryTime = &wrappers.Int32Value{
+			Value: int32(*res.InjuryTime),
+		}
 	}
 
 	return &stats
