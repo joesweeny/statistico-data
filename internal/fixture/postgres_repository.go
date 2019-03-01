@@ -37,7 +37,7 @@ func (p *PostgresFixtureRepository) Insert(f *model.Fixture) error {
 }
 
 func (p *PostgresFixtureRepository) Update(f *model.Fixture) error {
-	_, err := p.GetById(f.ID)
+	_, err := p.ById(f.ID)
 
 	if err != nil {
 		return err
@@ -63,7 +63,7 @@ func (p *PostgresFixtureRepository) Update(f *model.Fixture) error {
 	return err
 }
 
-func (p *PostgresFixtureRepository) GetById(id int) (*model.Fixture, error) {
+func (p *PostgresFixtureRepository) ById(id int) (*model.Fixture, error) {
 	query := `SELECT * FROM sportmonks_fixture where id = $1`
 	row := p.Connection.QueryRow(query, id)
 

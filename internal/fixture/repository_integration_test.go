@@ -54,7 +54,7 @@ func TestInsert(t *testing.T) {
 	conn.Close()
 }
 
-func TestGetById(t *testing.T) {
+func TestById(t *testing.T) {
 	conn, cleanUp := getConnection(t)
 	repo := PostgresFixtureRepository{Connection: conn}
 
@@ -68,7 +68,7 @@ func TestGetById(t *testing.T) {
 			t.Errorf("Error when inserting record into the database: %s", err.Error())
 		}
 
-		r, err := repo.GetById(43)
+		r, err := repo.ById(43)
 
 		if err != nil {
 			t.Errorf("Error when retrieving a record from the database: %s", err.Error())
@@ -92,7 +92,7 @@ func TestGetById(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
 
-		_, err := repo.GetById(99)
+		_, err := repo.ById(99)
 
 		if err == nil {
 			t.Errorf("Test failed, expected %v, got nil", err)
@@ -133,7 +133,7 @@ func TestUpdate(t *testing.T) {
 			t.Errorf("Error when updating a record in the database: %s", err.Error())
 		}
 
-		r, err := repo.GetById(78)
+		r, err := repo.ById(78)
 
 		if err != nil {
 			t.Errorf("Error when updating a record in the database: %s", err.Error())
