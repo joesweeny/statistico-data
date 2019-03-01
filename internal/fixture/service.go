@@ -5,6 +5,7 @@ import (
 	"time"
 	"log"
 	"errors"
+	"golang.org/x/net/context"
 )
 
 var ErrTimeParse = errors.New("unable to parse date provided in Request")
@@ -15,7 +16,7 @@ type Service struct {
 	Logger *log.Logger
 }
 
-func (s *Service) ListFixtures(r *pb.Request, stream pb.FixtureService_ListFixturesServer) error {
+func (s *Service) ListFixtures(r *pb.DateRangeRequest, stream pb.FixtureService_ListFixturesServer) error {
 	from, err := time.Parse(time.RFC3339, r.DateFrom)
 
 	if err != nil {
@@ -48,4 +49,20 @@ func (s *Service) ListFixtures(r *pb.Request, stream pb.FixtureService_ListFixtu
 	}
 
 	return nil
+}
+
+func (s *Service) FixtureByID(c context.Context, r *pb.FixtureRequest) (*pb.Fixture, error) {
+	fix, err := s.Repository.ById(int(r.FixtureId))
+
+	if err != nil {
+		return nil, err
+	}
+
+	f, err := s.HandleFixture(fix)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return f, nil
 }

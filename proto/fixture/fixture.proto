@@ -5,14 +5,20 @@ package statistico_data;
 import "google/protobuf/wrappers.proto";
 
 service FixtureService {
-    rpc ListFixtures(Request) returns (stream Fixture) {}
+    rpc ListFixtures(DateRangeRequest) returns (stream Fixture) {}
+    rpc FixtureByID(FixtureRequest) returns (Fixture) {}
 }
 
-message Request {
+message DateRangeRequest {
     // RFC3339 formatted string i.e. "2006-01-02T15:04:05Z07:00"
     string date_from = 1;
     // RFC3339 formatted string i.e "2006-01-02T15:04:05Z07:00"
     string date_to = 2;
+}
+
+message FixtureRequest {
+    // The ID of the Fixture to be retrieved
+    int64 fixture_id = 1;
 }
 
 message Competition {
