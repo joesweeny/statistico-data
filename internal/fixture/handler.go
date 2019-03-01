@@ -82,6 +82,9 @@ func competitionToProto(c *model.Competition) *pb.Competition {
 	var x pb.Competition
 	x.Id = int64(c.ID)
 	x.Name = c.Name
+	x.IsCup = &wrappers.BoolValue{
+		Value: c.IsCup,
+	}
 
 	return &x
 }
@@ -90,6 +93,9 @@ func seasonToProto(s *model.Season) *pb.Season {
 	var x pb.Season
 	x.Id = int64(s.ID)
 	x.Name = s.Name
+	x.IsCurrent = &wrappers.BoolValue{
+		Value: s.IsCurrent,
+	}
 
 	return &x
 }
