@@ -81,7 +81,9 @@ func competitionToProto(c *model.Competition) *pb.Competition {
 	var x pb.Competition
 	x.Id = int64(c.ID)
 	x.Name = c.Name
-	x.IsCup = c.IsCup
+	x.IsCup = &wrappers.BoolValue{
+		Value: c.IsCup,
+	}
 
 	return &x
 }
@@ -90,17 +92,20 @@ func seasonToProto(s *model.Season) *pb.Season {
 	var x pb.Season
 	x.Id = int64(s.ID)
 	x.Name = s.Name
-	x.IsCurrent = s.IsCurrent
+	x.IsCurrent = &wrappers.BoolValue{
+		Value: s.IsCurrent,
+	}
 
 	return &x
 }
 
 func venueToProto(v *model.Venue) *pb.Venue {
-	id := wrappers.Int64Value{}
-	id.Value = int64(v.ID)
-	name := wrappers.StringValue{}
-	name.Value = v.Name
-
+	id := wrappers.Int64Value{
+		Value: int64(v.ID),
+	}
+	name := wrappers.StringValue{
+		Value: v.Name,
+	}
 	ven := pb.Venue{}
 	ven.Id = &id
 	ven.Name = &name
@@ -118,14 +123,18 @@ func toMatchData(home *model.Team, away *model.Team, res *model.Result) *pb.Matc
 
 func toMatchStats(res *model.Result) *pb.MatchStats {
 	stats := pb.MatchStats{
-		HomeScore: int32(*res.HomeScore),
-		AwayScore: int32(*res.AwayScore),
+		HomeScore: &wrappers.Int32Value{
+			Value: int32(*res.HomeScore),
+		},
+		AwayScore: &wrappers.Int32Value{
+			Value: int32(*res.AwayScore),
+		},
 	}
 
 	if res.HomePenScore != nil {
-		a := wrappers.Int32Value{}
-		a.Value = int32(*res.HomePenScore)
-		stats.HomePenScore = &a
+		stats.HomePenScore = &wrappers.Int32Value{
+			Value: int32(*res.HomePenScore),
+		}
 	}
 
 	if res.AwayPenScore != nil {
