@@ -24,11 +24,13 @@ message FixtureRequest {
 message Competition {
     int64 id = 1;
     string name = 2;
+    google.protobuf.BoolValue is_cup = 3;
 }
 
 message Season {
     int64 id = 1;
     string name = 2;
+    google.protobuf.BoolValue is_current = 3;
 }
 
 message Team {
