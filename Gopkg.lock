@@ -10,9 +10,10 @@
   version = "v1.1.1"
 
 [[projects]]
-  digest = "1:3d702ebf092f21b462a9ef37709b719b2e7e67e5bc8e4e537803a95657581faa"
+  digest = "1:60bfcd256ec46ee9dc194a84b5c3851b91bf3edd6fbb9600d57b122e9fdb6cc6"
   name = "github.com/golang/protobuf"
   packages = [
+    "jsonpb",
     "proto",
     "protoc-gen-go",
     "protoc-gen-go/descriptor",
@@ -23,6 +24,7 @@
     "ptypes",
     "ptypes/any",
     "ptypes/duration",
+    "ptypes/struct",
     "ptypes/timestamp",
     "ptypes/wrappers",
   ]
@@ -201,6 +203,7 @@
   analyzer-name = "dep"
   analyzer-version = 1
   input-imports = [
+    "github.com/golang/protobuf/jsonpb",
     "github.com/golang/protobuf/proto",
     "github.com/golang/protobuf/protoc-gen-go",
     "github.com/golang/protobuf/ptypes/wrappers",

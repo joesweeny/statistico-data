@@ -5,10 +5,10 @@ package statistico_data;
 import "google/protobuf/wrappers.proto";
 
 service ResultService {
-    rpc GetResults(ResultRequest) returns (stream Result) {}
+    rpc GetResultsForTeam(TeamRequest) returns (stream Result) {}
 }
 
-message ResultRequest {
+message TeamRequest {
     // The Team ID that the Result set relates to
     int64 team_id = 1;
     // The number of results to return. If limit is not set the whole Result set for the Team
@@ -39,8 +39,8 @@ message MatchStats {
     google.protobuf.StringValue pitch = 1;
     google.protobuf.StringValue home_formation = 2;
     google.protobuf.StringValue away_formation = 3;
-    int32 home_score = 4;
-    int32 away_score = 5;
+    google.protobuf.Int32Value home_score = 4;
+    google.protobuf.Int32Value away_score = 5;
     google.protobuf.Int32Value home_pen_score = 6;
     google.protobuf.Int32Value away_pen_score = 7;
     google.protobuf.StringValue half_time_score = 8;
@@ -63,13 +63,13 @@ message Team {
 message Competition {
     int64 id = 1;
     string name = 2;
-    bool is_cup = 3;
+    google.protobuf.BoolValue is_cup = 3;
 }
 
 message Season {
     int64 id = 1;
     string name = 2;
-    bool is_current = 3;
+    google.protobuf.BoolValue is_current = 3;
 }
 
 message Venue {
