@@ -26,9 +26,9 @@ func TestFactoryCreateFixture(t *testing.T) {
 		a.Equal(98, s.AwayTeamID)
 		a.Nil(s.RoundID)
 		a.Nil(s.RefereeID)
-		a.Equal("2019-03-12 19:45:00 +0000 UTC", s.Date.String())
-		a.Equal("2019-01-14 11:25:00 +0000 UTC", s.CreatedAt.String())
-		a.Equal("2019-01-14 11:25:00 +0000 UTC", s.UpdatedAt.String())
+		a.Equal("2019-03-12T19:45:00Z", s.Date.Format(time.RFC3339))
+		a.Equal("2019-01-14T11:25:00Z", s.CreatedAt.Format(time.RFC3339))
+		a.Equal("2019-01-14T11:25:00Z", s.UpdatedAt.Format(time.RFC3339))
 	})
 }
 
@@ -60,9 +60,9 @@ func TestFactoryUpdateFixture(t *testing.T) {
 		a.Equal(98, updated.AwayTeamID)
 		a.Equal(2, *updated.RoundID)
 		a.Equal(32, *updated.RefereeID)
-		a.Equal("2019-03-12 20:00:00 +0000 UTC", updated.Date.String())
-		a.Equal("2019-01-14 11:25:00 +0000 UTC", updated.CreatedAt.String())
-		a.Equal("2019-01-14 11:35:00 +0000 UTC", updated.UpdatedAt.String())
+		a.Equal("2019-03-12T20:00:00Z", updated.Date.Format(time.RFC3339))
+		a.Equal("2019-01-14T11:25:00Z", updated.CreatedAt.Format(time.RFC3339))
+		a.Equal("2019-01-14T11:35:00Z", updated.UpdatedAt.Format(time.RFC3339))
 	})
 }
 
