@@ -17,7 +17,7 @@ func TestFactoryCreateCompetiton(t *testing.T) {
 		t.Helper()
 
 		c := f.createCompetition(newClientLeague())
-
+		
 		a := assert.New(t)
 
 		a.Equal(564, c.ID)

@@ -381,6 +381,93 @@ func TestByTeamId(t *testing.T) {
 	})
 }
 
+func TestBySeasonId(t *testing.T) {
+	conn, cleanUp := getConnection(t)
+	repo := PostgresFixtureRepository{Connection: conn}
+
+	t.Run("returns slice of fixture structs matching parameters provided", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+
+		insertFixtures(t, &repo)
+
+		fix, err := repo.BySeasonId(6012, time.Unix(1550070000, 0))
+
+		if err != nil {
+			t.Fatalf("Test failed, expected nil, got %s", err.Error())
+		}
+
+		all, err := repo.Ids()
+
+		if err != nil {
+			t.Fatalf("Test failed, expected nil, got %s", err.Error())
+		}
+
+		assert.Equal(t, 9, len(all))
+		assert.Equal(t, 4, len(fix))
+		assert.Equal(t, 5, fix[0].ID)
+		assert.Equal(t, 6, fix[1].ID)
+		assert.Equal(t, 7, fix[2].ID)
+		assert.Equal(t, 8, fix[3].ID)
+
+		for _, f := range fix {
+			assert.Equal(t, 6012, f.SeasonID)
+		}
+	})
+
+	t.Run("returns a slice of fixtures structs filtered by date", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+
+		insertFixtures(t, &repo)
+
+		fix, err := repo.BySeasonId(6012, time.Unix(1550066317, 0))
+
+		if err != nil {
+			t.Fatalf("Test failed, expected nil, got %s", err.Error())
+		}
+
+		all, err := repo.Ids()
+
+		if err != nil {
+			t.Fatalf("Test failed, expected nil, got %s", err.Error())
+		}
+
+		assert.Equal(t, 9, len(all))
+		assert.Equal(t, 2, len(fix))
+		assert.Equal(t, 5, fix[0].ID)
+		assert.Equal(t, 6, fix[1].ID)
+
+		for _, f := range fix {
+			assert.Equal(t, 6012, f.SeasonID)
+		}
+	})
+
+	t.Run("empty result set returned if no results match parameters", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+
+		insertFixtures(t, &repo)
+
+		fix, err := repo.BySeasonId(10000,time.Unix(1550066317, 0))
+
+		if err != nil {
+			t.Fatalf("Test failed, expected nil, got %s", err.Error())
+		}
+
+		all, err := repo.Ids()
+
+		if err != nil {
+			t.Fatalf("Test failed, expected nil, got %s", err.Error())
+		}
+
+		assert.Equal(t, 9, len(all))
+		assert.Equal(t, 0, len(fix))
+	})
+
+	conn.Close()
+}
+
 var db = config.GetConfig().Database
 
 func getConnection(t *testing.T) (*sql.DB, func()) {
@@ -430,7 +517,7 @@ func insertFixtures(t *testing.T, repo Repository) {
 		x := 1550066310 + i
 		s := model.Fixture{
 			ID:         i,
-			SeasonID:   14567,
+			SeasonID:   6012,
 			HomeTeamID: 66,
 			AwayTeamID: 924,
 			Date:       time.Unix(int64(x), 0),
@@ -445,7 +532,7 @@ func insertFixtures(t *testing.T, repo Repository) {
 
 	s := model.Fixture{
 		ID:         99,
-		SeasonID:   14567,
+		SeasonID:   145,
 		HomeTeamID: 32,
 		AwayTeamID: 66,
 		Date:       time.Unix(1550066312, 0),
