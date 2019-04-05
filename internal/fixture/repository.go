@@ -16,4 +16,8 @@ type Repository interface {
 	// Limit parameter to limit the number of Fixture structs returned
 	// Date constraint returning fixtures from before that date
 	ByTeamId(id int64, limit int32, before time.Time) ([]model.Fixture, error)
+	// Id of the Season
+	// Date constraint returning fixtures from before the given date
+	// Order fixture date 'ASC' or 'DESC'
+	BySeasonId(id int64, limit int32, before time.Time, order string) ([]model.Fixture, error)
 }
