@@ -2,7 +2,11 @@ package fixture
 
 import(
 	"github.com/statistico/statistico-data/internal/model"
-	pb "github.com/statistico/statistico-data/proto/fixture"
+	pbFixture "github.com/statistico/statistico-data/proto/fixture"
+	pbTeam "github.com/statistico/statistico-data/proto/team"
+	pbCompetition "github.com/statistico/statistico-data/proto/competition"
+	pbSeason "github.com/statistico/statistico-data/proto/season"
+	pbVenue "github.com/statistico/statistico-data/proto/venue"
 	"github.com/statistico/statistico-data/internal/team"
 	"github.com/statistico/statistico-data/internal/competition"
 	"github.com/statistico/statistico-data/internal/season"
@@ -17,7 +21,7 @@ type Handler struct {
 	VenueRepo venue.Repository
 }
 
-func (h Handler) HandleFixture(f *model.Fixture) (*pb.Fixture, error) {
+func (h Handler) HandleFixture(f *model.Fixture) (*pbFixture.Fixture, error) {
 	s, err := h.SeasonRepo.Id(f.SeasonID)
 
 	if err != nil {
@@ -42,7 +46,7 @@ func (h Handler) HandleFixture(f *model.Fixture) (*pb.Fixture, error) {
 		return nil, err
 	}
 
-	proto := pb.Fixture{
+	proto := pbFixture.Fixture{
 		Id: int64(f.ID),
 		Competition: competitionToProto(c),
 		Season: seasonToProto(s),
@@ -70,16 +74,16 @@ func (h Handler) HandleFixture(f *model.Fixture) (*pb.Fixture, error) {
 	return &proto, nil
 }
 
-func teamToProto(t *model.Team) *pb.Team {
-	var x pb.Team
+func teamToProto(t *model.Team) *pbTeam.Team {
+	var x pbTeam.Team
 	x.Id = int64(t.ID)
 	x.Name = t.Name
 
 	return &x
 }
 
-func competitionToProto(c *model.Competition) *pb.Competition {
-	var x pb.Competition
+func competitionToProto(c *model.Competition) *pbCompetition.Competition {
+	var x pbCompetition.Competition
 	x.Id = int64(c.ID)
 	x.Name = c.Name
 	x.IsCup = &wrappers.BoolValue{
@@ -89,8 +93,8 @@ func competitionToProto(c *model.Competition) *pb.Competition {
 	return &x
 }
 
-func seasonToProto(s *model.Season) *pb.Season {
-	var x pb.Season
+func seasonToProto(s *model.Season) *pbSeason.Season {
+	var x pbSeason.Season
 	x.Id = int64(s.ID)
 	x.Name = s.Name
 	x.IsCurrent = &wrappers.BoolValue{
@@ -100,13 +104,13 @@ func seasonToProto(s *model.Season) *pb.Season {
 	return &x
 }
 
-func venueToProto(v *model.Venue) *pb.Venue {
+func venueToProto(v *model.Venue) *pbVenue.Venue {
 	id := wrappers.Int64Value{}
 	id.Value = int64(v.ID)
 	name := wrappers.StringValue{}
 	name.Value = v.Name
 
-	ven := pb.Venue{}
+	ven := pbVenue.Venue{}
 	ven.Id = &id
 	ven.Name = &name
 

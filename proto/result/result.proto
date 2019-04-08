@@ -1,6 +1,8 @@
 syntax = "proto3";
 
-package statistico_data;
+option go_package = "github.com/statistico/statistico-data/proto/result";
+
+package result;
 
 import "google/protobuf/wrappers.proto";
 import "proto/competition/competition.proto";
@@ -25,17 +27,17 @@ message TeamRequest {
 
 message Result {
     int64 id = 1;
-    Competition competition = 2;
-    Season season = 3;
-    Venue venue = 4;
+    competition.Competition competition = 2;
+    season.Season season = 3;
+    venue.Venue venue = 4;
     google.protobuf.Int64Value referee_id = 5;
     int64 date_time = 6;
     MatchData match_data = 7;
 }
 
 message MatchData {
-    Team home_team = 1;
-    Team away_team = 2;
+    team.Team home_team = 1;
+    team.Team away_team = 2;
     MatchStats stats = 3;
 }
 

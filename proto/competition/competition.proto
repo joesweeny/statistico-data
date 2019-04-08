@@ -1,6 +1,8 @@
 syntax = "proto3";
 
-package statistico_data;
+option go_package = "github.com/statistico/statistico-data/proto/competition";
+
+package competition;
 
 import "google/protobuf/wrappers.proto";
 

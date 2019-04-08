@@ -8,11 +8,6 @@ import fmt "fmt"
 import math "math"
 import wrappers "github.com/golang/protobuf/ptypes/wrappers"
 
-import (
-	context "golang.org/x/net/context"
-	grpc "google.golang.org/grpc"
-)
-
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
 var _ = fmt.Errorf
@@ -23,93 +18,6 @@ var _ = math.Inf
 // A compilation error at this line likely means your copy of the
 // proto package needs to be updated.
 const _ = proto.ProtoPackageIsVersion2 // please upgrade the proto package
-
-type DateRangeRequest struct {
-	// RFC3339 formatted string i.e. "2006-01-02T15:04:05Z07:00"
-	DateFrom string `protobuf:"bytes,1,opt,name=date_from,json=dateFrom,proto3" json:"date_from,omitempty"`
-	// RFC3339 formatted string i.e "2006-01-02T15:04:05Z07:00"
-	DateTo               string   `protobuf:"bytes,2,opt,name=date_to,json=dateTo,proto3" json:"date_to,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
-}
-
-func (m *DateRangeRequest) Reset()         { *m = DateRangeRequest{} }
-func (m *DateRangeRequest) String() string { return proto.CompactTextString(m) }
-func (*DateRangeRequest) ProtoMessage()    {}
-func (*DateRangeRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_competition_6317bf26839ba1e0, []int{0}
-}
-func (m *DateRangeRequest) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_DateRangeRequest.Unmarshal(m, b)
-}
-func (m *DateRangeRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_DateRangeRequest.Marshal(b, m, deterministic)
-}
-func (dst *DateRangeRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DateRangeRequest.Merge(dst, src)
-}
-func (m *DateRangeRequest) XXX_Size() int {
-	return xxx_messageInfo_DateRangeRequest.Size(m)
-}
-func (m *DateRangeRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_DateRangeRequest.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_DateRangeRequest proto.InternalMessageInfo
-
-func (m *DateRangeRequest) GetDateFrom() string {
-	if m != nil {
-		return m.DateFrom
-	}
-	return ""
-}
-
-func (m *DateRangeRequest) GetDateTo() string {
-	if m != nil {
-		return m.DateTo
-	}
-	return ""
-}
-
-type FixtureRequest struct {
-	// The ID of the Fixture to be retrieved
-	FixtureId            int64    `protobuf:"varint,1,opt,name=fixture_id,json=fixtureId,proto3" json:"fixture_id,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
-}
-
-func (m *FixtureRequest) Reset()         { *m = FixtureRequest{} }
-func (m *FixtureRequest) String() string { return proto.CompactTextString(m) }
-func (*FixtureRequest) ProtoMessage()    {}
-func (*FixtureRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_competition_6317bf26839ba1e0, []int{1}
-}
-func (m *FixtureRequest) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_FixtureRequest.Unmarshal(m, b)
-}
-func (m *FixtureRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_FixtureRequest.Marshal(b, m, deterministic)
-}
-func (dst *FixtureRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_FixtureRequest.Merge(dst, src)
-}
-func (m *FixtureRequest) XXX_Size() int {
-	return xxx_messageInfo_FixtureRequest.Size(m)
-}
-func (m *FixtureRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_FixtureRequest.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_FixtureRequest proto.InternalMessageInfo
-
-func (m *FixtureRequest) GetFixtureId() int64 {
-	if m != nil {
-		return m.FixtureId
-	}
-	return 0
-}
 
 type Competition struct {
 	Id                   int64               `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
@@ -124,7 +32,7 @@ func (m *Competition) Reset()         { *m = Competition{} }
 func (m *Competition) String() string { return proto.CompactTextString(m) }
 func (*Competition) ProtoMessage()    {}
 func (*Competition) Descriptor() ([]byte, []int) {
-	return fileDescriptor_competition_6317bf26839ba1e0, []int{2}
+	return fileDescriptor_competition_a3a3a3d6c228d864, []int{0}
 }
 func (m *Competition) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Competition.Unmarshal(m, b)
@@ -165,224 +73,27 @@ func (m *Competition) GetIsCup() *wrappers.BoolValue {
 	return nil
 }
 
-type Fixture struct {
-	Id int64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	//    competition.Competition competition = 2;
-	//    Season season = 3;
-	//    Team home_team = 4;
-	//    Team away_team = 5;
-	//    Venue venue = 6;
-	//    google.protobuf.Int64Value referee_id = 7;
-	DateTime             int64    `protobuf:"varint,8,opt,name=date_time,json=dateTime,proto3" json:"date_time,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
-}
-
-func (m *Fixture) Reset()         { *m = Fixture{} }
-func (m *Fixture) String() string { return proto.CompactTextString(m) }
-func (*Fixture) ProtoMessage()    {}
-func (*Fixture) Descriptor() ([]byte, []int) {
-	return fileDescriptor_competition_6317bf26839ba1e0, []int{3}
-}
-func (m *Fixture) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_Fixture.Unmarshal(m, b)
-}
-func (m *Fixture) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_Fixture.Marshal(b, m, deterministic)
-}
-func (dst *Fixture) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Fixture.Merge(dst, src)
-}
-func (m *Fixture) XXX_Size() int {
-	return xxx_messageInfo_Fixture.Size(m)
-}
-func (m *Fixture) XXX_DiscardUnknown() {
-	xxx_messageInfo_Fixture.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_Fixture proto.InternalMessageInfo
-
-func (m *Fixture) GetId() int64 {
-	if m != nil {
-		return m.Id
-	}
-	return 0
-}
-
-func (m *Fixture) GetDateTime() int64 {
-	if m != nil {
-		return m.DateTime
-	}
-	return 0
+func init() {
+	proto.RegisterType((*Competition)(nil), "competition.Competition")
 }
 
 func init() {
-	proto.RegisterType((*DateRangeRequest)(nil), "statistico_data.DateRangeRequest")
-	proto.RegisterType((*FixtureRequest)(nil), "statistico_data.FixtureRequest")
-	proto.RegisterType((*Competition)(nil), "statistico_data.Competition")
-	proto.RegisterType((*Fixture)(nil), "statistico_data.Fixture")
+	proto.RegisterFile("proto/competition/competition.proto", fileDescriptor_competition_a3a3a3d6c228d864)
 }
 
-// Reference imports to suppress errors if they are not otherwise used.
-var _ context.Context
-var _ grpc.ClientConn
-
-// This is a compile-time assertion to ensure that this generated file
-// is compatible with the grpc package it is being compiled against.
-const _ = grpc.SupportPackageIsVersion4
-
-// FixtureServiceClient is the client API for FixtureService service.
-//
-// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
-type FixtureServiceClient interface {
-	ListFixtures(ctx context.Context, in *DateRangeRequest, opts ...grpc.CallOption) (FixtureService_ListFixturesClient, error)
-	FixtureByID(ctx context.Context, in *FixtureRequest, opts ...grpc.CallOption) (*Fixture, error)
-}
-
-type fixtureServiceClient struct {
-	cc *grpc.ClientConn
-}
-
-func NewFixtureServiceClient(cc *grpc.ClientConn) FixtureServiceClient {
-	return &fixtureServiceClient{cc}
-}
-
-func (c *fixtureServiceClient) ListFixtures(ctx context.Context, in *DateRangeRequest, opts ...grpc.CallOption) (FixtureService_ListFixturesClient, error) {
-	stream, err := c.cc.NewStream(ctx, &_FixtureService_serviceDesc.Streams[0], "/statistico_data.FixtureService/ListFixtures", opts...)
-	if err != nil {
-		return nil, err
-	}
-	x := &fixtureServiceListFixturesClient{stream}
-	if err := x.ClientStream.SendMsg(in); err != nil {
-		return nil, err
-	}
-	if err := x.ClientStream.CloseSend(); err != nil {
-		return nil, err
-	}
-	return x, nil
-}
-
-type FixtureService_ListFixturesClient interface {
-	Recv() (*Fixture, error)
-	grpc.ClientStream
-}
-
-type fixtureServiceListFixturesClient struct {
-	grpc.ClientStream
-}
-
-func (x *fixtureServiceListFixturesClient) Recv() (*Fixture, error) {
-	m := new(Fixture)
-	if err := x.ClientStream.RecvMsg(m); err != nil {
-		return nil, err
-	}
-	return m, nil
-}
-
-func (c *fixtureServiceClient) FixtureByID(ctx context.Context, in *FixtureRequest, opts ...grpc.CallOption) (*Fixture, error) {
-	out := new(Fixture)
-	err := c.cc.Invoke(ctx, "/statistico_data.FixtureService/FixtureByID", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-// FixtureServiceServer is the server API for FixtureService service.
-type FixtureServiceServer interface {
-	ListFixtures(*DateRangeRequest, FixtureService_ListFixturesServer) error
-	FixtureByID(context.Context, *FixtureRequest) (*Fixture, error)
-}
-
-func RegisterFixtureServiceServer(s *grpc.Server, srv FixtureServiceServer) {
-	s.RegisterService(&_FixtureService_serviceDesc, srv)
-}
-
-func _FixtureService_ListFixtures_Handler(srv interface{}, stream grpc.ServerStream) error {
-	m := new(DateRangeRequest)
-	if err := stream.RecvMsg(m); err != nil {
-		return err
-	}
-	return srv.(FixtureServiceServer).ListFixtures(m, &fixtureServiceListFixturesServer{stream})
-}
-
-type FixtureService_ListFixturesServer interface {
-	Send(*Fixture) error
-	grpc.ServerStream
-}
-
-type fixtureServiceListFixturesServer struct {
-	grpc.ServerStream
-}
-
-func (x *fixtureServiceListFixturesServer) Send(m *Fixture) error {
-	return x.ServerStream.SendMsg(m)
-}
-
-func _FixtureService_FixtureByID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(FixtureRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(FixtureServiceServer).FixtureByID(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/statistico_data.FixtureService/FixtureByID",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FixtureServiceServer).FixtureByID(ctx, req.(*FixtureRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-var _FixtureService_serviceDesc = grpc.ServiceDesc{
-	ServiceName: "statistico_data.FixtureService",
-	HandlerType: (*FixtureServiceServer)(nil),
-	Methods: []grpc.MethodDesc{
-		{
-			MethodName: "FixtureByID",
-			Handler:    _FixtureService_FixtureByID_Handler,
-		},
-	},
-	Streams: []grpc.StreamDesc{
-		{
-			StreamName:    "ListFixtures",
-			Handler:       _FixtureService_ListFixtures_Handler,
-			ServerStreams: true,
-		},
-	},
-	Metadata: "proto/competition/competition.proto",
-}
-
-func init() {
-	proto.RegisterFile("proto/competition/competition.proto", fileDescriptor_competition_6317bf26839ba1e0)
-}
-
-var fileDescriptor_competition_6317bf26839ba1e0 = []byte{
-	// 348 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x52, 0xcd, 0x4f, 0xfa, 0x40,
-	0x10, 0xfd, 0x15, 0x7e, 0xf2, 0xb1, 0x18, 0x34, 0x7b, 0xb1, 0xc1, 0xa8, 0x58, 0x2f, 0x5c, 0x6c,
-	0x15, 0x13, 0x8d, 0x57, 0x20, 0x44, 0x8c, 0x89, 0x49, 0x25, 0x1e, 0xbc, 0x34, 0x4b, 0xbb, 0xd4,
-	0x49, 0x28, 0x53, 0xbb, 0xb3, 0x7e, 0xfc, 0x51, 0xfe, 0x8f, 0x86, 0xa5, 0x7c, 0x04, 0x62, 0xe2,
-	0x6d, 0xe6, 0xbd, 0x37, 0x6f, 0xf6, 0x4d, 0x96, 0x9d, 0xa5, 0x19, 0x12, 0x7a, 0x21, 0x26, 0xa9,
-	0x24, 0x20, 0xc0, 0xe9, 0x7a, 0xed, 0x1a, 0x96, 0xef, 0x29, 0x12, 0x04, 0x8a, 0x20, 0xc4, 0x20,
-	0x12, 0x24, 0x1a, 0xc7, 0x31, 0x62, 0x3c, 0x91, 0x9e, 0xa1, 0x47, 0x7a, 0xec, 0x7d, 0x64, 0x22,
-	0x4d, 0x65, 0xa6, 0xe6, 0x03, 0xce, 0x1d, 0xdb, 0xef, 0x09, 0x92, 0xbe, 0x98, 0xc6, 0xd2, 0x97,
-	0x6f, 0x5a, 0x2a, 0xe2, 0x87, 0xac, 0x1a, 0x09, 0x92, 0xc1, 0x38, 0xc3, 0xc4, 0xb6, 0x9a, 0x56,
-	0xab, 0xea, 0x57, 0x66, 0x40, 0x3f, 0xc3, 0x84, 0x1f, 0xb0, 0xb2, 0x21, 0x09, 0xed, 0x82, 0xa1,
-	0x4a, 0xb3, 0x76, 0x88, 0x8e, 0xc7, 0xea, 0x7d, 0xf8, 0x24, 0x9d, 0x2d, 0x7d, 0x8e, 0x18, 0x1b,
-	0xcf, 0x91, 0x00, 0x22, 0x63, 0x54, 0xf4, 0xab, 0x39, 0x32, 0x88, 0x9c, 0x88, 0xd5, 0xba, 0xab,
-	0x00, 0xbc, 0xce, 0x0a, 0x4b, 0x55, 0x01, 0x22, 0xce, 0xd9, 0xff, 0xa9, 0x48, 0x64, 0xbe, 0xc5,
-	0xd4, 0xfc, 0x92, 0x95, 0x40, 0x05, 0xa1, 0x4e, 0xed, 0x62, 0xd3, 0x6a, 0xd5, 0xda, 0x0d, 0x77,
-	0x1e, 0xcf, 0x5d, 0xc4, 0x73, 0x3b, 0x88, 0x93, 0x67, 0x31, 0xd1, 0xd2, 0xdf, 0x01, 0xd5, 0xd5,
-	0xa9, 0x73, 0xcd, 0xca, 0xf9, 0xb3, 0xb6, 0x36, 0x2c, 0x72, 0x12, 0x24, 0xd2, 0xae, 0x18, 0xd8,
-	0xe4, 0x1c, 0x42, 0x22, 0xdb, 0xdf, 0xd6, 0x32, 0xcf, 0x93, 0xcc, 0xde, 0x21, 0x94, 0xfc, 0x91,
-	0xed, 0x3e, 0x80, 0xa2, 0x1c, 0x55, 0xfc, 0xd4, 0xdd, 0xb8, 0xb6, 0xbb, 0x79, 0xca, 0x86, 0xbd,
-	0x25, 0xc9, 0xa7, 0x9d, 0x7f, 0x17, 0x16, 0xbf, 0x67, 0xb5, 0xbc, 0xed, 0x7c, 0x0d, 0x7a, 0xfc,
-	0xe4, 0x37, 0xf1, 0x1f, 0xdc, 0x3a, 0xb7, 0x2f, 0x37, 0x31, 0xd0, 0xab, 0x1e, 0xb9, 0x21, 0x26,
-	0xde, 0x4a, 0xb7, 0x56, 0x9e, 0xcf, 0x46, 0xbc, 0xad, 0x6f, 0x34, 0x2a, 0x19, 0xe8, 0xea, 0x27,
-	0x00, 0x00, 0xff, 0xff, 0x24, 0x2f, 0x80, 0xa3, 0x62, 0x02, 0x00, 0x00,
+var fileDescriptor_competition_a3a3a3d6c228d864 = []byte{
+	// 196 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x64, 0x8f, 0x31, 0x6b, 0x85, 0x30,
+	0x14, 0x85, 0x89, 0xb6, 0x42, 0x23, 0x74, 0xc8, 0x24, 0x0e, 0x45, 0xda, 0xc5, 0xa5, 0x09, 0x6d,
+	0x87, 0xd2, 0x55, 0xff, 0x81, 0x43, 0x87, 0x2e, 0x25, 0x26, 0xa9, 0xbd, 0xa0, 0xde, 0x60, 0x6e,
+	0x78, 0x7f, 0xff, 0x41, 0xe4, 0xf1, 0x84, 0xb7, 0x7d, 0x9c, 0x73, 0xe0, 0xe3, 0xf0, 0x17, 0xbf,
+	0x21, 0xa1, 0x32, 0xb8, 0x78, 0x47, 0x40, 0x80, 0xeb, 0x91, 0x65, 0x6a, 0x45, 0x79, 0x88, 0xea,
+	0xa7, 0x09, 0x71, 0x9a, 0x9d, 0x4a, 0xd5, 0x18, 0xff, 0xd4, 0x69, 0xd3, 0xde, 0xbb, 0x2d, 0xec,
+	0xe3, 0x67, 0xcb, 0xcb, 0xfe, 0x3a, 0x17, 0x8f, 0x3c, 0x03, 0x5b, 0xb1, 0x86, 0xb5, 0xf9, 0x90,
+	0x81, 0x15, 0x82, 0xdf, 0xad, 0x7a, 0x71, 0x55, 0xd6, 0xb0, 0xf6, 0x61, 0x48, 0x2c, 0xde, 0x78,
+	0x01, 0xe1, 0xd7, 0x44, 0x5f, 0xe5, 0x0d, 0x6b, 0xcb, 0xf7, 0x5a, 0xee, 0x0e, 0x79, 0x71, 0xc8,
+	0x0e, 0x71, 0xfe, 0xd6, 0x73, 0x74, 0xc3, 0x3d, 0x84, 0x3e, 0xfa, 0xee, 0xeb, 0xe7, 0x73, 0x02,
+	0xfa, 0x8f, 0xa3, 0x34, 0xb8, 0xa8, 0x40, 0x9a, 0x20, 0x10, 0x18, 0x3c, 0xe0, 0xab, 0xd5, 0xa4,
+	0xd5, 0xcd, 0xbf, 0xb1, 0x48, 0xd1, 0xc7, 0x39, 0x00, 0x00, 0xff, 0xff, 0x5e, 0x65, 0x74, 0x74,
+	0xfb, 0x00, 0x00, 0x00,
 }

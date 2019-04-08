@@ -1,6 +1,8 @@
 syntax = "proto3";
 
-package statistico_data;
+option go_package = "github.com/statistico/statistico-data/proto/fixture";
+
+package fixture;
 
 import "google/protobuf/wrappers.proto";
 import "proto/competition/competition.proto";
@@ -27,11 +29,11 @@ message FixtureRequest {
 
 message Fixture {
     int64 id = 1;
-    Competition competition = 2;
-    Season season = 3;
-    Team home_team = 4;
-    Team away_team = 5;
-    Venue venue = 6;
+    competition.Competition competition = 2;
+    season.Season season = 3;
+    team.Team home_team = 4;
+    team.Team away_team = 5;
+    venue.Venue venue = 6;
     google.protobuf.Int64Value referee_id = 7;
     int64 date_time = 8;
 }
