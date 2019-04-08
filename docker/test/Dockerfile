@@ -5,6 +5,4 @@ WORKDIR /go/src/github.com/statistico/statistico-data
 RUN apk update && apk add git gcc g++
 RUN go get gotest.tools/gotestsum
 
-COPY ./ /go/src/github.com/statistico/statistico-data/
-
 CMD ["/bin/sh"]
