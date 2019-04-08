@@ -1,11 +1,11 @@
 package result
 
 import (
-	"github.com/stretchr/testify/mock"
 	"github.com/statistico/statistico-data/internal/model"
-	"time"
-	"testing"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
+	"testing"
+	"time"
 )
 
 func TestHandleResult(t *testing.T) {
@@ -15,9 +15,9 @@ func TestHandleResult(t *testing.T) {
 	venueRepo := new(mockVenueRepository)
 	handler := Handler{
 		CompetitionRepo: compRepo,
-		SeasonRepo: seasonRepo,
-		TeamRepo: teamRepo,
-		VenueRepo: venueRepo,
+		SeasonRepo:      seasonRepo,
+		TeamRepo:        teamRepo,
+		VenueRepo:       venueRepo,
 	}
 
 	t.Run("hydrates new proto result struct", func(t *testing.T) {

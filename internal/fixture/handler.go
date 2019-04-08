@@ -1,24 +1,24 @@
 package fixture
 
-import(
-	"github.com/statistico/statistico-data/internal/model"
-	pbFixture "github.com/statistico/statistico-data/proto/fixture"
-	pbTeam "github.com/statistico/statistico-data/proto/team"
-	pbCompetition "github.com/statistico/statistico-data/proto/competition"
-	pbSeason "github.com/statistico/statistico-data/proto/season"
-	pbVenue "github.com/statistico/statistico-data/proto/venue"
-	"github.com/statistico/statistico-data/internal/team"
-	"github.com/statistico/statistico-data/internal/competition"
-	"github.com/statistico/statistico-data/internal/season"
-	"github.com/statistico/statistico-data/internal/venue"
+import (
 	"github.com/golang/protobuf/ptypes/wrappers"
+	"github.com/statistico/statistico-data/internal/competition"
+	"github.com/statistico/statistico-data/internal/model"
+	"github.com/statistico/statistico-data/internal/season"
+	"github.com/statistico/statistico-data/internal/team"
+	"github.com/statistico/statistico-data/internal/venue"
+	pbCompetition "github.com/statistico/statistico-data/proto/competition"
+	pbFixture "github.com/statistico/statistico-data/proto/fixture"
+	pbSeason "github.com/statistico/statistico-data/proto/season"
+	pbTeam "github.com/statistico/statistico-data/proto/team"
+	pbVenue "github.com/statistico/statistico-data/proto/venue"
 )
 
 type Handler struct {
 	CompetitionRepo competition.Repository
-	SeasonRepo season.Repository
-	TeamRepo team.Repository
-	VenueRepo venue.Repository
+	SeasonRepo      season.Repository
+	TeamRepo        team.Repository
+	VenueRepo       venue.Repository
 }
 
 func (h Handler) HandleFixture(f *model.Fixture) (*pbFixture.Fixture, error) {
@@ -47,12 +47,12 @@ func (h Handler) HandleFixture(f *model.Fixture) (*pbFixture.Fixture, error) {
 	}
 
 	proto := pbFixture.Fixture{
-		Id: int64(f.ID),
+		Id:          int64(f.ID),
 		Competition: competitionToProto(c),
-		Season: seasonToProto(s),
-		HomeTeam: teamToProto(home),
-		AwayTeam: teamToProto(away),
-		DateTime: f.Date.Unix(),
+		Season:      seasonToProto(s),
+		HomeTeam:    teamToProto(home),
+		AwayTeam:    teamToProto(away),
+		DateTime:    f.Date.Unix(),
 	}
 
 	if f.VenueID != nil {
@@ -61,7 +61,7 @@ func (h Handler) HandleFixture(f *model.Fixture) (*pbFixture.Fixture, error) {
 		if err != nil {
 			return nil, err
 		}
-		
+
 		proto.Venue = venueToProto(v)
 	}
 

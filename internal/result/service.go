@@ -1,19 +1,20 @@
 package result
 
 import (
+	"errors"
 	"github.com/statistico/statistico-data/internal/fixture"
 	pb "github.com/statistico/statistico-data/proto/result"
-	"time"
-	"errors"
 	"log"
+	"time"
 )
 
 const maxLimit = 10000
+
 var ErrTimeParse = errors.New("unable to parse date provided in Request")
 
 type Service struct {
 	FixtureRepo fixture.Repository
-	ResultRepo Repository
+	ResultRepo  Repository
 	Handler
 	Logger *log.Logger
 }

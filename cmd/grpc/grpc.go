@@ -1,14 +1,14 @@
 package main
 
 import (
-	"net"
-	"log"
-	"google.golang.org/grpc"
-	"github.com/statistico/statistico-data/internal/container"
 	"github.com/statistico/statistico-data/internal/config"
+	"github.com/statistico/statistico-data/internal/container"
 	fix "github.com/statistico/statistico-data/proto/fixture"
 	res "github.com/statistico/statistico-data/proto/result"
+	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
+	"log"
+	"net"
 )
 
 func main() {

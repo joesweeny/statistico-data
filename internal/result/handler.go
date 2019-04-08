@@ -1,24 +1,24 @@
 package result
 
 import (
+	"github.com/golang/protobuf/ptypes/wrappers"
 	"github.com/statistico/statistico-data/internal/competition"
+	"github.com/statistico/statistico-data/internal/model"
 	"github.com/statistico/statistico-data/internal/season"
 	"github.com/statistico/statistico-data/internal/team"
 	"github.com/statistico/statistico-data/internal/venue"
-	"github.com/statistico/statistico-data/internal/model"
-	pbResult "github.com/statistico/statistico-data/proto/result"
-	pbTeam "github.com/statistico/statistico-data/proto/team"
 	pbCompetition "github.com/statistico/statistico-data/proto/competition"
+	pbResult "github.com/statistico/statistico-data/proto/result"
 	pbSeason "github.com/statistico/statistico-data/proto/season"
+	pbTeam "github.com/statistico/statistico-data/proto/team"
 	pbVenue "github.com/statistico/statistico-data/proto/venue"
-	"github.com/golang/protobuf/ptypes/wrappers"
 )
 
 type Handler struct {
 	CompetitionRepo competition.Repository
-	SeasonRepo season.Repository
-	TeamRepo team.Repository
-	VenueRepo venue.Repository
+	SeasonRepo      season.Repository
+	TeamRepo        team.Repository
+	VenueRepo       venue.Repository
 }
 
 func (h Handler) HandleResult(f *model.Fixture, r *model.Result) (*pbResult.Result, error) {
@@ -47,11 +47,11 @@ func (h Handler) HandleResult(f *model.Fixture, r *model.Result) (*pbResult.Resu
 	}
 
 	proto := pbResult.Result{
-		Id: int64(r.FixtureID),
+		Id:          int64(r.FixtureID),
 		Competition: competitionToProto(c),
-		Season: seasonToProto(s),
-		DateTime: f.Date.Unix(),
-		MatchData: toMatchData(home, away, r),
+		Season:      seasonToProto(s),
+		DateTime:    f.Date.Unix(),
+		MatchData:   toMatchData(home, away, r),
 	}
 
 	if f.VenueID != nil {
@@ -121,7 +121,7 @@ func toMatchData(home *model.Team, away *model.Team, res *model.Result) *pbResul
 	return &pbResult.MatchData{
 		HomeTeam: teamToProto(home),
 		AwayTeam: teamToProto(away),
-		Stats: toMatchStats(res),
+		Stats:    toMatchStats(res),
 	}
 }
 
