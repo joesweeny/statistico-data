@@ -6,7 +6,6 @@ import (
 	"github.com/statistico/statistico-data/internal/season"
 	"log"
 	"sync"
-	"github.com/joesweeny/sportmonks-go-client"
 )
 
 var waitGroup sync.WaitGroup

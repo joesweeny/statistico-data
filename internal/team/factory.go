@@ -4,7 +4,6 @@ import (
 	"github.com/statistico/sportmonks-go-client"
 	"github.com/statistico/statistico-data/internal/model"
 	"github.com/jonboulle/clockwork"
-	"github.com/joesweeny/sportmonks-go-client"
 )
 
 type Factory struct {

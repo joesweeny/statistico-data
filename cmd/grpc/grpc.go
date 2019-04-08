@@ -4,10 +4,10 @@ import (
 	"net"
 	"log"
 	"google.golang.org/grpc"
-	"github.com/joesweeny/statistico-data/internal/container"
-	"github.com/joesweeny/statistico-data/internal/config"
-	fix "github.com/joesweeny/statistico-data/proto/fixture"
-	res "github.com/joesweeny/statistico-data/proto/result"
+	"github.com/statistico/statistico-data/internal/container"
+	"github.com/statistico/statistico-data/internal/config"
+	fix "github.com/statistico/statistico-data/proto/fixture"
+	res "github.com/statistico/statistico-data/proto/result"
 	"google.golang.org/grpc/reflection"
 )
 
