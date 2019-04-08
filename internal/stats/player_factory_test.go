@@ -1,7 +1,7 @@
 package stats
 
 import (
-	"github.com/joesweeny/sportmonks-go-client"
+	"github.com/statistico/sportmonks-go-client"
 	"github.com/jonboulle/clockwork"
 	"github.com/stretchr/testify/assert"
 	"testing"

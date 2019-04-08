@@ -3,8 +3,8 @@ package player
 import (
 	"database/sql"
 	"fmt"
-	"github.com/joesweeny/statistico-data/internal/config"
-	"github.com/joesweeny/statistico-data/internal/model"
+	"github.com/statistico/statistico-data/internal/config"
+	"github.com/statistico/statistico-data/internal/model"
 	"github.com/stretchr/testify/assert"
 	"testing"
 	"time"

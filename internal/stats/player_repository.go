@@ -1,6 +1,6 @@
 package stats
 
-import "github.com/joesweeny/statistico-data/internal/model"
+import "github.com/statistico/statistico-data/internal/model"
 
 type PlayerRepository interface {
 	InsertPlayerStats(m *model.PlayerStats) error

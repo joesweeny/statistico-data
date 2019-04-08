@@ -1,6 +1,6 @@
 package venue
 
-import "github.com/joesweeny/statistico-data/internal/model"
+import "github.com/statistico/statistico-data/internal/model"
 
 type Repository interface {
 	Insert(v *model.Venue) error

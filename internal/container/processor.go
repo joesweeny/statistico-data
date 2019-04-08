@@ -1,18 +1,18 @@
 package container
 
 import (
-	"github.com/joesweeny/statistico-data/internal/competition"
-	"github.com/joesweeny/statistico-data/internal/country"
-	"github.com/joesweeny/statistico-data/internal/event"
-	"github.com/joesweeny/statistico-data/internal/fixture"
-	"github.com/joesweeny/statistico-data/internal/player"
-	"github.com/joesweeny/statistico-data/internal/result"
-	"github.com/joesweeny/statistico-data/internal/round"
-	"github.com/joesweeny/statistico-data/internal/season"
-	"github.com/joesweeny/statistico-data/internal/squad"
-	"github.com/joesweeny/statistico-data/internal/stats"
-	"github.com/joesweeny/statistico-data/internal/team"
-	"github.com/joesweeny/statistico-data/internal/venue"
+	"github.com/statistico/statistico-data/internal/competition"
+	"github.com/statistico/statistico-data/internal/country"
+	"github.com/statistico/statistico-data/internal/event"
+	"github.com/statistico/statistico-data/internal/fixture"
+	"github.com/statistico/statistico-data/internal/player"
+	"github.com/statistico/statistico-data/internal/result"
+	"github.com/statistico/statistico-data/internal/round"
+	"github.com/statistico/statistico-data/internal/season"
+	"github.com/statistico/statistico-data/internal/squad"
+	"github.com/statistico/statistico-data/internal/stats"
+	"github.com/statistico/statistico-data/internal/team"
+	"github.com/statistico/statistico-data/internal/venue"
 )
 
 type Processor interface {

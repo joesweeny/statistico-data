@@ -3,9 +3,9 @@ package squad
 import (
 	"database/sql"
 	"fmt"
-	"github.com/joesweeny/statistico-data/internal/config"
-	"github.com/joesweeny/statistico-data/internal/model"
-	"github.com/joesweeny/statistico-data/internal/season"
+	"github.com/statistico/statistico-data/internal/config"
+	"github.com/statistico/statistico-data/internal/model"
+	"github.com/statistico/statistico-data/internal/season"
 	"github.com/stretchr/testify/assert"
 	"testing"
 	"time"

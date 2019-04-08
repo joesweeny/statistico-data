@@ -1,7 +1,7 @@
 package fixture
 
 import (
-	pb "github.com/joesweeny/statistico-data/proto/fixture"
+	pb "github.com/statistico/statistico-data/proto/fixture"
 	"time"
 	"log"
 	"errors"
