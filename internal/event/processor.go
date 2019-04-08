@@ -1,7 +1,7 @@
 package event
 
 import (
-	"github.com/joesweeny/sportmonks-go-client"
+	"github.com/statistico/sportmonks-go-client"
 	"log"
 )
 

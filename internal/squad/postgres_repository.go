@@ -2,7 +2,7 @@ package squad
 
 import (
 	"database/sql"
-	"github.com/joesweeny/statistico-data/internal/model"
+	"github.com/statistico/statistico-data/internal/model"
 	"github.com/lib/pq"
 	_ "github.com/lib/pq"
 	"github.com/pkg/errors"

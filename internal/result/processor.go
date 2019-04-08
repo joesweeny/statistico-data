@@ -1,10 +1,10 @@
 package result
 
 import (
-	"github.com/joesweeny/sportmonks-go-client"
-	"github.com/joesweeny/statistico-data/internal/event"
-	"github.com/joesweeny/statistico-data/internal/fixture"
-	"github.com/joesweeny/statistico-data/internal/stats"
+	"github.com/statistico/sportmonks-go-client"
+	"github.com/statistico/statistico-data/internal/event"
+	"github.com/statistico/statistico-data/internal/fixture"
+	"github.com/statistico/statistico-data/internal/stats"
 	"log"
 	"sync"
 	"time"

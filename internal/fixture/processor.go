@@ -1,11 +1,12 @@
 package fixture
 
 import (
-	"github.com/joesweeny/sportmonks-go-client"
-	"github.com/joesweeny/statistico-data/internal/model"
-	"github.com/joesweeny/statistico-data/internal/season"
+	"github.com/statistico/sportmonks-go-client"
+	"github.com/statistico/statistico-data/internal/model"
+	"github.com/statistico/statistico-data/internal/season"
 	"log"
 	"sync"
+	"github.com/joesweeny/sportmonks-go-client"
 )
 
 var waitGroup sync.WaitGroup
