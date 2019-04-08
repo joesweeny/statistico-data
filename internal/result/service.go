@@ -1,8 +1,8 @@
 package result
 
 import (
-	"github.com/joesweeny/statistico-data/internal/fixture"
-	pb "github.com/joesweeny/statistico-data/proto/result"
+	"github.com/statistico/statistico-data/internal/fixture"
+	pb "github.com/statistico/statistico-data/proto/result"
 	"time"
 	"errors"
 	"log"

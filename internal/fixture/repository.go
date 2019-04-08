@@ -1,7 +1,7 @@
 package fixture
 
 import (
-	"github.com/joesweeny/statistico-data/internal/model"
+	"github.com/statistico/statistico-data/internal/model"
 	"time"
 )
 

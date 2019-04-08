@@ -10,10 +10,9 @@
   version = "v1.1.1"
 
 [[projects]]
-  digest = "1:60bfcd256ec46ee9dc194a84b5c3851b91bf3edd6fbb9600d57b122e9fdb6cc6"
+  digest = "1:1e95d20d050664ec98287804ee8a961fbc02902aec9a0fd44fd3580a866e0759"
   name = "github.com/golang/protobuf"
   packages = [
-    "jsonpb",
     "proto",
     "protoc-gen-go",
     "protoc-gen-go/descriptor",
@@ -28,50 +27,16 @@
     "ptypes/wrappers",
   ]
   pruneopts = "UT"
-  revision = "aa810b61a9c79d51363740d207bb46cf8e620ed5"
-  version = "v1.2.0"
+  revision = "b5d812f8a3706043e23a9cd5babf2e5423744d30"
+  version = "v1.3.1"
 
 [[projects]]
-  digest = "1:ca59b1175189b3f0e9f1793d2c350114be36eaabbe5b9f554b35edee1de50aea"
+  digest = "1:d5f97fc268267ec1b61c3453058c738246fc3e746f14b1ae25161513b7367b0c"
   name = "github.com/gorilla/mux"
   packages = ["."]
   pruneopts = "UT"
-  revision = "a7962380ca08b5a188038c69871b8d3fbdf31e89"
-  version = "v1.7.0"
-
-[[projects]]
-  branch = "master"
-  digest = "1:7085da3c3d3438adfbdab99583053ee9652636b8a69725ee4fd05ba4b6acd3e0"
-  name = "github.com/joesweeny/sportmonks-go-client"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "4987f381cfabe3c92bef442b381cd4b5dde4f57b"
-
-[[projects]]
-  branch = "master"
-  digest = "1:1972d09fb05cadc4f090509f8bf56277c64c8f85f6c62ecfd08ffa3cb6feb215"
-  name = "github.com/joesweeny/statistico-data"
-  packages = [
-    "internal/competition",
-    "internal/config",
-    "internal/container",
-    "internal/country",
-    "internal/event",
-    "internal/fixture",
-    "internal/model",
-    "internal/player",
-    "internal/result",
-    "internal/round",
-    "internal/season",
-    "internal/squad",
-    "internal/stats",
-    "internal/team",
-    "internal/venue",
-    "proto/fixture",
-    "proto/result",
-  ]
-  pruneopts = "UT"
-  revision = "98a47ca99c09d15497a1bdaf531cb6deb67b8d67"
+  revision = "c5c6c98bc25355028a63748a498942a6398ccd22"
+  version = "v1.7.1"
 
 [[projects]]
   digest = "1:75ab90ae3f5d876167e60f493beadfe66f0ed861a710f283fb06c86437a09538"
@@ -109,6 +74,14 @@
   version = "v1.0.0"
 
 [[projects]]
+  branch = "master"
+  digest = "1:7085da3c3d3438adfbdab99583053ee9652636b8a69725ee4fd05ba4b6acd3e0"
+  name = "github.com/statistico/sportmonks-go-client"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "4987f381cfabe3c92bef442b381cd4b5dde4f57b"
+
+[[projects]]
   digest = "1:ac83cf90d08b63ad5f7e020ef480d319ae890c208f8524622a2f3136e2686b02"
   name = "github.com/stretchr/objx"
   packages = ["."]
@@ -129,7 +102,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:fc7b6b4384e1e849d99eab58eca4f8c0a76bad4699117d5077a9a5c3c83e289e"
+  digest = "1:a7550c619a7f9701bc2f0b2c866668a207cfb693a2834796f723d2c78b514372"
   name = "golang.org/x/net"
   packages = [
     "context",
@@ -141,15 +114,15 @@
     "trace",
   ]
   pruneopts = "UT"
-  revision = "3a22650c66bd7f4fb6d1e8072ffd7b75c8a27898"
+  revision = "eb5bcb51f2a31c7d5141d810b70815c05d9c9146"
 
 [[projects]]
   branch = "master"
-  digest = "1:8207c052fb873f83c61a5aa16f6add5feb9881eda2112b56f69fd3b9e7f55c3f"
+  digest = "1:cf353a5a9ffb2d6f850e9c773e25388a425a70c270546480427ed069e87b136a"
   name = "golang.org/x/sys"
   packages = ["unix"]
   pruneopts = "UT"
-  revision = "153ac476189d567564fda94622d7a8c0fb338f6b"
+  revision = "4b34438f7a67ee5f45cc6132e2bad873a20324e9"
 
 [[projects]]
   digest = "1:a2ab62866c75542dd18d2b069fec854577a20211d7c0ea6ae746072a1dccdd18"
@@ -176,14 +149,14 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:077c1c599507b3b3e9156d17d36e1e61928ee9b53a5b420f10f28ebd4a0b275c"
+  digest = "1:c3076e7defee87de1236f1814beb588f40a75544c60121e6eb38b3b3721783e2"
   name = "google.golang.org/genproto"
   packages = ["googleapis/rpc/status"]
   pruneopts = "UT"
-  revision = "bd968387e4aa590b3c6e4ba38ecac1ed314d43ad"
+  revision = "64821d5d210748c883cd2b809589555ae4654203"
 
 [[projects]]
-  digest = "1:468bc9b39a60a4ac6726976d60d32cb0fbcaf749fea4139be8cec53fdfbd82d5"
+  digest = "1:87d21766dc058648c95ae9f929496931684f576e2fbd7c80e36ab7c07b6896cf"
   name = "google.golang.org/grpc"
   packages = [
     ".",
@@ -221,8 +194,8 @@
     "tap",
   ]
   pruneopts = "UT"
-  revision = "a02b0774206b209466313a0b525d2c738fe407eb"
-  version = "v1.18.0"
+  revision = "3507fb8e1a5ad030303c106fef3a47c9fdad16ad"
+  version = "v1.19.1"
 
 [solve-meta]
   analyzer-name = "dep"
@@ -232,27 +205,10 @@
     "github.com/golang/protobuf/protoc-gen-go",
     "github.com/golang/protobuf/ptypes/wrappers",
     "github.com/gorilla/mux",
-    "github.com/joesweeny/sportmonks-go-client",
-    "github.com/joesweeny/statistico-data/internal/competition",
-    "github.com/joesweeny/statistico-data/internal/config",
-    "github.com/joesweeny/statistico-data/internal/container",
-    "github.com/joesweeny/statistico-data/internal/country",
-    "github.com/joesweeny/statistico-data/internal/event",
-    "github.com/joesweeny/statistico-data/internal/fixture",
-    "github.com/joesweeny/statistico-data/internal/model",
-    "github.com/joesweeny/statistico-data/internal/player",
-    "github.com/joesweeny/statistico-data/internal/result",
-    "github.com/joesweeny/statistico-data/internal/round",
-    "github.com/joesweeny/statistico-data/internal/season",
-    "github.com/joesweeny/statistico-data/internal/squad",
-    "github.com/joesweeny/statistico-data/internal/stats",
-    "github.com/joesweeny/statistico-data/internal/team",
-    "github.com/joesweeny/statistico-data/internal/venue",
-    "github.com/joesweeny/statistico-data/proto/fixture",
-    "github.com/joesweeny/statistico-data/proto/result",
     "github.com/jonboulle/clockwork",
     "github.com/lib/pq",
     "github.com/pkg/errors",
+    "github.com/statistico/sportmonks-go-client",
     "github.com/stretchr/testify/assert",
     "github.com/stretchr/testify/mock",
     "golang.org/x/net/context",

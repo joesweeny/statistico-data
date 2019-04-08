@@ -71,7 +71,7 @@ services:
       dockerfile: ./docker/test/Dockerfile
       context: .
     volumes:
-      - .:/go/src/github.com/joesweeny/statistico-data
+      - .:/go/src/github.com/statistico/statistico-data
     environment:
       DB_DRIVER: postgres
       DB_HOST: postgres

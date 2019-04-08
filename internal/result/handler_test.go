@@ -2,7 +2,7 @@ package result
 
 import (
 	"github.com/stretchr/testify/mock"
-	"github.com/joesweeny/statistico-data/internal/model"
+	"github.com/statistico/statistico-data/internal/model"
 	"time"
 	"testing"
 	"github.com/stretchr/testify/assert"

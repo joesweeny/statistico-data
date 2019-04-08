@@ -1,8 +1,8 @@
 package stats
 
 import (
-	"github.com/joesweeny/sportmonks-go-client"
-	"github.com/joesweeny/statistico-data/internal/model"
+	"github.com/statistico/sportmonks-go-client"
+	"github.com/statistico/statistico-data/internal/model"
 	"github.com/jonboulle/clockwork"
 	"strconv"
 )
