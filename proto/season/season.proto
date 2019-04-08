@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package statistico_data;
+
+import "google/protobuf/wrappers.proto";
+
+message Season {
+    int64 id = 1;
+    string name = 2;
+    google.protobuf.BoolValue is_current = 3;
+}

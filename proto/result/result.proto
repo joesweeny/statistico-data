@@ -3,6 +3,10 @@ syntax = "proto3";
 package statistico_data;
 
 import "google/protobuf/wrappers.proto";
+import "proto/competition/competition.proto";
+import "proto/season/season.proto";
+import "proto/team/team.proto";
+import "proto/venue/venue.proto";
 
 service ResultService {
     rpc GetResultsForTeam(TeamRequest) returns (stream Result) {}
@@ -53,26 +57,4 @@ message MatchStats {
     google.protobuf.Int32Value added_time = 15;
     google.protobuf.Int32Value extra_time = 16;
     google.protobuf.Int32Value injury_time = 17;
-}
-
-message Team {
-    int64 id = 1;
-    string name = 2;
-}
-
-message Competition {
-    int64 id = 1;
-    string name = 2;
-    google.protobuf.BoolValue is_cup = 3;
-}
-
-message Season {
-    int64 id = 1;
-    string name = 2;
-    google.protobuf.BoolValue is_current = 3;
-}
-
-message Venue {
-    google.protobuf.Int64Value id = 1;
-    google.protobuf.StringValue name = 2;
 }

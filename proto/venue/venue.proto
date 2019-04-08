@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package statistico_data;
+
+import "google/protobuf/wrappers.proto";
+
+message Venue {
+    google.protobuf.Int64Value id = 1;
+    google.protobuf.StringValue name = 2;
+}

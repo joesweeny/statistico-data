@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+package statistico_data;
+
+message Team {
+    int64 id = 1;
+    string name = 2;
+}
