@@ -45,7 +45,7 @@ The suite contains integration tests that depend on an external database therefo
 container
 
 ## gRPC
-Statistico's internal systems communicate via gRPC. The gRPC application specifications can be found in the 
+Statistico's internal systems communicate via gRPC. This application's gRPC specifications can be found in the 
 [/proto](https://github.com/statistico/statistico-data/proto) directory. For more on gRPC view [here](https://grpc.io/docs/guides/)
 
 This application exposes two services:
@@ -54,8 +54,8 @@ This application exposes two services:
 
 The parameters required to access these services are well defined in their respective `.proto` files. 
 
-To access this applications services using a local client we recommend [gRPCurl](https://github.com/fullstorydev/grpcurl) 
-which. Example calls are:
+To access this applications services using a local client we recommend [gRPCurl](https://github.com/fullstorydev/grpcurl). 
+Example calls are:
 
 #### To fetch fixtures between a date period
 ```proto
