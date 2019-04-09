@@ -6,6 +6,7 @@ package result;
 
 import "google/protobuf/wrappers.proto";
 import "proto/competition/competition.proto";
+import "proto/round/round.proto";
 import "proto/season/season.proto";
 import "proto/team/team.proto";
 import "proto/venue/venue.proto";
@@ -29,10 +30,11 @@ message Result {
     int64 id = 1;
     competition.Competition competition = 2;
     season.Season season = 3;
-    venue.Venue venue = 4;
-    google.protobuf.Int64Value referee_id = 5;
-    int64 date_time = 6;
-    MatchData match_data = 7;
+    round.Round round = 4;
+    venue.Venue venue = 5;
+    google.protobuf.Int64Value referee_id = 6;
+    int64 date_time = 7;
+    MatchData match_data = 8;
 }
 
 message MatchData {
