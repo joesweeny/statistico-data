@@ -3,10 +3,10 @@ package fixture
 import (
 	"bytes"
 	"encoding/json"
-	"github.com/statistico/sportmonks-go-client"
-	"github.com/statistico/statistico-data/internal/model"
 	"github.com/jonboulle/clockwork"
 	"github.com/pkg/errors"
+	"github.com/statistico/sportmonks-go-client"
+	"github.com/statistico/statistico-data/internal/model"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"io/ioutil"

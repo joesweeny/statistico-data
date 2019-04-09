@@ -2,9 +2,9 @@ package fixture
 
 import (
 	"database/sql"
-	"github.com/statistico/statistico-data/internal/model"
 	_ "github.com/lib/pq"
 	"github.com/pkg/errors"
+	"github.com/statistico/statistico-data/internal/model"
 	"time"
 )
 
@@ -132,7 +132,6 @@ func (p *PostgresFixtureRepository) BySeasonId(id int64, before time.Time) ([]mo
 
 	return rowsToFixtureSlice(rows)
 }
-
 
 func rowsToIntSlice(rows *sql.Rows) ([]int, error) {
 	defer rows.Close()

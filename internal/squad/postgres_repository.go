@@ -2,10 +2,10 @@ package squad
 
 import (
 	"database/sql"
-	"github.com/statistico/statistico-data/internal/model"
 	"github.com/lib/pq"
 	_ "github.com/lib/pq"
 	"github.com/pkg/errors"
+	"github.com/statistico/statistico-data/internal/model"
 	"strconv"
 	"time"
 )

@@ -2,8 +2,8 @@ package season
 
 import (
 	"database/sql"
-	"github.com/statistico/statistico-data/internal/model"
 	"github.com/pkg/errors"
+	"github.com/statistico/statistico-data/internal/model"
 	"time"
 )
 

@@ -28,7 +28,7 @@ jobs:
           name: Test Release Image
           command: |
             $GOPATH/bin/dep ensure
-            docker-compose -f docker-compose.dev.yml run test gotestsum -f short-verbose
+            docker-compose -f docker-compose.dev.yml run test gotestsum -f short-verbose ./internal/...
 
       - deploy:
           name: Deploy

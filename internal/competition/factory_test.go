@@ -1,8 +1,8 @@
 package competition
 
 import (
-	"github.com/statistico/sportmonks-go-client"
 	"github.com/jonboulle/clockwork"
+	"github.com/statistico/sportmonks-go-client"
 	"github.com/stretchr/testify/assert"
 	"testing"
 	"time"
@@ -17,7 +17,7 @@ func TestFactoryCreateCompetiton(t *testing.T) {
 		t.Helper()
 
 		c := f.createCompetition(newClientLeague())
-		
+
 		a := assert.New(t)
 
 		a.Equal(564, c.ID)

@@ -1,12 +1,12 @@
 package fixture
 
 import (
-	"github.com/stretchr/testify/mock"
 	"github.com/statistico/statistico-data/internal/model"
-	"testing"
-	"time"
 	"github.com/statistico/statistico-data/internal/season"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
+	"testing"
+	"time"
 )
 
 func TestHandleFixture(t *testing.T) {
@@ -15,10 +15,10 @@ func TestHandleFixture(t *testing.T) {
 	seasonRepo := new(mockSeasonRepository)
 	venueRepo := new(mockVenueRepository)
 	handler := Handler{
-		TeamRepo: teamRepo,
+		TeamRepo:        teamRepo,
 		CompetitionRepo: compRepo,
-		SeasonRepo: seasonRepo,
-		VenueRepo: venueRepo,
+		SeasonRepo:      seasonRepo,
+		VenueRepo:       venueRepo,
 	}
 
 	t.Run("hydrates new proto fixture struct", func(t *testing.T) {
@@ -96,10 +96,10 @@ func TestHandleFixture(t *testing.T) {
 		seasonRepo := new(mockSeasonRepository)
 		venueRepo := new(mockVenueRepository)
 		handler := Handler{
-			TeamRepo: teamRepo,
+			TeamRepo:        teamRepo,
 			CompetitionRepo: compRepo,
-			SeasonRepo: seasonRepo,
-			VenueRepo: venueRepo,
+			SeasonRepo:      seasonRepo,
+			VenueRepo:       venueRepo,
 		}
 
 		ven := 87
@@ -107,10 +107,10 @@ func TestHandleFixture(t *testing.T) {
 		fixture.VenueID = &ven
 
 		seasonRepo.On("Id", 14567).Return(&model.Season{}, season.ErrNotFound)
-		compRepo.AssertNotCalled(t,"GetById", 45)
+		compRepo.AssertNotCalled(t, "GetById", 45)
 		teamRepo.AssertNotCalled(t, "GetById", 451)
 		teamRepo.AssertNotCalled(t, "GetById", 924)
-		venueRepo.AssertNotCalled(t,"GetById", 87)
+		venueRepo.AssertNotCalled(t, "GetById", 87)
 
 		proto, err := handler.HandleFixture(fixture)
 

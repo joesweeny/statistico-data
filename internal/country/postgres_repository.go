@@ -2,9 +2,9 @@ package country
 
 import (
 	"database/sql"
-	"github.com/statistico/statistico-data/internal/model"
 	_ "github.com/lib/pq"
 	"github.com/pkg/errors"
+	"github.com/statistico/statistico-data/internal/model"
 	"time"
 )
 

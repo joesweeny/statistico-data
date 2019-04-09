@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+option go_package = "github.com/statistico/statistico-data/proto/competition";
+
+package competition;
+
+import "google/protobuf/wrappers.proto";
+
+message Competition {
+    int64 id = 1;
+    string name = 2;
+    google.protobuf.BoolValue is_cup = 3;
+}

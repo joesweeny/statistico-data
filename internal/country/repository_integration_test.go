@@ -3,9 +3,9 @@ package country
 import (
 	"database/sql"
 	"fmt"
+	_ "github.com/lib/pq"
 	"github.com/statistico/statistico-data/internal/config"
 	"github.com/statistico/statistico-data/internal/model"
-	_ "github.com/lib/pq"
 	"github.com/stretchr/testify/assert"
 	"testing"
 	"time"

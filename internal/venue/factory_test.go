@@ -1,8 +1,8 @@
 package venue
 
 import (
-	"github.com/statistico/sportmonks-go-client"
 	"github.com/jonboulle/clockwork"
+	"github.com/statistico/sportmonks-go-client"
 	"github.com/stretchr/testify/assert"
 	"testing"
 	"time"

@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+option go_package = "github.com/statistico/statistico-data/proto/season";
+
+package season;
+
+import "google/protobuf/wrappers.proto";
+
+message Season {
+    int64 id = 1;
+    string name = 2;
+    google.protobuf.BoolValue is_current = 3;
+}

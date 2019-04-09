@@ -3,9 +3,9 @@ package team
 import (
 	"bytes"
 	"encoding/json"
+	"github.com/jonboulle/clockwork"
 	"github.com/statistico/sportmonks-go-client"
 	"github.com/statistico/statistico-data/internal/model"
-	"github.com/jonboulle/clockwork"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"io/ioutil"

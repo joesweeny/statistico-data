@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+option go_package = "github.com/statistico/statistico-data/proto/venue";
+
+package venue;
+
+import "google/protobuf/wrappers.proto";
+
+message Venue {
+    google.protobuf.Int64Value id = 1;
+    google.protobuf.StringValue name = 2;
+}

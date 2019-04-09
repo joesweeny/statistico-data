@@ -300,7 +300,7 @@ func TestBetween(t *testing.T) {
 
 		for i := 0; i <= 3; i++ {
 			f := fix[i]
-			assert.Equal(t, i + 1, f.ID)
+			assert.Equal(t, i+1, f.ID)
 			assert.Equal(t, 14567, f.SeasonID)
 			assert.Equal(t, 451, f.HomeTeamID)
 			assert.Equal(t, 924, f.AwayTeamID)
@@ -449,7 +449,7 @@ func TestBySeasonId(t *testing.T) {
 
 		insertFixtures(t, &repo)
 
-		fix, err := repo.BySeasonId(10000,time.Unix(1550066317, 0))
+		fix, err := repo.BySeasonId(10000, time.Unix(1550066317, 0))
 
 		if err != nil {
 			t.Fatalf("Test failed, expected nil, got %s", err.Error())
