@@ -18,7 +18,7 @@ func TestHandleFixture(t *testing.T) {
 	handler := Handler{
 		TeamRepo:        teamRepo,
 		CompetitionRepo: compRepo,
-		RoundRepo:		 roundRepo,
+		RoundRepo:       roundRepo,
 		SeasonRepo:      seasonRepo,
 		VenueRepo:       venueRepo,
 	}
@@ -109,7 +109,7 @@ func TestHandleFixture(t *testing.T) {
 		handler := Handler{
 			TeamRepo:        teamRepo,
 			CompetitionRepo: compRepo,
-			RoundRepo:	     roundRepo,
+			RoundRepo:       roundRepo,
 			SeasonRepo:      seasonRepo,
 			VenueRepo:       venueRepo,
 		}
@@ -261,9 +261,9 @@ func newVenue() *model.Venue {
 
 func newRound() *model.Round {
 	return &model.Round{
-		ID:			165789,
-		Name:		"18",
-		SeasonID:	14567,
+		ID:        165789,
+		Name:      "18",
+		SeasonID:  14567,
 		StartDate: time.Unix(1548086929, 0),
 		EndDate:   time.Unix(1548086929, 0),
 		CreatedAt: time.Unix(1548086929, 0),

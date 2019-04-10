@@ -15,7 +15,7 @@ func (c Container) FixtureService() *fixture.Service {
 		Repository: &fixture.PostgresFixtureRepository{Connection: c.Database},
 		Handler: fixture.Handler{
 			CompetitionRepo: &competition.PostgresCompetitionRepository{Connection: c.Database},
-			RoundRepo: 		 &round.PostgresRoundRepository{Connection: c.Database},
+			RoundRepo:       &round.PostgresRoundRepository{Connection: c.Database},
 			SeasonRepo:      &season.PostgresSeasonRepository{Connection: c.Database},
 			TeamRepo:        &team.PostgresTeamRepository{Connection: c.Database},
 			VenueRepo:       &venue.PostgresVenueRepository{Connection: c.Database},
@@ -30,7 +30,7 @@ func (c Container) ResultService() *result.Service {
 		ResultRepo:  &result.PostgresResultRepository{Connection: c.Database},
 		Handler: result.Handler{
 			CompetitionRepo: &competition.PostgresCompetitionRepository{Connection: c.Database},
-			RoundRepo: 		 &round.PostgresRoundRepository{Connection: c.Database},
+			RoundRepo:       &round.PostgresRoundRepository{Connection: c.Database},
 			SeasonRepo:      &season.PostgresSeasonRepository{Connection: c.Database},
 			TeamRepo:        &team.PostgresTeamRepository{Connection: c.Database},
 			VenueRepo:       &venue.PostgresVenueRepository{Connection: c.Database},

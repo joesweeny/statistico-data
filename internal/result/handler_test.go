@@ -16,7 +16,7 @@ func TestHandleResult(t *testing.T) {
 	venueRepo := new(mockVenueRepository)
 	handler := Handler{
 		CompetitionRepo: compRepo,
-		RoundRepo:		 roundRepo,
+		RoundRepo:       roundRepo,
 		SeasonRepo:      seasonRepo,
 		TeamRepo:        teamRepo,
 		VenueRepo:       venueRepo,
@@ -265,9 +265,9 @@ func newFixture() *model.Fixture {
 
 func newRound() *model.Round {
 	return &model.Round{
-		ID:			165789,
-		Name:		"18",
-		SeasonID:	14567,
+		ID:        165789,
+		Name:      "18",
+		SeasonID:  14567,
 		StartDate: time.Unix(1548086929, 0),
 		EndDate:   time.Unix(1548086929, 0),
 		CreatedAt: time.Unix(1548086929, 0),

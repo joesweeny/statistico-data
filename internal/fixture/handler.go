@@ -4,6 +4,7 @@ import (
 	"github.com/golang/protobuf/ptypes/wrappers"
 	"github.com/statistico/statistico-data/internal/competition"
 	"github.com/statistico/statistico-data/internal/model"
+	"github.com/statistico/statistico-data/internal/round"
 	"github.com/statistico/statistico-data/internal/season"
 	"github.com/statistico/statistico-data/internal/team"
 	"github.com/statistico/statistico-data/internal/venue"
@@ -13,7 +14,6 @@ import (
 	pbSeason "github.com/statistico/statistico-data/proto/season"
 	pbTeam "github.com/statistico/statistico-data/proto/team"
 	pbVenue "github.com/statistico/statistico-data/proto/venue"
-	"github.com/statistico/statistico-data/internal/round"
 	"time"
 )
 
@@ -109,11 +109,11 @@ func competitionToProto(c *model.Competition) *pbCompetition.Competition {
 
 func roundToProto(r *model.Round) *pbRound.Round {
 	return &pbRound.Round{
-		Id: int64(r.ID),
-		Name: r.Name,
-		SeasonId: int64(r.SeasonID),
+		Id:        int64(r.ID),
+		Name:      r.Name,
+		SeasonId:  int64(r.SeasonID),
 		StartDate: r.StartDate.Format(time.RFC3339),
-		EndDate: r.EndDate.Format(time.RFC3339),
+		EndDate:   r.EndDate.Format(time.RFC3339),
 	}
 }
 
