@@ -11,10 +11,12 @@ import (
 func TestHandleResult(t *testing.T) {
 	teamRepo := new(mockTeamRepository)
 	compRepo := new(mockCompetitionRepository)
+	roundRepo := new(mockRoundRepository)
 	seasonRepo := new(mockSeasonRepository)
 	venueRepo := new(mockVenueRepository)
 	handler := Handler{
 		CompetitionRepo: compRepo,
+		RoundRepo:       roundRepo,
 		SeasonRepo:      seasonRepo,
 		TeamRepo:        teamRepo,
 		VenueRepo:       venueRepo,
@@ -45,6 +47,7 @@ func TestHandleResult(t *testing.T) {
 		teamRepo.On("GetById", 451).Return(newTeam(451, "West Ham"), nil)
 		teamRepo.On("GetById", 924).Return(newTeam(924, "Chelsea"), nil)
 		venueRepo.On("GetById", 87).Return(newVenue(), nil)
+		roundRepo.On("GetById", 165789).Return(newRound(), nil)
 
 		proto, err := handler.HandleResult(newFixture(), &res)
 
@@ -85,6 +88,11 @@ func TestHandleResult(t *testing.T) {
 		a.Nil(proto.MatchData.Stats.AddedTime)
 		a.Nil(proto.MatchData.Stats.ExtraTime)
 		a.Nil(proto.MatchData.Stats.InjuryTime)
+		a.Equal(int64(165789), proto.Round.GetId())
+		a.Equal("18", proto.Round.GetName())
+		a.Equal(int64(14567), proto.Round.GetSeasonId())
+		a.Equal("2019-01-21T16:08:49Z", proto.Round.GetStartDate())
+		a.Equal("2019-01-21T16:08:49Z", proto.Round.GetEndDate())
 	})
 }
 
@@ -178,8 +186,24 @@ func (m mockSeasonRepository) CurrentSeasonIds() ([]int, error) {
 	return args.Get(0).([]int), args.Error(1)
 }
 
-type mockFixtureRepository struct {
+type mockRoundRepository struct {
 	mock.Mock
+}
+
+func (m mockRoundRepository) Insert(c *model.Round) error {
+	args := m.Called(c)
+	return args.Error(0)
+}
+
+func (m mockRoundRepository) Update(c *model.Round) error {
+	args := m.Called(&c)
+	return args.Error(0)
+}
+
+func (m mockRoundRepository) GetById(id int) (*model.Round, error) {
+	args := m.Called(id)
+	c := args.Get(0).(*model.Round)
+	return c, args.Error(1)
 }
 
 func newCompetition() *model.Competition {
@@ -236,5 +260,17 @@ func newFixture() *model.Fixture {
 		Date:       time.Unix(1548086929, 0),
 		CreatedAt:  time.Unix(1546965200, 0),
 		UpdatedAt:  time.Unix(1546965200, 0),
+	}
+}
+
+func newRound() *model.Round {
+	return &model.Round{
+		ID:        165789,
+		Name:      "18",
+		SeasonID:  14567,
+		StartDate: time.Unix(1548086929, 0),
+		EndDate:   time.Unix(1548086929, 0),
+		CreatedAt: time.Unix(1548086929, 0),
+		UpdatedAt: time.Unix(1548086929, 0),
 	}
 }

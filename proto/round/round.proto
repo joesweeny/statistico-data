@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+option go_package = "github.com/statistico/statistico-data/proto/round";
+
+package round;
+
+message Round {
+    int64 id = 1;
+    string name = 2;
+    int64 season_id = 3;
+    // RFC3339 formatted string i.e "2006-01-02T15:04:05Z07:00"
+    string start_date = 4;
+    // RFC3339 formatted string i.e "2006-01-02T15:04:05Z07:00"
+    string end_date = 5;
+}
