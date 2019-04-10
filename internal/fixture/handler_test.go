@@ -26,18 +26,16 @@ func TestHandleFixture(t *testing.T) {
 	t.Run("hydrates new proto fixture struct", func(t *testing.T) {
 		ven := 87
 		ref := 5
-		round := 560
 		fixture := newFixture(99)
 		fixture.VenueID = &ven
 		fixture.RefereeID = &ref
-		fixture.RoundID = &round
 
 		seasonRepo.On("Id", 14567).Return(newSeason(), nil)
 		compRepo.On("GetById", 45).Return(newCompetition(), nil)
 		teamRepo.On("GetById", 451).Return(newTeam(451, "West Ham"), nil)
 		teamRepo.On("GetById", 924).Return(newTeam(924, "Chelsea"), nil)
 		venueRepo.On("GetById", 87).Return(newVenue(), nil)
-		roundRepo.On("GetById", 560).Return(newRound(), nil)
+		roundRepo.On("GetById", 165789).Return(newRound(), nil)
 
 		proto, err := handler.HandleFixture(fixture)
 
@@ -62,15 +60,16 @@ func TestHandleFixture(t *testing.T) {
 		a.Equal("London Stadium", proto.Venue.GetName().GetValue())
 		a.Equal(int64(5), proto.RefereeId.GetValue())
 		a.Equal(int64(1548086929), proto.GetDateTime())
-		a.Equal(int64(560), proto.Round.GetId())
+		a.Equal(int64(165789), proto.Round.GetId())
 		a.Equal("18", proto.Round.GetName())
 		a.Equal(int64(14567), proto.Round.GetSeasonId())
-		a.Equal("2019-01-21T16:08:00+00:00", proto.Round.GetStartDate())
-		a.Equal("2019-01-21T16:08:00+00:00", proto.Round.GetEndDate())
+		a.Equal("2019-01-21T16:08:49Z", proto.Round.GetStartDate())
+		a.Equal("2019-01-21T16:08:49Z", proto.Round.GetEndDate())
 	})
 
 	t.Run("can handle nullable fields", func(t *testing.T) {
 		fixture := newFixture(99)
+		fixture.RoundID = nil
 
 		seasonRepo.On("Id", 14567).Return(newSeason(), nil)
 		compRepo.On("GetById", 45).Return(newCompetition(), nil)
@@ -98,11 +97,7 @@ func TestHandleFixture(t *testing.T) {
 		a.Nil(proto.Venue.GetName())
 		a.Nil(proto.RefereeId)
 		a.Equal(int64(1548086929), proto.GetDateTime())
-		a.Nil(proto.Round.GetId())
-		a.Equal(proto.Round.GetName())
-		a.Equal(proto.Round.GetSeasonId())
-		a.Equal("2019-01-21T16:08:00+00:00", proto.Round.GetStartDate())
-		a.Equal("2019-01-21T16:08:00+00:00", proto.Round.GetEndDate())
+		a.Nil(proto.Round)
 	})
 
 	t.Run("error is returned if season not found", func(t *testing.T) {
@@ -128,7 +123,7 @@ func TestHandleFixture(t *testing.T) {
 		teamRepo.AssertNotCalled(t, "GetById", 451)
 		teamRepo.AssertNotCalled(t, "GetById", 924)
 		venueRepo.AssertNotCalled(t, "GetById", 87)
-		roundRepo.AssertNotCalled(t, "GetById", 560)
+		roundRepo.AssertNotCalled(t, "GetById", 165789)
 
 		proto, err := handler.HandleFixture(fixture)
 
@@ -266,9 +261,11 @@ func newVenue() *model.Venue {
 
 func newRound() *model.Round {
 	return &model.Round{
-		ID:			560,
+		ID:			165789,
 		Name:		"18",
 		SeasonID:	14567,
+		StartDate: time.Unix(1548086929, 0),
+		EndDate:   time.Unix(1548086929, 0),
 		CreatedAt: time.Unix(1548086929, 0),
 		UpdatedAt: time.Unix(1548086929, 0),
 	}
