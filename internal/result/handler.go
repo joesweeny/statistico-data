@@ -9,13 +9,17 @@ import (
 	"github.com/statistico/statistico-data/internal/venue"
 	pbCompetition "github.com/statistico/statistico-data/proto/competition"
 	pbResult "github.com/statistico/statistico-data/proto/result"
+	pbRound "github.com/statistico/statistico-data/proto/round"
 	pbSeason "github.com/statistico/statistico-data/proto/season"
 	pbTeam "github.com/statistico/statistico-data/proto/team"
 	pbVenue "github.com/statistico/statistico-data/proto/venue"
+	"github.com/statistico/statistico-data/internal/round"
+	"time"
 )
 
 type Handler struct {
 	CompetitionRepo competition.Repository
+	RoundRepo 		round.Repository
 	SeasonRepo      season.Repository
 	TeamRepo        team.Repository
 	VenueRepo       venue.Repository
@@ -54,6 +58,16 @@ func (h Handler) HandleResult(f *model.Fixture, r *model.Result) (*pbResult.Resu
 		MatchData:   toMatchData(home, away, r),
 	}
 
+	if f.RoundID != nil {
+		r, err := h.RoundRepo.GetById(*f.RoundID)
+
+		if err != nil {
+			return nil, err
+		}
+
+		proto.Round = roundToProto(r)
+	}
+
 	if f.VenueID != nil {
 		v, err := h.VenueRepo.GetById(*f.VenueID)
 
@@ -90,6 +104,16 @@ func competitionToProto(c *model.Competition) *pbCompetition.Competition {
 	}
 
 	return &x
+}
+
+func roundToProto(r *model.Round) *pbRound.Round {
+	return &pbRound.Round{
+		Id: int64(r.ID),
+		Name: r.Name,
+		SeasonId: int64(r.SeasonID),
+		StartDate: r.StartDate.Format(time.RFC3339),
+		EndDate: r.EndDate.Format(time.RFC3339),
+	}
 }
 
 func seasonToProto(s *model.Season) *pbSeason.Season {
