@@ -176,4 +176,3 @@ func ToMatchStats(res *model.Result) *pbResult.MatchStats {
 
 	return &stats
 }
-

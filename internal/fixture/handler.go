@@ -1,17 +1,17 @@
 package fixture
 
 import (
+	"fmt"
 	"github.com/golang/protobuf/ptypes/wrappers"
 	"github.com/statistico/statistico-data/internal/competition"
 	"github.com/statistico/statistico-data/internal/model"
-	"github.com/statistico/statistico-data/internal/round"
 	"github.com/statistico/statistico-data/internal/proto"
+	pbFixture "github.com/statistico/statistico-data/internal/proto/fixture"
+	"github.com/statistico/statistico-data/internal/round"
 	"github.com/statistico/statistico-data/internal/season"
 	"github.com/statistico/statistico-data/internal/team"
 	"github.com/statistico/statistico-data/internal/venue"
-	pbFixture "github.com/statistico/statistico-data/internal/proto/fixture"
 	"log"
-	"fmt"
 )
 
 type Handler struct {
@@ -20,7 +20,7 @@ type Handler struct {
 	SeasonRepo      season.Repository
 	TeamRepo        team.Repository
 	VenueRepo       venue.Repository
-	Logger 			*log.Logger
+	Logger          *log.Logger
 }
 
 func (h Handler) HandleFixture(f *model.Fixture) (*pbFixture.Fixture, error) {

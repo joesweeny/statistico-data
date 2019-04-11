@@ -19,7 +19,7 @@ func (c Container) FixtureService() *fixture.Service {
 			SeasonRepo:      &season.PostgresSeasonRepository{Connection: c.Database},
 			TeamRepo:        &team.PostgresTeamRepository{Connection: c.Database},
 			VenueRepo:       &venue.PostgresVenueRepository{Connection: c.Database},
-			Logger: 		 c.Logger,
+			Logger:          c.Logger,
 		},
 		Logger: c.Logger,
 	}

@@ -5,10 +5,10 @@ import (
 	"github.com/statistico/statistico-data/internal/season"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
+	"io/ioutil"
+	"log"
 	"testing"
 	"time"
-	"log"
-	"io/ioutil"
 )
 
 func TestHandleFixture(t *testing.T) {
@@ -23,7 +23,7 @@ func TestHandleFixture(t *testing.T) {
 		RoundRepo:       roundRepo,
 		SeasonRepo:      seasonRepo,
 		VenueRepo:       venueRepo,
-		Logger:		     log.New(ioutil.Discard, "Error: ", 0),
+		Logger:          log.New(ioutil.Discard, "Error: ", 0),
 	}
 
 	t.Run("hydrates new proto fixture struct", func(t *testing.T) {
@@ -115,7 +115,7 @@ func TestHandleFixture(t *testing.T) {
 			RoundRepo:       roundRepo,
 			SeasonRepo:      seasonRepo,
 			VenueRepo:       venueRepo,
-			Logger:		     log.New(ioutil.Discard, "Error: ", 0),
+			Logger:          log.New(ioutil.Discard, "Error: ", 0),
 		}
 
 		ven := 87

@@ -2,11 +2,11 @@ package fixture
 
 import (
 	"errors"
+	"fmt"
 	pb "github.com/statistico/statistico-data/internal/proto/fixture"
 	"golang.org/x/net/context"
 	"log"
 	"time"
-	"fmt"
 )
 
 var ErrTimeParse = errors.New("unable to parse date provided in Request")

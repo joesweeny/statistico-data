@@ -1,17 +1,17 @@
 package result
 
 import (
+	"fmt"
 	"github.com/golang/protobuf/ptypes/wrappers"
 	"github.com/statistico/statistico-data/internal/competition"
 	"github.com/statistico/statistico-data/internal/model"
-	"github.com/statistico/statistico-data/internal/round"
 	"github.com/statistico/statistico-data/internal/proto"
+	pbResult "github.com/statistico/statistico-data/internal/proto/result"
+	"github.com/statistico/statistico-data/internal/round"
 	"github.com/statistico/statistico-data/internal/season"
 	"github.com/statistico/statistico-data/internal/team"
 	"github.com/statistico/statistico-data/internal/venue"
-	pbResult "github.com/statistico/statistico-data/internal/proto/result"
 	"log"
-	"fmt"
 )
 
 type Handler struct {
@@ -20,7 +20,7 @@ type Handler struct {
 	SeasonRepo      season.Repository
 	TeamRepo        team.Repository
 	VenueRepo       venue.Repository
-	Logger 			*log.Logger
+	Logger          *log.Logger
 }
 
 func (h Handler) HandleResult(f *model.Fixture, r *model.Result) (*pbResult.Result, error) {
