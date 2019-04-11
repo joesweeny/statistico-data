@@ -33,9 +33,13 @@ To run the full test suite a handy script is located in the `/bin` directory, to
 
 `bin/docker-dev-test`
 
-To narrow tests down to individual test cases additional flags can be appended:
+To narrow tests down to an individual directory additional flags can be appended:
 
-`bin/docker-dev-test -run=TestById`
+`bin/docker-dev-test ./internal/....`
+
+To narrow tests down further to individual test cases additional flags can be appended:
+
+`bin/docker-dev-test ./internal/fixture -run=TestById`
 
 Alternatively the test suite can be run by using Golang's inbuilt testing tool and executing the following command:
 
