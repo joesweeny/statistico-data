@@ -11,7 +11,6 @@ import (
 	"github.com/statistico/statistico-data/internal/venue"
 	pbResult "github.com/statistico/statistico-data/internal/proto/result"
 	"log"
-	"errors"
 	"fmt"
 )
 
@@ -28,37 +27,33 @@ func (h Handler) HandleResult(f *model.Fixture, r *model.Result) (*pbResult.Resu
 	s, err := h.SeasonRepo.Id(f.SeasonID)
 
 	if err != nil {
-		e := fmt.Sprintf("Error when retrieving Result: FixtureID %d, Season ID %d", r.FixtureID, f.SeasonID)
-		err = errors.New(e)
-		h.logError(err)
-		return nil, err
+		e := fmt.Errorf("error when retrieving Result: FixtureID %d, Season ID %d", r.FixtureID, f.SeasonID)
+		h.Logger.Println(e)
+		return nil, e
 	}
 
 	c, err := h.CompetitionRepo.GetById(s.LeagueID)
 
 	if err != nil {
-		e := fmt.Sprintf("Error when retrieving Result: FixtureID %d, Competition ID %d", r.FixtureID, s.LeagueID)
-		err = errors.New(e)
-		h.logError(err)
-		return nil, err
+		e := fmt.Errorf("error when retrieving Result: FixtureID %d, Competition ID %d", r.FixtureID, s.LeagueID)
+		h.Logger.Println(e)
+		return nil, e
 	}
 
 	home, err := h.TeamRepo.GetById(f.HomeTeamID)
 
 	if err != nil {
-		e := fmt.Sprintf("Error when retrieving Result: FixtureID %d, Home Team ID %d", r.FixtureID, f.HomeTeamID)
-		err = errors.New(e)
-		h.logError(err)
-		return nil, err
+		e := fmt.Errorf("error when retrieving Result: FixtureID %d, Home Team ID %d", r.FixtureID, f.HomeTeamID)
+		h.Logger.Println(e)
+		return nil, e
 	}
 
 	away, err := h.TeamRepo.GetById(f.AwayTeamID)
 
 	if err != nil {
-		e := fmt.Sprintf("Error when retrieving Result: FixtureID %d, Away Team ID %d", r.FixtureID, f.AwayTeamID)
-		err = errors.New(e)
-		h.logError(err)
-		return nil, err
+		e := fmt.Errorf("error when retrieving Result: FixtureID %d, Away Team ID %d", r.FixtureID, f.AwayTeamID)
+		h.Logger.Println(e)
+		return nil, e
 	}
 
 	p := pbResult.Result{
@@ -73,9 +68,8 @@ func (h Handler) HandleResult(f *model.Fixture, r *model.Result) (*pbResult.Resu
 		rd, err := h.RoundRepo.GetById(*f.RoundID)
 
 		if err != nil {
-			e := fmt.Sprintf("Error when retrieving Result: FixtureID %d, Round ID %d", r.FixtureID, f.RoundID)
-			err = errors.New(e)
-			h.logError(err)
+			e := fmt.Errorf("error when retrieving Result: FixtureID %d, Round ID %d", r.FixtureID, f.RoundID)
+			h.Logger.Println(e)
 			p.Round = nil
 		} else {
 			p.Round = proto.RoundToProto(rd)
@@ -86,9 +80,8 @@ func (h Handler) HandleResult(f *model.Fixture, r *model.Result) (*pbResult.Resu
 		v, err := h.VenueRepo.GetById(*f.VenueID)
 
 		if err != nil {
-			e := fmt.Sprintf("Error when retrieving Result: FixtureID %d, Venue ID %d", r.FixtureID, f.VenueID)
-			err = errors.New(e)
-			h.logError(err)
+			e := fmt.Errorf("error when retrieving Result: FixtureID %d, Venue ID %d", r.FixtureID, f.VenueID)
+			h.Logger.Println(e)
 			p.Venue = nil
 		} else {
 			p.Venue = proto.VenueToProto(v)
@@ -102,8 +95,4 @@ func (h Handler) HandleResult(f *model.Fixture, r *model.Result) (*pbResult.Resu
 	}
 
 	return &p, nil
-}
-
-func (h Handler) logError(e error) {
-	h.Logger.Print(e.Error())
 }

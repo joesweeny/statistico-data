@@ -34,15 +34,11 @@ func (s Service) GetResultsForTeam(r *pb.TeamRequest, stream pb.ResultService_Ge
 
 	fixtures, err := s.FixtureRepo.ByTeamId(r.TeamId, limit, date)
 
-	s.Logger.Printf("Number of fixtures retrieved %d", len(fixtures))
-
 	if err != nil {
 		return err
 	}
 
 	for _, fix := range fixtures {
-		s.Logger.Printf("Fixture ID: %d", fix.ID)
-
 		res, err := s.ResultRepo.GetByFixtureId(fix.ID)
 
 		if err != nil {
