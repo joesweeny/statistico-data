@@ -8,6 +8,7 @@ import (
 	"github.com/statistico/statistico-data/internal/config"
 	"log"
 	"os"
+	"time"
 )
 
 type Container struct {
@@ -63,7 +64,7 @@ func sportmonksClient(config *config.Config) *sportmonks.Client {
 }
 
 func logger() *log.Logger {
-	return log.New(os.Stdout, "Error: ", 0)
+	return log.New(os.Stdout, fmt.Sprintf("%s : Error: ", time.Now().Format(time.RFC3339)), 0)
 }
 
 func clock() clockwork.Clock {
