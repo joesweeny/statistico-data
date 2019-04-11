@@ -77,7 +77,7 @@ grpcurl \
     -d \
     '{"fixture_id": 5601}' \
     localhost:50051  \
-    fixture.FixtureService/ListFixtures
+    fixture.FixtureService/FixtureByID
 ```
 #### To fetch results for a given Team
 ```proto
