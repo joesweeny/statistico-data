@@ -1,15 +1,15 @@
 syntax = "proto3";
 
-option go_package = "github.com/statistico/statistico-data/proto/fixture";
+option go_package = "github.com/statistico/statistico-data/internal/proto/fixture";
 
 package fixture;
 
 import "google/protobuf/wrappers.proto";
-import "proto/competition/competition.proto";
-import "proto/round/round.proto";
-import "proto/season/season.proto";
-import "proto/team/team.proto";
-import "proto/venue/venue.proto";
+import "internal/proto/competition/competition.proto";
+import "internal/proto/round/round.proto";
+import "internal/proto/season/season.proto";
+import "internal/proto/team/team.proto";
+import "internal/proto/venue/venue.proto";
 
 service FixtureService {
     rpc ListFixtures(DateRangeRequest) returns (stream Fixture) {}

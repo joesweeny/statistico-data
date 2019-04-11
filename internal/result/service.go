@@ -3,7 +3,7 @@ package result
 import (
 	"errors"
 	"github.com/statistico/statistico-data/internal/fixture"
-	pb "github.com/statistico/statistico-data/proto/result"
+	pb "github.com/statistico/statistico-data/internal/proto/result"
 	"log"
 	"time"
 )

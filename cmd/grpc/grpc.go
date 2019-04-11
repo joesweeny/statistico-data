@@ -3,8 +3,8 @@ package main
 import (
 	"github.com/statistico/statistico-data/internal/config"
 	"github.com/statistico/statistico-data/internal/container"
-	fix "github.com/statistico/statistico-data/proto/fixture"
-	res "github.com/statistico/statistico-data/proto/result"
+	fix "github.com/statistico/statistico-data/internal/proto/fixture"
+	res "github.com/statistico/statistico-data/internal/proto/result"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 	"log"

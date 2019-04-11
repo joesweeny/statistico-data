@@ -2,7 +2,7 @@ package fixture
 
 import (
 	"errors"
-	pb "github.com/statistico/statistico-data/proto/fixture"
+	pb "github.com/statistico/statistico-data/internal/proto/fixture"
 	"golang.org/x/net/context"
 	"log"
 	"time"
