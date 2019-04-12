@@ -65,6 +65,12 @@ func PlayerStatsToProto(p *model.PlayerStats) *pbPlayerStats.PlayerStats {
 		}
 	}
 
+	if p.Assists != nil {
+		stats.Assists = &wrappers.Int32Value{
+			Value: int32(*p.Assists),
+		}
+	}
+
 	return &stats
 }
 
