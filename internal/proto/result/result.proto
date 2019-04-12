@@ -13,6 +13,7 @@ import "internal/proto/venue/venue.proto";
 
 service ResultService {
     rpc GetResultsForTeam(TeamRequest) returns (stream Result) {}
+    rpc GetResultsForSeason(SeasonRequest) returns (stream Result) {}
 }
 
 message TeamRequest {
@@ -24,6 +25,11 @@ message TeamRequest {
     // A filter to return Results before a specific date
     // RFC3339 formatted string i.e "2006-01-02T15:04:05Z07:00"
     string date_before = 3;
+}
+
+message SeasonRequest {
+    // The Season ID that the Result set relates to
+    int64 season_id = 1;
 }
 
 message Result {
