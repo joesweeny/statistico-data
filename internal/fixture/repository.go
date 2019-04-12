@@ -18,5 +18,5 @@ type Repository interface {
 	ByTeamId(id int64, limit int32, before time.Time) ([]model.Fixture, error)
 	// Id of the Season
 	// Date constraint returning fixtures from before the given date
-	BySeasonId(id int64, before time.Time) ([]model.Fixture, error)
+	BySeasonId(id int64) ([]model.Fixture, error)
 }
