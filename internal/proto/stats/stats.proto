@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+option go_package = "github.com/statistico/statistico-data/internal/proto/stats";
+
+package stats;
+
+import "google/protobuf/wrappers.proto";
+
+service StatsService {
+    rpc GetPlayerStatsForFixture(FixtureRequest) returns (FixtureResponse) {}
+}
+
+message FixtureRequest {
+    int64 fixture_id = 1;
+}
+
+message FixtureResponse {
+    repeated PlayerStats home_team = 1;
+    repeated PlayerStats away_team = 2;
+}
+
+message PlayerStats {
+    int64 player_id = 1;
+    google.protobuf.Int32Value shots_total = 2;
+    google.protobuf.Int32Value shots_on_goal = 3;
+    google.protobuf.Int32Value goals_scored = 4;
+    google.protobuf.Int32Value goals_conceded = 5;
+    google.protobuf.Int32Value assists = 6;
+}
