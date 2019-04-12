@@ -6,6 +6,7 @@ import (
 	pb "github.com/statistico/statistico-data/internal/proto/result"
 	"log"
 	"time"
+	"github.com/statistico/statistico-data/internal/model"
 )
 
 const maxLimit = 10000
@@ -38,7 +39,21 @@ func (s Service) GetResultsForTeam(r *pb.TeamRequest, stream pb.ResultService_Ge
 		return err
 	}
 
-	for _, fix := range fixtures {
+	return s.sendResults(fixtures, stream)
+}
+
+func (s Service) GetResultsForSeason(r *pb.SeasonRequest, stream pb.ResultService_GetResultsForSeasonServer) error {
+	fixtures, err := s.FixtureRepo.BySeasonId(r.SeasonId)
+
+	if err != nil {
+		return err
+	}
+
+	return s.sendResults(fixtures, stream)
+}
+
+func (s Service) sendResults(f []model.Fixture, stream pb.ResultService_GetResultsForTeamServer) error {
+	for _, fix := range f {
 		res, err := s.ResultRepo.GetByFixtureId(fix.ID)
 
 		if err != nil {
