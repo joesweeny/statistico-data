@@ -4,6 +4,7 @@ import (
 	"github.com/golang/protobuf/ptypes/wrappers"
 	"github.com/statistico/statistico-data/internal/model"
 	pbCompetition "github.com/statistico/statistico-data/internal/proto/competition"
+	pbPlayerStats "github.com/statistico/statistico-data/internal/proto/stats"
 	pbResult "github.com/statistico/statistico-data/internal/proto/result"
 	pbRound "github.com/statistico/statistico-data/internal/proto/round"
 	pbSeason "github.com/statistico/statistico-data/internal/proto/season"
@@ -29,6 +30,42 @@ func CompetitionToProto(c *model.Competition) *pbCompetition.Competition {
 	}
 
 	return &x
+}
+
+func PlayerStatsToProto(p *model.PlayerStats) *pbPlayerStats.PlayerStats {
+	stats := pbPlayerStats.PlayerStats{
+		PlayerId: 		int64(p.PlayerID),
+	}
+
+	shots := p.PlayerShots
+
+	if shots.Total != nil {
+		stats.ShotsTotal = &wrappers.Int32Value{
+			Value: int32(*shots.Total),
+		}
+	}
+
+	if shots.OnGoal != nil {
+		stats.ShotsOnGoal = &wrappers.Int32Value{
+			Value: int32(*shots.OnGoal),
+		}
+	}
+
+	goals := p.PlayerGoals
+
+	if goals.Scored != nil {
+		stats.GoalsScored = &wrappers.Int32Value{
+			Value: int32(*goals.Scored),
+		}
+	}
+
+	if goals.Conceded != nil {
+		stats.GoalsConceded = &wrappers.Int32Value{
+			Value: int32(*goals.Conceded),
+		}
+	}
+
+	return &stats
 }
 
 func RoundToProto(r *model.Round) *pbRound.Round {
