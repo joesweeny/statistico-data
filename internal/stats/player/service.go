@@ -35,7 +35,7 @@ func (s Service) GetPlayerStatsForFixture(c context.Context, r *pb.FixtureReques
 
 	res.HomeTeam = HandlePlayerStats(home)
 
-	away, err := s.PlayerRepository.ByFixtureAndTeam(uint64(fix.ID), uint64(fix.HomeTeamID))
+	away, err := s.PlayerRepository.ByFixtureAndTeam(uint64(fix.ID), uint64(fix.AwayTeamID))
 
 	if err != nil {
 		e := fmt.Errorf("error when retrieving player stats: FixtureID %d, Away Team ID %d", fix.ID, fix.HomeTeamID)
