@@ -12,7 +12,7 @@ type PlayerProcessor struct {
 }
 
 func (p PlayerProcessor) ProcessPlayerStats(s *sportmonks.LineupPlayer, isSub bool) {
-	x, err := p.PlayerRepository.ByFixtureAndPlayer(s.FixtureID, s.PlayerID)
+	x, err := p.PlayerRepository.ByFixtureAndPlayer(uint64(s.FixtureID), uint64(s.PlayerID))
 
 	if err == ErrNotFound {
 		created := p.PlayerFactory.createPlayerStats(s, isSub)

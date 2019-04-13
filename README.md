@@ -52,9 +52,10 @@ container
 Statistico's internal systems communicate via gRPC. This application's gRPC specifications can be found in the 
 [/proto](https://github.com/statistico/statistico-data/proto) directory. For more on gRPC view [here](https://grpc.io/docs/guides/)
 
-This application exposes two services:
+This application exposes three services:
 - FixtureService
 - ResultService
+- StatsService
 
 The parameters required to access these services are well defined in their respective `.proto` files. 
 
@@ -88,3 +89,12 @@ grpcurl \
     localhost:50051  \
     result.ResultService/GetResultsForTeam
 ```
+
+#### To fetch player stats for a given fixture
+```proto
+grpcurl \
+    -plaintext \
+    -d \
+    '{"fixture_id": 7019}' \
+    localhost:50051  \
+    stats.StatsService/GetPlayerStatsForFixture

@@ -56,7 +56,7 @@ func (s *Service) ListFixtures(r *pb.DateRangeRequest, stream pb.FixtureService_
 }
 
 func (s *Service) FixtureByID(c context.Context, r *pb.FixtureRequest) (*pb.Fixture, error) {
-	fix, err := s.Repository.ById(int(r.FixtureId))
+	fix, err := s.Repository.ById(uint64(r.FixtureId))
 
 	if err != nil {
 		m := fmt.Sprintf("Fixture with ID %d does not exist", r.FixtureId)

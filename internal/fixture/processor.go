@@ -91,7 +91,7 @@ func (s Processor) handleFixtures(f []sportmonks.Fixture) {
 }
 
 func (s Processor) persistFixture(m *sportmonks.Fixture) {
-	fixture, err := s.ById(m.ID)
+	fixture, err := s.ById(uint64(m.ID))
 
 	if err != nil && (model.Fixture{}) == *fixture {
 		created := s.createFixture(m)
