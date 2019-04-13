@@ -14,13 +14,13 @@ func TestHandlePlayerStats(t *testing.T) {
 			onGoal = 2
 		)
 
-		x := []model.PlayerStats{
-			*modelPlayerStats(&goals, &assists, &onGoal),
-			*modelPlayerStats(&goals, &assists, &onGoal),
-			*modelPlayerStats(&goals, &assists, &onGoal),
+		x := []*model.PlayerStats{
+			modelPlayerStats(&goals, &assists, &onGoal),
+			modelPlayerStats(&goals, &assists, &onGoal),
+			modelPlayerStats(&goals, &assists, &onGoal),
 		}
 
-		stats := HandlePlayerStats(&x)
+		stats := HandlePlayerStats(x)
 
 		assert.Equal(t, 3, len(stats))
 	})

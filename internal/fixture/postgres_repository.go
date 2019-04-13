@@ -37,7 +37,7 @@ func (p *PostgresFixtureRepository) Insert(f *model.Fixture) error {
 }
 
 func (p *PostgresFixtureRepository) Update(f *model.Fixture) error {
-	_, err := p.ById(f.ID)
+	_, err := p.ById(uint64(f.ID))
 
 	if err != nil {
 		return err

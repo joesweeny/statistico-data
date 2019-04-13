@@ -34,7 +34,7 @@ func CompetitionToProto(c *model.Competition) *pbCompetition.Competition {
 
 func PlayerStatsToProto(p *model.PlayerStats) *pbPlayerStats.PlayerStats {
 	stats := pbPlayerStats.PlayerStats{
-		PlayerId: 		int64(p.PlayerID),
+		PlayerId: 		uint64(p.PlayerID),
 	}
 
 	shots := p.PlayerShots

@@ -19,7 +19,7 @@ func TestPlayerStatsToProto(t *testing.T) {
 		proto := PlayerStatsToProto(stats)
 
 		a := assert.New(t)
-		a.Equal(int64(77), proto.PlayerId)
+		a.Equal(uint64(77), proto.PlayerId)
 		a.Equal(int32(5), proto.ShotsTotal.GetValue())
 		a.Equal(int32(3), proto.ShotsOnGoal.GetValue())
 		a.Equal(int32(2), proto.GoalsScored.GetValue())
@@ -35,7 +35,7 @@ func TestPlayerStatsToProto(t *testing.T) {
 		proto := PlayerStatsToProto(stats)
 
 		a := assert.New(t)
-		a.Equal(int64(77), proto.PlayerId)
+		a.Equal(uint64(77), proto.PlayerId)
 		a.Equal(int32(0), proto.ShotsTotal.GetValue())
 		a.Equal(int32(0), proto.ShotsOnGoal.GetValue())
 		a.Equal(int32(0), proto.GoalsScored.GetValue())

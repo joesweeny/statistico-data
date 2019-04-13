@@ -64,7 +64,7 @@ func (p *PostgresPlayerStatsRepository) InsertPlayerStats(m *model.PlayerStats) 
 }
 
 func (p *PostgresPlayerStatsRepository) UpdatePlayerStats(m *model.PlayerStats) error {
-	if _, err := p.ByFixtureAndPlayer(m.FixtureID, m.PlayerID); err != nil {
+	if _, err := p.ByFixtureAndPlayer(uint64(m.FixtureID), uint64(m.PlayerID)); err != nil {
 		return err
 	}
 
