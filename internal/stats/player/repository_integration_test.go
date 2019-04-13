@@ -1,4 +1,4 @@
-package stats
+package player_stats
 
 import (
 	"database/sql"
@@ -19,7 +19,7 @@ func TestInsert(t *testing.T) {
 		defer cleanUp()
 
 		for i := 1; i < 4; i++ {
-			m := newPlayerStats(42, 65)
+			m := newPlayerStats(42, 65, 100)
 
 			if err := repo.InsertPlayerStats(m); err != nil {
 				t.Errorf("Error when inserting record into the database: %s", err.Error())
@@ -46,7 +46,7 @@ func TestByFixtureAndPlayer(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
 
-		m := newPlayerStats(30, 672)
+		m := newPlayerStats(30, 672, 100)
 
 		if err := repo.InsertPlayerStats(m); err != nil {
 			t.Errorf("Error when inserting record into the database: %s", err.Error())
@@ -121,7 +121,7 @@ func TestUpdatePlayerStats(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
 
-		m := newPlayerStats(30, 672)
+		m := newPlayerStats(30, 672, 100)
 
 		if err := repo.InsertPlayerStats(m); err != nil {
 			t.Errorf("Error when inserting record into the database: %s", err.Error())
@@ -237,7 +237,7 @@ func TestUpdatePlayerStats(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
 
-		err := repo.UpdatePlayerStats(newPlayerStats(1, 2))
+		err := repo.UpdatePlayerStats(newPlayerStats(1, 2, 100))
 
 		if err == nil {
 			t.Fatalf("Test failed, expected nil, got %v", err)
@@ -249,6 +249,42 @@ func TestUpdatePlayerStats(t *testing.T) {
 	})
 
 	conn.Close()
+}
+
+func TestByFixtureAndTeam(t *testing.T) {
+	conn, cleanUp := getPlayerConnection(t)
+	repo := PostgresPlayerStatsRepository{Connection: conn}
+
+	t.Run("returns a slice of player stats structs", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+
+		m := newPlayerStats(30, 6, 22)
+
+		if err := repo.InsertPlayerStats(m); err != nil {
+			t.Errorf("Error when inserting record into the database: %s", err.Error())
+		}
+
+		for i := 1; i < 5; i++ {
+			m := newPlayerStats(30, i, 100)
+
+			if err := repo.InsertPlayerStats(m); err != nil {
+				t.Errorf("Error when inserting record into the database: %s", err.Error())
+			}
+		}
+
+		stats, err := repo.ByFixtureAndTeam(30, 100)
+
+		if err != nil {
+			t.Errorf("Error when retrieving a record from the database: %s", err.Error())
+		}
+
+		assert.Equal(t,4, len(stats))
+
+		for _, s := range stats {
+			assert.Equal(t, 100, s.TeamID)
+		}
+	})
 }
 
 var db = config.GetConfig().Database
@@ -272,12 +308,12 @@ func getPlayerConnection(t *testing.T) (*sql.DB, func()) {
 	}
 }
 
-func newPlayerStats(fixtureId, playerId int) *model.PlayerStats {
+func newPlayerStats(fixtureId, playerId, teamId int) *model.PlayerStats {
 	pos := "M"
 	return &model.PlayerStats{
 		FixtureID:       fixtureId,
 		PlayerID:        playerId,
-		TeamID:          100,
+		TeamID:          teamId,
 		Position:        &pos,
 		IsSubstitute:    false,
 		PlayerShots:     model.PlayerShots{},

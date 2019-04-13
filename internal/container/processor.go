@@ -11,6 +11,7 @@ import (
 	"github.com/statistico/statistico-data/internal/season"
 	"github.com/statistico/statistico-data/internal/squad"
 	"github.com/statistico/statistico-data/internal/stats"
+	"github.com/statistico/statistico-data/internal/stats/player"
 	"github.com/statistico/statistico-data/internal/team"
 	"github.com/statistico/statistico-data/internal/venue"
 )
@@ -65,10 +66,10 @@ func (c Container) PlayerProcessor() *player.Processor {
 	}
 }
 
-func (c Container) playerStatsProcessor() stats.PlayerProcessor {
-	return stats.PlayerProcessor{
-		PlayerRepository: &stats.PostgresPlayerStatsRepository{Connection: c.Database},
-		PlayerFactory:    stats.PlayerFactory{Clock: clock()},
+func (c Container) playerStatsProcessor() player_stats.PlayerProcessor {
+	return player_stats.PlayerProcessor{
+		PlayerRepository: &player_stats.PostgresPlayerStatsRepository{Connection: c.Database},
+		PlayerFactory:    player_stats.PlayerFactory{Clock: clock()},
 		Logger:           c.Logger,
 	}
 }

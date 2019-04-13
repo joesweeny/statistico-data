@@ -1,4 +1,4 @@
-package stats
+package player_stats
 
 import (
 	"testing"
