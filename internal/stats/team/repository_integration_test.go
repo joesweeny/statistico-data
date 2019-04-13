@@ -1,4 +1,4 @@
-package stats
+package team_stats
 
 import (
 	"database/sql"

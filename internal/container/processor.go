@@ -10,7 +10,7 @@ import (
 	"github.com/statistico/statistico-data/internal/round"
 	"github.com/statistico/statistico-data/internal/season"
 	"github.com/statistico/statistico-data/internal/squad"
-	"github.com/statistico/statistico-data/internal/stats"
+	"github.com/statistico/statistico-data/internal/stats/team"
 	"github.com/statistico/statistico-data/internal/stats/player"
 	"github.com/statistico/statistico-data/internal/team"
 	"github.com/statistico/statistico-data/internal/venue"
@@ -126,10 +126,10 @@ func (c Container) TeamProcessor() *team.Processor {
 	}
 }
 
-func (c Container) teamStatsProcessor() stats.TeamProcessor {
-	return stats.TeamProcessor{
-		TeamRepository: &stats.PostgresTeamStatsRepository{Connection: c.Database},
-		TeamFactory:    stats.TeamFactory{Clock: clock()},
+func (c Container) teamStatsProcessor() team_stats.TeamProcessor {
+	return team_stats.TeamProcessor{
+		TeamRepository: &team_stats.PostgresTeamStatsRepository{Connection: c.Database},
+		TeamFactory:    team_stats.TeamFactory{Clock: clock()},
 		Logger:         c.Logger,
 	}
 }
