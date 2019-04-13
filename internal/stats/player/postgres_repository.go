@@ -1,4 +1,4 @@
-package stats
+package player_stats
 
 import (
 	"database/sql"
@@ -120,6 +120,72 @@ func (p *PostgresPlayerStatsRepository) ByFixtureAndPlayer(fixtureId, playerId i
 	row := p.Connection.QueryRow(query, fixtureId, playerId)
 
 	return rowToPlayerStats(row)
+}
+
+func (p *PostgresPlayerStatsRepository) ByFixtureAndTeam(fixtureId, teamId uint64) ([]*model.PlayerStats, error) {
+	query := `SELECT * FROM sportmonks_player_stats WHERE fixture_id = $1 AND team_id = $2`
+	rows, err := p.Connection.Query(query, fixtureId, teamId)
+
+	if err != nil {
+		return []*model.PlayerStats{}, err
+	}
+
+	var (
+		created int64
+		updated int64
+		stats []*model.PlayerStats
+		m model.PlayerStats
+	)
+
+	for rows.Next() {
+		err := rows.Scan(
+			&m.FixtureID,
+			&m.PlayerID,
+			&m.TeamID,
+			&m.Position,
+			&m.FormationPosition,
+			&m.IsSubstitute,
+			&m.PlayerShots.Total,
+			&m.PlayerShots.OnGoal,
+			&m.PlayerGoals.Scored,
+			&m.PlayerGoals.Conceded,
+			&m.PlayerFouls.Drawn,
+			&m.PlayerFouls.Committed,
+			&m.YellowCards,
+			&m.RedCard,
+			&m.PlayerCrosses.Total,
+			&m.PlayerCrosses.Accuracy,
+			&m.PlayerPasses.Total,
+			&m.PlayerPasses.Accuracy,
+			&m.Assists,
+			&m.Offsides,
+			&m.Saves,
+			&m.PlayerPenalties.Scored,
+			&m.PlayerPenalties.Missed,
+			&m.PlayerPenalties.Saved,
+			&m.PlayerPenalties.Committed,
+			&m.PlayerPenalties.Won,
+			&m.HitWoodwork,
+			&m.Tackles,
+			&m.Blocks,
+			&m.Interceptions,
+			&m.Clearances,
+			&m.MinutesPlayed,
+			&created,
+			&updated,
+		)
+
+		if err != nil {
+			return stats, err
+		}
+
+		m.CreatedAt = time.Unix(created, 0)
+		m.UpdatedAt = time.Unix(updated, 0)
+
+		stats = append(stats, &m)
+	}
+
+	return stats, nil
 }
 
 func rowToPlayerStats(r *sql.Row) (*model.PlayerStats, error) {

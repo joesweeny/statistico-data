@@ -226,12 +226,10 @@ func TestUpdateTeamStats(t *testing.T) {
 
 var db = config.GetConfig().Database
 
-var teamDb = config.GetConfig().Database
-
 func getTeamConnection(t *testing.T) (*sql.DB, func()) {
 	psqlInfo := fmt.Sprintf("host=%s port=%s user=%s "+
 		"password=%s dbname=%s sslmode=disable",
-		teamDb.Host, teamDb.Port, teamDb.User, teamDb.Password, teamDb.Name)
+		db.Host, db.Port, db.User, db.Password, db.Name)
 
 	db, err := sql.Open(db.Driver, psqlInfo)
 
