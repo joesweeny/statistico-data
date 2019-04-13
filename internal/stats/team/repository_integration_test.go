@@ -1,4 +1,4 @@
-package stats
+package team_stats
 
 import (
 	"database/sql"
@@ -223,6 +223,8 @@ func TestUpdateTeamStats(t *testing.T) {
 
 	conn.Close()
 }
+
+var db = config.GetConfig().Database
 
 var teamDb = config.GetConfig().Database
 

@@ -2,9 +2,13 @@ package stats
 
 import (
 	"database/sql"
+	"errors"
 	"github.com/statistico/statistico-data/internal/model"
 	"time"
+	_ "github.com/lib/pq"
 )
+
+var ErrNotFound = errors.New("not found")
 
 type PostgresPlayerStatsRepository struct {
 	Connection *sql.DB

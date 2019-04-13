@@ -5,6 +5,7 @@ import (
 	"github.com/statistico/statistico-data/internal/event"
 	"github.com/statistico/statistico-data/internal/fixture"
 	"github.com/statistico/statistico-data/internal/stats"
+	"github.com/statistico/statistico-data/internal/stats/team"
 	"log"
 	"sync"
 	"time"
@@ -24,7 +25,7 @@ type Processor struct {
 	Client          *sportmonks.Client
 	Logger          *log.Logger
 	PlayerProcessor stats.PlayerProcessor
-	TeamProcessor   stats.TeamProcessor
+	TeamProcessor   team_stats.TeamProcessor
 	EventProcessor  event.Processor
 }
 

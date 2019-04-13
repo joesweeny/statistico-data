@@ -8,6 +8,7 @@ import (
 	"time"
 )
 
+var t = time.Date(2019, 01, 14, 11, 25, 00, 00, time.UTC)
 var clock = clockwork.NewFakeClockAt(t)
 var f = PlayerFactory{clock}
 
