@@ -6,11 +6,11 @@ import (
 	pbPlayerStats "github.com/statistico/statistico-data/internal/proto/stats"
 )
 
-func HandlePlayerStats(p *[]model.PlayerStats) ([]*pbPlayerStats.PlayerStats) {
+func HandlePlayerStats(p []*model.PlayerStats) ([]*pbPlayerStats.PlayerStats) {
 	var stats []*pbPlayerStats.PlayerStats
 
-	for _, player := range *p {
-		s := proto.PlayerStatsToProto(&player)
+	for _, player := range p {
+		s := proto.PlayerStatsToProto(player)
 		stats = append(stats, s)
 	}
 
