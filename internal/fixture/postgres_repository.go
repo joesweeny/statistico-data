@@ -63,7 +63,7 @@ func (p *PostgresFixtureRepository) Update(f *model.Fixture) error {
 	return err
 }
 
-func (p *PostgresFixtureRepository) ById(id int) (*model.Fixture, error) {
+func (p *PostgresFixtureRepository) ById(id uint64) (*model.Fixture, error) {
 	query := `SELECT * FROM sportmonks_fixture where id = $1`
 	row := p.Connection.QueryRow(query, id)
 
