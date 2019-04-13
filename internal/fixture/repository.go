@@ -8,7 +8,7 @@ import (
 type Repository interface {
 	Insert(f *model.Fixture) error
 	Update(f *model.Fixture) error
-	ById(id int) (*model.Fixture, error)
+	ById(id uint64) (*model.Fixture, error)
 	Ids() ([]int, error)
 	IdsBetween(from, to time.Time) ([]int, error)
 	Between(from, to time.Time) ([]model.Fixture, error)
