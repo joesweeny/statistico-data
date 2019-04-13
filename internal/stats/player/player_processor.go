@@ -1,4 +1,4 @@
-package stats
+package player_stats
 
 import (
 	"github.com/statistico/sportmonks-go-client"
