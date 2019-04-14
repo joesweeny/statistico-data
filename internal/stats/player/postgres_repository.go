@@ -134,10 +134,13 @@ func (p *PostgresPlayerStatsRepository) ByFixtureAndTeam(fixtureId, teamId uint6
 		created int64
 		updated int64
 		stats []*model.PlayerStats
-		m model.PlayerStats
 	)
 
+	defer rows.Close()
+
 	for rows.Next() {
+		var m model.PlayerStats
+
 		err := rows.Scan(
 			&m.FixtureID,
 			&m.PlayerID,

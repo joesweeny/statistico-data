@@ -15,7 +15,7 @@ type Service struct {
 	Logger 			 *log.Logger
 }
 
-func (s Service) GetPlayerStatsForFixture(c context.Context, r *pb.FixtureRequest) (*pb.FixtureResponse, error) {
+func (s Service) GetPlayerStatsForFixture(c context.Context, r *pb.FixtureRequest) (*pb.StatsResponse, error) {
 	fix, err := s.FixtureRepo.ById(r.FixtureId)
 
 	if err != nil {
@@ -23,7 +23,7 @@ func (s Service) GetPlayerStatsForFixture(c context.Context, r *pb.FixtureReques
 		return nil, errors.New(m)
 	}
 
-	res := pb.FixtureResponse{}
+	res := pb.StatsResponse{}
 
 	home, err := s.PlayerRepository.ByFixtureAndTeam(uint64(fix.ID), uint64(fix.HomeTeamID))
 
