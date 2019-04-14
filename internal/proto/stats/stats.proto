@@ -7,14 +7,14 @@ package stats;
 import "google/protobuf/wrappers.proto";
 
 service StatsService {
-    rpc GetPlayerStatsForFixture(FixtureRequest) returns (FixtureResponse) {}
+    rpc GetPlayerStatsForFixture(FixtureRequest) returns (StatsResponse) {}
 }
 
 message FixtureRequest {
     uint64 fixture_id = 1;
 }
 
-message FixtureResponse {
+message StatsResponse {
     repeated PlayerStats home_team = 1;
     repeated PlayerStats away_team = 2;
 }
