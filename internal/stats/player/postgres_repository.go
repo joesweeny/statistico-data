@@ -123,7 +123,7 @@ func (p *PostgresPlayerStatsRepository) ByFixtureAndPlayer(fixtureId, playerId u
 }
 
 func (p *PostgresPlayerStatsRepository) ByFixtureAndTeam(fixtureId, teamId uint64) ([]*model.PlayerStats, error) {
-	query := `SELECT * FROM sportmonks_player_stats WHERE fixture_id = $1 AND team_id = $2`
+	query := `SELECT * FROM sportmonks_player_stats WHERE fixture_id = $1 AND team_id = $2 order by formation_position ASC`
 	rows, err := p.Connection.Query(query, fixtureId, teamId)
 
 	if err != nil {
