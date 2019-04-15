@@ -21,7 +21,7 @@ func HandleStartingLineupPlayers(p []*model.PlayerStats) ([]*pbPlayerStats.Lineu
 	var lineup []*pbPlayerStats.LineupPlayer
 
 	for _, player := range p {
-		if player.IsSubstitute == false {
+		if !player.IsSubstitute {
 			l := proto.PlayerStatsToLineupPlayerProto(player)
 			lineup = append(lineup, l)
 		}
@@ -34,7 +34,7 @@ func HandleSubstituteLineupPlayers(p []*model.PlayerStats) ([]*pbPlayerStats.Lin
 	var lineup []*pbPlayerStats.LineupPlayer
 
 	for _, player := range p {
-		if player.IsSubstitute == true {
+		if player.IsSubstitute {
 			l := proto.PlayerStatsToLineupPlayerProto(player)
 			lineup = append(lineup, l)
 		}
