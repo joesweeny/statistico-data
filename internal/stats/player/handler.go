@@ -16,3 +16,14 @@ func HandlePlayerStats(p []*model.PlayerStats) ([]*pbPlayerStats.PlayerStats) {
 
 	return stats
 }
+
+func HandleLineupPlayers(p []*model.PlayerStats) ([]*pbPlayerStats.LineupPlayer) {
+	var lineup []*pbPlayerStats.LineupPlayer
+
+	for _, player := range p {
+		l := proto.PlayerStatsToLineupPlayerProto(player)
+		lineup = append(lineup, l)
+	}
+
+	return lineup
+}

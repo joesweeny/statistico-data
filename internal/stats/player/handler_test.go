@@ -26,6 +26,47 @@ func TestHandlePlayerStats(t *testing.T) {
 	})
 }
 
+func TestHandleLineupPlayers(t *testing.T) {
+	t.Run("returns a slice of proto LineupPlayer structs", func(t *testing.T) {
+		var (
+			playerId1 = 1
+			formation1 = 1
+			pos1 = "M"
+		)
+
+		var (
+			playerId2 = 2
+			formation2 = 2
+			pos2 = "M"
+		)
+
+		var (
+			playerId3 = 3
+			formation3 = 3
+			pos3 = "M"
+		)
+
+		x := []*model.PlayerStats{
+			modelPlayerLineup(playerId1, &formation1, &pos1),
+			modelPlayerLineup(playerId2, &formation2, &pos2),
+			modelPlayerLineup(playerId3, &formation3, &pos3),
+		}
+
+		lineup := HandleLineupPlayers(x)
+
+		a := assert.New(t)
+
+		a.Equal(3, len(lineup))
+
+		for i, l := range lineup {
+			a.Equal(uint64(i + 1), l.PlayerId)
+			a.Equal("M", l.Position)
+			a.Equal(uint32(i + 1), l.FormationPosition.GetValue())
+			a.False(l.IsSubstitute)
+		}
+	})
+}
+
 func modelPlayerStats(goals *int, assists *int, onGoal *int) *model.PlayerStats {
 	shots := 5
 	conceded := 0
@@ -40,5 +81,14 @@ func modelPlayerStats(goals *int, assists *int, onGoal *int) *model.PlayerStats 
 			Conceded: &conceded,
 		},
 		Assists: assists,
+	}
+}
+
+func modelPlayerLineup(playerId int, formation *int, position *string) *model.PlayerStats {
+	return &model.PlayerStats{
+		PlayerID: playerId,
+		Position: position,
+		IsSubstitute: false,
+		FormationPosition: formation,
 	}
 }
