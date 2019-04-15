@@ -133,6 +133,19 @@ func (p *PostgresFixtureRepository) BySeasonId(id int64) ([]model.Fixture, error
 	return rowsToFixtureSlice(rows)
 }
 
+func (p *PostgresFixtureRepository) ByHomeAndAwayTeam(homeTeamId, awayTeamId uint64, limit uint32, before time.Time) ([]model.Fixture, error) {
+	query := `SELECT * FROM sportmonks_fixture WHERE home_team_id = $1 and away_team_id = $2 and date < $3
+	ORDER BY date DESC LIMIT $4`
+
+	rows, err := p.Connection.Query(query, homeTeamId, awayTeamId, before.Unix(), limit)
+
+	if err != nil {
+		return []model.Fixture{}, err
+	}
+
+	return rowsToFixtureSlice(rows)
+}
+
 func rowsToIntSlice(rows *sql.Rows) ([]int, error) {
 	defer rows.Close()
 
