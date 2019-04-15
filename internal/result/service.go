@@ -21,7 +21,19 @@ type Service struct {
 }
 
 func (s Service) GetHistoricalResultsForFixture(r *pb.HistoricalResultRequest, stream pb.ResultService_GetHistoricalResultsForFixtureServer) error {
-	return nil
+	date, err := time.Parse(time.RFC3339, r.DateBefore)
+
+	if err != nil {
+		return ErrTimeParse
+	}
+
+	fixtures, err := s.FixtureRepo.ByHomeAndAwayTeam(r.HomeTeamId, r.AwayTeamId, r.Limit, date)
+
+	if err != nil {
+		return err
+	}
+
+	return s.sendResults(fixtures, stream)
 }
 
 func (s Service) GetResultsForTeam(r *pb.TeamRequest, stream pb.ResultService_GetResultsForTeamServer) error {
