@@ -42,6 +42,6 @@ message Lineup {
 message LineupPlayer {
     uint64 player_id = 1;
     string position = 2;
-    google.protobuf.Int32Value formation_position = 3;
+    google.protobuf.UInt32Value formation_position = 3;
     bool is_substitute = 4;
 }

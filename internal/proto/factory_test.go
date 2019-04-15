@@ -44,6 +44,40 @@ func TestPlayerStatsToProto(t *testing.T) {
 	})
 }
 
+func TestPlayerStatsToLineupPlayerProto(t *testing.T) {
+	pos := "M"
+	form := 8
+
+	player := model.PlayerStats{
+		PlayerID: 105,
+		Position: &pos,
+		IsSubstitute: false,
+		FormationPosition: &form,
+	}
+
+	t.Run("a new LineupPlayer proto struct is hydrated", func(t *testing.T) {
+		pl := PlayerStatsToLineupPlayerProto(&player)
+
+		a := assert.New(t)
+		a.Equal(uint64(105), pl.PlayerId)
+		a.Equal("M", pl.Position)
+		a.False(pl.IsSubstitute)
+		a.Equal(uint32(8), pl.FormationPosition.GetValue())
+	})
+
+	t.Run("nullable fields are handled", func(t *testing.T) {
+		player.FormationPosition = nil
+
+		pl := PlayerStatsToLineupPlayerProto(&player)
+
+		a := assert.New(t)
+		a.Equal(uint64(105), pl.PlayerId)
+		a.Equal("M", pl.Position)
+		a.False(pl.IsSubstitute)
+		a.Equal(uint32(0), pl.FormationPosition.GetValue())
+	})
+}
+
 func newPlayerStats(goals *int, assists *int, onGoal *int) *model.PlayerStats {
 	shots := 5
 	conceded := 0

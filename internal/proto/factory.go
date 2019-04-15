@@ -40,11 +40,11 @@ func PlayerStatsToLineupPlayerProto(p *model.PlayerStats) *pbPlayerStats.LineupP
 	}
 
 	if p.FormationPosition != nil {
-		player.FormationPosition = &wrappers.Int32Value{
-			Value: int32(*p.FormationPosition),
+		player.FormationPosition = &wrappers.UInt32Value{
+			Value: uint32(*p.FormationPosition),
 		}
 	}
-	
+
 	return &player
 }
 
