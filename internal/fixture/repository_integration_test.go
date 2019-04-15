@@ -440,6 +440,81 @@ func TestBySeasonId(t *testing.T) {
 	conn.Close()
 }
 
+func TestByHomeAndAwayTeam(t *testing.T) {
+	conn, cleanUp := getConnection(t)
+	repo := PostgresFixtureRepository{Connection: conn}
+
+	t.Run("returns slice of fixture structs matching parameters provided", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+
+		insertFixtures(t, &repo)
+
+		fix, err := repo.ByHomeAndAwayTeam(uint64(66), uint64(924), uint32(100), time.Unix(1550066320, 0))
+
+		if err != nil {
+			t.Fatalf("Test failed, expected nil, got %s", err.Error())
+		}
+
+		all, err := repo.Ids()
+
+		if err != nil {
+			t.Fatalf("Test failed, expected nil, got %s", err.Error())
+		}
+
+		assert.Equal(t, 9, len(all))
+		assert.Equal(t, 4, len(fix))
+	})
+
+	t.Run("results can be filtered by limit", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+
+		insertFixtures(t, &repo)
+
+		fix, err := repo.ByHomeAndAwayTeam(uint64(66), uint64(924), uint32(1), time.Unix(1550066317, 0))
+
+		if err != nil {
+			t.Fatalf("Test failed, expected nil, got %s", err.Error())
+		}
+
+		all, err := repo.Ids()
+
+		if err != nil {
+			t.Fatalf("Test failed, expected nil, got %s", err.Error())
+		}
+
+		assert.Equal(t, 9, len(all))
+		assert.Equal(t, 1, len(fix))
+		assert.Equal(t, 6, fix[0].ID)
+		assert.Equal(t, 66, fix[0].HomeTeamID)
+		assert.Equal(t, 924, fix[0].AwayTeamID)
+	})
+
+	t.Run("empty result set returned if no results match parameters", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+
+		insertFixtures(t, &repo)
+
+		fix, err := repo.ByHomeAndAwayTeam(uint64(66), uint64(44), uint32(100), time.Unix(1550066317, 0))
+
+		if err != nil {
+			t.Fatalf("Test failed, expected nil, got %s", err.Error())
+		}
+
+		all, err := repo.Ids()
+
+		if err != nil {
+			t.Fatalf("Test failed, expected nil, got %s", err.Error())
+		}
+
+		assert.Equal(t, 9, len(all))
+		assert.Equal(t, 0, len(fix))
+	})
+}
+
+
 var db = config.GetConfig().Database
 
 func getConnection(t *testing.T) (*sql.DB, func()) {
