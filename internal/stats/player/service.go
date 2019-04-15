@@ -48,6 +48,6 @@ func (s Service) GetPlayerStatsForFixture(c context.Context, r *pb.FixtureReques
 	return &res, nil
 }
 
-func (s Service) GetLineUpForFixture(c context.Context, r *pb.FixtureRequest) (*pb.LineUpResponse, error) {
+func (s Service) GetLineUpForFixture(c context.Context, r *pb.FixtureRequest) (*pb.LineupResponse, error) {
 	return nil, nil
 }
