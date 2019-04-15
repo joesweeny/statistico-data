@@ -8,6 +8,7 @@ import "google/protobuf/wrappers.proto";
 
 service StatsService {
     rpc GetPlayerStatsForFixture(FixtureRequest) returns (StatsResponse) {}
+    rpc GetLineUpForFixture(FixtureRequest) returns (LineUpResponse) {}
 }
 
 message FixtureRequest {
@@ -19,6 +20,11 @@ message StatsResponse {
     repeated PlayerStats away_team = 2;
 }
 
+message LineUpResponse {
+    LineUp home_team = 1;
+    LineUp away_team = 2;
+}
+
 message PlayerStats {
     uint64 player_id = 1;
     google.protobuf.Int32Value shots_total = 2;
@@ -26,4 +32,16 @@ message PlayerStats {
     google.protobuf.Int32Value goals_scored = 4;
     google.protobuf.Int32Value goals_conceded = 5;
     google.protobuf.Int32Value assists = 6;
+}
+
+message LineUp {
+    repeated Player start = 1;
+    repeated Player bench = 2;
+}
+
+message Player {
+    uint64 player_id = 1;
+    string position = 2;
+    google.protobuf.Int32Value formation_position = 3;
+    bool is_substitute = 4;
 }
