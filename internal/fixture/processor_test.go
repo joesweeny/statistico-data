@@ -174,6 +174,11 @@ func (m mockFixtureRepository) BySeasonId(id int64) ([]model.Fixture, error) {
 	return args.Get(0).([]model.Fixture), args.Error(1)
 }
 
+func (m mockFixtureRepository) ByHomeAndAwayTeam(homeTeamId, awayTeamId uint64, limit uint32, before time.Time) ([]model.Fixture, error) {
+	args := m.Called(homeTeamId, awayTeamId, limit, before)
+	return args.Get(0).([]model.Fixture), args.Error(1)
+}
+
 func seasonResponse() sportmonks.SeasonResponse {
 	var round = 10
 	var stage = 567
