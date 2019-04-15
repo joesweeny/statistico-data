@@ -19,7 +19,7 @@ func TestInsert(t *testing.T) {
 		defer cleanUp()
 
 		for i := 1; i < 4; i++ {
-			m := newPlayerStats(42, 65, 100)
+			m := newPlayerStats(42, 65, 100, i)
 
 			if err := repo.InsertPlayerStats(m); err != nil {
 				t.Errorf("Error when inserting record into the database: %s", err.Error())
@@ -46,7 +46,7 @@ func TestByFixtureAndPlayer(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
 
-		m := newPlayerStats(30, 672, 100)
+		m := newPlayerStats(30, 672, 100, 1)
 
 		if err := repo.InsertPlayerStats(m); err != nil {
 			t.Errorf("Error when inserting record into the database: %s", err.Error())
@@ -63,7 +63,7 @@ func TestByFixtureAndPlayer(t *testing.T) {
 		a.Equal(672, r.PlayerID)
 		a.Equal(100, r.TeamID)
 		a.Equal("M", *r.Position)
-		a.Nil(r.FormationPosition)
+		a.Equal(1, *r.FormationPosition)
 		a.False(r.IsSubstitute)
 		a.Nil(m.PlayerShots.Total)
 		a.Nil(m.PlayerShots.OnGoal)
@@ -121,7 +121,7 @@ func TestUpdatePlayerStats(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
 
-		m := newPlayerStats(30, 672, 100)
+		m := newPlayerStats(30, 672, 100, 1)
 
 		if err := repo.InsertPlayerStats(m); err != nil {
 			t.Errorf("Error when inserting record into the database: %s", err.Error())
@@ -237,7 +237,7 @@ func TestUpdatePlayerStats(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
 
-		err := repo.UpdatePlayerStats(newPlayerStats(1, 2, 100))
+		err := repo.UpdatePlayerStats(newPlayerStats(1, 2, 100, 1))
 
 		if err == nil {
 			t.Fatalf("Test failed, expected nil, got %v", err)
@@ -259,14 +259,14 @@ func TestByFixtureAndTeam(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
 
-		m := newPlayerStats(30, 6, 22)
+		m := newPlayerStats(30, 6, 22, 4)
 
 		if err := repo.InsertPlayerStats(m); err != nil {
 			t.Errorf("Error when inserting record into the database: %s", err.Error())
 		}
 
 		for i := 1; i < 5; i++ {
-			m := newPlayerStats(30, i, 100)
+			m := newPlayerStats(30, i, 100, i)
 
 			if err := repo.InsertPlayerStats(m); err != nil {
 				t.Errorf("Error when inserting record into the database: %s", err.Error())
@@ -283,6 +283,40 @@ func TestByFixtureAndTeam(t *testing.T) {
 
 		for _, s := range stats {
 			assert.Equal(t, 100, s.TeamID)
+		}
+	})
+
+	t.Run("player stats structs are ordered ascending by formation position", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+
+		m := newPlayerStats(30, 16, 22, 10)
+
+		if err := repo.InsertPlayerStats(m); err != nil {
+			t.Errorf("Error when inserting record into the database: %s", err.Error())
+		}
+
+		for i := 5; i >= 1; i-- {
+			m := newPlayerStats(30, i, 100, i)
+
+			if err := repo.InsertPlayerStats(m); err != nil {
+				t.Errorf("Error when inserting record into the database: %s", err.Error())
+			}
+		}
+
+		stats, err := repo.ByFixtureAndTeam(30, 100)
+
+		if err != nil {
+			t.Errorf("Error when retrieving a record from the database: %s", err.Error())
+		}
+
+		assert.Equal(t,5, len(stats))
+
+		for i, s := range stats {
+			assert.Equal(t, 30, s.FixtureID)
+			assert.Equal(t, 100, s.TeamID)
+			assert.Equal(t, i + 1, *s.FormationPosition)
+			assert.Equal(t, i + 1, s.PlayerID)
 		}
 	})
 }
@@ -308,13 +342,14 @@ func getPlayerConnection(t *testing.T) (*sql.DB, func()) {
 	}
 }
 
-func newPlayerStats(fixtureId, playerId, teamId int) *model.PlayerStats {
+func newPlayerStats(fixtureId, playerId, teamId, formation int) *model.PlayerStats {
 	pos := "M"
 	return &model.PlayerStats{
 		FixtureID:       fixtureId,
 		PlayerID:        playerId,
 		TeamID:          teamId,
 		Position:        &pos,
+		FormationPosition: &formation,
 		IsSubstitute:    false,
 		PlayerShots:     model.PlayerShots{},
 		PlayerGoals:     model.PlayerGoals{},
