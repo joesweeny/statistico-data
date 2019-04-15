@@ -32,6 +32,22 @@ func CompetitionToProto(c *model.Competition) *pbCompetition.Competition {
 	return &x
 }
 
+func PlayerStatsToLineupPlayerProto(p *model.PlayerStats) *pbPlayerStats.LineupPlayer {
+	player := pbPlayerStats.LineupPlayer{
+		PlayerId: uint64(p.PlayerID),
+		Position: *p.Position,
+		IsSubstitute: p.IsSubstitute,
+	}
+
+	if p.FormationPosition != nil {
+		player.FormationPosition = &wrappers.UInt32Value{
+			Value: uint32(*p.FormationPosition),
+		}
+	}
+
+	return &player
+}
+
 func PlayerStatsToProto(p *model.PlayerStats) *pbPlayerStats.PlayerStats {
 	stats := pbPlayerStats.PlayerStats{
 		PlayerId: 		uint64(p.PlayerID),
