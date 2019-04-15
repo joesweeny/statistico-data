@@ -12,8 +12,9 @@ import "internal/proto/team/team.proto";
 import "internal/proto/venue/venue.proto";
 
 service ResultService {
-    rpc GetResultsForTeam(TeamRequest) returns (stream Result) {}
+    rpc GetHistoricalResultsForFixture(HistoricalResultRequest) returns (stream Result) {}
     rpc GetResultsForSeason(SeasonRequest) returns (stream Result) {}
+    rpc GetResultsForTeam(TeamRequest) returns (stream Result) {}
 }
 
 message TeamRequest {
@@ -30,6 +31,18 @@ message TeamRequest {
 message SeasonRequest {
     // The Season ID that the Result set relates to
     int64 season_id = 1;
+}
+
+message HistoricalResultRequest {
+    // The Home Team ID that the Result set relates to
+    uint64 home_team_id = 1;
+    // The Away Team ID that the Result set relates to
+    uint64 away_team_id = 2;
+    // The number of results to return
+    uint32 limit = 3;
+    // A filter to return Results before a specific date
+    // RFC3339 formatted string i.e "2006-01-02T15:04:05Z07:00"
+    string date_before = 4;
 }
 
 message Result {

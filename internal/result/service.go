@@ -20,6 +20,10 @@ type Service struct {
 	Logger *log.Logger
 }
 
+func (s Service) GetHistoricalResultsForFixture(r *pb.HistoricalResultRequest, stream pb.ResultService_GetHistoricalResultsForFixtureServer) error {
+	return nil
+}
+
 func (s Service) GetResultsForTeam(r *pb.TeamRequest, stream pb.ResultService_GetResultsForTeamServer) error {
 	date, err := time.Parse(time.RFC3339, r.DateBefore)
 
