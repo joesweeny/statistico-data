@@ -17,12 +17,27 @@ func HandlePlayerStats(p []*model.PlayerStats) ([]*pbPlayerStats.PlayerStats) {
 	return stats
 }
 
-func HandleLineupPlayers(p []*model.PlayerStats) ([]*pbPlayerStats.LineupPlayer) {
+func HandleStartingLineupPlayers(p []*model.PlayerStats) ([]*pbPlayerStats.LineupPlayer) {
 	var lineup []*pbPlayerStats.LineupPlayer
 
 	for _, player := range p {
-		l := proto.PlayerStatsToLineupPlayerProto(player)
-		lineup = append(lineup, l)
+		if player.IsSubstitute == false {
+			l := proto.PlayerStatsToLineupPlayerProto(player)
+			lineup = append(lineup, l)
+		}
+	}
+
+	return lineup
+}
+
+func HandleSubstituteLineupPlayers(p []*model.PlayerStats) ([]*pbPlayerStats.LineupPlayer) {
+	var lineup []*pbPlayerStats.LineupPlayer
+
+	for _, player := range p {
+		if player.IsSubstitute == true {
+			l := proto.PlayerStatsToLineupPlayerProto(player)
+			lineup = append(lineup, l)
+		}
 	}
 
 	return lineup

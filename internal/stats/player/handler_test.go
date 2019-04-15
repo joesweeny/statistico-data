@@ -26,8 +26,8 @@ func TestHandlePlayerStats(t *testing.T) {
 	})
 }
 
-func TestHandleLineupPlayers(t *testing.T) {
-	t.Run("returns a slice of proto LineupPlayer structs", func(t *testing.T) {
+func TestHandleStartingLineupPlayers(t *testing.T) {
+	t.Run("returns a slice of proto LineupPlayer structs who are not substitutes", func(t *testing.T) {
 		var (
 			playerId1 = 1
 			formation1 = 1
@@ -47,22 +47,63 @@ func TestHandleLineupPlayers(t *testing.T) {
 		)
 
 		x := []*model.PlayerStats{
-			modelPlayerLineup(playerId1, &formation1, &pos1),
-			modelPlayerLineup(playerId2, &formation2, &pos2),
-			modelPlayerLineup(playerId3, &formation3, &pos3),
+			modelPlayerLineup(playerId1, &formation1, &pos1, false),
+			modelPlayerLineup(playerId2, &formation2, &pos2, false),
+			modelPlayerLineup(playerId3, &formation3, &pos3, true),
 		}
 
-		lineup := HandleLineupPlayers(x)
+		lineup := HandleStartingLineupPlayers(x)
 
 		a := assert.New(t)
 
-		a.Equal(3, len(lineup))
+		a.Equal(2, len(lineup))
 
 		for i, l := range lineup {
 			a.Equal(uint64(i + 1), l.PlayerId)
 			a.Equal("M", l.Position)
 			a.Equal(uint32(i + 1), l.FormationPosition.GetValue())
 			a.False(l.IsSubstitute)
+		}
+	})
+}
+
+func TestHandleSubstituteLineupPlayers(t *testing.T) {
+	t.Run("returns a slice of proto LineupPlayer structs who are substitutes", func(t *testing.T) {
+		var (
+			playerId1 = 1
+			formation1 = 1
+			pos1 = "M"
+		)
+
+		var (
+			playerId2 = 2
+			formation2 = 2
+			pos2 = "M"
+		)
+
+		var (
+			playerId3 = 3
+			formation3 = 3
+			pos3 = "M"
+		)
+
+		x := []*model.PlayerStats{
+			modelPlayerLineup(playerId1, &formation1, &pos1, true),
+			modelPlayerLineup(playerId2, &formation2, &pos2, false),
+			modelPlayerLineup(playerId3, &formation3, &pos3, false),
+		}
+
+		lineup := HandleSubstituteLineupPlayers(x)
+
+		a := assert.New(t)
+
+		a.Equal(1, len(lineup))
+
+		for i, l := range lineup {
+			a.Equal(uint64(i + 1), l.PlayerId)
+			a.Equal("M", l.Position)
+			a.Equal(uint32(i + 1), l.FormationPosition.GetValue())
+			a.True(l.IsSubstitute)
 		}
 	})
 }
@@ -84,11 +125,11 @@ func modelPlayerStats(goals *int, assists *int, onGoal *int) *model.PlayerStats 
 	}
 }
 
-func modelPlayerLineup(playerId int, formation *int, position *string) *model.PlayerStats {
+func modelPlayerLineup(playerId int, formation *int, position *string, sub bool) *model.PlayerStats {
 	return &model.PlayerStats{
 		PlayerID: playerId,
 		Position: position,
-		IsSubstitute: false,
+		IsSubstitute: sub,
 		FormationPosition: formation,
 	}
 }
