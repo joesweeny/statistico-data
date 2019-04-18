@@ -514,6 +514,62 @@ func TestByHomeAndAwayTeam(t *testing.T) {
 	})
 }
 
+func TestTeamIdsForSeason(t *testing.T) {
+	conn, cleanUp := getConnection(t)
+	repo := PostgresFixtureRepository{Connection: conn}
+
+	t.Run("returns an int slice of Team IDs", func(t *testing.T ) {
+		t.Helper()
+		defer cleanUp()
+
+		insertFixtures(t, &repo)
+
+		ids1, err := repo.TeamIdsForSeason(uint64(14567))
+
+		if err != nil {
+			t.Fatalf("Test failed, expected nil, got %s", err.Error())
+		}
+
+		a := assert.New(t)
+
+		a.Equal(2, len(ids1))
+		a.Equal(451, ids1[0])
+		a.Equal(924, ids1[1])
+
+		ids2, err := repo.TeamIdsForSeason(uint64(6012))
+
+		if err != nil {
+			t.Fatalf("Test failed, expected nil, got %s", err.Error())
+		}
+
+		a.Equal(2, len(ids2))
+		a.Equal(66, ids2[0])
+		a.Equal(924, ids2[1])
+
+		ids3, err := repo.TeamIdsForSeason(uint64(145))
+
+		if err != nil {
+			t.Fatalf("Test failed, expected nil, got %s", err.Error())
+		}
+
+		a.Equal(2, len(ids3))
+		a.Equal(32, ids3[0])
+		a.Equal(66, ids3[1])
+	})
+
+	t.Run("empty slice is returned if no results match Season ID", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+
+		ids, err := repo.TeamIdsForSeason(uint64(67897))
+
+		if err != nil {
+			t.Fatalf("Test failed, expected nil, got %s", err.Error())
+		}
+
+		assert.Equal(t,0, len(ids))
+	})
+}
 
 var db = config.GetConfig().Database
 
@@ -580,8 +636,8 @@ func insertFixtures(t *testing.T, repo Repository) {
 	s := model.Fixture{
 		ID:         99,
 		SeasonID:   145,
-		HomeTeamID: 32,
-		AwayTeamID: 66,
+		HomeTeamID: 66,
+		AwayTeamID: 32,
 		Date:       time.Unix(1550066312, 0),
 		CreatedAt:  time.Unix(1546965200, 0),
 		UpdatedAt:  time.Unix(1546965200, 0),

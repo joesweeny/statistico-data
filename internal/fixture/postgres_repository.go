@@ -146,8 +146,9 @@ func (p *PostgresFixtureRepository) ByHomeAndAwayTeam(homeTeamId, awayTeamId uin
 	return rowsToFixtureSlice(rows)
 }
 
-func (p *PostgresFixtureRepository) TeamIdsForSeason(seasonId uint64 ) ([]int, error) {
-	query := `SELECT DISTINCT home_team_id, away_team_id where season_id = $1`
+func (p *PostgresFixtureRepository) TeamIdsForSeason(seasonId uint64) ([]int, error) {
+	query := `SELECT id FROM (SELECT home_team_id as id FROM sportmonks_fixture where season_id = $1 UNION
+	SELECT away_team_id as id FROM sportmonks_fixture where season_id = $1) AS combined ORDER BY id ASC`
 
 	rows, err := p.Connection.Query(query, seasonId)
 
