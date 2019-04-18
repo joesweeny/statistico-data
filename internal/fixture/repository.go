@@ -24,4 +24,6 @@ type Repository interface {
 	// Limit parameter to limit the number of Fixture structs returned
 	// Date constraint returning fixtures from before that date
 	ByHomeAndAwayTeam(homeTeamId, awayTeamId uint64, limit uint32, before time.Time) ([]model.Fixture, error)
+	// Return a struct of Team IDs linked to the seasonId provided
+	TeamIdsForSeason(seasonId uint64) ([]int, error)
 }

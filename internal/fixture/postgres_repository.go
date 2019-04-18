@@ -146,6 +146,18 @@ func (p *PostgresFixtureRepository) ByHomeAndAwayTeam(homeTeamId, awayTeamId uin
 	return rowsToFixtureSlice(rows)
 }
 
+func (p *PostgresFixtureRepository) TeamIdsForSeason(seasonId uint64 ) ([]int, error) {
+	query := `SELECT DISTINCT home_team_id, away_team_id where season_id = $1`
+
+	rows, err := p.Connection.Query(query, seasonId)
+
+	if err != nil {
+		return []int{}, err
+	}
+
+	return rowsToIntSlice(rows)
+}
+
 func rowsToIntSlice(rows *sql.Rows) ([]int, error) {
 	defer rows.Close()
 
