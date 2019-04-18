@@ -7,6 +7,11 @@ import proto "github.com/golang/protobuf/proto"
 import fmt "fmt"
 import math "math"
 
+import (
+	context "golang.org/x/net/context"
+	grpc "google.golang.org/grpc"
+)
+
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
 var _ = fmt.Errorf
@@ -17,6 +22,44 @@ var _ = math.Inf
 // A compilation error at this line likely means your copy of the
 // proto package needs to be updated.
 const _ = proto.ProtoPackageIsVersion2 // please upgrade the proto package
+
+type SeasonRequest struct {
+	SeasonId             uint64   `protobuf:"varint,1,opt,name=season_id,json=seasonId,proto3" json:"season_id,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *SeasonRequest) Reset()         { *m = SeasonRequest{} }
+func (m *SeasonRequest) String() string { return proto.CompactTextString(m) }
+func (*SeasonRequest) ProtoMessage()    {}
+func (*SeasonRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_team_15a5214370c1eba1, []int{0}
+}
+func (m *SeasonRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_SeasonRequest.Unmarshal(m, b)
+}
+func (m *SeasonRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_SeasonRequest.Marshal(b, m, deterministic)
+}
+func (dst *SeasonRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SeasonRequest.Merge(dst, src)
+}
+func (m *SeasonRequest) XXX_Size() int {
+	return xxx_messageInfo_SeasonRequest.Size(m)
+}
+func (m *SeasonRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_SeasonRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_SeasonRequest proto.InternalMessageInfo
+
+func (m *SeasonRequest) GetSeasonId() uint64 {
+	if m != nil {
+		return m.SeasonId
+	}
+	return 0
+}
 
 type Team struct {
 	Id                   int64    `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
@@ -30,7 +73,7 @@ func (m *Team) Reset()         { *m = Team{} }
 func (m *Team) String() string { return proto.CompactTextString(m) }
 func (*Team) ProtoMessage()    {}
 func (*Team) Descriptor() ([]byte, []int) {
-	return fileDescriptor_team_39ef1b51ec50e018, []int{0}
+	return fileDescriptor_team_15a5214370c1eba1, []int{1}
 }
 func (m *Team) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Team.Unmarshal(m, b)
@@ -65,22 +108,127 @@ func (m *Team) GetName() string {
 }
 
 func init() {
+	proto.RegisterType((*SeasonRequest)(nil), "team.SeasonRequest")
 	proto.RegisterType((*Team)(nil), "team.Team")
 }
 
-func init() {
-	proto.RegisterFile("internal/proto/team/team.proto", fileDescriptor_team_39ef1b51ec50e018)
+// Reference imports to suppress errors if they are not otherwise used.
+var _ context.Context
+var _ grpc.ClientConn
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the grpc package it is being compiled against.
+const _ = grpc.SupportPackageIsVersion4
+
+// TeamServiceClient is the client API for TeamService service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
+type TeamServiceClient interface {
+	GetTeamsForSeason(ctx context.Context, in *SeasonRequest, opts ...grpc.CallOption) (TeamService_GetTeamsForSeasonClient, error)
 }
 
-var fileDescriptor_team_39ef1b51ec50e018 = []byte{
-	// 134 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x92, 0xcb, 0xcc, 0x2b, 0x49,
-	0x2d, 0xca, 0x4b, 0xcc, 0xd1, 0x2f, 0x28, 0xca, 0x2f, 0xc9, 0xd7, 0x2f, 0x49, 0x4d, 0xcc, 0x05,
-	0x13, 0x7a, 0x60, 0xbe, 0x10, 0x0b, 0x88, 0xad, 0xa4, 0xc5, 0xc5, 0x12, 0x92, 0x9a, 0x98, 0x2b,
-	0xc4, 0xc7, 0xc5, 0x94, 0x99, 0x22, 0xc1, 0xa8, 0xc0, 0xa8, 0xc1, 0x1c, 0xc4, 0x94, 0x99, 0x22,
-	0x24, 0xc4, 0xc5, 0x92, 0x97, 0x98, 0x9b, 0x2a, 0xc1, 0xa4, 0xc0, 0xa8, 0xc1, 0x19, 0x04, 0x66,
-	0x3b, 0x59, 0x47, 0x59, 0xa6, 0x67, 0x96, 0x64, 0x94, 0x26, 0xe9, 0x25, 0xe7, 0xe7, 0xea, 0x17,
-	0x97, 0x24, 0x96, 0x64, 0x16, 0x97, 0x64, 0x26, 0xe7, 0x23, 0x31, 0x75, 0x53, 0x12, 0x4b, 0x12,
-	0xf5, 0xb1, 0xd8, 0x9c, 0xc4, 0x06, 0x66, 0x1b, 0x03, 0x02, 0x00, 0x00, 0xff, 0xff, 0xf0, 0x44,
-	0x2c, 0x36, 0x97, 0x00, 0x00, 0x00,
+type teamServiceClient struct {
+	cc *grpc.ClientConn
+}
+
+func NewTeamServiceClient(cc *grpc.ClientConn) TeamServiceClient {
+	return &teamServiceClient{cc}
+}
+
+func (c *teamServiceClient) GetTeamsForSeason(ctx context.Context, in *SeasonRequest, opts ...grpc.CallOption) (TeamService_GetTeamsForSeasonClient, error) {
+	stream, err := c.cc.NewStream(ctx, &_TeamService_serviceDesc.Streams[0], "/team.TeamService/GetTeamsForSeason", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &teamServiceGetTeamsForSeasonClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type TeamService_GetTeamsForSeasonClient interface {
+	Recv() (*Team, error)
+	grpc.ClientStream
+}
+
+type teamServiceGetTeamsForSeasonClient struct {
+	grpc.ClientStream
+}
+
+func (x *teamServiceGetTeamsForSeasonClient) Recv() (*Team, error) {
+	m := new(Team)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+// TeamServiceServer is the server API for TeamService service.
+type TeamServiceServer interface {
+	GetTeamsForSeason(*SeasonRequest, TeamService_GetTeamsForSeasonServer) error
+}
+
+func RegisterTeamServiceServer(s *grpc.Server, srv TeamServiceServer) {
+	s.RegisterService(&_TeamService_serviceDesc, srv)
+}
+
+func _TeamService_GetTeamsForSeason_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(SeasonRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(TeamServiceServer).GetTeamsForSeason(m, &teamServiceGetTeamsForSeasonServer{stream})
+}
+
+type TeamService_GetTeamsForSeasonServer interface {
+	Send(*Team) error
+	grpc.ServerStream
+}
+
+type teamServiceGetTeamsForSeasonServer struct {
+	grpc.ServerStream
+}
+
+func (x *teamServiceGetTeamsForSeasonServer) Send(m *Team) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+var _TeamService_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "team.TeamService",
+	HandlerType: (*TeamServiceServer)(nil),
+	Methods:     []grpc.MethodDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "GetTeamsForSeason",
+			Handler:       _TeamService_GetTeamsForSeason_Handler,
+			ServerStreams: true,
+		},
+	},
+	Metadata: "internal/proto/team/team.proto",
+}
+
+func init() {
+	proto.RegisterFile("internal/proto/team/team.proto", fileDescriptor_team_15a5214370c1eba1)
+}
+
+var fileDescriptor_team_15a5214370c1eba1 = []byte{
+	// 212 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x6c, 0x8f, 0x31, 0x4b, 0x04, 0x31,
+	0x10, 0x85, 0xcd, 0x1a, 0xc4, 0x1b, 0x51, 0x30, 0x36, 0x87, 0x82, 0x1c, 0x5b, 0x1d, 0xa2, 0x1b,
+	0xd1, 0x46, 0xb1, 0xb3, 0xf0, 0xb0, 0xcd, 0x5a, 0xd9, 0xc8, 0xec, 0x66, 0xd0, 0x80, 0x49, 0x34,
+	0x99, 0xf5, 0xf7, 0x4b, 0xb2, 0x16, 0x0a, 0x36, 0xe1, 0xcb, 0x37, 0x0f, 0xe6, 0x0d, 0x9c, 0xba,
+	0xc0, 0x94, 0x02, 0xbe, 0xeb, 0x8f, 0x14, 0x39, 0x6a, 0x26, 0xf4, 0xf5, 0xe9, 0xea, 0x5f, 0xc9,
+	0xc2, 0xed, 0x39, 0xec, 0xf7, 0x84, 0x39, 0x06, 0x43, 0x9f, 0x13, 0x65, 0x56, 0x27, 0xb0, 0xc8,
+	0x55, 0xbc, 0x38, 0xbb, 0x14, 0x2b, 0xb1, 0x96, 0x66, 0x77, 0x16, 0x8f, 0xb6, 0x3d, 0x03, 0xf9,
+	0x44, 0xe8, 0xd5, 0x01, 0x34, 0x3f, 0xd3, 0x6d, 0xd3, 0x38, 0xab, 0x14, 0xc8, 0x80, 0x9e, 0x96,
+	0xcd, 0x4a, 0xac, 0x17, 0xa6, 0xf2, 0xd5, 0x06, 0xf6, 0x4a, 0xb6, 0xa7, 0xf4, 0xe5, 0x46, 0x52,
+	0x37, 0x70, 0xb8, 0x21, 0x2e, 0x26, 0x3f, 0xc4, 0x34, 0xef, 0x54, 0x47, 0x5d, 0x2d, 0xf4, 0xa7,
+	0xc1, 0x31, 0xcc, 0xb2, 0x44, 0xdb, 0xad, 0x4b, 0x71, 0x7f, 0xf7, 0x7c, 0xfb, 0xea, 0xf8, 0x6d,
+	0x1a, 0xba, 0x31, 0x7a, 0x9d, 0x19, 0xd9, 0x65, 0x76, 0x63, 0xfc, 0x85, 0x17, 0x16, 0x19, 0xf5,
+	0x3f, 0x07, 0x0f, 0x3b, 0x95, 0xaf, 0xbf, 0x03, 0x00, 0x00, 0xff, 0xff, 0x0c, 0xe0, 0x39, 0x44,
+	0x0e, 0x01, 0x00, 0x00,
 }
