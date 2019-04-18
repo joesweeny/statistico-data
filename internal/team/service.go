@@ -1,14 +1,10 @@
 package team
 
 import (
-	"github.com/statistico/statistico-data/internal/fixture"
-	"log"
 	pb "github.com/statistico/statistico-data/internal/proto/team"
 )
 
 type Service struct {
-	FixtureRepo fixture.Repository
-	Logger 		*log.Logger
 }
 
 func (s Service) GetTeamsForSeason(r *pb.SeasonRequest, stream pb.TeamService_GetTeamsForSeasonServer) error {
