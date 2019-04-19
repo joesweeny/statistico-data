@@ -4,14 +4,6 @@ option go_package = "github.com/statistico/statistico-data/internal/proto/team";
 
 package team;
 
-service TeamService {
-    rpc GetTeamsForSeason(SeasonRequest) returns (stream Team) {}
-}
-
-message SeasonRequest {
-    uint64 season_id = 1;
-}
-
 message Team {
     int64 id = 1;
     string name = 2;
