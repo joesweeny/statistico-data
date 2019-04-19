@@ -7,6 +7,7 @@ import (
 	"log"
 	"time"
 	"github.com/statistico/statistico-data/internal/model"
+	"fmt"
 )
 
 const maxLimit = 10000
@@ -30,7 +31,8 @@ func (s Service) GetHistoricalResultsForFixture(r *pb.HistoricalResultRequest, s
 	fixtures, err := s.FixtureRepo.ByHomeAndAwayTeam(r.HomeTeamId, r.AwayTeamId, r.Limit, date)
 
 	if err != nil {
-		return err
+		s.Logger.Printf("Error retrieving Fixture(s) in Result Service. Error: %s", err.Error())
+		return fmt.Errorf("server error: Unable to fulfil Request")
 	}
 
 	return s.sendResults(fixtures, stream)
@@ -52,7 +54,8 @@ func (s Service) GetResultsForTeam(r *pb.TeamRequest, stream pb.ResultService_Ge
 	fixtures, err := s.FixtureRepo.ByTeamId(r.TeamId, limit, date)
 
 	if err != nil {
-		return err
+		s.Logger.Printf("Error retrieving Fixture(s) in Result Service. Error: %s", err.Error())
+		return fmt.Errorf("server error: Unable to fulfil Request")
 	}
 
 	return s.sendResults(fixtures, stream)
@@ -62,7 +65,8 @@ func (s Service) GetResultsForSeason(r *pb.SeasonRequest, stream pb.ResultServic
 	fixtures, err := s.FixtureRepo.BySeasonId(r.SeasonId)
 
 	if err != nil {
-		return err
+		s.Logger.Printf("Error retrieving Fixture(s) in Result Service. Error: %s", err.Error())
+		return fmt.Errorf("server error: Unable to fulfil Request")
 	}
 
 	return s.sendResults(fixtures, stream)
@@ -73,18 +77,19 @@ func (s Service) sendResults(f []model.Fixture, stream pb.ResultService_GetResul
 		res, err := s.ResultRepo.GetByFixtureId(fix.ID)
 
 		if err != nil {
-			return err
+			return fmt.Errorf("fixture with ID %d does not exist", fix.ID)
 		}
 
 		x, err := s.HandleResult(&fix, res)
 
 		if err != nil {
+			s.Logger.Printf("Error hydrating Result. Error: %s", err.Error())
 			return err
 		}
 
 		if err := stream.Send(x); err != nil {
-			s.Logger.Printf("Error hydrating Result. ID: %d. Error: %s", res.FixtureID, err.Error())
-			return err
+			s.Logger.Printf("Error streaming Result back to client. Error: %s", err.Error())
+			continue
 		}
 	}
 

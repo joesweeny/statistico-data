@@ -47,7 +47,7 @@ func (s *Service) ListFixtures(r *pb.DateRangeRequest, stream pb.FixtureService_
 		}
 
 		if err := stream.Send(f); err != nil {
-			s.Logger.Printf("Error hydrating streaming Fixture back to client. Error: %s", err.Error())
+			s.Logger.Printf("Error streaming Fixture back to client. Error: %s", err.Error())
 			continue
 		}
 	}
