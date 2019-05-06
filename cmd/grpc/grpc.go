@@ -4,7 +4,7 @@ import (
 	"github.com/statistico/statistico-data/internal/config"
 	"github.com/statistico/statistico-data/internal/container"
 	fix "github.com/statistico/statistico-data/internal/proto/fixture"
-	st "github.com/statistico/statistico-data/internal/proto/stats"
+	st "github.com/statistico/statistico-data/internal/proto/stats/player"
 	res "github.com/statistico/statistico-data/internal/proto/result"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"

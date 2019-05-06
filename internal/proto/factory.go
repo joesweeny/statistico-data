@@ -4,7 +4,7 @@ import (
 	"github.com/golang/protobuf/ptypes/wrappers"
 	"github.com/statistico/statistico-data/internal/model"
 	pbCompetition "github.com/statistico/statistico-data/internal/proto/competition"
-	pbPlayerStats "github.com/statistico/statistico-data/internal/proto/stats"
+	pbPlayerStats "github.com/statistico/statistico-data/internal/proto/stats/player"
 	pbResult "github.com/statistico/statistico-data/internal/proto/result"
 	pbRound "github.com/statistico/statistico-data/internal/proto/round"
 	pbSeason "github.com/statistico/statistico-data/internal/proto/season"
