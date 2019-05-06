@@ -5,6 +5,7 @@ import (
 	"github.com/statistico/statistico-data/internal/model"
 	pbCompetition "github.com/statistico/statistico-data/internal/proto/competition"
 	pbPlayerStats "github.com/statistico/statistico-data/internal/proto/stats/player"
+	pbTeamStats "github.com/statistico/statistico-data/internal/proto/stats/team"
 	pbResult "github.com/statistico/statistico-data/internal/proto/result"
 	pbRound "github.com/statistico/statistico-data/internal/proto/round"
 	pbSeason "github.com/statistico/statistico-data/internal/proto/season"
@@ -109,6 +110,158 @@ func SeasonToProto(s *model.Season) *pbSeason.Season {
 	}
 
 	return &x
+}
+
+func TeamStatsToProto(t *model.TeamStats) *pbTeamStats.TeamStats {
+	stats := pbTeamStats.TeamStats{
+		TeamId: uint64(t.TeamID),
+	}
+
+	shots := t.TeamShots
+
+	if shots.Total != nil {
+		stats.ShotsTotal = &wrappers.UInt32Value{
+			Value: uint32(*shots.Total),
+		}
+	}
+
+	if shots.OnGoal != nil {
+		stats.ShotsOnGoal = &wrappers.UInt32Value{
+			Value: uint32(*shots.OnGoal),
+		}
+	}
+
+	if shots.OffGoal != nil {
+		stats.ShotsOffGoal = &wrappers.UInt32Value{
+			Value: uint32(*shots.OffGoal),
+		}
+	}
+
+	if shots.Blocked != nil {
+		stats.ShotsBlocked = &wrappers.UInt32Value{
+			Value: uint32(*shots.Blocked),
+		}
+	}
+
+	if shots.InsideBox != nil {
+		stats.ShotsInsideBox = &wrappers.UInt32Value{
+			Value: uint32(*shots.InsideBox),
+		}
+	}
+
+	if shots.OutsideBox != nil {
+		stats.ShotsOutsideBox = &wrappers.UInt32Value{
+			Value: uint32(*shots.OutsideBox),
+		}
+	}
+
+	passes := t.TeamPasses
+
+	if passes.Total != nil {
+		stats.PassesTotal = &wrappers.UInt32Value{
+			Value: uint32(*passes.Total),
+		}
+	}
+
+	if passes.Accuracy != nil {
+		stats.PassesAccuracy = &wrappers.UInt32Value{
+			Value: uint32(*passes.Accuracy),
+		}
+	}
+
+	if passes.Percentage != nil {
+		stats.PassesPercentage = &wrappers.UInt32Value{
+			Value: uint32(*passes.Percentage),
+		}
+	}
+
+	attacks := t.TeamAttacks
+
+	if attacks.Total != nil {
+		stats.AttacksTotal = &wrappers.UInt32Value{
+			Value: uint32(*attacks.Total),
+		}
+	}
+
+	if attacks.Dangerous != nil {
+		stats.AttacksDangerous = &wrappers.UInt32Value{
+			Value: uint32(*attacks.Dangerous),
+		}
+	}
+
+	if t.Fouls != nil {
+		stats.Fouls = &wrappers.UInt32Value{
+			Value: uint32(*t.Fouls),
+		}
+	}
+
+	if t.Corners != nil {
+		stats.Corners = &wrappers.UInt32Value{
+			Value: uint32(*t.Corners),
+		}
+	}
+
+	if t.Offsides != nil {
+		stats.Offsides = &wrappers.UInt32Value{
+			Value: uint32(*t.Offsides),
+		}
+	}
+
+	if t.Possession != nil {
+		stats.Possession = &wrappers.UInt32Value{
+			Value: uint32(*t.Possession),
+		}
+	}
+
+	if t.YellowCards != nil {
+		stats.YellowCards = &wrappers.UInt32Value{
+			Value: uint32(*t.YellowCards),
+		}
+	}
+
+	if t.RedCards != nil {
+		stats.RedCards = &wrappers.UInt32Value{
+			Value: uint32(*t.RedCards),
+		}
+	}
+
+	if t.Saves != nil {
+		stats.Saves = &wrappers.UInt32Value{
+			Value: uint32(*t.Saves),
+		}
+	}
+
+	if t.Substitutions != nil {
+		stats.Substitutions = &wrappers.UInt32Value{
+			Value: uint32(*t.Substitutions),
+		}
+	}
+
+	if t.GoalKicks != nil {
+		stats.GoalKicks = &wrappers.UInt32Value{
+			Value: uint32(*t.GoalKicks),
+		}
+	}
+
+	if t.GoalAttempts != nil {
+		stats.GoalAttempts = &wrappers.UInt32Value{
+			Value: uint32(*t.GoalAttempts),
+		}
+	}
+
+	if t.FreeKicks != nil {
+		stats.FreeKicks = &wrappers.UInt32Value{
+			Value: uint32(*t.FreeKicks),
+		}
+	}
+
+	if t.ThrowIns != nil {
+		stats.ThrowIns = &wrappers.UInt32Value{
+			Value: uint32(*t.ThrowIns),
+		}
+	}
+
+	return &stats
 }
 
 func VenueToProto(v *model.Venue) *pbVenue.Venue {
