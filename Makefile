@@ -14,7 +14,7 @@ build:
 	protoc -I/usr/local/include -I. internal/proto/season/season.proto \
         --go_out=plugins=grpc:$(GOPATH)/src
 
-	protoc -I/usr/local/include -I. internal/proto/stats/stats.proto \
+	protoc -I/usr/local/include -I. internal/proto/stats/player/stats.proto \
         --go_out=plugins=grpc:$(GOPATH)/src
 
 	protoc -I/usr/local/include -I. internal/proto/team/team.proto \

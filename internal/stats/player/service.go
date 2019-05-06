@@ -2,7 +2,7 @@ package player_stats
 
 import (
 	"github.com/statistico/statistico-data/internal/fixture"
-	pb "github.com/statistico/statistico-data/internal/proto/stats"
+	pb "github.com/statistico/statistico-data/internal/proto/stats/player"
 	"log"
 	"context"
 	"errors"
