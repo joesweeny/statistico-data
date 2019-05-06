@@ -78,6 +78,40 @@ func TestPlayerStatsToLineupPlayerProto(t *testing.T) {
 	})
 }
 
+func TestTeamStatsToProto(t *testing.T) {
+	t.Run("returns a proto team stats struct", func(t *testing.T) {
+		m := newTeamStats()
+
+		proto := TeamStatsToProto(m)
+
+		a := assert.New(t)
+		a.Equal(uint64(850), proto.TeamId)
+		a.Equal(uint32(5), proto.ShotsTotal.GetValue())
+		a.Nil(proto.ShotsOnGoal)
+		a.Nil(proto.ShotsOffGoal)
+		a.Equal(uint32(2), proto.ShotsBlocked.GetValue())
+		a.Nil(proto.ShotsInsideBox)
+		a.Nil(proto.ShotsOutsideBox)
+		a.Nil(proto.PassesTotal)
+		a.Nil(proto.PassesAccuracy)
+		a.Nil(proto.PassesPercentage)
+		a.Nil(proto.AttacksTotal)
+		a.Equal(uint32(30), proto.AttacksDangerous.GetValue())
+		a.Nil(proto.Fouls)
+		a.Equal(uint32(15), proto.Corners.GetValue())
+		a.Nil(proto.Offsides)
+		a.Nil(proto.Possession)
+		a.Nil(proto.YellowCards)
+		a.Equal(uint32(1), proto.RedCards.GetValue())
+		a.Nil(proto.Saves)
+		a.Nil(proto.Substitutions)
+		a.Equal(uint32(12), proto.GoalKicks.GetValue())
+		a.Nil(proto.GoalAttempts)
+		a.Nil(proto.FreeKicks)
+		a.Nil(proto.ThrowIns)
+	})
+}
+
 func newPlayerStats(goals *int, assists *int, onGoal *int) *model.PlayerStats {
 	shots := 5
 	conceded := 0
@@ -92,5 +126,28 @@ func newPlayerStats(goals *int, assists *int, onGoal *int) *model.PlayerStats {
 			Conceded: &conceded,
 		},
 		Assists: assists,
+	}
+}
+
+func newTeamStats() *model.TeamStats {
+	total := 5
+	blocked := 2
+	corners := 15
+	redCards := 1
+	dangerous := 30
+	goalKicks := 12
+
+	return &model.TeamStats{
+		TeamID: 850,
+		TeamShots: model.TeamShots{
+			Total: &total,
+			Blocked: &blocked,
+		},
+		Corners: &corners,
+		RedCards: &redCards,
+		TeamAttacks: model.TeamAttacks{
+			Dangerous: &dangerous,
+		},
+		GoalKicks: &goalKicks,
 	}
 }
