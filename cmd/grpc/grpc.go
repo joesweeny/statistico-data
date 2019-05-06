@@ -5,6 +5,7 @@ import (
 	"github.com/statistico/statistico-data/internal/container"
 	fix "github.com/statistico/statistico-data/internal/proto/fixture"
 	st "github.com/statistico/statistico-data/internal/proto/stats/player"
+	te "github.com/statistico/statistico-data/internal/proto/stats/team"
 	res "github.com/statistico/statistico-data/internal/proto/result"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
@@ -26,6 +27,7 @@ func main() {
 	fix.RegisterFixtureServiceServer(server, app.FixtureService())
 	res.RegisterResultServiceServer(server, app.ResultService())
 	st.RegisterPlayerStatsServiceServer(server, app.PlayerStatsService())
+	te.RegisterTeamStatsServiceServer(server, app.TeamStatsService())
 
 	reflection.Register(server)
 
