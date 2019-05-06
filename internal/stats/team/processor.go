@@ -12,7 +12,7 @@ type TeamProcessor struct {
 }
 
 func (p TeamProcessor) ProcessTeamStats(s *sportmonks.TeamStats) {
-	x, err := p.TeamRepository.ByFixtureAndTeam(s.FixtureID, s.TeamID)
+	x, err := p.TeamRepository.ByFixtureAndTeam(uint64(s.FixtureID), uint64(s.TeamID))
 
 	if err == ErrNotFound {
 		created := p.TeamFactory.createTeamStats(s)

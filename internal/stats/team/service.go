@@ -29,7 +29,7 @@ func (s Service) GetTeamStatsForFixture(c context.Context, r *pb.FixtureRequest)
 	home, err := s.TeamRepository.ByFixtureAndTeam(uint64(fix.ID), uint64(fix.HomeTeamID))
 
 	if err != nil {
-		e := fmt.Errorf("error when retrieving player stats: FixtureID %d, Home Team ID %d", fix.ID, fix.HomeTeamID)
+		e := fmt.Errorf("error when retrieving team stats: FixtureID %d, Home Team ID %d", fix.ID, fix.HomeTeamID)
 		s.Logger.Println(e)
 		return nil, e
 	}
@@ -39,7 +39,7 @@ func (s Service) GetTeamStatsForFixture(c context.Context, r *pb.FixtureRequest)
 	away, err := s.TeamRepository.ByFixtureAndTeam(uint64(fix.ID), uint64(fix.AwayTeamID))
 
 	if err != nil {
-		e := fmt.Errorf("error when retrieving player stats: FixtureID %d, Away Team ID %d", fix.ID, fix.HomeTeamID)
+		e := fmt.Errorf("error when retrieving team stats: FixtureID %d, Away Team ID %d", fix.ID, fix.HomeTeamID)
 		s.Logger.Println(e)
 		return nil, e
 	}
