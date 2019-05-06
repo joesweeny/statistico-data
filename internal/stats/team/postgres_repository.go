@@ -101,7 +101,7 @@ func (p *PostgresTeamStatsRepository) UpdateTeamStats(m *model.TeamStats) error 
 	return err
 }
 
-func (p *PostgresTeamStatsRepository) ByFixtureAndTeam(fixtureId, teamId int) (*model.TeamStats, error) {
+func (p *PostgresTeamStatsRepository) ByFixtureAndTeam(fixtureId, teamId uint64) (*model.TeamStats, error) {
 	query := `SELECT * FROM sportmonks_team_stats where fixture_id = $1 AND team_id = $2`
 	row := p.Connection.QueryRow(query, fixtureId, teamId)
 

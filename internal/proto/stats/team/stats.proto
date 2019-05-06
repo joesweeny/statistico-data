@@ -15,8 +15,8 @@ message FixtureRequest {
 }
 
 message StatsResponse {
-    repeated TeamStats home_team = 1;
-    repeated TeamStats away_team = 2;
+    TeamStats home_team = 1;
+    TeamStats away_team = 2;
 }
 
 message TeamStats {
