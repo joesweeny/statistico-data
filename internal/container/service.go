@@ -9,6 +9,7 @@ import (
 	"github.com/statistico/statistico-data/internal/team"
 	"github.com/statistico/statistico-data/internal/venue"
 	"github.com/statistico/statistico-data/internal/stats/player"
+	"github.com/statistico/statistico-data/internal/stats/team"
 )
 
 func (c Container) FixtureService() *fixture.Service {
@@ -46,6 +47,14 @@ func (c Container) PlayerStatsService() *player_stats.Service {
 	return &player_stats.Service{
 		PlayerRepository: &player_stats.PostgresPlayerStatsRepository{Connection: c.Database},
 		FixtureRepo: &fixture.PostgresFixtureRepository{Connection: c.Database},
+		Logger: c.Logger,
+	}
+}
+
+func (c Container) TeamStatsService() *team_stats.Service {
+	return &team_stats.Service{
+		TeamRepository: &team_stats.PostgresTeamStatsRepository{Connection: c.Database},
+		FixtureRepository: &fixture.PostgresFixtureRepository{Connection: c.Database},
 		Logger: c.Logger,
 	}
 }

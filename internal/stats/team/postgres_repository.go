@@ -57,7 +57,7 @@ func (p *PostgresTeamStatsRepository) InsertTeamStats(m *model.TeamStats) error 
 }
 
 func (p *PostgresTeamStatsRepository) UpdateTeamStats(m *model.TeamStats) error {
-	if _, err := p.ByFixtureAndTeam(m.FixtureID, m.TeamID); err != nil {
+	if _, err := p.ByFixtureAndTeam(uint64(m.FixtureID), uint64(m.TeamID)); err != nil {
 		return err
 	}
 
@@ -101,7 +101,7 @@ func (p *PostgresTeamStatsRepository) UpdateTeamStats(m *model.TeamStats) error 
 	return err
 }
 
-func (p *PostgresTeamStatsRepository) ByFixtureAndTeam(fixtureId, teamId int) (*model.TeamStats, error) {
+func (p *PostgresTeamStatsRepository) ByFixtureAndTeam(fixtureId, teamId uint64) (*model.TeamStats, error) {
 	query := `SELECT * FROM sportmonks_team_stats where fixture_id = $1 AND team_id = $2`
 	row := p.Connection.QueryRow(query, fixtureId, teamId)
 
