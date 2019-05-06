@@ -57,7 +57,7 @@ func (p *PostgresTeamStatsRepository) InsertTeamStats(m *model.TeamStats) error 
 }
 
 func (p *PostgresTeamStatsRepository) UpdateTeamStats(m *model.TeamStats) error {
-	if _, err := p.ByFixtureAndTeam(m.FixtureID, m.TeamID); err != nil {
+	if _, err := p.ByFixtureAndTeam(uint64(m.FixtureID), uint64(m.TeamID)); err != nil {
 		return err
 	}
 
