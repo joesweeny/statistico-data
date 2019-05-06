@@ -17,6 +17,9 @@ build:
 	protoc -I/usr/local/include -I. internal/proto/stats/player/stats.proto \
         --go_out=plugins=grpc:$(GOPATH)/src
 
+	protoc -I/usr/local/include -I. internal/proto/stats/team/stats.proto \
+        --go_out=plugins=grpc:$(GOPATH)/src
+
 	protoc -I/usr/local/include -I. internal/proto/team/team.proto \
         --go_out=plugins=grpc:$(GOPATH)/src
 

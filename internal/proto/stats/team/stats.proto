@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+option go_package = "github.com/statistico/statistico-data/internal/proto/stats/team";
+
+package team_stats;
+
+import "google/protobuf/wrappers.proto";
+
+service TeamStatsService {
+    rpc GetTeamStatsForFixture(FixtureRequest) returns (StatsResponse) {}
+}
+
+message FixtureRequest {
+    uint64 fixture_id = 1;
+}
+
+message StatsResponse {
+    repeated TeamStats home_team = 1;
+    repeated TeamStats away_team = 2;
+}
+
+message TeamStats {
+    uint64 team_id = 1;
+    google.protobuf.UInt32Value shots_total = 2;
+    google.protobuf.UInt32Value shots_on_goal = 3;
+    google.protobuf.UInt32Value shots_off_goal = 4;
+    google.protobuf.UInt32Value shots_blocked = 5;
+    google.protobuf.UInt32Value shots_inside_box = 6;
+    google.protobuf.UInt32Value shots_outside_box = 7;
+    google.protobuf.UInt32Value passes_total = 8;
+    google.protobuf.UInt32Value passes_accuracy = 9;
+    google.protobuf.UInt32Value passes_percentage = 10;
+    google.protobuf.UInt32Value attacks_total = 11;
+    google.protobuf.UInt32Value attacks_dangerous = 12;
+    google.protobuf.UInt32Value fouls = 13;
+    google.protobuf.UInt32Value corners = 14;
+    google.protobuf.UInt32Value offsides = 15;
+    google.protobuf.UInt32Value possession = 16;
+    google.protobuf.UInt32Value yellow_cards = 17;
+    google.protobuf.UInt32Value red_cards = 18;
+    google.protobuf.UInt32Value saves = 19;
+    google.protobuf.UInt32Value substitutions = 20;
+    google.protobuf.UInt32Value goal_kicks = 21;
+    google.protobuf.UInt32Value goal_attempts = 22;
+    google.protobuf.UInt32Value free_kicks = 23;
+    google.protobuf.UInt32Value throw_ins = 24;
+}

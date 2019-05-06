@@ -25,7 +25,7 @@ func main() {
 
 	fix.RegisterFixtureServiceServer(server, app.FixtureService())
 	res.RegisterResultServiceServer(server, app.ResultService())
-	st.RegisterStatsServiceServer(server, app.PlayerStatsService())
+	st.RegisterPlayerStatsServiceServer(server, app.PlayerStatsService())
 
 	reflection.Register(server)
 
