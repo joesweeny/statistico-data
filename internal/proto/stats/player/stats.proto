@@ -6,7 +6,7 @@ package player_stats;
 
 import "google/protobuf/wrappers.proto";
 
-service StatsService {
+service PlayerStatsService {
     rpc GetPlayerStatsForFixture(FixtureRequest) returns (StatsResponse) {}
     rpc GetLineUpForFixture(FixtureRequest) returns (LineupResponse) {}
 }
