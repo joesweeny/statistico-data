@@ -51,7 +51,7 @@ func TestProcess(t *testing.T) {
 		fixtureRepo.On("ById", uint64(34)).Return(&model.Fixture{}, errors.New("not found"))
 		fixtureRepo.On("Insert", mock.Anything).Return(nil)
 		fixtureRepo.AssertNotCalled(t, "Update", mock.Anything)
-		processor.Process("fixture", done)
+		processor.Process("fixture", "", done)
 	})
 
 	t.Run("updates existing fixture", func(t *testing.T) {
@@ -62,7 +62,7 @@ func TestProcess(t *testing.T) {
 		fixtureRepo.On("ById", uint64(34)).Return(f, nil)
 		fixtureRepo.On("Update", &f).Return(nil)
 		fixtureRepo.AssertNotCalled(t, "Insert", mock.Anything)
-		processor.Process("fixture", done)
+		processor.Process("fixture", "", done)
 	})
 
 	t.Run("inserts new fixture", func(t *testing.T) {
@@ -72,7 +72,7 @@ func TestProcess(t *testing.T) {
 		fixtureRepo.On("ById", uint64(34)).Return(&model.Fixture{}, errors.New("not found"))
 		fixtureRepo.On("Insert", mock.Anything).Return(nil)
 		fixtureRepo.AssertNotCalled(t, "Update", mock.Anything)
-		processor.Process("fixture:current-season", done)
+		processor.Process("fixture", "", done)
 	})
 
 	t.Run("updates existing fixture", func(t *testing.T) {
@@ -83,7 +83,7 @@ func TestProcess(t *testing.T) {
 		fixtureRepo.On("ById", 34).Return(f, nil)
 		fixtureRepo.On("Update", &f).Return(nil)
 		fixtureRepo.AssertNotCalled(t, "Insert", mock.Anything)
-		processor.Process("fixture:current-season", done)
+		processor.Process("fixture", "", done)
 	})
 }
 

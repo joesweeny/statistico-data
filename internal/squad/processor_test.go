@@ -62,7 +62,7 @@ func TestProcess(t *testing.T) {
 		squadRepo.On("BySeasonAndTeam", 100, 56).Return(&model.Squad{}, ErrNotFound)
 		squadRepo.On("Insert", mock.Anything).Return(nil)
 		squadRepo.AssertNotCalled(t, "Update", mock.Anything)
-		processor.Process("squad", done)
+		processor.Process("squad", "", done)
 	})
 
 	t.Run("updates existing squad", func(t *testing.T) {
@@ -72,7 +72,7 @@ func TestProcess(t *testing.T) {
 
 		squadRepo.On("CurrentSeason").Return([]model.Squad{*squad}, nil)
 		squadRepo.On("Update", mock.Anything).Return(nil)
-		processor.Process("squad", done)
+		processor.Process("squad", "", done)
 	})
 }
 

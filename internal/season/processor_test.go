@@ -46,7 +46,7 @@ func TestProcess(t *testing.T) {
 		repo.On("Id", 100).Return(&model.Season{}, errors.New("not Found"))
 		repo.On("Insert", mock.Anything).Return(nil)
 		repo.AssertNotCalled(t, "Update", mock.Anything)
-		processor.Process("season", done)
+		processor.Process("season", "", done)
 	})
 
 	t.Run("updates existing competition", func(t *testing.T) {
@@ -57,7 +57,7 @@ func TestProcess(t *testing.T) {
 		repo.On("Update", &c).Return(nil)
 		repo.MethodCalled("Update", &c)
 		repo.AssertNotCalled(t, "Insert", mock.Anything)
-		processor.Process("season", done)
+		processor.Process("season", "", done)
 	})
 }
 
