@@ -15,7 +15,7 @@ type Processor struct {
 
 const season = "season"
 
-func (s Processor) Process(command string, done chan bool) {
+func (s Processor) Process(command string, option string, done chan bool) {
 	if command != season {
 		s.Logger.Fatalf("Command %s is not supported", command)
 		return

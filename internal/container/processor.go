@@ -17,7 +17,7 @@ import (
 )
 
 type Processor interface {
-	Process(command string, done chan bool)
+	Process(command string, option string, done chan bool)
 }
 
 func (c Container) CompetitionProcessor() *competition.Processor {

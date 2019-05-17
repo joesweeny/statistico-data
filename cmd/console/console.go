@@ -10,6 +10,7 @@ import (
 )
 
 var command = flag.String("command", "", "Provide the model name to process")
+var option = flag.String("option", "", "Optional parameter to pass to command")
 
 func main() {
 	app := container.Bootstrap(config.GetConfig())
@@ -31,7 +32,7 @@ func main() {
 	case Player:
 		processor = app.PlayerProcessor()
 		break
-	case Result, ResultToday:
+	case Result, ResultById, ResultToday:
 		processor = app.ResultProcessor()
 		break
 	case Round, RoundCurrentSeason:
@@ -60,7 +61,7 @@ func main() {
 
 	fmt.Printf("%s: Processing started for %s\n", start.String(), *command)
 
-	go processor.Process(*command, done)
+	go processor.Process(*command, *option, done)
 
 	<-done
 

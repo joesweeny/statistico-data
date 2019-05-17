@@ -9,9 +9,11 @@ import (
 	"log"
 	"sync"
 	"time"
+	"strconv"
 )
 
 const result = "result"
+const resultById = "result:by-id"
 const resultToday = "result:today"
 const callLimit = 1500
 
@@ -29,10 +31,13 @@ type Processor struct {
 	EventProcessor  event.Processor
 }
 
-func (p Processor) Process(command string, done chan bool) {
+func (p Processor) Process(command string, option string, done chan bool) {
 	switch command {
 	case result:
 		go p.allResults(done)
+	case resultById:
+		id, _ := strconv.Atoi(option)
+		go p.byId(done, id)
 	case resultToday:
 		go p.resultsToday(done)
 	default:
@@ -48,6 +53,19 @@ func (p Processor) allResults(done chan bool) {
 		p.Logger.Fatalf("Error when retrieving Season IDs: %s", err.Error())
 		return
 	}
+
+	go p.processResults(ids, done)
+}
+
+func (p Processor) byId(done chan bool, id int) {
+	fix, err := p.FixtureRepo.ById(uint64(id))
+
+	if err != nil {
+		p.Logger.Fatalf("Error when retrieving Fixture ID: %d, %s", id, err.Error())
+		return
+	}
+
+	ids := []int{fix.ID}
 
 	go p.processResults(ids, done)
 }

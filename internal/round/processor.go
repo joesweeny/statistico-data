@@ -21,7 +21,7 @@ type Processor struct {
 const round = "round"
 const roundCurrentSeason = "round:current-season"
 
-func (s Processor) Process(command string, done chan bool) {
+func (s Processor) Process(command string, option string, done chan bool) {
 	switch command {
 	case round:
 		go s.allSeasons(done)

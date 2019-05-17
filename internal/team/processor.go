@@ -21,7 +21,7 @@ const teamCurrentSeason = "team:current-season"
 
 var waitGroup sync.WaitGroup
 
-func (s Processor) Process(command string, done chan bool) {
+func (s Processor) Process(command string, option string, done chan bool) {
 	switch command {
 	case team:
 		go s.allSeasons(done)

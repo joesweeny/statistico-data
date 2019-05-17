@@ -15,7 +15,7 @@ type Processor struct {
 
 const country = "country"
 
-func (s Processor) Process(command string, done chan bool) {
+func (s Processor) Process(command string, option string, done chan bool) {
 	if command != country {
 		s.Logger.Fatalf("Command %s is not supported", command)
 		return
