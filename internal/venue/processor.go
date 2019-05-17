@@ -21,7 +21,7 @@ type Processor struct {
 const venue = "venue"
 const venueCurrentSeason = "venue:current-season"
 
-func (s Processor) Process(command string, done chan bool) {
+func (s Processor) Process(command string, option string, done chan bool) {
 	switch command {
 	case venue:
 		go s.allSeasons(done)

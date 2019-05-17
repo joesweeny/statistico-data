@@ -50,7 +50,7 @@ func TestProcess(t *testing.T) {
 		venueRepo.On("GetById", 23).Return(&model.Venue{}, errors.New("not found"))
 		venueRepo.On("Insert", mock.Anything).Return(nil)
 		venueRepo.AssertNotCalled(t, "Update", mock.Anything)
-		processor.Process("venue", done)
+		processor.Process("venue", "", done)
 	})
 
 	t.Run("updates existing venue", func(t *testing.T) {
@@ -61,7 +61,7 @@ func TestProcess(t *testing.T) {
 		venueRepo.On("GetById", 23).Return(v, nil)
 		venueRepo.On("Update", &v).Return(nil)
 		venueRepo.AssertNotCalled(t, "Insert", mock.Anything)
-		processor.Process("venue", done)
+		processor.Process("venue", "", done)
 	})
 }
 

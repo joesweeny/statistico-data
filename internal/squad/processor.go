@@ -21,7 +21,7 @@ type Processor struct {
 
 var counter int
 
-func (s Processor) Process(command string, done chan bool) {
+func (s Processor) Process(command string, option string, done chan bool) {
 	switch command {
 	case squad:
 		go s.allSeasons(done)

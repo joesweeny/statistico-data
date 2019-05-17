@@ -20,7 +20,7 @@ type Processor struct {
 	Logger *log.Logger
 }
 
-func (p Processor) Process(command string, done chan bool) {
+func (p Processor) Process(command string, option string, done chan bool) {
 	switch command {
 	case player:
 		go p.allPlayers(done)

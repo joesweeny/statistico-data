@@ -21,7 +21,7 @@ type Processor struct {
 const fixture = "fixture"
 const fixtureCurrentSeason = "fixture:current-season"
 
-func (s Processor) Process(command string, done chan bool) {
+func (s Processor) Process(command string, option string, done chan bool) {
 	switch command {
 	case fixture:
 		go s.allSeasons(done)

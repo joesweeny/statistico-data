@@ -49,7 +49,7 @@ func TestProcess(t *testing.T) {
 		teamRepo.On("GetById", 56).Return(&model.Team{}, ErrNotFound)
 		teamRepo.On("Insert", mock.Anything).Return(nil)
 		teamRepo.AssertNotCalled(t, "Update", mock.Anything)
-		processor.Process("team", done)
+		processor.Process("team", "", done)
 	})
 
 	t.Run("updates existing round", func(t *testing.T) {
@@ -60,7 +60,7 @@ func TestProcess(t *testing.T) {
 		teamRepo.On("GetById", 34).Return(r, nil)
 		teamRepo.On("Update", &r).Return(nil)
 		teamRepo.AssertNotCalled(t, "Insert", mock.Anything)
-		processor.Process("team", done)
+		processor.Process("team", "", done)
 	})
 }
 

@@ -50,7 +50,7 @@ func TestProcess(t *testing.T) {
 		roundRepo.On("GetById", 54).Return(&model.Round{}, errors.New("not found"))
 		roundRepo.On("Insert", mock.Anything).Return(nil)
 		roundRepo.AssertNotCalled(t, "Update", mock.Anything)
-		processor.Process("round", done)
+		processor.Process("round", "", done)
 	})
 
 	t.Run("updates existing round", func(t *testing.T) {
@@ -61,7 +61,7 @@ func TestProcess(t *testing.T) {
 		roundRepo.On("GetById", 34).Return(r, nil)
 		roundRepo.On("Update", &r).Return(nil)
 		roundRepo.AssertNotCalled(t, "Insert", mock.Anything)
-		processor.Process("round", done)
+		processor.Process("round", "", done)
 	})
 }
 

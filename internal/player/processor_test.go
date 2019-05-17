@@ -49,7 +49,7 @@ func TestProcess(t *testing.T) {
 		squadRepo.On("All").Return(newSquad(), nil)
 		playerRepo.On("Id", 5).Return(&model.Player{}, ErrNotFound)
 		playerRepo.On("Insert", mock.Anything).Return(nil)
-		processor.Process("player", done)
+		processor.Process("player", "", done)
 	})
 
 	t.Run("player is not inserted if already present", func(t *testing.T) {
@@ -58,7 +58,7 @@ func TestProcess(t *testing.T) {
 		squadRepo.On("All").Return(newSquad(), nil)
 		playerRepo.On("Id", 5).Return(newPlayer(5), nil)
 		playerRepo.AssertNotCalled(t, "Insert", mock.Anything)
-		processor.Process("player", done)
+		processor.Process("player", "", done)
 	})
 }
 
