@@ -70,6 +70,23 @@ func (p Processor) byId(done chan bool, id int) {
 	go p.processResults(ids, done)
 }
 
+func (p Processor) bySeasonId(done chan bool, id int) {
+	fix, err := p.FixtureRepo.BySeasonId(int64(id))
+
+	if err != nil {
+		p.Logger.Fatalf("Error when retrieving fixtures for Season ID: %d, %s", id, err.Error())
+		return
+	}
+
+	var ids []int
+
+	for _, f := range fix {
+		ids = append(ids, f.ID)
+	}
+
+	go p.processResults(ids, done)
+}
+
 func (p Processor) resultsToday(done chan bool) {
 	now := p.Clock.Now()
 	y, m, d := now.Date()
