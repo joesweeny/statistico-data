@@ -14,6 +14,7 @@ import (
 
 const result = "result"
 const resultById = "result:by-id"
+const resultBySeasonId = "result:by-season-id"
 const resultToday = "result:today"
 const callLimit = 1500
 
@@ -38,6 +39,9 @@ func (p Processor) Process(command string, option string, done chan bool) {
 	case resultById:
 		id, _ := strconv.Atoi(option)
 		go p.byId(done, id)
+	case resultBySeasonId:
+		id, _ := strconv.Atoi(option)
+		go p.bySeasonId(done, id)
 	case resultToday:
 		go p.resultsToday(done)
 	default:
@@ -66,6 +70,23 @@ func (p Processor) byId(done chan bool, id int) {
 	}
 
 	ids := []int{fix.ID}
+
+	go p.processResults(ids, done)
+}
+
+func (p Processor) bySeasonId(done chan bool, id int) {
+	fix, err := p.FixtureRepo.BySeasonId(int64(id))
+
+	if err != nil {
+		p.Logger.Fatalf("Error when retrieving fixtures for Season ID: %d, %s", id, err.Error())
+		return
+	}
+
+	var ids []int
+
+	for _, f := range fix {
+		ids = append(ids, f.ID)
+	}
 
 	go p.processResults(ids, done)
 }
