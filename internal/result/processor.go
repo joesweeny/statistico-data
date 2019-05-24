@@ -10,6 +10,7 @@ import (
 	"sync"
 	"time"
 	"strconv"
+	"github.com/jonboulle/clockwork"
 )
 
 const result = "result"
@@ -30,6 +31,7 @@ type Processor struct {
 	TeamProcessor   team_stats.TeamProcessor
 	PlayerProcessor player_stats.PlayerProcessor
 	EventProcessor  event.Processor
+	Clock 			clockwork.Clock
 }
 
 func (p Processor) Process(command string, option string, done chan bool) {
@@ -75,7 +77,8 @@ func (p Processor) byId(done chan bool, id int) {
 }
 
 func (p Processor) bySeasonId(done chan bool, id int) {
-	fix, err := p.FixtureRepo.BySeasonId(int64(id))
+	// Adding a Clock.Now() here is a bit hacky. Redo by dynamically handling this
+	fix, err := p.FixtureRepo.BySeasonId(int64(id), p.Clock.Now())
 
 	if err != nil {
 		p.Logger.Fatalf("Error when retrieving fixtures for Season ID: %d, %s", id, err.Error())
