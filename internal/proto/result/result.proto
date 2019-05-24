@@ -31,6 +31,9 @@ message TeamRequest {
 message SeasonRequest {
     // The Season ID that the Result set relates to
     int64 season_id = 1;
+    // A filter to return Results before a specific date
+    // RFC3339 formatted string i.e "2006-01-02T15:04:05Z07:00"
+    string date_before = 2;
 }
 
 message HistoricalResultRequest {
