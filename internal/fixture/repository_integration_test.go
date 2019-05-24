@@ -391,7 +391,7 @@ func TestBySeasonId(t *testing.T) {
 
 		insertFixtures(t, &repo)
 
-		fix, err := repo.BySeasonId(6012)
+		fix, err := repo.BySeasonId(6012, time.Unix(1550066319, 0))
 
 		if err != nil {
 			t.Fatalf("Test failed, expected nil, got %s", err.Error())
@@ -421,7 +421,7 @@ func TestBySeasonId(t *testing.T) {
 
 		insertFixtures(t, &repo)
 
-		fix, err := repo.BySeasonId(10000)
+		fix, err := repo.BySeasonId(10000, time.Unix(1550066319, 0))
 
 		if err != nil {
 			t.Fatalf("Test failed, expected nil, got %s", err.Error())
@@ -435,6 +435,34 @@ func TestBySeasonId(t *testing.T) {
 
 		assert.Equal(t, 9, len(all))
 		assert.Equal(t, 0, len(fix))
+	})
+
+	t.Run("returns slice of fixture structs restricted by date", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+
+		insertFixtures(t, &repo)
+
+		fix, err := repo.BySeasonId(6012, time.Unix(1550066317, 0))
+
+		if err != nil {
+			t.Fatalf("Test failed, expected nil, got %s", err.Error())
+		}
+
+		all, err := repo.Ids()
+
+		if err != nil {
+			t.Fatalf("Test failed, expected nil, got %s", err.Error())
+		}
+
+		assert.Equal(t, 9, len(all))
+		assert.Equal(t, 2, len(fix))
+		assert.Equal(t, 5, fix[0].ID)
+		assert.Equal(t, 6, fix[1].ID)
+
+		for _, f := range fix {
+			assert.Equal(t, 6012, f.SeasonID)
+		}
 	})
 
 	conn.Close()
