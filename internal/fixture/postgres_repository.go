@@ -121,10 +121,10 @@ func (p *PostgresFixtureRepository) ByTeamId(id int64, limit int32, before time.
 	return rowsToFixtureSlice(rows)
 }
 
-func (p *PostgresFixtureRepository) BySeasonId(id int64) ([]model.Fixture, error) {
-	query := `SELECT * FROM sportmonks_fixture WHERE season_id = $1 ORDER BY date ASC, id ASC`
+func (p *PostgresFixtureRepository) BySeasonId(id int64, before time.Time) ([]model.Fixture, error) {
+	query := `SELECT * FROM sportmonks_fixture WHERE season_id = $1 and date < $2 ORDER BY date ASC, id ASC`
 
-	rows, err := p.Connection.Query(query, id)
+	rows, err := p.Connection.Query(query, id, before.Unix())
 
 	if err != nil {
 		return []model.Fixture{}, err

@@ -84,6 +84,7 @@ func (c Container) ResultProcessor() *result.Processor {
 		PlayerProcessor: c.playerStatsProcessor(),
 		TeamProcessor:   c.teamStatsProcessor(),
 		EventProcessor:  c.eventProcessor(),
+		Clock:	 		 c.Clock,
 	}
 }
 

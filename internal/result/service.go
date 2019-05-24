@@ -62,7 +62,13 @@ func (s Service) GetResultsForTeam(r *pb.TeamRequest, stream pb.ResultService_Ge
 }
 
 func (s Service) GetResultsForSeason(r *pb.SeasonRequest, stream pb.ResultService_GetResultsForSeasonServer) error {
-	fixtures, err := s.FixtureRepo.BySeasonId(r.SeasonId)
+	date, err := time.Parse(time.RFC3339, r.DateBefore)
+
+	if err != nil {
+		return ErrTimeParse
+	}
+
+	fixtures, err := s.FixtureRepo.BySeasonId(r.SeasonId, date)
 
 	if err != nil {
 		s.Logger.Printf("Error retrieving Fixture(s) in Result Service. Error: %s", err.Error())

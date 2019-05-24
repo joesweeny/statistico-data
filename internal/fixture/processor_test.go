@@ -169,7 +169,7 @@ func (m mockFixtureRepository) ByTeamId(id int64, limit int32, before time.Time)
 	return args.Get(0).([]model.Fixture), args.Error(1)
 }
 
-func (m mockFixtureRepository) BySeasonId(id int64) ([]model.Fixture, error) {
+func (m mockFixtureRepository) BySeasonId(id int64, before time.Time) ([]model.Fixture, error) {
 	args := m.Called(id)
 	return args.Get(0).([]model.Fixture), args.Error(1)
 }
