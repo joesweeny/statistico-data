@@ -4,11 +4,9 @@ import (
 	"github.com/jonboulle/clockwork"
 	"github.com/statistico/sportmonks-go-client"
 	"github.com/statistico/statistico-data/internal/fixture"
-	"github.com/statistico/statistico-data/internal/stats/player"
 	"log"
 	"strconv"
 	"strings"
-	"sync"
 	"time"
 )
 
@@ -19,7 +17,6 @@ const resultToday = "result:today"
 const callLimit = 1500
 
 var counter int
-var waitGroup sync.WaitGroup
 
 type Processor struct {
 	Repository
@@ -27,7 +24,6 @@ type Processor struct {
 	Factory
 	Client          *sportmonks.Client
 	Logger          *log.Logger
-	PlayerProcessor player_stats.PlayerProcessor
 	Clock 			clockwork.Clock
 }
 
@@ -118,7 +114,7 @@ func (p Processor) processResults(ids []int, done chan bool) {
 }
 
 func (p Processor) callClient(ids []int, ch chan<- sportmonks.Fixture, done chan bool, c *int) {
-	q := []string{"lineup,bench"}
+	var q []string
 
 	for _, id := range ids {
 		if *c >= callLimit {
@@ -146,24 +142,10 @@ func (p Processor) parseResults(ch <-chan sportmonks.Fixture, done chan bool) {
 		p.handleResult(x)
 	}
 
-	waitGroup.Wait()
-
 	done <- true
 }
 
 func (p Processor) handleResult(fix sportmonks.Fixture) {
-	waitGroup.Add(2)
-
-	go func(players []sportmonks.LineupPlayer) {
-		p.handlePlayers(players, false)
-		defer waitGroup.Done()
-	}(fix.Lineup.Data)
-
-	go func(players []sportmonks.LineupPlayer) {
-		p.handlePlayers(players, true)
-		defer waitGroup.Done()
-	}(fix.Bench.Data)
-
 	x, err := p.Repository.GetByFixtureId(fix.ID)
 
 	if err == ErrNotFound {
@@ -185,13 +167,3 @@ func (p Processor) handleResult(fix sportmonks.Fixture) {
 	return
 }
 
-func (p Processor) handlePlayers(lineups []sportmonks.LineupPlayer, bench bool) {
-	for _, player := range lineups {
-		waitGroup.Add(1)
-
-		go func(stats sportmonks.LineupPlayer) {
-			p.PlayerProcessor.ProcessPlayerStats(&stats, bench)
-			defer waitGroup.Done()
-		}(player)
-	}
-}
