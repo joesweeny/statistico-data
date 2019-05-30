@@ -26,6 +26,9 @@ func main() {
 	case Country:
 		processor = app.CountryProcessor()
 		break
+	case EventsByResultId, EventsBySeasonId, EventsToday:
+		processor = app.EventProcessor()
+		break
 	case Fixture, FixtureCurrentSeason:
 		processor = app.FixtureProcessor()
 		break

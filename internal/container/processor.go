@@ -38,11 +38,13 @@ func (c Container) CountryProcessor() *country.Processor {
 	}
 }
 
-func (c Container) eventProcessor() event.Processor {
+func (c Container) EventProcessor() event.Processor {
 	return event.Processor{
 		Repository: &event.PostgresEventRepository{Connection: c.Database},
 		Factory:    event.Factory{Clock: clock()},
 		Logger:     c.Logger,
+		FixtureRepo:     &fixture.PostgresFixtureRepository{Connection: c.Database},
+		Client:     c.SportMonksClient,
 	}
 }
 
@@ -82,7 +84,6 @@ func (c Container) ResultProcessor() *result.Processor {
 		Client:          c.SportMonksClient,
 		Logger:          c.Logger,
 		PlayerProcessor: c.playerStatsProcessor(),
-		EventProcessor:  c.eventProcessor(),
 		Clock:	 		 c.Clock,
 	}
 }

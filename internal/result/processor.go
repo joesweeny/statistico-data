@@ -3,7 +3,6 @@ package result
 import (
 	"github.com/jonboulle/clockwork"
 	"github.com/statistico/sportmonks-go-client"
-	"github.com/statistico/statistico-data/internal/event"
 	"github.com/statistico/statistico-data/internal/fixture"
 	"github.com/statistico/statistico-data/internal/stats/player"
 	"log"
@@ -29,7 +28,6 @@ type Processor struct {
 	Client          *sportmonks.Client
 	Logger          *log.Logger
 	PlayerProcessor player_stats.PlayerProcessor
-	EventProcessor  event.Processor
 	Clock 			clockwork.Clock
 }
 
@@ -120,7 +118,7 @@ func (p Processor) processResults(ids []int, done chan bool) {
 }
 
 func (p Processor) callClient(ids []int, ch chan<- sportmonks.Fixture, done chan bool, c *int) {
-	q := []string{"lineup,bench,goals,substitutions"}
+	q := []string{"lineup,bench"}
 
 	for _, id := range ids {
 		if *c >= callLimit {
@@ -154,7 +152,7 @@ func (p Processor) parseResults(ch <-chan sportmonks.Fixture, done chan bool) {
 }
 
 func (p Processor) handleResult(fix sportmonks.Fixture) {
-	waitGroup.Add(4)
+	waitGroup.Add(2)
 
 	go func(players []sportmonks.LineupPlayer) {
 		p.handlePlayers(players, false)
@@ -165,16 +163,6 @@ func (p Processor) handleResult(fix sportmonks.Fixture) {
 		p.handlePlayers(players, true)
 		defer waitGroup.Done()
 	}(fix.Bench.Data)
-
-	go func(goals []sportmonks.GoalEvent) {
-		p.handleGoalEvents(goals)
-		defer waitGroup.Done()
-	}(fix.Goals.Data)
-
-	go func(subs []sportmonks.SubstitutionEvent) {
-		p.handleSubstitutionEvents(subs)
-		defer waitGroup.Done()
-	}(fix.Subs.Data)
 
 	x, err := p.Repository.GetByFixtureId(fix.ID)
 
@@ -205,27 +193,5 @@ func (p Processor) handlePlayers(lineups []sportmonks.LineupPlayer, bench bool) 
 			p.PlayerProcessor.ProcessPlayerStats(&stats, bench)
 			defer waitGroup.Done()
 		}(player)
-	}
-}
-
-func (p Processor) handleGoalEvents(g []sportmonks.GoalEvent) {
-	for _, goal := range g {
-		waitGroup.Add(1)
-
-		go func(e sportmonks.GoalEvent) {
-			p.EventProcessor.ProcessGoalEvent(&e)
-			defer waitGroup.Done()
-		}(goal)
-	}
-}
-
-func (p Processor) handleSubstitutionEvents(s []sportmonks.SubstitutionEvent) {
-	for _, sub := range s {
-		waitGroup.Add(1)
-
-		go func(e sportmonks.SubstitutionEvent) {
-			p.EventProcessor.ProcessSubstitutionEvent(&e)
-			defer waitGroup.Done()
-		}(sub)
 	}
 }
