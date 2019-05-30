@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-var command = flag.String("command", "", "Provide the model name to process")
+var command = flag.String("command", "", "Provide the command name to process")
 var option = flag.String("option", "", "Optional parameter to pass to command")
 
 func main() {
@@ -46,6 +46,9 @@ func main() {
 		break
 	case Team, TeamCurrentSeason:
 		processor = app.TeamProcessor()
+		break
+	case TeamStatsByResultId, TeamStatsBySeasonId, TeamStatsToday:
+		processor = app.TeamStatsProcessor()
 		break
 	case Venue, VenueCurrentSeason:
 		processor = app.VenueProcessor()
