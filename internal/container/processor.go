@@ -82,7 +82,6 @@ func (c Container) ResultProcessor() *result.Processor {
 		Client:          c.SportMonksClient,
 		Logger:          c.Logger,
 		PlayerProcessor: c.playerStatsProcessor(),
-		TeamProcessor:   c.teamStatsProcessor(),
 		EventProcessor:  c.eventProcessor(),
 		Clock:	 		 c.Clock,
 	}
@@ -127,11 +126,13 @@ func (c Container) TeamProcessor() *team.Processor {
 	}
 }
 
-func (c Container) teamStatsProcessor() team_stats.TeamProcessor {
-	return team_stats.TeamProcessor{
+func (c Container) TeamStatsProcessor() team_stats.Processor {
+	return team_stats.Processor{
 		TeamRepository: &team_stats.PostgresTeamStatsRepository{Connection: c.Database},
 		TeamFactory:    team_stats.TeamFactory{Clock: clock()},
 		Logger:         c.Logger,
+		FixtureRepo:     &fixture.PostgresFixtureRepository{Connection: c.Database},
+		Client:     c.SportMonksClient,
 	}
 }
 

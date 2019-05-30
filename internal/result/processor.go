@@ -6,7 +6,6 @@ import (
 	"github.com/statistico/statistico-data/internal/event"
 	"github.com/statistico/statistico-data/internal/fixture"
 	"github.com/statistico/statistico-data/internal/stats/player"
-	"github.com/statistico/statistico-data/internal/stats/team"
 	"log"
 	"strconv"
 	"strings"
@@ -29,7 +28,6 @@ type Processor struct {
 	Factory
 	Client          *sportmonks.Client
 	Logger          *log.Logger
-	TeamProcessor   team_stats.TeamProcessor
 	PlayerProcessor player_stats.PlayerProcessor
 	EventProcessor  event.Processor
 	Clock 			clockwork.Clock
@@ -122,7 +120,7 @@ func (p Processor) processResults(ids []int, done chan bool) {
 }
 
 func (p Processor) callClient(ids []int, ch chan<- sportmonks.Fixture, done chan bool, c *int) {
-	q := []string{"lineup,bench,stats,goals,substitutions"}
+	q := []string{"lineup,bench,goals,substitutions"}
 
 	for _, id := range ids {
 		if *c >= callLimit {
@@ -156,12 +154,7 @@ func (p Processor) parseResults(ch <-chan sportmonks.Fixture, done chan bool) {
 }
 
 func (p Processor) handleResult(fix sportmonks.Fixture) {
-	waitGroup.Add(5)
-
-	go func(stats []sportmonks.TeamStats) {
-		p.handleTeams(stats)
-		defer waitGroup.Done()
-	}(fix.TeamStats.Data)
+	waitGroup.Add(4)
 
 	go func(players []sportmonks.LineupPlayer) {
 		p.handlePlayers(players, false)
@@ -202,17 +195,6 @@ func (p Processor) handleResult(fix sportmonks.Fixture) {
 	}
 
 	return
-}
-
-func (p Processor) handleTeams(t []sportmonks.TeamStats) {
-	for _, team := range t {
-		waitGroup.Add(1)
-
-		go func(stats sportmonks.TeamStats) {
-			p.TeamProcessor.ProcessTeamStats(&stats)
-			defer waitGroup.Done()
-		}(team)
-	}
 }
 
 func (p Processor) handlePlayers(lineups []sportmonks.LineupPlayer, bench bool) {
