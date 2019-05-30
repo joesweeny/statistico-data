@@ -35,6 +35,9 @@ func main() {
 	case Player:
 		processor = app.PlayerProcessor()
 		break
+	case PlayerStatsByResultId, PlayerStatsBySeasonId, PlayerStatsToday:
+		processor = app.PlayerStatsProcessor()
+		break
 	case Result, ResultById, ResultBySeasonId, ResultToday:
 		processor = app.ResultProcessor()
 		break
