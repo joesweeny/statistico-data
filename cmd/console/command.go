@@ -2,6 +2,9 @@ package main
 
 const Competition = "competition"
 const Country = "country"
+const EventsByResultId = "events:by-result-id"
+const EventsBySeasonId = "events:by-season-id"
+const EventsToday = "events:today"
 const Fixture = "fixture"
 const FixtureCurrentSeason = "fixture:current-season"
 const Player = "player"
