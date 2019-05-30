@@ -1,16 +1,17 @@
 package result
 
 import (
+	"github.com/jonboulle/clockwork"
 	"github.com/statistico/sportmonks-go-client"
 	"github.com/statistico/statistico-data/internal/event"
 	"github.com/statistico/statistico-data/internal/fixture"
-	"github.com/statistico/statistico-data/internal/stats/team"
 	"github.com/statistico/statistico-data/internal/stats/player"
+	"github.com/statistico/statistico-data/internal/stats/team"
 	"log"
+	"strconv"
+	"strings"
 	"sync"
 	"time"
-	"strconv"
-	"github.com/jonboulle/clockwork"
 )
 
 const result = "result"
@@ -39,8 +40,10 @@ func (p Processor) Process(command string, option string, done chan bool) {
 	case result:
 		go p.allResults(done)
 	case resultById:
-		id, _ := strconv.Atoi(option)
-		go p.byId(done, id)
+		for _, id := range strings.Split(option, ",") {
+			id, _ := strconv.Atoi(id)
+			go p.byId(done, id)
+		}
 	case resultBySeasonId:
 		id, _ := strconv.Atoi(option)
 		go p.bySeasonId(done, id)
