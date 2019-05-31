@@ -6,5 +6,6 @@
 00 4 * * * /opt/console -command=player > /proc/1/fd/1 2> /proc/1/fd/2
 00 9 * * * /opt/console -command=squad:current-season > /proc/1/fd/1 2> /proc/1/fd/2
 30 7 * * 1 /opt/console -command=venue:current-season > /proc/1/fd/1 2> /proc/1/fd/2
+0 0 * * 0 /opt/console -command=season > /proc/1/fd/1 2> /proc/1/fd/2
 30 10 * * 1 /opt/console -command=team:current-season > /proc/1/fd/1 2> /proc/1/fd/2
 30 7 * * 5 /opt/console -command=squad > /proc/1/fd/1 2> /proc/1/fd/2
