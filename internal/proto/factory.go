@@ -4,11 +4,11 @@ import (
 	"github.com/golang/protobuf/ptypes/wrappers"
 	"github.com/statistico/statistico-data/internal/model"
 	pbCompetition "github.com/statistico/statistico-data/internal/proto/competition"
-	pbPlayerStats "github.com/statistico/statistico-data/internal/proto/stats/player"
-	pbTeamStats "github.com/statistico/statistico-data/internal/proto/stats/team"
 	pbResult "github.com/statistico/statistico-data/internal/proto/result"
 	pbRound "github.com/statistico/statistico-data/internal/proto/round"
 	pbSeason "github.com/statistico/statistico-data/internal/proto/season"
+	pbPlayerStats "github.com/statistico/statistico-data/internal/proto/stats/player"
+	pbTeamStats "github.com/statistico/statistico-data/internal/proto/stats/team"
 	pbTeam "github.com/statistico/statistico-data/internal/proto/team"
 	pbVenue "github.com/statistico/statistico-data/internal/proto/venue"
 	"time"
@@ -359,12 +359,6 @@ func ToMatchStats(res *model.Result) *pbResult.MatchStats {
 	if res.Minutes != nil {
 		stats.Minutes = &wrappers.Int32Value{
 			Value: int32(*res.Minutes),
-		}
-	}
-
-	if res.Seconds != nil {
-		stats.Seconds = &wrappers.Int32Value{
-			Value: int32(*res.Seconds),
 		}
 	}
 

@@ -26,7 +26,6 @@ func TestHandleResult(t *testing.T) {
 		form := "4-3-2-1"
 		score := 2
 		full := "2-2"
-		zero := 0
 		pos1 := 3
 		pos2 := 19
 		min := 90
@@ -40,7 +39,6 @@ func TestHandleResult(t *testing.T) {
 		res.HomeLeaguePosition = &pos1
 		res.AwayLeaguePosition = &pos2
 		res.Minutes = &min
-		res.Seconds = &zero
 
 		seasonRepo.On("Id", 14567).Return(newSeason(), nil)
 		compRepo.On("GetById", 45).Return(newCompetition(), nil)
@@ -84,7 +82,6 @@ func TestHandleResult(t *testing.T) {
 		a.Equal(int32(3), proto.MatchData.Stats.HomeLeaguePosition.GetValue())
 		a.Equal(int32(19), proto.MatchData.Stats.AwayLeaguePosition.GetValue())
 		a.Equal(int32(90), proto.MatchData.Stats.Minutes.GetValue())
-		a.Equal(int32(0), proto.MatchData.Stats.Seconds.GetValue())
 		a.Nil(proto.MatchData.Stats.AddedTime)
 		a.Nil(proto.MatchData.Stats.ExtraTime)
 		a.Nil(proto.MatchData.Stats.InjuryTime)

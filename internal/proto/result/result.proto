@@ -79,7 +79,6 @@ message MatchStats {
     google.protobuf.Int32Value home_league_position = 11;
     google.protobuf.Int32Value away_league_position = 12;
     google.protobuf.Int32Value minutes = 13;
-    google.protobuf.Int32Value seconds = 14;
     google.protobuf.Int32Value added_time = 15;
     google.protobuf.Int32Value extra_time = 16;
     google.protobuf.Int32Value injury_time = 17;
