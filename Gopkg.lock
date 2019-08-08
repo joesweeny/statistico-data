@@ -10,6 +10,14 @@
   version = "v1.1.1"
 
 [[projects]]
+  digest = "1:ec6f9bf5e274c833c911923c9193867f3f18788c461f76f05f62bb1510e0ae65"
+  name = "github.com/go-sql-driver/mysql"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "72cd26f257d44c1114970e19afddcd812016007e"
+  version = "v1.4.1"
+
+[[projects]]
   digest = "1:1e95d20d050664ec98287804ee8a961fbc02902aec9a0fd44fd3580a866e0759"
   name = "github.com/golang/protobuf"
   packages = [
@@ -58,6 +66,14 @@
   version = "v1.0.0"
 
 [[projects]]
+  digest = "1:79e87abf06b873987dee86598950f5b51732ac454d5a5cab6445a14330e6c9e3"
+  name = "github.com/mattn/go-sqlite3"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "b612a2feea6aa87c6d052d9086572551df06497e"
+  version = "v1.11.0"
+
+[[projects]]
   digest = "1:cf31692c14422fa27c83a05292eb5cbe0fb2775972e8f1f8446a71549bd8980b"
   name = "github.com/pkg/errors"
   packages = ["."]
@@ -74,12 +90,23 @@
   version = "v1.0.0"
 
 [[projects]]
+  digest = "1:e97b85dd679107b8a0fa8eb7ca844548276064b4cf9632057b8db495a95402ed"
+  name = "github.com/pressly/goose"
+  packages = [
+    ".",
+    "cmd/goose",
+  ]
+  pruneopts = "UT"
+  revision = "f9980cee258976cd89b5edeaee57983104b9180f"
+  version = "v1.0"
+
+[[projects]]
   branch = "master"
-  digest = "1:7085da3c3d3438adfbdab99583053ee9652636b8a69725ee4fd05ba4b6acd3e0"
+  digest = "1:d2725426388acb619d4be1d7091a43e6e9178d090a95de634ea996e10b377732"
   name = "github.com/statistico/sportmonks-go-client"
   packages = ["."]
   pruneopts = "UT"
-  revision = "4987f381cfabe3c92bef442b381cd4b5dde4f57b"
+  revision = "c309060826edce33b7a424e6e43a193fd5ead4a6"
 
 [[projects]]
   digest = "1:ac83cf90d08b63ad5f7e020ef480d319ae890c208f8524622a2f3136e2686b02"
@@ -99,6 +126,18 @@
   pruneopts = "UT"
   revision = "ffdc059bfe9ce6a4e144ba849dbedead332c6053"
   version = "v1.3.0"
+
+[[projects]]
+  digest = "1:19fd46009e9bad71f7e9a8367e7317ed632f89926352a7d59822edec785ae4f3"
+  name = "github.com/ziutek/mymysql"
+  packages = [
+    "godrv",
+    "mysql",
+    "native",
+  ]
+  pruneopts = "UT"
+  revision = "e08c2f35356576b3c3690c252fe5dca728ae9292"
+  version = "v1.5.4"
 
 [[projects]]
   branch = "master"
@@ -146,6 +185,14 @@
   pruneopts = "UT"
   revision = "f21a4dfb5e38f5895301dc265a8def02365cc3d0"
   version = "v0.3.0"
+
+[[projects]]
+  digest = "1:c25289f43ac4a68d88b02245742347c94f1e108c534dda442188015ff80669b3"
+  name = "google.golang.org/appengine"
+  packages = ["cloudsql"]
+  pruneopts = "UT"
+  revision = "b2f4a3cf3c67576a2ee09e1fe62656a5086ce880"
+  version = "v1.6.1"
 
 [[projects]]
   branch = "master"
@@ -208,12 +255,15 @@
     "github.com/jonboulle/clockwork",
     "github.com/lib/pq",
     "github.com/pkg/errors",
+    "github.com/pressly/goose/cmd/goose",
     "github.com/statistico/sportmonks-go-client",
     "github.com/stretchr/testify/assert",
     "github.com/stretchr/testify/mock",
     "golang.org/x/net/context",
     "google.golang.org/grpc",
+    "google.golang.org/grpc/codes",
     "google.golang.org/grpc/reflection",
+    "google.golang.org/grpc/status",
   ]
   solver-name = "gps-cdcl"
   solver-version = 1

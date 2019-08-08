@@ -17,7 +17,6 @@ type Result struct {
 	HomeLeaguePosition *int      `json:"home_league_position"`
 	AwayLeaguePosition *int      `json:"away_league_position"`
 	Minutes            *int      `json:"minutes"`
-	Seconds            *int      `json:"seconds"`
 	AddedTime          *int      `json:"added_time"`
 	ExtraTime          *int      `json:"extra_time"`
 	InjuryTime         *int      `json:"injury_time"`

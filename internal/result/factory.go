@@ -26,7 +26,6 @@ func (f Factory) createResult(s *sportmonks.Fixture) *model.Result {
 		HomeLeaguePosition: &s.Standings.LocalteamPosition,
 		AwayLeaguePosition: &s.Standings.VisitorteamPosition,
 		Minutes:            &s.Time.Minute,
-		Seconds:            s.Time.Second,
 		AddedTime:          s.Time.AddedTime,
 		ExtraTime:          s.Time.ExtraMinute,
 		InjuryTime:         s.Time.InjuryTime,
@@ -49,7 +48,6 @@ func (f Factory) updateResult(s *sportmonks.Fixture, m *model.Result) *model.Res
 	m.HomeLeaguePosition = &s.Standings.LocalteamPosition
 	m.AwayLeaguePosition = &s.Standings.VisitorteamPosition
 	m.Minutes = &s.Time.Minute
-	m.Seconds = s.Time.Second
 	m.AddedTime = s.Time.AddedTime
 	m.ExtraTime = s.Time.ExtraMinute
 	m.InjuryTime = s.Time.InjuryTime

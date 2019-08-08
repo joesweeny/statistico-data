@@ -90,7 +90,6 @@ func TestGetById(t *testing.T) {
 		a.Nil(r.HomeLeaguePosition)
 		a.Nil(r.AwayLeaguePosition)
 		a.Nil(r.Minutes)
-		a.Nil(r.Seconds)
 		a.Nil(r.AddedTime)
 		a.Nil(r.ExtraTime)
 		a.Nil(r.InjuryTime)
@@ -141,7 +140,6 @@ func TestUpdate(t *testing.T) {
 		var homePosition = 2
 		var awayPosition = 18
 		var mins = 90
-		var secs = 20
 		var added = 5
 		var injury = 2
 		var d = time.Date(2019, 01, 14, 11, 25, 00, 00, time.UTC)
@@ -157,7 +155,6 @@ func TestUpdate(t *testing.T) {
 		m.HomeLeaguePosition = &homePosition
 		m.AwayLeaguePosition = &awayPosition
 		m.Minutes = &mins
-		m.Seconds = &secs
 		m.AddedTime = &added
 		m.InjuryTime = &injury
 		m.UpdatedAt = d
@@ -188,7 +185,6 @@ func TestUpdate(t *testing.T) {
 		a.Equal(2, *r.HomeLeaguePosition)
 		a.Equal(18, *r.AwayLeaguePosition)
 		a.Equal(90, *r.Minutes)
-		a.Equal(20, *r.Seconds)
 		a.Equal(5, *r.AddedTime)
 		a.Nil(r.ExtraTime)
 		a.Equal(2, *r.InjuryTime)
