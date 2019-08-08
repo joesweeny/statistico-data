@@ -34,7 +34,6 @@ func TestCreateResult(t *testing.T) {
 		a.Equal(1, *m.HomeLeaguePosition)
 		a.Equal(5, *m.AwayLeaguePosition)
 		a.Equal(90, *m.Minutes)
-		a.Equal(0, *m.Seconds)
 		a.Equal(0, *m.AddedTime)
 		a.Equal(0, *m.ExtraTime)
 		a.Equal(0, *m.InjuryTime)
@@ -79,7 +78,6 @@ func TestUpdateResult(t *testing.T) {
 		a.Equal(1, *m.HomeLeaguePosition)
 		a.Equal(5, *m.AwayLeaguePosition)
 		a.Equal(90, *m.Minutes)
-		a.Equal(0, *m.Seconds)
 		a.Equal(0, *m.AddedTime)
 		a.Equal(0, *m.ExtraTime)
 		a.Equal(0, *m.InjuryTime)
@@ -113,7 +111,6 @@ func newClientFixture(id int) *sportmonks.Fixture {
 		},
 		Time: sportmonks.FixtureTime{
 			Minute:      90,
-			Second:      &zero,
 			AddedTime:   &zero,
 			ExtraMinute: &zero,
 			InjuryTime:  &zero,
