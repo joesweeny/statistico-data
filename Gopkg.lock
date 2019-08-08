@@ -75,11 +75,11 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:7085da3c3d3438adfbdab99583053ee9652636b8a69725ee4fd05ba4b6acd3e0"
+  digest = "1:d2725426388acb619d4be1d7091a43e6e9178d090a95de634ea996e10b377732"
   name = "github.com/statistico/sportmonks-go-client"
   packages = ["."]
   pruneopts = "UT"
-  revision = "4987f381cfabe3c92bef442b381cd4b5dde4f57b"
+  revision = "c309060826edce33b7a424e6e43a193fd5ead4a6"
 
 [[projects]]
   digest = "1:ac83cf90d08b63ad5f7e020ef480d319ae890c208f8524622a2f3136e2686b02"
