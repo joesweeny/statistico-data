@@ -126,8 +126,10 @@ func (p Processor) callClient(ids []int, ch chan<- sportmonks.Fixture, done chan
 
 func (p Processor) parseStats(ch <-chan sportmonks.Fixture, stats chan<- *model.PlayerStats) {
 	for x := range ch {
-		go p.handleStats(x, stats)
+		p.handleStats(x, stats)
 	}
+
+	close(stats)
 }
 
 func (p Processor) handleStats(fix sportmonks.Fixture, ch chan<- *model.PlayerStats) {
