@@ -93,9 +93,11 @@ func (p Processor) statsToday(done chan bool) {
 
 func (p Processor) processStats(ids []int, done chan bool) {
 	results := make(chan sportmonks.Fixture, len(ids))
+	stats := make(chan *model.PlayerStats, 1000)
 
 	go p.callClient(ids, results, done, &counter)
-	go p.parseStats(results, done)
+	go p.parseStats(results, stats)
+	go p.processPlayerStats(stats, done)
 }
 
 func (p Processor) callClient(ids []int, ch chan<- sportmonks.Fixture, done chan bool, c *int) {
@@ -122,28 +124,20 @@ func (p Processor) callClient(ids []int, ch chan<- sportmonks.Fixture, done chan
 	close(ch)
 }
 
-func (p Processor) parseStats(ch <-chan sportmonks.Fixture, done chan bool) {
-	stats := make(chan *model.PlayerStats, 500)
-
+func (p Processor) parseStats(ch <-chan sportmonks.Fixture, stats chan<- *model.PlayerStats) {
 	for x := range ch {
 		go p.handleStats(x, stats)
 	}
-
-	p.processPlayerStats(stats, done)
 }
 
 func (p Processor) handleStats(fix sportmonks.Fixture, ch chan<- *model.PlayerStats) {
 	for _, player := range fix.Lineup.Data {
-		ch <- p.hydratePlayerStats(&player, false)
+		ch <- p.PlayerFactory.createPlayerStats(&player, false)
 	}
 
 	for _, player := range fix.Bench.Data {
-		ch <- p.hydratePlayerStats(&player, true)
+		ch <- p.PlayerFactory.createPlayerStats(&player, true)
 	}
-}
-
-func (p Processor) hydratePlayerStats(s *sportmonks.LineupPlayer, isSub bool) *model.PlayerStats {
-	return p.PlayerFactory.createPlayerStats(s, isSub)
 }
 
 func (p Processor) processPlayerStats(ch <-chan *model.PlayerStats, done chan bool) {
