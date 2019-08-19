@@ -3,10 +3,10 @@ package player_stats
 import (
 	"github.com/statistico/sportmonks-go-client"
 	"github.com/statistico/statistico-data/internal/fixture"
+	"github.com/statistico/statistico-data/internal/model"
 	"log"
 	"strconv"
 	"strings"
-	"sync"
 	"time"
 )
 
@@ -16,7 +16,6 @@ const playerStatsToday = "player-stats:today"
 const callLimit = 1500
 
 var counter int
-var waitGroup sync.WaitGroup
 
 type Processor struct {
 	PlayerRepository
@@ -94,9 +93,11 @@ func (p Processor) statsToday(done chan bool) {
 
 func (p Processor) processStats(ids []int, done chan bool) {
 	results := make(chan sportmonks.Fixture, len(ids))
+	stats := make(chan *model.PlayerStats, 1000)
 
 	go p.callClient(ids, results, done, &counter)
-	go p.parseStats(results, done)
+	go p.parseStats(results, stats)
+	go p.processPlayerStats(stats, done)
 }
 
 func (p Processor) callClient(ids []int, ch chan<- sportmonks.Fixture, done chan bool, c *int) {
@@ -123,54 +124,38 @@ func (p Processor) callClient(ids []int, ch chan<- sportmonks.Fixture, done chan
 	close(ch)
 }
 
-func (p Processor) parseStats(ch <-chan sportmonks.Fixture, done chan bool) {
+func (p Processor) parseStats(ch <-chan sportmonks.Fixture, stats chan<- *model.PlayerStats) {
 	for x := range ch {
-		p.handleStats(x)
+		go p.handleStats(x, stats)
 	}
-
-	waitGroup.Wait()
-
-	done <- true
 }
 
-func (p Processor) handleStats(fix sportmonks.Fixture) {
+func (p Processor) handleStats(fix sportmonks.Fixture, ch chan<- *model.PlayerStats) {
 	for _, player := range fix.Lineup.Data {
-		waitGroup.Add(1)
-
-		go func(stats sportmonks.LineupPlayer) {
-			p.processPlayerStats(&stats, false)
-			defer waitGroup.Done()
-		}(player)
+		ch <- p.PlayerFactory.createPlayerStats(&player, false)
 	}
 
 	for _, player := range fix.Bench.Data {
-		waitGroup.Add(1)
-
-		go func(stats sportmonks.LineupPlayer) {
-			p.processPlayerStats(&stats, true)
-			defer waitGroup.Done()
-		}(player)
+		ch <- p.PlayerFactory.createPlayerStats(&player, true)
 	}
 }
 
-func (p Processor) processPlayerStats(s *sportmonks.LineupPlayer, isSub bool) {
-	x, err := p.PlayerRepository.ByFixtureAndPlayer(uint64(s.FixtureID), uint64(s.PlayerID))
+func (p Processor) processPlayerStats(ch <-chan *model.PlayerStats, done chan bool) {
+	for s := range ch {
+		_, err := p.PlayerRepository.ByFixtureAndPlayer(uint64(s.FixtureID), uint64(s.PlayerID))
 
-	if err == ErrNotFound {
-		created := p.PlayerFactory.createPlayerStats(s, isSub)
+		if err == ErrNotFound {
+			if err := p.PlayerRepository.InsertPlayerStats(s); err != nil {
+				log.Printf("Error '%s' occurred when inserting Player Stats struct: %+v\n,", err.Error(), s)
+			}
 
-		if err := p.PlayerRepository.InsertPlayerStats(created); err != nil {
-			log.Printf("Error '%s' occurred when inserting Player Stats struct: %+v\n,", err.Error(), created)
+			continue
 		}
 
-		return
+		if err := p.PlayerRepository.UpdatePlayerStats(s); err != nil {
+			log.Printf("Error '%s' occurred when Updating Player Stats struct: %+v\n,", err.Error(), s)
+		}
 	}
 
-	updated := p.PlayerFactory.updatePlayerStats(s, x)
-
-	if err := p.PlayerRepository.UpdatePlayerStats(updated); err != nil {
-		log.Printf("Error '%s' occurred when Updating Player Stats struct: %+v\n,", err.Error(), updated)
-	}
-
-	return
+	done <- true
 }

@@ -1,7 +1,7 @@
 0 * * * * /opt/console -command=result:today > /proc/1/fd/1 2> /proc/1/fd/2
 15 * * * * /opt/console -command=team-stats:today > /proc/1/fd/1 2> /proc/1/fd/2
-30 * * * * /opt/console -command=player-stats:today > /proc/1/fd/1 2> /proc/1/fd/2
 45 * * * * /opt/console -command=events:today > /proc/1/fd/1 2> /proc/1/fd/2
+0 */2 * * * /opt/console -command=player-stats:today > /proc/1/fd/1 2> /proc/1/fd/2
 0 1 * * * /opt/console -command=fixture:current-season > /proc/1/fd/1 2> /proc/1/fd/2
 00 4 * * * /opt/console -command=player > /proc/1/fd/1 2> /proc/1/fd/2
 00 9 * * * /opt/console -command=squad:current-season > /proc/1/fd/1 2> /proc/1/fd/2
