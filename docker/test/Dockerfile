@@ -1,8 +1,11 @@
-FROM golang:1.11-alpine3.8
-
-WORKDIR /go/src/github.com/statistico/statistico-data
+FROM golang:1.12.9-alpine
 
 RUN apk update && apk add git gcc g++
+ENV GO111MODULE=on
+WORKDIR /opt
+COPY go.mod .
+COPY go.sum .
 RUN go get gotest.tools/gotestsum
+RUN go mod download
 
 CMD ["/bin/sh"]

@@ -14,20 +14,13 @@ jobs:
             - "3f:66:e4:bb:f0:43:80:a8:78:1f:e5:36:7b:41:34:56"
 
       - run:
-          name: Install dependencies
-          command: |
-            go get -u github.com/golang/dep/cmd/dep
-
-      - run:
           name: Build Release Image
           command: |
-            $GOPATH/bin/dep ensure
             docker-compose -f docker-compose.dev.yml up -d --build
 
       - run:
           name: Test Release Image
           command: |
-            $GOPATH/bin/dep ensure
             docker-compose -f docker-compose.dev.yml run test gotestsum -f short-verbose
 
       - deploy:
