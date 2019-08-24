@@ -45,8 +45,8 @@ Statistico's internal systems communicate via gRPC. This application's gRPC spec
 
 This application exposes four services:
 - FixtureService
-- ResultService
 - PlayerStatsService
+- ResultService
 - TeamStatsService
 
 The parameters required to access these services are well defined in their respective `.proto` files. 
@@ -72,15 +72,6 @@ grpcurl \
     localhost:50051  \
     fixture.FixtureService/FixtureByID
 ```
-#### To fetch results for a given Team
-```proto
-grpcurl \
-    -plaintext \
-    -d \
-    '{"team_id": 501, "limit": 75, "date_before": "2019-04-03T23:59:59+00:00"}' \
-    localhost:50051  \
-    result.ResultService/GetResultsForTeam
-```
 
 #### To fetch player stats for a given fixture
 ```proto
@@ -91,6 +82,16 @@ grpcurl \
     localhost:50051  \
     player_stats.PlayerStatsService/GetPlayerStatsForFixture
 ```  
+    
+#### To fetch results for a given Team
+```proto
+grpcurl \
+    -plaintext \
+    -d \
+    '{"team_id": 501, "limit": 75, "date_before": "2019-04-03T23:59:59+00:00"}' \
+    localhost:50051  \
+    result.ResultService/GetResultsForTeam
+```
     
 #### To fetch team stats for a given fixture
 ```proto
