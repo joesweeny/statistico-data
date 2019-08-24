@@ -6,16 +6,7 @@ This application is the data warehouse that receives and stores data that powers
 To develop this application locally you will need to following tools and language installed locally:
 - Docker
 - Docker Compose
-- Golang >=1.11
-
-## Dependency Management
-[Dep](https://golang.github.io/dep/) is used to handle this applications dependencies. You can install dep locally by executing:
-
-`go get -u github.com/golang/dep/cmd/dep`
-
-Once install you can compile this application's dependencies by executing:
-
-`dep ensure`
+- Golang >=1.12.9
 
 ## Deployment
 This application is auto-deployed through [CircleCI](https://circleci.com/). Deployment scripts can be found in the `.circleci`
@@ -52,10 +43,11 @@ container
 Statistico's internal systems communicate via gRPC. This application's gRPC specifications can be found in the 
 [/proto](https://github.com/statistico/statistico-data/proto) directory. For more on gRPC view [here](https://grpc.io/docs/guides/)
 
-This application exposes three services:
+This application exposes four services:
 - FixtureService
 - ResultService
-- StatsService
+- PlayerStatsService
+- TeamStatsService
 
 The parameters required to access these services are well defined in their respective `.proto` files. 
 
@@ -97,4 +89,15 @@ grpcurl \
     -d \
     '{"fixture_id": 7019}' \
     localhost:50051  \
-    stats.StatsService/GetPlayerStatsForFixture
+    player_stats.PlayerStatsService/GetPlayerStatsForFixture
+```  
+    
+#### To fetch team stats for a given fixture
+```proto
+grpcurl \
+    -plaintext \
+    -d \
+    '{"fixture_id": 7019}' \
+    localhost:50051  \
+    team_stats.TeamStatsService/GetTeamStatsForFixture
+```
