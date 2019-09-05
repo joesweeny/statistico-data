@@ -5,10 +5,12 @@ import (
 	"encoding/json"
 	"errors"
 	"github.com/jonboulle/clockwork"
-	"github.com/statistico/sportmonks-go-client"
-	"github.com/statistico/statistico-data/internal/model"
-	"github.com/statistico/statistico-data/internal/statistico/mock"
+	spClient "github.com/statistico/sportmonks-go-client"
+	"github.com/statistico/statistico-data/internal/statistico"
+	stMock "github.com/statistico/statistico-data/internal/statistico/mock"
+	"github.com/statistico/statistico-data/internal/statistico/sportmonks"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -16,9 +18,9 @@ import (
 )
 
 func TestProcess(t *testing.T) {
-	repo := new(mock.CountryRepository)
+	repo := new(stMock.CountryRepository)
 
-	server := mock.HttpClient(func(req *http.Request) *http.Response {
+	server := stMock.HttpClient(func(req *http.Request) *http.Response {
 		assert.Equal(t, req.URL.String(), "http://example.com/api/v2.0/countries?api_token=my-key&page=1")
 		b, _ := json.Marshal(countryResponse())
 		return &http.Response{
@@ -27,23 +29,23 @@ func TestProcess(t *testing.T) {
 		}
 	})
 
-	client := sportmonks.Client{
+	client := spClient.Client{
 		Client:  server,
 		BaseURL: "http://example.com",
 		ApiKey:  "my-key",
 	}
 
-	processor := Processor{
-		Repository: repo,
-		Factory:    Factory{clockwork.NewFakeClock()},
-		Client:     &client,
-		Logger:     log.New(ioutil.Discard, "", 0),
+	processor := CountryProcessor{
+		repository: repo,
+		factory:    sportmonks.CountryFactory{Clock: clockwork.NewFakeClock()},
+		client:     &client,
+		logger:     log.New(ioutil.Discard, "", 0),
 	}
 
 	t.Run("inserts new country", func(t *testing.T) {
 		done := make(chan bool)
 
-		repo.On("GetById", 1).Return(&model.Country{}, errors.New("not Found"))
+		repo.On("GetById", 1).Return(&statistico.Country{}, errors.New("not Found"))
 		repo.On("Insert", mock.Anything).Return(nil)
 		repo.AssertNotCalled(t, "Update", mock.Anything)
 		processor.Process("country", "",done)
@@ -52,7 +54,7 @@ func TestProcess(t *testing.T) {
 	t.Run("updates existing country", func(t *testing.T) {
 		done := make(chan bool)
 
-		c := newCountry(1)
+		c := stMock.Country(1)
 		repo.On("GetById", 1).Return(c, nil)
 		repo.On("Update", &c).Return(nil)
 		repo.MethodCalled("Update", &c)
@@ -61,25 +63,25 @@ func TestProcess(t *testing.T) {
 	})
 }
 
-func countryResponse() sportmonks.CountriesResponse {
+func countryResponse() spClient.CountriesResponse {
 	c := clientCountry()
 
-	m := sportmonks.Meta{}
+	m := spClient.Meta{}
 	m.Pagination.Total = 1
 	m.Pagination.Count = 1
 	m.Pagination.PerPage = 1
 	m.Pagination.CurrentPage = 1
 	m.Pagination.TotalPages = 1
 
-	res := sportmonks.CountriesResponse{}
+	res := spClient.CountriesResponse{}
 	res.Data = append(res.Data, c)
 	res.Meta = m
 
 	return res
 }
 
-func clientCountry() sportmonks.Country {
-	return sportmonks.Country{
+func clientCountry() spClient.Country {
+	return spClient.Country{
 		ID:   1,
 		Name: "Brazil",
 		Extra: struct {

@@ -7,6 +7,8 @@ import (
 	"log"
 )
 
+// CountryProcessor is used to retrieve data from an external data source and
+// persist to this applications chosen data store
 type CountryProcessor struct {
 	repository statistico.CountryRepository
 	factory sportmonks.CountryFactory

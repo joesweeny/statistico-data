@@ -4,10 +4,9 @@ import (
 	"database/sql"
 	"fmt"
 	"github.com/statistico/statistico-data/internal/config"
-	"github.com/statistico/statistico-data/internal/statistico"
+	"github.com/statistico/statistico-data/internal/statistico/mock"
 	"github.com/stretchr/testify/assert"
 	"testing"
-	"time"
 )
 
 func TestInsert(t *testing.T) {
@@ -19,7 +18,7 @@ func TestInsert(t *testing.T) {
 		defer cleanUp()
 
 		for i := 1; i < 4; i++ {
-			c := newCountry(i)
+			c := mock.Country(i)
 
 			if err := repo.Insert(c); err != nil {
 				t.Errorf("Error when inserting record into the database: %s", err.Error())
@@ -40,7 +39,7 @@ func TestInsert(t *testing.T) {
 	t.Run("returns error when ID primary key violates unique constraint", func(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
-		c := newCountry(10)
+		c := mock.Country(10)
 
 		if err := repo.Insert(c); err != nil {
 			t.Errorf("Test failed, expected nil, got %s", err)
@@ -59,7 +58,7 @@ func TestUpdate(t *testing.T) {
 	t.Run("modifies existing record", func(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
-		c := newCountry(100)
+		c := mock.Country(100)
 
 		if err := repo.Insert(c); err != nil {
 			t.Errorf("Error when inserting record into the database: %s", err.Error())
@@ -87,7 +86,7 @@ func TestUpdate(t *testing.T) {
 	t.Run("returns error if record does not exist", func(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
-		c := newCountry(146)
+		c := mock.Country(146)
 
 		err := repo.Update(c)
 
@@ -105,7 +104,7 @@ func TestGetById(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
 
-		c := newCountry(62)
+		c := mock.Country(62)
 
 		if err := repo.Insert(c); err != nil {
 			t.Fatalf("Error when inserting record into the database: %s", err.Error())
@@ -156,17 +155,4 @@ func getConnection(t *testing.T) (*sql.DB, func()) {
 			t.Fatalf("Failed to clear database. %s", err.Error())
 		}
 	}
-}
-
-func newCountry(id int) *statistico.Country {
-	c := statistico.Country{
-		ID:        id,
-		Name:      "England",
-		Continent: "Europe",
-		ISO:       "ENG",
-		CreatedAt: time.Unix(1546965200, 0),
-		UpdatedAt: time.Unix(1546965200, 0),
-	}
-
-	return &c
 }

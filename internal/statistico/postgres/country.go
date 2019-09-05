@@ -13,6 +13,8 @@ type CountryRepository struct {
 	Connection *sql.DB
 }
 
+// Insert a new domain Country struct to database
+// Errors that occur while performing the operation are returned.
 func (p *CountryRepository) Insert(c *statistico.Country) error {
 	query := `
 	INSERT INTO sportmonks_country (id, name, continent, iso, created_at, updated_at)
@@ -31,6 +33,8 @@ func (p *CountryRepository) Insert(c *statistico.Country) error {
 	return err
 }
 
+// Update an existing domain Country struct to database
+// Errors that occur while performing the operation are returned.
 func (p *CountryRepository) Update(c *statistico.Country) error {
 	_, err := p.GetById(c.ID)
 
@@ -55,6 +59,8 @@ func (p *CountryRepository) Update(c *statistico.Country) error {
 	return err
 }
 
+// Retrieve an existing domain Country struct from database
+// Errors that occur while performing the operation are returned.
 func (p *CountryRepository) GetById(id int) (*statistico.Country, error) {
 	query := `SELECT * from sportmonks_country where id = $1`
 	row := p.Connection.QueryRow(query, id)
