@@ -13,7 +13,7 @@ type Country struct {
 	UpdatedAt time.Time `json:"updated_at"`
 }
 
-type Repository interface {
+type CountryRepository interface {
 	Insert(c *Country) error
 	Update(c *Country) error
 	GetById(id int) (*Country, error)
