@@ -1,4 +1,4 @@
-package model
+package statistico
 
 import (
 	"time"
@@ -11,4 +11,10 @@ type Country struct {
 	ISO       string    `json:"iso"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
+}
+
+type Repository interface {
+	Insert(c *Country) error
+	Update(c *Country) error
+	GetById(id int) (*Country, error)
 }

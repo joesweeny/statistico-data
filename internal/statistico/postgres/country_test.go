@@ -1,11 +1,10 @@
-package country
+package postgres
 
 import (
 	"database/sql"
 	"fmt"
-	_ "github.com/lib/pq"
 	"github.com/statistico/statistico-data/internal/config"
-	"github.com/statistico/statistico-data/internal/model"
+	"github.com/statistico/statistico-data/internal/statistico"
 	"github.com/stretchr/testify/assert"
 	"testing"
 	"time"
@@ -13,11 +12,12 @@ import (
 
 func TestInsert(t *testing.T) {
 	conn, cleanUp := getConnection(t)
-	repo := PostgresCountryRepository{Connection: conn}
+	repo := CountryRepository{Connection: conn}
 
 	t.Run("increases table count", func(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
+
 		for i := 1; i < 4; i++ {
 			c := newCountry(i)
 
@@ -50,13 +50,11 @@ func TestInsert(t *testing.T) {
 			t.Fatalf("Test failed, expected %s, got nil", e)
 		}
 	})
-
-	conn.Close()
 }
 
 func TestUpdate(t *testing.T) {
 	conn, cleanUp := getConnection(t)
-	repo := PostgresCountryRepository{conn}
+	repo := CountryRepository{conn}
 
 	t.Run("modifies existing record", func(t *testing.T) {
 		t.Helper()
@@ -71,13 +69,13 @@ func TestUpdate(t *testing.T) {
 		c.Name = s
 
 		if err := repo.Update(c); err != nil {
-			t.Errorf("Error when updating a record in the database: %s", err.Error())
+			t.Fatalf("Error when updating a record in the database: %s", err.Error())
 		}
 
 		r, err := repo.GetById(c.ID)
 
 		if err != nil {
-			t.Errorf("Error when updating a record in the database: %s", err.Error())
+			t.Fatalf("Error when updating a record in the database: %s", err.Error())
 		}
 
 		got := r.Name
@@ -97,13 +95,11 @@ func TestUpdate(t *testing.T) {
 			t.Fatalf("Test failed, expected nil, got %v", err)
 		}
 	})
-
-	conn.Close()
 }
 
 func TestGetById(t *testing.T) {
 	conn, cleanUp := getConnection(t)
-	repo := PostgresCountryRepository{conn}
+	repo := CountryRepository{conn}
 
 	t.Run("country can be retrieved by ID", func(t *testing.T) {
 		t.Helper()
@@ -112,13 +108,13 @@ func TestGetById(t *testing.T) {
 		c := newCountry(62)
 
 		if err := repo.Insert(c); err != nil {
-			t.Errorf("Error when inserting record into the database: %s", err.Error())
+			t.Fatalf("Error when inserting record into the database: %s", err.Error())
 		}
 
 		r, err := repo.GetById(62)
 
 		if err != nil {
-			t.Errorf("Error when retrieving a record from the database: %s", err.Error())
+			t.Fatalf("Error when retrieving a record from the database: %s", err.Error())
 		}
 
 		a := assert.New(t)
@@ -139,33 +135,31 @@ func TestGetById(t *testing.T) {
 			t.Fatalf("Test failed, expected %v, got nil", err)
 		}
 	})
-
-	conn.Close()
 }
 
-var db = config.GetConfig().Database
-
 func getConnection(t *testing.T) (*sql.DB, func()) {
-	psqlInfo := fmt.Sprintf("host=%s port=%s user=%s "+
-		"password=%s dbname=%s sslmode=disable",
-		db.Host, db.Port, db.User, db.Password, db.Name)
+	db := config.GetConfig().Database
 
-	db, err := sql.Open(db.Driver, psqlInfo)
+	dsn := "host=%s port=%s user=%s "+ "password=%s dbname=%s sslmode=disable"
+
+	psqlInfo := fmt.Sprintf(dsn, db.Host, db.Port, db.User, db.Password, db.Name)
+
+	conn, err := sql.Open(db.Driver, psqlInfo)
 
 	if err != nil {
 		panic(err)
 	}
 
-	return db, func() {
-		_, err := db.Exec("delete from sportmonks_country")
+	return conn, func() {
+		_, err := conn.Exec("delete from sportmonks_country")
 		if err != nil {
 			t.Fatalf("Failed to clear database. %s", err.Error())
 		}
 	}
 }
 
-func newCountry(id int) *model.Country {
-	c := model.Country{
+func newCountry(id int) *statistico.Country {
+	c := statistico.Country{
 		ID:        id,
 		Name:      "England",
 		Continent: "Europe",
