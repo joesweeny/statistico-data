@@ -24,3 +24,12 @@ func (m CountryRepository) GetById(id int) (*app.Country, error) {
 	c := args.Get(0).(*app.Country)
 	return c, args.Error(1)
 }
+
+type CountryRequester struct {
+	mock.Mock
+}
+
+func (c CountryRequester) Countries(ch chan<- *app.Country) error {
+	args := c.Called(ch)
+	return args.Error(0)
+}

@@ -1,44 +1,60 @@
 package process
 
 import (
+	"bytes"
+	"encoding/json"
+	"errors"
 	spClient "github.com/statistico/sportmonks-go-client"
+	"github.com/statistico/statistico-data/internal/app"
+	"github.com/statistico/statistico-data/internal/app/mock"
+	"github.com/statistico/statistico-data/internal/app/sportmonks"
+	"github.com/stretchr/testify/assert"
+	mk "github.com/stretchr/testify/mock"
+	"io/ioutil"
+	"log"
+	"net/http"
 	"testing"
 )
 
 func TestProcess(t *testing.T) {
-	//repo := new(stMock.CountryRepository)
-	//
-	//server := stMock.HttpClient(func(req *http.Request) *http.Response {
-	//	assert.Equal(t, req.URL.String(), "http://example.com/api/v2.0/countries?api_token=my-key&page=1")
-	//	b, _ := json.Marshal(countryResponse())
-	//	return &http.Response{
-	//		StatusCode: 200,
-	//		Body:       ioutil.NopCloser(bytes.NewBuffer(b)),
-	//	}
-	//})
-	//
-	//client := spClient.Client{
-	//	Client:  server,
-	//	BaseURL: "http://example.com",
-	//	ApiKey:  "my-key",
-	//}
-	//
-	//processor := CountryProcessor{
-	//	repository: repo,
-	//	factory:    sportmonks.CountryFactory{Clock: clockwork.NewFakeClock()},
-	//	client:     &client,
-	//	logger:     log.New(ioutil.Discard, "", 0),
-	//}
-	//
-	//t.Run("inserts new country", func(t *testing.T) {
-	//	done := make(chan bool)
-	//
-	//	repo.On("GetById", 1).Return(&app.Country{}, errors.New("not Found"))
-	//	repo.On("Insert", mock.Anything).Return(nil)
-	//	repo.AssertNotCalled(t, "Update", mock.Anything)
-	//	processor.Process("country", "", done)
-	//})
-	//
+	repo := new(mock.CountryRepository)
+	server := mock.HttpClient(func(req *http.Request) (*http.Response, error) {
+		assert.Equal(t, req.URL.String(), "http://example.com/api/v2.0/countries?api_token=my-key&page=1")
+		b, _ := json.Marshal(countryResponse())
+
+		return &http.Response{
+			StatusCode: 200,
+			Body:       ioutil.NopCloser(bytes.NewBuffer(b)),
+		}, nil
+	})
+
+	client := spClient.Client{
+		Client:  server,
+		BaseURL: "http://example.com",
+		ApiKey:  "my-key",
+	}
+
+	requester := sportmonks.NewCountryRequester(&client)
+
+	processor := CountryProcessor{
+		repository: repo,
+		requester:  requester,
+		logger:     log.New(ioutil.Discard, "", 0),
+	}
+
+	t.Run("inserts new country", func(t *testing.T) {
+		done := make(chan bool)
+
+		//a := assert.New(t)
+
+		repo.On("GetById", 180).Return(&app.Country{}, errors.New("not Found"))
+		repo.On("Insert", mk.AnythingOfType("app.Country")).Return(nil)
+		repo.AssertCalled(t, "GetById", 180)
+		repo.AssertCalled(t, "Insert", mk.AnythingOfType("app.Country"))
+		repo.AssertNotCalled(t, "Update", mk.AnythingOfType("app.Country"))
+		processor.Process("country", "", done)
+	})
+
 	//t.Run("updates existing country", func(t *testing.T) {
 	//	done := make(chan bool)
 	//
@@ -51,7 +67,7 @@ func TestProcess(t *testing.T) {
 	//})
 }
 
-func countryResponse() spClient.CountriesResponse {
+func countryResponse() *spClient.CountriesResponse {
 	c := clientCountry()
 
 	m := spClient.Meta{}
@@ -62,16 +78,16 @@ func countryResponse() spClient.CountriesResponse {
 	m.Pagination.TotalPages = 1
 
 	res := spClient.CountriesResponse{}
-	res.Data = append(res.Data, c)
+	res.Data = append(res.Data, *c)
 	res.Meta = m
 
-	return res
+	return &res
 }
 
-func clientCountry() spClient.Country {
-	return spClient.Country{
-		ID:   1,
-		Name: "Brazil",
+func clientCountry() *spClient.Country {
+	country := spClient.Country{
+		ID:   180,
+		Name: "England",
 		Extra: struct {
 			Continent   string      `json:"continent"`
 			SubRegion   string      `json:"sub_region"`
@@ -81,11 +97,25 @@ func clientCountry() spClient.Country {
 			Longitude   string      `json:"longitude"`
 			Latitude    string      `json:"latitude"`
 		}{
-			Continent:   "South America",
-			SubRegion:   "South America",
-			WorldRegion: "South America",
-			Fifa:        "BRA",
-			ISO:         "BRA",
+			Continent:   "Europe",
+			SubRegion:   "Western Europe",
+			WorldRegion: "Europe",
+			Fifa:        "ENG",
+			ISO:         "ENG",
 		},
 	}
+
+	return &country
+}
+
+
+func newCountry(id int) *app.Country {
+	c := app.Country{
+		ID:        id,
+		Name:      "England",
+		Continent: "Europe",
+		ISO:       "ENG",
+	}
+
+	return &c
 }
