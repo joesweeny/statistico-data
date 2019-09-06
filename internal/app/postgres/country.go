@@ -3,6 +3,7 @@ package postgres
 import (
 	"database/sql"
 	"fmt"
+	"github.com/jonboulle/clockwork"
 	_ "github.com/lib/pq"
 	"github.com/pkg/errors"
 	"github.com/statistico/statistico-data/internal/app"
@@ -11,6 +12,7 @@ import (
 
 type CountryRepository struct {
 	connection *sql.DB
+	clock clockwork.Clock
 }
 
 // Insert a new domain Country struct to database, errors that occur while performing the
@@ -26,8 +28,8 @@ func (p *CountryRepository) Insert(c *app.Country) error {
 		c.Name,
 		c.Continent,
 		c.ISO,
-		c.CreatedAt.Unix(),
-		c.UpdatedAt.Unix(),
+		p.clock.Now().Unix(),
+		p.clock.Now().Unix(),
 	)
 
 	return err
@@ -53,7 +55,7 @@ func (p *CountryRepository) Update(c *app.Country) error {
 		c.Name,
 		c.Continent,
 		c.ISO,
-		c.UpdatedAt.Unix(),
+		p.clock.Now().Unix(),
 	)
 
 	return err
@@ -84,6 +86,6 @@ func rowToCountry(r *sql.Row) (*app.Country, error) {
 	return &c, nil
 }
 
-func NewCountryRepository(connection *sql.DB) *CountryRepository {
-	return &CountryRepository{connection: connection}
+func NewCountryRepository(connection *sql.DB, clock clockwork.Clock) *CountryRepository {
+	return &CountryRepository{connection: connection, clock: clock}
 }

@@ -1,14 +1,12 @@
 package sportmonks
 
 import (
-	"github.com/jonboulle/clockwork"
 	"github.com/statistico/sportmonks-go-client"
 	"github.com/statistico/statistico-data/internal/app"
 )
 
 type CountryRequester struct {
 	client *sportmonks.Client
-	clock clockwork.Clock
 }
 
 func (c CountryRequester) Countries(ch chan<- *app.Country) error {
@@ -58,9 +56,6 @@ func (c CountryRequester) hydrateCountry(s *sportmonks.Country) *app.Country {
 	}
 }
 
-func NewCountryRequester(client *sportmonks.Client, clock clockwork.Clock) *CountryRequester {
-	return &CountryRequester{
-		client: client,
-		clock:  clock,
-	}
+func NewCountryRequester(client *sportmonks.Client) *CountryRequester {
+	return &CountryRequester{client: client}
 }

@@ -5,5 +5,5 @@ import (
 )
 
 func (c Container) CountryRepository() *postgres.CountryRepository {
-	return postgres.NewCountryRepository(c.Database)
+	return postgres.NewCountryRepository(c.Database, c.Clock)
 }

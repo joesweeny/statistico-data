@@ -3,7 +3,6 @@ package sportmonks
 import (
 	"bytes"
 	"encoding/json"
-	"github.com/jonboulle/clockwork"
 	"github.com/statistico/sportmonks-go-client"
 	"github.com/statistico/statistico-data/internal/app"
 	"github.com/statistico/statistico-data/internal/app/mock"
@@ -11,13 +10,9 @@ import (
 	"io/ioutil"
 	"net/http"
 	"testing"
-	"time"
 )
 
 func TestCountries(t *testing.T) {
-	now := time.Date(2019, 01, 14, 11, 25, 00, 00, time.UTC)
-	clock := clockwork.NewFakeClockAt(now)
-
 	t.Run("parses response into Country struct and add pushes into channel", func (t *testing.T) {
 		server := mock.HttpClient(func(req *http.Request) (*http.Response, error) {
 			assert.Equal(t, req.URL.String(), "http://example.com/api/v2.0/countries?api_token=my-key&page=1")
@@ -35,10 +30,7 @@ func TestCountries(t *testing.T) {
 			ApiKey:  "my-key",
 		}
 
-		service := CountryRequester{
-			client: &client,
-			clock: clock,
-		}
+		service := CountryRequester{client: &client}
 
 		countries := make(chan *app.Country, 2)
 

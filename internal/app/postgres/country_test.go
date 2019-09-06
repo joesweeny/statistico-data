@@ -3,6 +3,7 @@ package postgres
 import (
 	"database/sql"
 	"fmt"
+	"github.com/jonboulle/clockwork"
 	"github.com/statistico/statistico-data/internal/app"
 	"github.com/statistico/statistico-data/internal/config"
 	"github.com/stretchr/testify/assert"
@@ -10,9 +11,15 @@ import (
 	"time"
 )
 
+var (
+	now = time.Date(2019, 01, 14, 11, 25, 00, 00, time.UTC)
+	clock = clockwork.NewFakeClockAt(now)
+)
+
+
 func TestInsert(t *testing.T) {
 	conn, cleanUp := getConnection(t)
-	repo := CountryRepository{connection: conn}
+	repo := CountryRepository{connection: conn, clock: clock}
 
 	t.Run("increases table count", func(t *testing.T) {
 		t.Helper()
@@ -54,7 +61,7 @@ func TestInsert(t *testing.T) {
 
 func TestUpdate(t *testing.T) {
 	conn, cleanUp := getConnection(t)
-	repo := CountryRepository{conn}
+	repo := CountryRepository{connection: conn, clock: clock}
 
 	t.Run("modifies existing record", func(t *testing.T) {
 		t.Helper()
@@ -99,7 +106,7 @@ func TestUpdate(t *testing.T) {
 
 func TestGetById(t *testing.T) {
 	conn, cleanUp := getConnection(t)
-	repo := CountryRepository{conn}
+	repo := CountryRepository{connection: conn, clock: clock}
 
 	t.Run("country can be retrieved by ID", func(t *testing.T) {
 		t.Helper()
@@ -123,8 +130,8 @@ func TestGetById(t *testing.T) {
 		a.Equal("England", r.Name)
 		a.Equal("Europe", r.Continent)
 		a.Equal("ENG", r.ISO)
-		a.Equal("2019-01-08 16:33:20 +0000 UTC", r.CreatedAt.String())
-		a.Equal("2019-01-08 16:33:20 +0000 UTC", r.UpdatedAt.String())
+		a.Equal("2019-01-14 11:25:00 +0000 UTC", r.CreatedAt.String())
+		a.Equal("2019-01-14 11:25:00 +0000 UTC", r.UpdatedAt.String())
 	})
 
 	t.Run("returns error if country does not exist", func(t *testing.T) {
@@ -164,8 +171,6 @@ func newCountry(id int) *app.Country {
 		Name:      "England",
 		Continent: "Europe",
 		ISO:       "ENG",
-		CreatedAt: time.Unix(1546965200, 0),
-		UpdatedAt: time.Unix(1546965200, 0),
 	}
 
 	return &c
