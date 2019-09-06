@@ -3,8 +3,8 @@ package postgres
 import (
 	"database/sql"
 	"fmt"
-	"github.com/statistico/statistico-data/internal/config"
 	"github.com/statistico/statistico-data/internal/statistico/mock"
+	"github.com/statistico/statistico-data/internal/config"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )

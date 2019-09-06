@@ -1,8 +1,8 @@
 package container
 
 import (
+	"github.com/statistico/statistico-data/internal/app/process"
 	"github.com/statistico/statistico-data/internal/competition"
-	"github.com/statistico/statistico-data/internal/country"
 	"github.com/statistico/statistico-data/internal/event"
 	"github.com/statistico/statistico-data/internal/fixture"
 	"github.com/statistico/statistico-data/internal/player"
@@ -10,8 +10,8 @@ import (
 	"github.com/statistico/statistico-data/internal/round"
 	"github.com/statistico/statistico-data/internal/season"
 	"github.com/statistico/statistico-data/internal/squad"
-	"github.com/statistico/statistico-data/internal/stats/team"
 	"github.com/statistico/statistico-data/internal/stats/player"
+	"github.com/statistico/statistico-data/internal/stats/team"
 	"github.com/statistico/statistico-data/internal/team"
 	"github.com/statistico/statistico-data/internal/venue"
 )
@@ -29,13 +29,12 @@ func (c Container) CompetitionProcessor() *competition.Processor {
 	}
 }
 
-func (c Container) CountryProcessor() *country.Processor {
-	return &country.Processor{
-		Repository: &country.PostgresCountryRepository{Connection: c.Database},
-		Factory:    country.Factory{Clock: clock()},
-		Client:     c.SportMonksClient,
-		Logger:     logger(),
-	}
+func (c Container) CountryProcessor() *process.CountryProcessor {
+	return process.NewCountryProcessor(
+		c.CountryRepository(),
+		c.CountryRequester(),
+		c.Logger,
+	)
 }
 
 func (c Container) EventProcessor() event.Processor {

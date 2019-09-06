@@ -5,22 +5,22 @@ import (
 	"fmt"
 	_ "github.com/lib/pq"
 	"github.com/pkg/errors"
-	"github.com/statistico/statistico-data/internal/statistico"
+	"github.com/statistico/statistico-data/internal/app"
 	"time"
 )
 
 type CountryRepository struct {
-	Connection *sql.DB
+	connection *sql.DB
 }
 
-// Insert a new domain Country struct to database
-// Errors that occur while performing the operation are returned.
-func (p *CountryRepository) Insert(c *statistico.Country) error {
+// Insert a new domain Country struct to database, errors that occur while performing the
+// operation are returned.
+func (p *CountryRepository) Insert(c *app.Country) error {
 	query := `
 	INSERT INTO sportmonks_country (id, name, continent, iso, created_at, updated_at)
 	VALUES ($1, $2, $3, $4, $5, $6)`
 
-	_, err := p.Connection.Exec(
+	_, err := p.connection.Exec(
 		query,
 		c.ID,
 		c.Name,
@@ -33,9 +33,9 @@ func (p *CountryRepository) Insert(c *statistico.Country) error {
 	return err
 }
 
-// Update an existing domain Country struct to database
-// Errors that occur while performing the operation are returned.
-func (p *CountryRepository) Update(c *statistico.Country) error {
+// Update an existing domain Country struct to database, errors that occur while performing the
+// operation are returned.
+func (p *CountryRepository) Update(c *app.Country) error {
 	_, err := p.GetById(c.ID)
 
 	if err != nil {
@@ -47,7 +47,7 @@ func (p *CountryRepository) Update(c *statistico.Country) error {
 	set name = $2, continent = $3, iso = $4, updated_at = $5 
 	where id = $1`
 
-	_, err = p.Connection.Exec(
+	_, err = p.connection.Exec(
 		query,
 		c.ID,
 		c.Name,
@@ -59,20 +59,20 @@ func (p *CountryRepository) Update(c *statistico.Country) error {
 	return err
 }
 
-// Retrieve an existing domain Country struct from database
-// Errors that occur while performing the operation are returned.
-func (p *CountryRepository) GetById(id int) (*statistico.Country, error) {
+// Retrieve an existing domain Country struct from database, errors that occur while performing the
+// operation are returned.
+func (p *CountryRepository) GetById(id int) (*app.Country, error) {
 	query := `SELECT * from sportmonks_country where id = $1`
-	row := p.Connection.QueryRow(query, id)
+	row := p.connection.QueryRow(query, id)
 
 	return rowToCountry(row)
 }
 
-func rowToCountry(r *sql.Row) (*statistico.Country, error) {
+func rowToCountry(r *sql.Row) (*app.Country, error) {
 	var created int64
 	var updated int64
 
-	c := statistico.Country{}
+	c := app.Country{}
 
 	if err := r.Scan(&c.ID, &c.Name, &c.Continent, &c.ISO, &created, &updated); err != nil {
 		return &c, errors.New(fmt.Sprintf("Country with ID %d does not exist", c.ID))
@@ -82,4 +82,8 @@ func rowToCountry(r *sql.Row) (*statistico.Country, error) {
 	c.UpdatedAt = time.Unix(updated, 0)
 
 	return &c, nil
+}
+
+func NewCountryRepository(connection *sql.DB) *CountryRepository {
+	return &CountryRepository{connection: connection}
 }

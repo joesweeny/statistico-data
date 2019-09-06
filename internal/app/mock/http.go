@@ -1,6 +1,8 @@
 package mock
 
-import "net/http"
+import (
+	"net/http"
+)
 
 func HttpClient(fn roundTripFunc) *http.Client {
 	return &http.Client{
@@ -8,8 +10,8 @@ func HttpClient(fn roundTripFunc) *http.Client {
 	}
 }
 
-type roundTripFunc func(req *http.Request) *http.Response
+type roundTripFunc func(req *http.Request) (*http.Response, error)
 
 func (r roundTripFunc) RoundTrip(req *http.Request) (*http.Response, error) {
-	return r(req), nil
+	return r(req)
 }

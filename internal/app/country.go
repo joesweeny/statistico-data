@@ -1,4 +1,4 @@
-package statistico
+package app
 
 import (
 	"time"
@@ -21,8 +21,9 @@ type CountryRepository interface {
 	GetById(id int) (*Country, error)
 }
 
-// CountryDataService provides an interface allowing this application to retrieve data from an external
-// data provider and filtering through the channel provided as the only argument
-type CountryDataService interface {
-	Countries(ch chan<- *Country)
+// CountryRequester provides an interface allowing this application to request data from an external
+// data provider and filtering through the channel provided as the only argument. The requester implementation
+// is responsible for closing the channel once successful execution is complete
+type CountryRequester interface {
+	Countries(ch chan<- *Country) error
 }
