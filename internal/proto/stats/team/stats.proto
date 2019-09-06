@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option go_package = "github.com/statistico/app-data/internal/proto/stats/team";
+option go_package = "github.com/statistico/statistico-data/internal/proto/stats/team";
 
 package team_stats;
 
