@@ -3,22 +3,23 @@ package postgres
 import (
 	"database/sql"
 	"fmt"
-	"github.com/statistico/statistico-data/internal/statistico/mock"
+	"github.com/statistico/statistico-data/internal/app"
 	"github.com/statistico/statistico-data/internal/config"
 	"github.com/stretchr/testify/assert"
 	"testing"
+	"time"
 )
 
 func TestInsert(t *testing.T) {
 	conn, cleanUp := getConnection(t)
-	repo := CountryRepository{Connection: conn}
+	repo := CountryRepository{connection: conn}
 
 	t.Run("increases table count", func(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
 
 		for i := 1; i < 4; i++ {
-			c := mock.Country(i)
+			c := newCountry(i)
 
 			if err := repo.Insert(c); err != nil {
 				t.Errorf("Error when inserting record into the database: %s", err.Error())
@@ -39,7 +40,7 @@ func TestInsert(t *testing.T) {
 	t.Run("returns error when ID primary key violates unique constraint", func(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
-		c := mock.Country(10)
+		c := newCountry(10)
 
 		if err := repo.Insert(c); err != nil {
 			t.Errorf("Test failed, expected nil, got %s", err)
@@ -58,7 +59,7 @@ func TestUpdate(t *testing.T) {
 	t.Run("modifies existing record", func(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
-		c := mock.Country(100)
+		c := newCountry(100)
 
 		if err := repo.Insert(c); err != nil {
 			t.Errorf("Error when inserting record into the database: %s", err.Error())
@@ -86,7 +87,7 @@ func TestUpdate(t *testing.T) {
 	t.Run("returns error if record does not exist", func(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
-		c := mock.Country(146)
+		c := newCountry(146)
 
 		err := repo.Update(c)
 
@@ -104,7 +105,7 @@ func TestGetById(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
 
-		c := mock.Country(62)
+		c := newCountry(62)
 
 		if err := repo.Insert(c); err != nil {
 			t.Fatalf("Error when inserting record into the database: %s", err.Error())
@@ -155,4 +156,17 @@ func getConnection(t *testing.T) (*sql.DB, func()) {
 			t.Fatalf("Failed to clear database. %s", err.Error())
 		}
 	}
+}
+
+func newCountry(id int) *app.Country {
+	c := app.Country{
+		ID:        id,
+		Name:      "England",
+		Continent: "Europe",
+		ISO:       "ENG",
+		CreatedAt: time.Unix(1546965200, 0),
+		UpdatedAt: time.Unix(1546965200, 0),
+	}
+
+	return &c
 }
