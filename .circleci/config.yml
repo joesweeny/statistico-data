@@ -16,7 +16,7 @@ jobs:
       - run:
           name: Build Release Image
           command: |
-            docker-compose -f docker-compose.dev.yml up -d --build
+            docker-compose -f docker-compose.build.yml up -d --build
 
       - run:
           name: Test Release Image
