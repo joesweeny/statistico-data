@@ -13,6 +13,8 @@ services:
     build:
       dockerfile: ./docker/console/Dockerfile
       context: .
+    env_file:
+      - .env
     environment:
       DB_DRIVER: postgres
       DB_HOST: postgres
@@ -20,7 +22,6 @@ services:
       DB_PASSWORD: password
       DB_USER: dev
       DB_PORT: 5432
-      SPORTMONKS_API_KEY: hMNoq0c2fMjipNWEeG7IMmDF9bMNKeVoRi8lJ0qZDhg125U1IormejZKfwua
     tty: true
     links:
       - postgres
@@ -29,6 +30,8 @@ services:
     build:
       dockerfile: ./docker/grpc/Dockerfile
       context: .
+    env_file:
+      - .env
     environment:
       DB_DRIVER: postgres
       DB_HOST: postgres
@@ -36,7 +39,6 @@ services:
       DB_PASSWORD: password
       DB_USER: dev
       DB_PORT: 5432
-      SPORTMONKS_API_KEY: hMNoq0c2fMjipNWEeG7IMmDF9bMNKeVoRi8lJ0qZDhg125U1IormejZKfwua
     ports:
       - "50051:50051"
     tty: true
