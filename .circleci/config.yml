@@ -16,12 +16,12 @@ jobs:
       - run:
           name: Build Release Image
           command: |
-            docker-compose -f docker-compose.dev.yml up -d --build
+            docker-compose -f docker-compose.build.yml up -d --build
 
       - run:
           name: Test Release Image
           command: |
-            docker-compose -f docker-compose.dev.yml run test gotestsum -f short-verbose
+            docker-compose -f docker-compose.build.yml run test gotestsum -f short-verbose
 
       - deploy:
           name: Deploy
