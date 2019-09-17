@@ -25,5 +25,5 @@ type CountryRepository interface {
 // data provider and filtering through the channel provided as the only argument. The requester implementation
 // is responsible for closing the channel once successful execution is complete
 type CountryRequester interface {
-	Countries(ch chan<- *Country) error
+	Countries(ch chan<- *Country)
 }

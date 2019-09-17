@@ -23,14 +23,7 @@ func (p CountryProcessor) Process(command string, option string, done chan bool)
 
 	countries := make(chan *app.Country, 50)
 
-	go func() {
-		err := p.requester.Countries(countries)
-
-		if err != nil {
-			p.logger.Fatalf("Error when processing countries in CountryProcessor '%s'", err.Error())
-		}
-	}()
-
+	go p.requester.Countries(countries)
 	go p.persistCountries(countries, done)
 }
 
@@ -49,20 +42,20 @@ func (p CountryProcessor) persist(c *app.Country) {
 	country, err := p.repository.GetById(c.ID)
 
 	if err != nil {
-		if err := p.repository.Insert(country); err != nil {
+		if err := p.repository.Insert(c); err != nil {
 			log.Printf("Error '%s' occurred when inserting Country struct: %+v\n,", err.Error(), country)
 		}
 
 		return
 	}
 
-	if err := p.repository.Update(country); err != nil {
+	if err := p.repository.Update(c); err != nil {
 		log.Printf("Error '%s' occurred when updating Competition struct: %+v\n,", err.Error(), country)
 	}
 
 	return
 }
 
-func NewCountryProcessor(r app.CountryRepository, s app.CountryRequester, l *log.Logger) *CountryProcessor {
-	return &CountryProcessor{repository: r, requester: s, logger: l}
+func NewCountryProcessor(r app.CountryRepository, s app.CountryRequester, log *log.Logger) *CountryProcessor {
+	return &CountryProcessor{repository: r, requester: s, logger: log}
 }

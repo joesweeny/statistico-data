@@ -3,51 +3,41 @@ package sportmonks
 import (
 	"github.com/statistico/sportmonks-go-client"
 	"github.com/statistico/statistico-data/internal/app"
+	"log"
 )
 
 type CountryRequester struct {
 	client *sportmonks.Client
+	logger     *log.Logger
 }
 
-func (c CountryRequester) Countries(ch chan<- *app.Country) error {
-	res, err := c.callClient(1, ch)
+func (c CountryRequester) Countries(ch chan<- *app.Country) {
+	res, err := c.client.Countries(1, []string{}, 5)
 
 	if err != nil {
-		return err
+		c.logger.Fatalf("Error when calling client '%s", err.Error())
 	}
 
-	total := res.Meta.Pagination.Total
-
-	if total > 1 {
-		for i := 2; i <= total; i++ {
-			_, err := c.callClient(i, ch)
-
-			if err != nil {
-				return err
-			}
-		}
+	for i := 1; i <= res.Meta.Pagination.TotalPages; i++ {
+		c.callClient(i, ch)
 	}
 
 	close(ch)
-
-	return nil
 }
 
-func (c CountryRequester) callClient(page int, ch chan<- *app.Country) (*sportmonks.CountriesResponse, error) {
+func (c CountryRequester) callClient(page int, ch chan<- *app.Country) {
 	res, err := c.client.Countries(page, []string{}, 5)
 
 	if err != nil {
-		return &sportmonks.CountriesResponse{}, err
+		c.logger.Fatalf("Error when calling client '%s", err.Error())
 	}
 
 	for _, country := range res.Data {
-		ch <- c.hydrateCountry(&country)
+		ch <- transform(&country)
 	}
-
-	return res, nil
 }
 
-func (c CountryRequester) hydrateCountry(s *sportmonks.Country) *app.Country {
+func transform(s *sportmonks.Country) *app.Country {
 	return &app.Country{
 		ID:        s.ID,
 		Name:      s.Name,
@@ -56,6 +46,6 @@ func (c CountryRequester) hydrateCountry(s *sportmonks.Country) *app.Country {
 	}
 }
 
-func NewCountryRequester(client *sportmonks.Client) *CountryRequester {
-	return &CountryRequester{client: client}
+func NewCountryRequester(client *sportmonks.Client, log *log.Logger) *CountryRequester {
+	return &CountryRequester{client: client, logger: log}
 }
