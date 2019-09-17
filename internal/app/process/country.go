@@ -21,10 +21,9 @@ func (p CountryProcessor) Process(command string, option string, done chan bool)
 		return
 	}
 
-	countries := make(chan *app.Country, 50)
+	ch := p.requester.Countries()
 
-	go p.requester.Countries(countries)
-	go p.persistCountries(countries, done)
+	go p.persistCountries(ch, done)
 }
 
 // Loop through provided channel and persist Country struct(s) to database, once the channel

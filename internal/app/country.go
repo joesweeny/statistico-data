@@ -22,8 +22,8 @@ type CountryRepository interface {
 }
 
 // CountryRequester provides an interface allowing this application to request data from an external
-// data provider and filtering through the channel provided as the only argument. The requester implementation
-// is responsible for closing the channel once successful execution is complete
+// data provider. The requester implementation is responsible for creating the channel, filtering struct data into
+// the channel before closing the channel once successful execution is complete
 type CountryRequester interface {
-	Countries(ch chan<- *Country)
+	Countries() <-chan *Country
 }

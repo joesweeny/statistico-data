@@ -29,7 +29,7 @@ type CountryRequester struct {
 	mock.Mock
 }
 
-func (c CountryRequester) Countries(ch chan<- *app.Country) error {
-	args := c.Called(ch)
-	return args.Error(0)
+func (c CountryRequester) Countries() <-chan *app.Country {
+	args := c.Called()
+	return args.Get(0).(chan *app.Country)
 }
