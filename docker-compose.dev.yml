@@ -1,85 +1,11 @@
 version: "3.3"
 services:
-  postgres:
-    image: postgres
-    environment:
-      POSTGRES_USER: dev
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: statshub
-    ports:
-      - 5432:5432
+# Extends docker-compose.build.yml
 
   console:
-    build:
-      dockerfile: ./docker/console/Dockerfile
-      context: .
-    environment:
-      DB_DRIVER: postgres
-      DB_HOST: postgres
-      DB_NAME: statshub
-      DB_PASSWORD: password
-      DB_USER: dev
-      DB_PORT: 5432
-      SPORTMONKS_API_KEY: hMNoq0c2fMjipNWEeG7IMmDF9bMNKeVoRi8lJ0qZDhg125U1IormejZKfwua
-    tty: true
-    links:
-      - postgres
+    env_file:
+      - .env
 
   grpc:
-    build:
-      dockerfile: ./docker/grpc/Dockerfile
-      context: .
-    environment:
-      DB_DRIVER: postgres
-      DB_HOST: postgres
-      DB_NAME: statshub
-      DB_PASSWORD: password
-      DB_USER: dev
-      DB_PORT: 5432
-      SPORTMONKS_API_KEY: hMNoq0c2fMjipNWEeG7IMmDF9bMNKeVoRi8lJ0qZDhg125U1IormejZKfwua
-    ports:
-      - "50051:50051"
-    tty: true
-    links:
-      - postgres
-
-  cron:
-    build:
-      dockerfile: ./docker/cron/Dockerfile
-      context: .
-    tty: true
-    links:
-      - postgres
-
-  migrate:
-    build:
-      dockerfile: ./docker/migrate/Dockerfile
-      context: .
-    environment:
-      DB_HOST: postgres
-      DB_USER: dev
-      DB_PASSWORD: password
-      DB_NAME: statshub
-    links:
-      - postgres
-    depends_on:
-      - postgres
-    command: ["./bin/migrate"]
-
-  test:
-    build:
-      dockerfile: ./docker/test/Dockerfile
-      context: .
-    volumes:
-      - .:/opt
-    environment:
-      DB_DRIVER: postgres
-      DB_HOST: postgres
-      DB_PASSWORD: password
-      DB_NAME: statshub
-      DB_USER: dev
-      DB_PORT: 5432
-    links:
-      - postgres
-    depends_on:
-      - postgres
+    env_file:
+      - .env
