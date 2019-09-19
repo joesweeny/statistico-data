@@ -8,7 +8,7 @@ import (
 
 type CountryRequester struct {
 	client *sportmonks.Client
-	logger     *logrus.Logger
+	logger *logrus.Logger
 }
 
 func (c CountryRequester) Countries() <-chan *app.Country {

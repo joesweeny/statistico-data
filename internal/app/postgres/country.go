@@ -12,7 +12,7 @@ import (
 
 type CountryRepository struct {
 	connection *sql.DB
-	clock clockwork.Clock
+	clock      clockwork.Clock
 }
 
 // Insert a new domain Country struct to database, errors that occur while performing the

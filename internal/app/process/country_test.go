@@ -165,7 +165,7 @@ func newCountry(id int, name string) *app.Country {
 func countryChannel(countries []*app.Country) chan *app.Country {
 	ch := make(chan *app.Country, len(countries))
 
-	for _, c:= range countries {
+	for _, c := range countries {
 		ch <- c
 	}
 

@@ -14,7 +14,7 @@ import (
 )
 
 func TestCountries(t *testing.T) {
-	t.Run("countries returns channel", func (t *testing.T) {
+	t.Run("countries returns channel", func(t *testing.T) {
 		server := mock.HttpClient(func(req *http.Request) (*http.Response, error) {
 			assert.Equal(t, req.URL.String(), "http://example.com/api/v2.0/countries?api_token=my-key&page=1")
 			b, _ := json.Marshal(countryResponse())
@@ -37,8 +37,8 @@ func TestCountries(t *testing.T) {
 
 		ch := requester.Countries()
 
-		eng := <- ch
-		ger := <- ch
+		eng := <-ch
+		ger := <-ch
 
 		a := assert.New(t)
 

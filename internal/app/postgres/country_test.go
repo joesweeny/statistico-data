@@ -12,10 +12,9 @@ import (
 )
 
 var (
-	now = time.Date(2019, 01, 14, 11, 25, 00, 00, time.UTC)
+	now   = time.Date(2019, 01, 14, 11, 25, 00, 00, time.UTC)
 	clock = clockwork.NewFakeClockAt(now)
 )
-
 
 func TestInsert(t *testing.T) {
 	conn, cleanUp := getConnection(t)
@@ -147,7 +146,7 @@ func TestGetById(t *testing.T) {
 func getConnection(t *testing.T) (*sql.DB, func()) {
 	db := config.GetConfig().Database
 
-	dsn := "host=%s port=%s user=%s "+ "password=%s dbname=%s sslmode=disable"
+	dsn := "host=%s port=%s user=%s " + "password=%s dbname=%s sslmode=disable"
 
 	psqlInfo := fmt.Sprintf(dsn, db.Host, db.Port, db.User, db.Password, db.Name)
 
