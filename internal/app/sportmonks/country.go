@@ -15,10 +15,10 @@ func (c CountryRequester) Countries() <-chan *app.Country {
 	res, err := c.client.Countries(1, []string{}, 5)
 
 	if err != nil {
-		c.logger.Fatalf("Error when calling client '%s when make country request", err.Error())
+		c.logger.Fatalf("Error when calling client '%s when making country request", err.Error())
 	}
 
-	ch := make(chan *app.Country, 50)
+	ch := make(chan *app.Country, res.Meta.Pagination.Total)
 
 	go c.parseCountries(res.Meta.Pagination.TotalPages, ch)
 
@@ -37,7 +37,7 @@ func (c CountryRequester) callClient(page int, ch chan<- *app.Country) {
 	res, err := c.client.Countries(page, []string{}, 5)
 
 	if err != nil {
-		c.logger.Fatalf("Error when calling client '%s when make country request", err.Error())
+		c.logger.Fatalf("Error when calling client '%s when making country request", err.Error())
 	}
 
 	for _, country := range res.Data {

@@ -1,19 +1,20 @@
-package sportmonks
+package sportmonks_test
 
 import (
 	"bytes"
 	"encoding/json"
-	"github.com/statistico/sportmonks-go-client"
-	"github.com/statistico/statistico-data/internal/app"
+	spClient "github.com/statistico/sportmonks-go-client"
 	"github.com/statistico/statistico-data/internal/app/mock"
+	"github.com/statistico/statistico-data/internal/app/sportmonks"
 	"github.com/stretchr/testify/assert"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"testing"
 )
 
 func TestCountries(t *testing.T) {
-	t.Run("parses response into Country struct and add pushes into channel", func (t *testing.T) {
+	t.Run("countries returns channel", func (t *testing.T) {
 		server := mock.HttpClient(func(req *http.Request) (*http.Response, error) {
 			assert.Equal(t, req.URL.String(), "http://example.com/api/v2.0/countries?api_token=my-key&page=1")
 			b, _ := json.Marshal(countryResponse())
@@ -24,54 +25,54 @@ func TestCountries(t *testing.T) {
 			}, nil
 		})
 
-		client := sportmonks.Client{
+		client := spClient.Client{
 			Client:  server,
 			BaseURL: "http://example.com",
 			ApiKey:  "my-key",
 		}
 
-		service := CountryRequester{client: &client}
+		requester := sportmonks.NewCountryRequester(&client, &log.Logger{})
 
-		countries := make(chan *app.Country, 2)
+		ch := requester.Countries()
 
-		err := service.Countries(countries)
-
-		if err != nil {
-			t.Fatalf("Test failed, expected nil, got %s", err.Error())
-		}
+		eng := <- ch
+		ger := <- ch
 
 		a := assert.New(t)
 
-		for c := range countries {
-			a.Equal(180, c.ID)
-			a.Equal("England", c.Name)
-			a.Equal("Europe", c.Continent)
-			a.Equal("ENG", c.ISO)
-		}
+		a.Equal(180, eng.ID)
+		a.Equal("England", eng.Name)
+		a.Equal("Europe", eng.Continent)
+		a.Equal("ENG", eng.ISO)
+		a.Equal(5, ger.ID)
+		a.Equal("Germany", ger.Name)
+		a.Equal("Europe", ger.Continent)
+		a.Equal("ENG", ger.ISO)
 	})
 }
 
-func countryResponse() *sportmonks.CountriesResponse {
-	c := clientCountry()
+func countryResponse() *spClient.CountriesResponse {
+	eng := clientCountry(180, "England")
+	ger := clientCountry(5, "Germany")
 
-	m := sportmonks.Meta{}
-	m.Pagination.Total = 1
+	m := spClient.Meta{}
+	m.Pagination.Total = 2
 	m.Pagination.Count = 1
 	m.Pagination.PerPage = 1
 	m.Pagination.CurrentPage = 1
 	m.Pagination.TotalPages = 1
 
-	res := sportmonks.CountriesResponse{}
-	res.Data = append(res.Data, *c)
+	res := spClient.CountriesResponse{}
+	res.Data = append(res.Data, *eng, *ger)
 	res.Meta = m
 
 	return &res
 }
 
-func clientCountry() *sportmonks.Country {
-	country := sportmonks.Country{
-		ID:   180,
-		Name: "England",
+func clientCountry(id int, name string) *spClient.Country {
+	country := spClient.Country{
+		ID:   id,
+		Name: name,
 		Extra: struct {
 			Continent   string      `json:"continent"`
 			SubRegion   string      `json:"sub_region"`
