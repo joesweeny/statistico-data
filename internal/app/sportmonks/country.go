@@ -1,14 +1,14 @@
 package sportmonks
 
 import (
+	"github.com/sirupsen/logrus"
 	"github.com/statistico/sportmonks-go-client"
 	"github.com/statistico/statistico-data/internal/app"
-	"log"
 )
 
 type CountryRequester struct {
 	client *sportmonks.Client
-	logger     *log.Logger
+	logger     *logrus.Logger
 }
 
 func (c CountryRequester) Countries() <-chan *app.Country {
@@ -16,6 +16,7 @@ func (c CountryRequester) Countries() <-chan *app.Country {
 
 	if err != nil {
 		c.logger.Fatalf("Error when calling client '%s when making country request", err.Error())
+		return nil
 	}
 
 	ch := make(chan *app.Country, res.Meta.Pagination.Total)
@@ -38,6 +39,7 @@ func (c CountryRequester) callClient(page int, ch chan<- *app.Country) {
 
 	if err != nil {
 		c.logger.Fatalf("Error when calling client '%s when making country request", err.Error())
+		return
 	}
 
 	for _, country := range res.Data {
@@ -54,6 +56,6 @@ func transform(s *sportmonks.Country) *app.Country {
 	}
 }
 
-func NewCountryRequester(client *sportmonks.Client, log *log.Logger) *CountryRequester {
+func NewCountryRequester(client *sportmonks.Client, log *logrus.Logger) *CountryRequester {
 	return &CountryRequester{client: client, logger: log}
 }

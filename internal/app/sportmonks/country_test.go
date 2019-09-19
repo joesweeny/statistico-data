@@ -3,12 +3,12 @@ package sportmonks_test
 import (
 	"bytes"
 	"encoding/json"
+	"github.com/sirupsen/logrus/hooks/test"
 	spClient "github.com/statistico/sportmonks-go-client"
 	"github.com/statistico/statistico-data/internal/app/mock"
 	"github.com/statistico/statistico-data/internal/app/sportmonks"
 	"github.com/stretchr/testify/assert"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"testing"
 )
@@ -31,7 +31,9 @@ func TestCountries(t *testing.T) {
 			ApiKey:  "my-key",
 		}
 
-		requester := sportmonks.NewCountryRequester(&client, &log.Logger{})
+		logger, _ := test.NewNullLogger()
+
+		requester := sportmonks.NewCountryRequester(&client, logger)
 
 		ch := requester.Countries()
 

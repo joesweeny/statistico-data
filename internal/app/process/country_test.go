@@ -1,121 +1,175 @@
-package process
+package process_test
 
 import (
-	"bytes"
-	"encoding/json"
 	"errors"
-	spClient "github.com/statistico/sportmonks-go-client"
+	"github.com/sirupsen/logrus"
+	"github.com/sirupsen/logrus/hooks/test"
 	"github.com/statistico/statistico-data/internal/app"
 	"github.com/statistico/statistico-data/internal/app/mock"
-	"github.com/statistico/statistico-data/internal/app/sportmonks"
+	"github.com/statistico/statistico-data/internal/app/process"
 	"github.com/stretchr/testify/assert"
-	mk "github.com/stretchr/testify/mock"
-	"io/ioutil"
-	"log"
-	"net/http"
 	"testing"
 )
 
 func TestProcess(t *testing.T) {
-	repo := new(mock.CountryRepository)
-	server := mock.HttpClient(func(req *http.Request) (*http.Response, error) {
-		assert.Equal(t, req.URL.String(), "http://example.com/api/v2.0/countries?api_token=my-key&page=1")
-		b, _ := json.Marshal(countryResponse())
-
-		return &http.Response{
-			StatusCode: 200,
-			Body:       ioutil.NopCloser(bytes.NewBuffer(b)),
-		}, nil
-	})
-
-	client := spClient.Client{
-		Client:  server,
-		BaseURL: "http://example.com",
-		ApiKey:  "my-key",
-	}
-
-	requester := sportmonks.NewCountryRequester(&client)
-
-	processor := CountryProcessor{
-		repository: repo,
-		requester:  requester,
-		logger:     log.New(ioutil.Discard, "", 0),
-	}
-
 	t.Run("inserts new country", func(t *testing.T) {
+		repo := new(mock.CountryRepository)
+		requester := new(mock.CountryRequester)
+		logger, hook := test.NewNullLogger()
+
+		processor := process.NewCountryProcessor(repo, requester, logger)
+
 		done := make(chan bool)
 
-		//a := assert.New(t)
+		eng := newCountry(180, "England")
+		ger := newCountry(5, "Germany")
+
+		countries := make([]*app.Country, 2)
+		countries[0] = eng
+		countries[1] = ger
+
+		ch := countryChannel(countries)
+
+		requester.On("Countries").Return(ch)
 
 		repo.On("GetById", 180).Return(&app.Country{}, errors.New("not Found"))
-		repo.On("Insert", mk.AnythingOfType("app.Country")).Return(nil)
-		repo.AssertCalled(t, "GetById", 180)
-		repo.AssertCalled(t, "Insert", mk.AnythingOfType("app.Country"))
-		repo.AssertNotCalled(t, "Update", mk.AnythingOfType("app.Country"))
+		repo.On("GetById", 5).Return(&app.Country{}, errors.New("not Found"))
+		repo.On("Insert", eng).Return(nil)
+		repo.On("Insert", ger).Return(nil)
+
 		processor.Process("country", "", done)
+
+		<-done
+
+		repo.AssertExpectations(t)
+		requester.AssertExpectations(t)
+		assert.Nil(t, hook.LastEntry())
 	})
 
-	//t.Run("updates existing country", func(t *testing.T) {
-	//	done := make(chan bool)
-	//
-	//	c := stMock.Country(1)
-	//	repo.On("GetById", 1).Return(c, nil)
-	//	repo.On("Update", &c).Return(nil)
-	//	repo.MethodCalled("Update", &c)
-	//	repo.AssertNotCalled(t, "Insert", mock.Anything)
-	//	processor.Process("country", "", done)
-	//})
+	t.Run("updates existing country", func(t *testing.T) {
+		repo := new(mock.CountryRepository)
+		requester := new(mock.CountryRequester)
+		logger, hook := test.NewNullLogger()
+
+		processor := process.NewCountryProcessor(repo, requester, logger)
+
+		done := make(chan bool)
+
+		eng := newCountry(180, "England")
+		ger := newCountry(5, "Germany")
+
+		countries := make([]*app.Country, 2)
+		countries[0] = eng
+		countries[1] = ger
+
+		ch := countryChannel(countries)
+
+		requester.On("Countries").Return(ch)
+
+		repo.On("GetById", 180).Return(eng, nil)
+		repo.On("GetById", 5).Return(ger, nil)
+		repo.On("Update", &eng).Return(nil)
+		repo.On("Update", &ger).Return(nil)
+
+		processor.Process("country", "", done)
+
+		<-done
+
+		repo.AssertExpectations(t)
+		requester.AssertExpectations(t)
+		assert.Nil(t, hook.LastEntry())
+	})
+
+	t.Run("logs error unable to insert country", func(t *testing.T) {
+		repo := new(mock.CountryRepository)
+		requester := new(mock.CountryRequester)
+		logger, hook := test.NewNullLogger()
+
+		processor := process.NewCountryProcessor(repo, requester, logger)
+
+		done := make(chan bool)
+
+		eng := newCountry(180, "England")
+		ger := newCountry(5, "Germany")
+
+		countries := make([]*app.Country, 2)
+		countries[0] = eng
+		countries[1] = ger
+
+		ch := countryChannel(countries)
+
+		requester.On("Countries").Return(ch)
+
+		repo.On("GetById", 180).Return(&app.Country{}, errors.New("not Found"))
+		repo.On("GetById", 5).Return(&app.Country{}, errors.New("not Found"))
+		repo.On("Insert", eng).Return(errors.New("error occurred"))
+		repo.On("Insert", ger).Return(nil)
+
+		processor.Process("country", "", done)
+
+		<-done
+
+		repo.AssertExpectations(t)
+		requester.AssertExpectations(t)
+		assert.Equal(t, 1, len(hook.Entries))
+		assert.Equal(t, logrus.WarnLevel, hook.LastEntry().Level)
+	})
+
+	t.Run("logs error unable to update country", func(t *testing.T) {
+		repo := new(mock.CountryRepository)
+		requester := new(mock.CountryRequester)
+		logger, hook := test.NewNullLogger()
+
+		processor := process.NewCountryProcessor(repo, requester, logger)
+
+		done := make(chan bool)
+
+		eng := newCountry(180, "England")
+		ger := newCountry(5, "Germany")
+
+		countries := make([]*app.Country, 2)
+		countries[0] = eng
+		countries[1] = ger
+
+		ch := countryChannel(countries)
+
+		requester.On("Countries").Return(ch)
+
+		repo.On("GetById", 180).Return(eng, nil)
+		repo.On("GetById", 5).Return(ger, nil)
+		repo.On("Update", &eng).Return(errors.New("error occurred"))
+		repo.On("Update", &ger).Return(nil)
+
+		processor.Process("country", "", done)
+
+		<-done
+
+		repo.AssertExpectations(t)
+		requester.AssertExpectations(t)
+		assert.Equal(t, 1, len(hook.Entries))
+		assert.Equal(t, logrus.WarnLevel, hook.LastEntry().Level)
+	})
 }
 
-func countryResponse() *spClient.CountriesResponse {
-	c := clientCountry()
-
-	m := spClient.Meta{}
-	m.Pagination.Total = 1
-	m.Pagination.Count = 1
-	m.Pagination.PerPage = 1
-	m.Pagination.CurrentPage = 1
-	m.Pagination.TotalPages = 1
-
-	res := spClient.CountriesResponse{}
-	res.Data = append(res.Data, *c)
-	res.Meta = m
-
-	return &res
-}
-
-func clientCountry() *spClient.Country {
-	country := spClient.Country{
-		ID:   180,
-		Name: "England",
-		Extra: struct {
-			Continent   string      `json:"continent"`
-			SubRegion   string      `json:"sub_region"`
-			WorldRegion string      `json:"world_region"`
-			Fifa        interface{} `json:"fifa,string"`
-			ISO         string      `json:"iso"`
-			Longitude   string      `json:"longitude"`
-			Latitude    string      `json:"latitude"`
-		}{
-			Continent:   "Europe",
-			SubRegion:   "Western Europe",
-			WorldRegion: "Europe",
-			Fifa:        "ENG",
-			ISO:         "ENG",
-		},
-	}
-
-	return &country
-}
-
-
-func newCountry(id int) *app.Country {
+func newCountry(id int, name string) *app.Country {
 	c := app.Country{
 		ID:        id,
-		Name:      "England",
+		Name:      name,
 		Continent: "Europe",
 		ISO:       "ENG",
 	}
 
 	return &c
+}
+
+func countryChannel(countries []*app.Country) chan *app.Country {
+	ch := make(chan *app.Country, len(countries))
+
+	for _, c:= range countries {
+		ch <- c
+	}
+
+	close(ch)
+
+	return ch
 }

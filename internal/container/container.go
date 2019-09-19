@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"github.com/jonboulle/clockwork"
+	"github.com/sirupsen/logrus"
 	"github.com/statistico/sportmonks-go-client"
 	"github.com/statistico/statistico-data/internal/config"
 	"log"
@@ -16,6 +17,7 @@ type Container struct {
 	Config           *config.Config
 	Database         *sql.DB
 	Logger           *log.Logger
+	NewLogger        *logrus.Logger
 	SportMonksClient *sportmonks.Client
 }
 
@@ -27,6 +29,7 @@ func Bootstrap(config *config.Config) *Container {
 	c.Clock = clock()
 	c.Database = databaseConnection(config)
 	c.Logger = logger()
+	c.NewLogger = newLogger()
 	c.SportMonksClient = sportmonksClient(config)
 
 	return &c
@@ -64,10 +67,17 @@ func sportmonksClient(config *config.Config) *sportmonks.Client {
 	return client
 }
 
-func logger() *log.Logger {
-	return log.New(os.Stdout, fmt.Sprintf("%s : Error: ", time.Now().Format(time.RFC3339)), 0)
+func newLogger() *logrus.Logger {
+	logger := logrus.New()
+	logger.SetFormatter(&logrus.JSONFormatter{})
+	logger.SetOutput(os.Stdout)
+	return logger
 }
 
 func clock() clockwork.Clock {
 	return clockwork.NewRealClock()
+}
+
+func logger() *log.Logger {
+	return log.New(os.Stdout, fmt.Sprintf("%s : Error: ", time.Now().Format(time.RFC3339)), 0)
 }

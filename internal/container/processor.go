@@ -33,7 +33,7 @@ func (c Container) CountryProcessor() *process.CountryProcessor {
 	return process.NewCountryProcessor(
 		c.CountryRepository(),
 		c.CountryRequester(),
-		c.Logger,
+		c.NewLogger,
 	)
 }
 

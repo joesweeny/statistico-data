@@ -1,8 +1,8 @@
 package process
 
 import (
+	"github.com/sirupsen/logrus"
 	"github.com/statistico/statistico-data/internal/app"
-	"log"
 )
 
 const country = "country"
@@ -12,13 +12,12 @@ const country = "country"
 type CountryProcessor struct {
 	repository app.CountryRepository
 	requester  app.CountryRequester
-	logger     *log.Logger
+	logger     *logrus.Logger
 }
 
 func (p CountryProcessor) Process(command string, option string, done chan bool) {
 	if command != country {
 		p.logger.Fatalf("Command %s is not supported", command)
-		return
 	}
 
 	ch := p.requester.Countries()
@@ -38,23 +37,23 @@ func (p CountryProcessor) persistCountries(ch <-chan *app.Country, done chan boo
 
 // Persist Country struct to the database, update if record exists, create new if not
 func (p CountryProcessor) persist(c *app.Country) {
-	country, err := p.repository.GetById(c.ID)
+	_, err := p.repository.GetById(c.ID)
 
 	if err != nil {
 		if err := p.repository.Insert(c); err != nil {
-			log.Printf("Error '%s' occurred when inserting Country struct: %+v\n,", err.Error(), country)
+			p.logger.Warningf("Error '%s' occurred when inserting Country struct: %+v\n,", err.Error(), *c)
 		}
 
 		return
 	}
 
 	if err := p.repository.Update(c); err != nil {
-		log.Printf("Error '%s' occurred when updating Competition struct: %+v\n,", err.Error(), country)
+		p.logger.Warningf("Error '%s' occurred when updating Competition struct: %+v\n,", err.Error(), *c)
 	}
 
 	return
 }
 
-func NewCountryProcessor(r app.CountryRepository, s app.CountryRequester, log *log.Logger) *CountryProcessor {
+func NewCountryProcessor(r app.CountryRepository, s app.CountryRequester, log *logrus.Logger) *CountryProcessor {
 	return &CountryProcessor{repository: r, requester: s, logger: log}
 }
