@@ -1,10 +1,11 @@
-package postgres
+package postgres_test
 
 import (
 	"database/sql"
 	"fmt"
 	"github.com/jonboulle/clockwork"
 	"github.com/statistico/statistico-data/internal/app"
+	"github.com/statistico/statistico-data/internal/app/postgres"
 	"github.com/statistico/statistico-data/internal/config"
 	"github.com/stretchr/testify/assert"
 	"testing"
@@ -18,7 +19,7 @@ var (
 
 func TestInsert(t *testing.T) {
 	conn, cleanUp := getConnection(t)
-	repo := CountryRepository{connection: conn, clock: clock}
+	repo := postgres.NewCountryRepository(conn, clock)
 
 	t.Run("increases table count", func(t *testing.T) {
 		t.Helper()
@@ -60,7 +61,7 @@ func TestInsert(t *testing.T) {
 
 func TestUpdate(t *testing.T) {
 	conn, cleanUp := getConnection(t)
-	repo := CountryRepository{connection: conn, clock: clock}
+	repo := postgres.NewCountryRepository(conn, clock)
 
 	t.Run("modifies existing record", func(t *testing.T) {
 		t.Helper()
@@ -105,7 +106,7 @@ func TestUpdate(t *testing.T) {
 
 func TestGetById(t *testing.T) {
 	conn, cleanUp := getConnection(t)
-	repo := CountryRepository{connection: conn, clock: clock}
+	repo := postgres.NewCountryRepository(conn, clock)
 
 	t.Run("country can be retrieved by ID", func(t *testing.T) {
 		t.Helper()
