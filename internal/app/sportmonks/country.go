@@ -1,27 +1,33 @@
 package sportmonks
 
 import (
+	"context"
+	"fmt"
 	"github.com/sirupsen/logrus"
-	"github.com/statistico/sportmonks-go-client"
 	"github.com/statistico/statistico-data/internal/app"
+	spClient "github.com/statistico/statistico-sportmonks-go-client"
 )
 
 type CountryRequester struct {
-	client *sportmonks.Client
+	client *spClient.HTTPClient
 	logger *logrus.Logger
 }
 
 func (c CountryRequester) Countries() <-chan *app.Country {
-	res, err := c.client.Countries(1, []string{}, 5)
+	_, meta, err := c.client.Countries(context.Background(),1, []string{})
+
+	fmt.Println("Hello World")
+	fmt.Printf("Error %s", err)
+	fmt.Printf("Meta %+v", meta)
 
 	if err != nil {
-		c.logger.Fatalf("Error when calling client '%s when making country request", err.Error())
+		c.logger.Fatalf("Error when calling client '%s' when making country request", err.Error())
 		return nil
 	}
 
-	ch := make(chan *app.Country, res.Meta.Pagination.Total)
+	ch := make(chan *app.Country, meta.Pagination.Total)
 
-	go c.parseCountries(res.Meta.Pagination.TotalPages, ch)
+	go c.parseCountries(meta.Pagination.TotalPages, ch)
 
 	return ch
 }
@@ -35,19 +41,21 @@ func (c CountryRequester) parseCountries(pages int, ch chan<- *app.Country) {
 }
 
 func (c CountryRequester) callClient(page int, ch chan<- *app.Country) {
-	res, err := c.client.Countries(page, []string{}, 5)
+	res, _, err := c.client.Countries(context.Background(), page, []string{})
+
+	fmt.Printf("Response %+v", res)
 
 	if err != nil {
-		c.logger.Fatalf("Error when calling client '%s when making country request", err.Error())
+		c.logger.Fatalf("Error when calling client '%s' when making country request", err.Error())
 		return
 	}
 
-	for _, country := range res.Data {
+	for _, country := range res {
 		ch <- transform(&country)
 	}
 }
 
-func transform(s *sportmonks.Country) *app.Country {
+func transform(s *spClient.Country) *app.Country {
 	return &app.Country{
 		ID:        int64(s.ID),
 		Name:      s.Name,
@@ -56,6 +64,6 @@ func transform(s *sportmonks.Country) *app.Country {
 	}
 }
 
-func NewCountryRequester(client *sportmonks.Client, log *logrus.Logger) *CountryRequester {
+func NewCountryRequester(client *spClient.HTTPClient, log *logrus.Logger) *CountryRequester {
 	return &CountryRequester{client: client, logger: log}
 }

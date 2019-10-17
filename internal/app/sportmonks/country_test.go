@@ -2,11 +2,10 @@ package sportmonks_test
 
 import (
 	"bytes"
-	"encoding/json"
 	"github.com/sirupsen/logrus/hooks/test"
-	spClient "github.com/statistico/sportmonks-go-client"
 	"github.com/statistico/statistico-data/internal/app/mock"
 	"github.com/statistico/statistico-data/internal/app/sportmonks"
+	spClient "github.com/statistico/statistico-sportmonks-go-client"
 	"github.com/stretchr/testify/assert"
 	"io/ioutil"
 	"net/http"
@@ -16,19 +15,16 @@ import (
 func TestCountries(t *testing.T) {
 	t.Run("countries returns channel", func(t *testing.T) {
 		server := mock.HttpClient(func(req *http.Request) (*http.Response, error) {
-			assert.Equal(t, req.URL.String(), "http://example.com/api/v2.0/countries?api_token=my-key&page=1")
-			b, _ := json.Marshal(countryResponse())
-
 			return &http.Response{
 				StatusCode: 200,
-				Body:       ioutil.NopCloser(bytes.NewBuffer(b)),
+				Body:       ioutil.NopCloser(bytes.NewBufferString(countriesResponse)),
 			}, nil
 		})
 
-		client := spClient.Client{
-			Client:  server,
-			BaseURL: "http://example.com",
-			ApiKey:  "my-key",
+		client := spClient.HTTPClient{
+			HTTPClient: server,
+			BaseURL:    "http://example.com",
+			Key:        "my-key",
 		}
 
 		logger, _ := test.NewNullLogger()
@@ -49,48 +45,45 @@ func TestCountries(t *testing.T) {
 		a.Equal(int64(5), ger.ID)
 		a.Equal("Germany", ger.Name)
 		a.Equal("Europe", ger.Continent)
-		a.Equal("ENG", ger.ISO)
+		a.Equal("DEU", ger.ISO)
 	})
 }
 
-func countryResponse() *spClient.CountriesResponse {
-	eng := clientCountry(180, "England")
-	ger := clientCountry(5, "Germany")
-
-	m := spClient.Meta{}
-	m.Pagination.Total = 2
-	m.Pagination.Count = 1
-	m.Pagination.PerPage = 1
-	m.Pagination.CurrentPage = 1
-	m.Pagination.TotalPages = 1
-
-	res := spClient.CountriesResponse{}
-	res.Data = append(res.Data, *eng, *ger)
-	res.Meta = m
-
-	return &res
-}
-
-func clientCountry(id int, name string) *spClient.Country {
-	country := spClient.Country{
-		ID:   id,
-		Name: name,
-		Extra: struct {
-			Continent   string      `json:"continent"`
-			SubRegion   string      `json:"sub_region"`
-			WorldRegion string      `json:"world_region"`
-			Fifa        interface{} `json:"fifa,string"`
-			ISO         string      `json:"iso"`
-			Longitude   string      `json:"longitude"`
-			Latitude    string      `json:"latitude"`
-		}{
-			Continent:   "Europe",
-			SubRegion:   "Western Europe",
-			WorldRegion: "Europe",
-			Fifa:        "ENG",
-			ISO:         "ENG",
+var countriesResponse = `{
+	"data": [
+		{
+			"id": 180,
+			"name": "England",
+			"extra": {
+				"continent": "Europe",
+				"sub_region": "Western Europe",
+				"world_region": "Europe",
+				"fifa": "GER",
+				"iso": "ENG",
+				"iso2": "EN"
+			}
 		},
+		{
+			"id": 5,
+			"name": "Germany",
+			"extra": {
+				"continent": "Europe",
+				"sub_region": "Western Europe",
+				"world_region": "Europe",
+				"fifa": "GER",
+				"iso": "DEU",
+				"iso2": "DE"
+			}
+		}
+	],
+	"meta": {
+		"pagination": {
+			"total": 2,
+			"count": 2,
+			"per_page": 100,
+			"current_page": 1,
+			"total_pages": 1,
+			"links": []
+		}
 	}
-
-	return &country
-}
+}`

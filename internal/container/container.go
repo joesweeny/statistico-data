@@ -6,6 +6,7 @@ import (
 	"github.com/jonboulle/clockwork"
 	"github.com/sirupsen/logrus"
 	"github.com/statistico/sportmonks-go-client"
+	spClient "github.com/statistico/statistico-sportmonks-go-client"
 	"github.com/statistico/statistico-data/internal/config"
 	"log"
 	"os"
@@ -19,6 +20,7 @@ type Container struct {
 	Logger           *log.Logger
 	NewLogger        *logrus.Logger
 	SportMonksClient *sportmonks.Client
+	NewSportMonksClient *spClient.HTTPClient
 }
 
 func Bootstrap(config *config.Config) *Container {
@@ -31,6 +33,7 @@ func Bootstrap(config *config.Config) *Container {
 	c.Logger = logger()
 	c.NewLogger = newLogger()
 	c.SportMonksClient = sportmonksClient(config)
+	c.NewSportMonksClient = newSportmonksClient(config)
 
 	return &c
 }
@@ -65,6 +68,12 @@ func sportmonksClient(config *config.Config) *sportmonks.Client {
 	}
 
 	return client
+}
+
+func newSportmonksClient(config *config.Config) *spClient.HTTPClient {
+	s := config.Services.SportsMonks
+
+	return spClient.NewHTTPClient(s.ApiKey)
 }
 
 func newLogger() *logrus.Logger {
