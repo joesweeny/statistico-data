@@ -26,7 +26,7 @@ func TestInsert(t *testing.T) {
 		defer cleanUp()
 
 		for i := 1; i < 4; i++ {
-			c := newCountry(i)
+			c := newCountry(int64(i))
 
 			if err := repo.Insert(c); err != nil {
 				t.Errorf("Error when inserting record into the database: %s", err.Error())
@@ -126,7 +126,7 @@ func TestGetById(t *testing.T) {
 
 		a := assert.New(t)
 
-		a.Equal(62, r.ID)
+		a.Equal(int64(62), r.ID)
 		a.Equal("England", r.Name)
 		a.Equal("Europe", r.Continent)
 		a.Equal("ENG", r.ISO)
@@ -165,7 +165,7 @@ func getConnection(t *testing.T) (*sql.DB, func()) {
 	}
 }
 
-func newCountry(id int) *app.Country {
+func newCountry(id int64) *app.Country {
 	c := app.Country{
 		ID:        id,
 		Name:      "England",

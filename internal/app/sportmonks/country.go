@@ -49,7 +49,7 @@ func (c CountryRequester) callClient(page int, ch chan<- *app.Country) {
 
 func transform(s *sportmonks.Country) *app.Country {
 	return &app.Country{
-		ID:        s.ID,
+		ID:        int64(s.ID),
 		Name:      s.Name,
 		Continent: s.Extra.Continent,
 		ISO:       s.Extra.ISO,

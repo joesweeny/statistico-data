@@ -25,6 +25,7 @@ func (p CountryProcessor) Process(command string, option string, done chan bool)
 	go p.persistCountries(ch, done)
 }
 
+
 // Loop through provided channel and persist Country struct(s) to database, once the channel
 // is empty the channel passed as the second argument is notified
 func (p CountryProcessor) persistCountries(ch <-chan *app.Country, done chan bool) {
