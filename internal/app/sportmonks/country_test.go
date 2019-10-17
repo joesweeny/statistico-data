@@ -83,7 +83,7 @@ var countriesResponse = `{
 			"per_page": 100,
 			"current_page": 1,
 			"total_pages": 1,
-			"links": []
+			"links": {}
 		}
 	}
 }`

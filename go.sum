@@ -36,6 +36,8 @@ github.com/statistico/statistico-sportmonks-go-client v0.0.0-20191017113040-fa3f
 github.com/statistico/statistico-sportmonks-go-client v0.0.0-20191017113040-fa3fac049716/go.mod h1:Cauw+83hBCOj/Ng8HLV9hiXEbfNCjGKpfA6icqwRxsQ=
 github.com/statistico/statistico-sportmonks-go-client v0.0.0-20191017140341-b413d80ddd1f h1:HH92JsIrrvBoaNFJlpF5GFSBZcYpoUX6bNmzUZoHxts=
 github.com/statistico/statistico-sportmonks-go-client v0.0.0-20191017140341-b413d80ddd1f/go.mod h1:Cauw+83hBCOj/Ng8HLV9hiXEbfNCjGKpfA6icqwRxsQ=
+github.com/statistico/statistico-sportmonks-go-client v0.0.0-20191017150232-aa4730007d49 h1:WSRQG8WdR9iy/RMYIPinLeHY8cfi21+ton4Vpk1nR84=
+github.com/statistico/statistico-sportmonks-go-client v0.0.0-20191017150232-aa4730007d49/go.mod h1:Cauw+83hBCOj/Ng8HLV9hiXEbfNCjGKpfA6icqwRxsQ=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/objx v0.1.1 h1:2vfRuCMp5sSVIDSqO8oNnWJq7mPa6KVP3iPIwFBuy8A=
 github.com/stretchr/objx v0.1.1/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
