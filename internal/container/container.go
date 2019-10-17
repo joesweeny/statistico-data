@@ -4,7 +4,9 @@ import (
 	"database/sql"
 	"fmt"
 	"github.com/jonboulle/clockwork"
+	"github.com/sirupsen/logrus"
 	"github.com/statistico/sportmonks-go-client"
+	spClient "github.com/statistico/statistico-sportmonks-go-client"
 	"github.com/statistico/statistico-data/internal/config"
 	"log"
 	"os"
@@ -16,7 +18,9 @@ type Container struct {
 	Config           *config.Config
 	Database         *sql.DB
 	Logger           *log.Logger
+	NewLogger        *logrus.Logger
 	SportMonksClient *sportmonks.Client
+	NewSportMonksClient *spClient.HTTPClient
 }
 
 func Bootstrap(config *config.Config) *Container {
@@ -27,7 +31,9 @@ func Bootstrap(config *config.Config) *Container {
 	c.Clock = clock()
 	c.Database = databaseConnection(config)
 	c.Logger = logger()
+	c.NewLogger = newLogger()
 	c.SportMonksClient = sportmonksClient(config)
+	c.NewSportMonksClient = newSportmonksClient(config)
 
 	return &c
 }
@@ -35,9 +41,10 @@ func Bootstrap(config *config.Config) *Container {
 func databaseConnection(config *config.Config) *sql.DB {
 	db := config.Database
 
-	psqlInfo := fmt.Sprintf("host=%s port=%s user=%s "+
-		"password=%s dbname=%s sslmode=disable",
-		db.Host, db.Port, db.User, db.Password, db.Name)
+	dsn := "host=%s port=%s user=%s "+
+		"password=%s dbname=%s sslmode=disable"
+
+	psqlInfo := fmt.Sprintf(dsn, db.Host, db.Port, db.User, db.Password, db.Name)
 
 	conn, err := sql.Open(db.Driver, psqlInfo)
 
@@ -63,10 +70,23 @@ func sportmonksClient(config *config.Config) *sportmonks.Client {
 	return client
 }
 
-func logger() *log.Logger {
-	return log.New(os.Stdout, fmt.Sprintf("%s : Error: ", time.Now().Format(time.RFC3339)), 0)
+func newSportmonksClient(config *config.Config) *spClient.HTTPClient {
+	s := config.Services.SportsMonks
+
+	return spClient.NewHTTPClient(s.ApiKey)
+}
+
+func newLogger() *logrus.Logger {
+	logger := logrus.New()
+	logger.SetFormatter(&logrus.JSONFormatter{})
+	logger.SetOutput(os.Stdout)
+	return logger
 }
 
 func clock() clockwork.Clock {
 	return clockwork.NewRealClock()
+}
+
+func logger() *log.Logger {
+	return log.New(os.Stdout, fmt.Sprintf("%s : Error: ", time.Now().Format(time.RFC3339)), 0)
 }
