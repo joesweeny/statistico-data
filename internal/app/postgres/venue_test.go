@@ -49,13 +49,11 @@ func TestVenueRepository_Insert(t *testing.T) {
 			t.Fatalf("Test failed, expected %s, got nil", e)
 		}
 	})
-
-	conn.Close()
 }
 
-func TestGetById(t *testing.T) {
-	conn, cleanUp := getConnection(t)
-	repo := PostgresVenueRepository{Connection: conn}
+func TestVenueRepository_GetById(t *testing.T) {
+	conn, cleanUp := test.GetConnection(t)
+	repo := postgres.NewVenueRepository(conn, test.Clock)
 
 	t.Run("venue can be retrieved by ID", func(t *testing.T) {
 		t.Helper()
@@ -64,18 +62,18 @@ func TestGetById(t *testing.T) {
 		v := newVenue(13)
 
 		if err := repo.Insert(v); err != nil {
-			t.Errorf("Error when inserting record into the database: %s", err.Error())
+			t.Fatalf("Error when inserting record into the database: %s", err.Error())
 		}
 
 		r, err := repo.GetById(13)
 
 		if err != nil {
-			t.Errorf("Error when retrieving a record from the database: %s", err.Error())
+			t.Fatalf("Error when retrieving a record from the database: %s", err.Error())
 		}
 
 		a := assert.New(t)
 
-		a.Equal(13, r.ID)
+		a.Equal(int64(13), r.ID)
 		a.Equal("London Stadium", r.Name)
 		a.Equal("Grass", *r.Surface)
 		a.Nil(r.Address)
@@ -89,23 +87,15 @@ func TestGetById(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
 
-		_, err := repo.GetById(99)
-
-		if err == nil {
-			t.Errorf("Test failed, expected %v, got nil", err)
-		}
-
-		if err != ErrNotFound {
-			t.Fatalf("Test failed, expected %v, got %s", ErrNotFound, err)
+		if _, err := repo.GetById(99); err == nil {
+			t.Fatalf("Test failed, expected %v, got nil", err)
 		}
 	})
-
-	conn.Close()
 }
 
-func TestUpdate(t *testing.T) {
-	conn, cleanUp := getConnection(t)
-	repo := PostgresVenueRepository{Connection: conn}
+func TestVenueRepository_Update(t *testing.T) {
+	conn, cleanUp := test.GetConnection(t)
+	repo := postgres.NewVenueRepository(conn, test.Clock)
 
 	t.Run("modifies existing venue", func(t *testing.T) {
 		t.Helper()
@@ -126,13 +116,13 @@ func TestUpdate(t *testing.T) {
 		v.Surface = nil
 
 		if err := repo.Update(v); err != nil {
-			t.Errorf("Error when updating a record in the database: %s", err.Error())
+			t.Fatalf("Error when updating a record in the database: %s", err.Error())
 		}
 
 		r, err := repo.GetById(2)
 
 		if err != nil {
-			t.Errorf("Error when updating a record in the database: %s", err.Error())
+			t.Fatalf("Error when updating a record in the database: %s", err.Error())
 		}
 
 		a := assert.New(t)
@@ -157,13 +147,7 @@ func TestUpdate(t *testing.T) {
 		if err == nil {
 			t.Fatalf("Test failed, expected nil, got %v", err)
 		}
-
-		if err != ErrNotFound {
-			t.Fatalf("Test failed, expected %v, got %v", ErrNotFound, err)
-		}
 	})
-
-	conn.Close()
 }
 
 func newVenue(id int64) *app.Venue {
