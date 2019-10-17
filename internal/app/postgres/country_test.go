@@ -1,25 +1,16 @@
 package postgres_test
 
 import (
-	"database/sql"
-	"fmt"
-	"github.com/jonboulle/clockwork"
 	"github.com/statistico/statistico-data/internal/app"
 	"github.com/statistico/statistico-data/internal/app/postgres"
-	"github.com/statistico/statistico-data/internal/config"
+	"github.com/statistico/statistico-data/internal/app/test"
 	"github.com/stretchr/testify/assert"
 	"testing"
-	"time"
 )
 
-var (
-	now   = time.Date(2019, 01, 14, 11, 25, 00, 00, time.UTC)
-	clock = clockwork.NewFakeClockAt(now)
-)
-
-func TestInsert(t *testing.T) {
-	conn, cleanUp := getConnection(t)
-	repo := postgres.NewCountryRepository(conn, clock)
+func TestCountryRepository_Insert(t *testing.T) {
+	conn, cleanUp := test.GetConnection(t)
+	repo := postgres.NewCountryRepository(conn, test.Clock)
 
 	t.Run("increases table count", func(t *testing.T) {
 		t.Helper()
@@ -59,9 +50,9 @@ func TestInsert(t *testing.T) {
 	})
 }
 
-func TestUpdate(t *testing.T) {
-	conn, cleanUp := getConnection(t)
-	repo := postgres.NewCountryRepository(conn, clock)
+func TestCountryRepository_Update(t *testing.T) {
+	conn, cleanUp := test.GetConnection(t)
+	repo := postgres.NewCountryRepository(conn, test.Clock)
 
 	t.Run("modifies existing record", func(t *testing.T) {
 		t.Helper()
@@ -104,9 +95,9 @@ func TestUpdate(t *testing.T) {
 	})
 }
 
-func TestGetById(t *testing.T) {
-	conn, cleanUp := getConnection(t)
-	repo := postgres.NewCountryRepository(conn, clock)
+func TestCountryRepository_GetById(t *testing.T) {
+	conn, cleanUp := test.GetConnection(t)
+	repo := postgres.NewCountryRepository(conn, test.Clock)
 
 	t.Run("country can be retrieved by ID", func(t *testing.T) {
 		t.Helper()
@@ -142,27 +133,6 @@ func TestGetById(t *testing.T) {
 			t.Fatalf("Test failed, expected %v, got nil", err)
 		}
 	})
-}
-
-func getConnection(t *testing.T) (*sql.DB, func()) {
-	db := config.GetConfig().Database
-
-	dsn := "host=%s port=%s user=%s " + "password=%s dbname=%s sslmode=disable"
-
-	psqlInfo := fmt.Sprintf(dsn, db.Host, db.Port, db.User, db.Password, db.Name)
-
-	conn, err := sql.Open(db.Driver, psqlInfo)
-
-	if err != nil {
-		panic(err)
-	}
-
-	return conn, func() {
-		_, err := conn.Exec("delete from sportmonks_country")
-		if err != nil {
-			t.Fatalf("Failed to clear database. %s", err.Error())
-		}
-	}
 }
 
 func newCountry(id int64) *app.Country {
