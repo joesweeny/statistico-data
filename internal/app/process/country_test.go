@@ -80,7 +80,7 @@ func TestProcess(t *testing.T) {
 		assert.Nil(t, hook.LastEntry())
 	})
 
-	t.Run("logs error unable to insert country", func(t *testing.T) {
+	t.Run("logs error when unable to insert country", func(t *testing.T) {
 		repo := new(mock.CountryRepository)
 		requester := new(mock.CountryRequester)
 		logger, hook := test.NewNullLogger()
@@ -115,7 +115,7 @@ func TestProcess(t *testing.T) {
 		assert.Equal(t, logrus.WarnLevel, hook.LastEntry().Level)
 	})
 
-	t.Run("logs error unable to update country", func(t *testing.T) {
+	t.Run("logs error when unable to update country", func(t *testing.T) {
 		repo := new(mock.CountryRepository)
 		requester := new(mock.CountryRequester)
 		logger, hook := test.NewNullLogger()

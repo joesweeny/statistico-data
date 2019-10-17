@@ -7,7 +7,7 @@ import (
 
 const country = "country"
 
-// CountryProcessor is used to retrieve data from an external data source and to this applications
+// CountryProcessor is used to process data from an external data source to this applications
 // chosen data store
 type CountryProcessor struct {
 	repository app.CountryRepository

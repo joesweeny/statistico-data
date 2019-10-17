@@ -15,8 +15,7 @@ type CountryRepository struct {
 	clock      clockwork.Clock
 }
 
-// Insert a new domain Country struct to database, errors that occur while performing the
-// operation are returned.
+// Insert a new domain Country struct to database.
 func (p *CountryRepository) Insert(c *app.Country) error {
 	query := `
 	INSERT INTO sportmonks_country (id, name, continent, iso, created_at, updated_at)
@@ -35,8 +34,7 @@ func (p *CountryRepository) Insert(c *app.Country) error {
 	return err
 }
 
-// Update an existing domain Country struct to database, errors that occur while performing the
-// operation are returned.
+// Update an existing domain Country struct to database.
 func (p *CountryRepository) Update(c *app.Country) error {
 	_, err := p.GetById(c.ID)
 
@@ -61,8 +59,7 @@ func (p *CountryRepository) Update(c *app.Country) error {
 	return err
 }
 
-// Retrieve an existing domain Country struct from database, errors that occur while performing the
-// operation are returned.
+// Retrieve an existing domain Country struct from database.
 func (p *CountryRepository) GetById(id int64) (*app.Country, error) {
 	query := `SELECT * from sportmonks_country where id = $1`
 	row := p.connection.QueryRow(query, id)
