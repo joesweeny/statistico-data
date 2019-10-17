@@ -15,6 +15,8 @@ type CountryProcessor struct {
 	logger     *logrus.Logger
 }
 
+// Process fetches data from external an external data source using the CountryRequester
+// before persisting to the storage engine using the CountryRepository
 func (p CountryProcessor) Process(command string, option string, done chan bool) {
 	if command != country {
 		p.logger.Fatalf("Command %s is not supported", command)
@@ -25,9 +27,6 @@ func (p CountryProcessor) Process(command string, option string, done chan bool)
 	go p.persistCountries(ch, done)
 }
 
-
-// Loop through provided channel and persist Country struct(s) to database, once the channel
-// is empty the channel passed as the second argument is notified
 func (p CountryProcessor) persistCountries(ch <-chan *app.Country, done chan bool) {
 	for country := range ch {
 		p.persist(country)
@@ -36,7 +35,6 @@ func (p CountryProcessor) persistCountries(ch <-chan *app.Country, done chan boo
 	done <- true
 }
 
-// Persist Country struct to the database, update if record exists, create new if not
 func (p CountryProcessor) persist(c *app.Country) {
 	_, err := p.repository.GetById(c.ID)
 
