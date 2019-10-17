@@ -2,7 +2,6 @@ package sportmonks
 
 import (
 	"context"
-	"fmt"
 	"github.com/sirupsen/logrus"
 	"github.com/statistico/statistico-data/internal/app"
 	spClient "github.com/statistico/statistico-sportmonks-go-client"
@@ -15,10 +14,6 @@ type CountryRequester struct {
 
 func (c CountryRequester) Countries() <-chan *app.Country {
 	_, meta, err := c.client.Countries(context.Background(),1, []string{})
-
-	fmt.Println("Hello World")
-	fmt.Printf("Error %s", err)
-	fmt.Printf("Meta %+v", meta)
 
 	if err != nil {
 		c.logger.Fatalf("Error when calling client '%s' when making country request", err.Error())
@@ -42,8 +37,6 @@ func (c CountryRequester) parseCountries(pages int, ch chan<- *app.Country) {
 
 func (c CountryRequester) callClient(page int, ch chan<- *app.Country) {
 	res, _, err := c.client.Countries(context.Background(), page, []string{})
-
-	fmt.Printf("Response %+v", res)
 
 	if err != nil {
 		c.logger.Fatalf("Error when calling client '%s' when making country request", err.Error())
