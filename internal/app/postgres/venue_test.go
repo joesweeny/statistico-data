@@ -10,7 +10,7 @@ import (
 )
 
 func TestVenueRepository_Insert(t *testing.T) {
-	conn, cleanUp := test.GetConnection(t)
+	conn, cleanUp := test.GetConnection(t, "sportmonks_venue")
 	repo := postgres.NewVenueRepository(conn, test.Clock)
 
 	t.Run("increase table count", func(t *testing.T) {
@@ -52,7 +52,7 @@ func TestVenueRepository_Insert(t *testing.T) {
 }
 
 func TestVenueRepository_GetById(t *testing.T) {
-	conn, cleanUp := test.GetConnection(t)
+	conn, cleanUp := test.GetConnection(t, "sportmonks_venue")
 	repo := postgres.NewVenueRepository(conn, test.Clock)
 
 	t.Run("venue can be retrieved by ID", func(t *testing.T) {
@@ -94,7 +94,7 @@ func TestVenueRepository_GetById(t *testing.T) {
 }
 
 func TestVenueRepository_Update(t *testing.T) {
-	conn, cleanUp := test.GetConnection(t)
+	conn, cleanUp := test.GetConnection(t, "sportmonks_venue")
 	repo := postgres.NewVenueRepository(conn, test.Clock)
 
 	t.Run("modifies existing venue", func(t *testing.T) {
@@ -127,7 +127,7 @@ func TestVenueRepository_Update(t *testing.T) {
 
 		a := assert.New(t)
 
-		a.Equal(2, r.ID)
+		a.Equal(int64(2), r.ID)
 		a.Equal("Upton Park", r.Name)
 		a.Nil(r.Surface)
 		a.Equal("Stratford", *r.Address)
@@ -163,4 +163,3 @@ func newVenue(id int64) *app.Venue {
 		UpdatedAt: time.Unix(1548086929, 0),
 	}
 }
-

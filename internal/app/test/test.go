@@ -14,7 +14,7 @@ var (
 	Clock = clockwork.NewFakeClockAt(now)
 )
 
-func GetConnection(t *testing.T) (*sql.DB, func()) {
+func GetConnection(t *testing.T, table string) (*sql.DB, func()) {
 	db := config.GetConfig().Database
 
 	dsn := "host=%s port=%s user=%s " + "password=%s dbname=%s sslmode=disable"
@@ -27,10 +27,8 @@ func GetConnection(t *testing.T) (*sql.DB, func()) {
 		panic(err)
 	}
 
-	defer conn.Close()
-
 	return conn, func() {
-		_, err := conn.Exec("delete from sportmonks_country")
+		_, err := conn.Exec("delete from " + table)
 		if err != nil {
 			t.Fatalf("Failed to clear database. %s", err.Error())
 		}

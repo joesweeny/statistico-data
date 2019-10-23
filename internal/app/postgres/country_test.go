@@ -9,7 +9,7 @@ import (
 )
 
 func TestCountryRepository_Insert(t *testing.T) {
-	conn, cleanUp := test.GetConnection(t)
+	conn, cleanUp := test.GetConnection(t, "sportmonks_country")
 	repo := postgres.NewCountryRepository(conn, test.Clock)
 
 	t.Run("increases table count", func(t *testing.T) {
@@ -51,7 +51,7 @@ func TestCountryRepository_Insert(t *testing.T) {
 }
 
 func TestCountryRepository_Update(t *testing.T) {
-	conn, cleanUp := test.GetConnection(t)
+	conn, cleanUp := test.GetConnection(t, "sportmonks_country")
 	repo := postgres.NewCountryRepository(conn, test.Clock)
 
 	t.Run("modifies existing record", func(t *testing.T) {
@@ -96,7 +96,7 @@ func TestCountryRepository_Update(t *testing.T) {
 }
 
 func TestCountryRepository_GetById(t *testing.T) {
-	conn, cleanUp := test.GetConnection(t)
+	conn, cleanUp := test.GetConnection(t, "sportmonks_country")
 	repo := postgres.NewCountryRepository(conn, test.Clock)
 
 	t.Run("country can be retrieved by ID", func(t *testing.T) {
