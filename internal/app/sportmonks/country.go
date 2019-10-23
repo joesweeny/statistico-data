@@ -44,11 +44,11 @@ func (c CountryRequester) callClient(page int, ch chan<- *app.Country) {
 	}
 
 	for _, country := range res {
-		ch <- transform(&country)
+		ch <- transformCountry(&country)
 	}
 }
 
-func transform(s *spClient.Country) *app.Country {
+func transformCountry(s *spClient.Country) *app.Country {
 	return &app.Country{
 		ID:        int64(s.ID),
 		Name:      s.Name,

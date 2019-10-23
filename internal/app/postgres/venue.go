@@ -27,8 +27,8 @@ func (r *VenueRepository) Insert(v *app.Venue) error {
 		v.Address,
 		v.City,
 		v.Capacity,
-		v.CreatedAt.Unix(),
-		v.UpdatedAt.Unix(),
+		r.clock.Now().Unix(),
+		r.clock.Now().Unix(),
 	)
 
 	return err
@@ -53,7 +53,7 @@ func (r *VenueRepository) Update(v *app.Venue) error {
 		v.Address,
 		v.City,
 		v.Capacity,
-		v.UpdatedAt.Unix(),
+		r.clock.Now().Unix(),
 	)
 
 	return err

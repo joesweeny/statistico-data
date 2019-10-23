@@ -25,5 +25,5 @@ type VenueRepository interface {
 // data provider. The requester implementation is responsible for creating the channel, filtering struct data into
 // the channel before closing the channel once successful execution is complete.
 type VenueRequester interface {
-	VenuesBySeasonIDs(seasonIDs []int64) <-chan *Country
+	VenuesBySeasonIDs(seasonIDs []int64) <-chan *Venue
 }
