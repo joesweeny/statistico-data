@@ -62,7 +62,7 @@ func (s Processor) persistSeasons(ch <-chan sportmonks.Season, done chan bool) {
 }
 
 func (s Processor) persist(m *sportmonks.Season) {
-	season, err := s.Id(m.ID)
+	season, err := s.Id(int64(m.ID))
 
 	if err != nil && (model.Season{} == *season) {
 		created := s.createSeason(m)

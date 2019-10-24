@@ -11,7 +11,7 @@ import (
 	"testing"
 )
 
-func TestProcess(t *testing.T) {
+func TestCountryProcessor_Process(t *testing.T) {
 	t.Run("inserts new country", func(t *testing.T) {
 		repo := new(mock.CountryRepository)
 		requester := new(mock.CountryRequester)

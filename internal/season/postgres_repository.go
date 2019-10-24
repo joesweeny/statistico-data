@@ -32,7 +32,7 @@ func (p *PostgresSeasonRepository) Insert(s *model.Season) error {
 }
 
 func (p *PostgresSeasonRepository) Update(s *model.Season) error {
-	_, err := p.Id(s.ID)
+	_, err := p.Id(int64(s.ID))
 
 	if err != nil {
 		return err
@@ -53,26 +53,26 @@ func (p *PostgresSeasonRepository) Update(s *model.Season) error {
 	return err
 }
 
-func (p *PostgresSeasonRepository) Id(id int) (*model.Season, error) {
+func (p *PostgresSeasonRepository) Id(id int64) (*model.Season, error) {
 	query := `SELECT * FROM sportmonks_season where id = $1`
 	row := p.Connection.QueryRow(query, id)
 
 	return rowToSeason(row)
 }
 
-func (p *PostgresSeasonRepository) Ids() ([]int, error) {
+func (p *PostgresSeasonRepository) Ids() ([]int64, error) {
 	query := `SELECT id FROM sportmonks_season ORDER BY id ASC`
 
 	rows, err := p.Connection.Query(query)
 
 	if err != nil {
-		return []int{}, err
+		return []int64{}, err
 	}
 
 	defer rows.Close()
 
-	var id int
-	var ids []int
+	var id int64
+	var ids []int64
 
 	for rows.Next() {
 		if err := rows.Scan(&id); err != nil {
@@ -85,18 +85,18 @@ func (p *PostgresSeasonRepository) Ids() ([]int, error) {
 	return ids, nil
 }
 
-func (p *PostgresSeasonRepository) CurrentSeasonIds() ([]int, error) {
+func (p *PostgresSeasonRepository) CurrentSeasonIds() ([]int64, error) {
 	query := `SELECT id FROM sportmonks_season where is_current = true ORDER BY id ASC`
 
 	rows, err := p.Connection.Query(query)
 
 	if err != nil {
-		return []int{}, err
+		return []int64{}, err
 	}
 
 	defer rows.Close()
 
-	var seasons []int
+	var seasons []int64
 
 	for rows.Next() {
 		var id int
@@ -106,10 +106,10 @@ func (p *PostgresSeasonRepository) CurrentSeasonIds() ([]int, error) {
 		}
 
 		if err != nil {
-			return []int{}, err
+			return []int64{}, err
 		}
 
-		seasons = append(seasons, id)
+		seasons = append(seasons, int64(id))
 	}
 
 	return seasons, nil
