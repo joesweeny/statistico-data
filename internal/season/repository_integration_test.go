@@ -180,7 +180,7 @@ func TestGetIds(t *testing.T) {
 
 		ids, err := repo.Ids()
 
-		want := []int{1, 2, 3, 4}
+		want := []int64{1, 2, 3, 4}
 
 		if err != nil {
 			t.Fatalf("Test failed, expected %v, got %s", want, err.Error())
@@ -198,7 +198,7 @@ func TestCurrentSeasonIds(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
 
-		seasons := []model.Season{}
+		var seasons []model.Season
 
 		for i := 1; i <= 4; i++ {
 			s := newSeason(i, true)
@@ -220,7 +220,7 @@ func TestCurrentSeasonIds(t *testing.T) {
 			t.Fatalf("Test failed, expected %v, got %s", seasons, err.Error())
 		}
 
-		assert.Equal(t, []int{1, 2, 3, 4}, retrieved)
+		assert.Equal(t, []int64{1, 2, 3, 4}, retrieved)
 	})
 }
 

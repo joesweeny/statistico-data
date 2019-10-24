@@ -43,7 +43,7 @@ func TestProcess(t *testing.T) {
 	t.Run("inserts new season", func(t *testing.T) {
 		done := make(chan bool)
 
-		repo.On("Id", 100).Return(&model.Season{}, errors.New("not Found"))
+		repo.On("Id", int64(100)).Return(&model.Season{}, errors.New("not Found"))
 		repo.On("Insert", mock.Anything).Return(nil)
 		repo.AssertNotCalled(t, "Update", mock.Anything)
 		processor.Process("season", "", done)
@@ -53,7 +53,7 @@ func TestProcess(t *testing.T) {
 		done := make(chan bool)
 
 		c := newSeason(1, true)
-		repo.On("Id", 100).Return(c, nil)
+		repo.On("Id", int64(100)).Return(c, nil)
 		repo.On("Update", &c).Return(nil)
 		repo.MethodCalled("Update", &c)
 		repo.AssertNotCalled(t, "Insert", mock.Anything)
@@ -75,20 +75,20 @@ func (m mockRepository) Update(c *model.Season) error {
 	return args.Error(0)
 }
 
-func (m mockRepository) Id(id int) (*model.Season, error) {
+func (m mockRepository) Id(id int64) (*model.Season, error) {
 	args := m.Called(id)
 	c := args.Get(0).(*model.Season)
 	return c, args.Error(1)
 }
 
-func (m mockRepository) Ids() ([]int, error) {
+func (m mockRepository) Ids() ([]int64, error) {
 	args := m.Called()
-	return args.Get(0).([]int), args.Error(1)
+	return args.Get(0).([]int64), args.Error(1)
 }
 
-func (m mockRepository) CurrentSeasonIds() ([]int, error) {
+func (m mockRepository) CurrentSeasonIds() ([]int64, error) {
 	args := m.Called()
-	return args.Get(0).([]int), args.Error(1)
+	return args.Get(0).([]int64), args.Error(1)
 }
 
 type roundTripFunc func(req *http.Request) *http.Response

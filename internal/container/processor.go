@@ -13,7 +13,6 @@ import (
 	"github.com/statistico/statistico-data/internal/stats/player"
 	"github.com/statistico/statistico-data/internal/stats/team"
 	"github.com/statistico/statistico-data/internal/team"
-	"github.com/statistico/statistico-data/internal/venue"
 )
 
 type Processor interface {

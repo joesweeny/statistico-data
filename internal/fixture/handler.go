@@ -3,6 +3,7 @@ package fixture
 import (
 	"fmt"
 	"github.com/golang/protobuf/ptypes/wrappers"
+	"github.com/statistico/statistico-data/internal/app"
 	"github.com/statistico/statistico-data/internal/competition"
 	"github.com/statistico/statistico-data/internal/model"
 	"github.com/statistico/statistico-data/internal/proto"
@@ -10,7 +11,6 @@ import (
 	"github.com/statistico/statistico-data/internal/round"
 	"github.com/statistico/statistico-data/internal/season"
 	"github.com/statistico/statistico-data/internal/team"
-	"github.com/statistico/statistico-data/internal/venue"
 	"log"
 )
 
@@ -19,12 +19,12 @@ type Handler struct {
 	RoundRepo       round.Repository
 	SeasonRepo      season.Repository
 	TeamRepo        team.Repository
-	VenueRepo       venue.Repository
+	VenueRepo       app.VenueRepository
 	Logger          *log.Logger
 }
 
 func (h Handler) HandleFixture(f *model.Fixture) (*pbFixture.Fixture, error) {
-	s, err := h.SeasonRepo.Id(f.SeasonID)
+	s, err := h.SeasonRepo.Id(int64(f.SeasonID))
 
 	if err != nil {
 		e := fmt.Errorf("error when retrieving Fixture: ID %d, Season ID %d", f.ID, f.SeasonID)
@@ -78,7 +78,7 @@ func (h Handler) HandleFixture(f *model.Fixture) (*pbFixture.Fixture, error) {
 	}
 
 	if f.VenueID != nil {
-		v, err := h.VenueRepo.GetById(*f.VenueID)
+		v, err := h.VenueRepo.GetById(int64(*f.VenueID))
 
 		if err != nil {
 			e := fmt.Errorf("error when retrieving Fixture: ID %d, Venue ID %d", f.ID, f.VenueID)

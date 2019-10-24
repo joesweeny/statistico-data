@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"github.com/jonboulle/clockwork"
 	"github.com/statistico/sportmonks-go-client"
+	m "github.com/statistico/statistico-data/internal/app/mock"
 	"github.com/statistico/statistico-data/internal/model"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -17,7 +18,7 @@ import (
 func TestProcess(t *testing.T) {
 	t.Helper()
 	teamRepo := new(mockTeamRepository)
-	seasonRepo := new(mockSeasonRepository)
+	seasonRepo := new(m.SeasonRepository)
 
 	server := newTestClient(func(req *http.Request) *http.Response {
 		assert.Equal(t, req.URL.String(), "http://example.com/api/v2.0/teams/season/100?api_token=my-key")
@@ -45,7 +46,7 @@ func TestProcess(t *testing.T) {
 	t.Run("inserts new round", func(t *testing.T) {
 		done := make(chan bool)
 
-		seasonRepo.On("Ids").Return([]int{100}, nil)
+		seasonRepo.On("Ids").Return([]int64{100}, nil)
 		teamRepo.On("GetById", 56).Return(&model.Team{}, ErrNotFound)
 		teamRepo.On("Insert", mock.Anything).Return(nil)
 		teamRepo.AssertNotCalled(t, "Update", mock.Anything)
@@ -56,7 +57,7 @@ func TestProcess(t *testing.T) {
 		done := make(chan bool)
 
 		r := newTeam(34)
-		seasonRepo.On("Ids").Return([]int{100}, nil)
+		seasonRepo.On("Ids").Return([]int64{100}, nil)
 		teamRepo.On("GetById", 34).Return(r, nil)
 		teamRepo.On("Update", &r).Return(nil)
 		teamRepo.AssertNotCalled(t, "Insert", mock.Anything)
@@ -74,36 +75,6 @@ func newTestClient(fn roundTripFunc) *http.Client {
 	return &http.Client{
 		Transport: roundTripFunc(fn),
 	}
-}
-
-type mockSeasonRepository struct {
-	mock.Mock
-}
-
-func (m mockSeasonRepository) Insert(c *model.Season) error {
-	args := m.Called(c)
-	return args.Error(0)
-}
-
-func (m mockSeasonRepository) Update(c *model.Season) error {
-	args := m.Called(&c)
-	return args.Error(0)
-}
-
-func (m mockSeasonRepository) Id(id int) (*model.Season, error) {
-	args := m.Called(id)
-	c := args.Get(0).(*model.Season)
-	return c, args.Error(1)
-}
-
-func (m mockSeasonRepository) Ids() ([]int, error) {
-	args := m.Called()
-	return args.Get(0).([]int), args.Error(1)
-}
-
-func (m mockSeasonRepository) CurrentSeasonIds() ([]int, error) {
-	args := m.Called()
-	return args.Get(0).([]int), args.Error(1)
 }
 
 type mockTeamRepository struct {

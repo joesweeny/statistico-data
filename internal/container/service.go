@@ -7,7 +7,6 @@ import (
 	"github.com/statistico/statistico-data/internal/round"
 	"github.com/statistico/statistico-data/internal/season"
 	"github.com/statistico/statistico-data/internal/team"
-	"github.com/statistico/statistico-data/internal/venue"
 	"github.com/statistico/statistico-data/internal/stats/player"
 	"github.com/statistico/statistico-data/internal/stats/team"
 )
@@ -20,7 +19,7 @@ func (c Container) FixtureService() *fixture.Service {
 			RoundRepo:       &round.PostgresRoundRepository{Connection: c.Database},
 			SeasonRepo:      &season.PostgresSeasonRepository{Connection: c.Database},
 			TeamRepo:        &team.PostgresTeamRepository{Connection: c.Database},
-			VenueRepo:       &venue.PostgresVenueRepository{Connection: c.Database},
+			VenueRepo:       c.VenueRepository(),
 			Logger:          c.Logger,
 		},
 		Logger: c.Logger,
@@ -36,7 +35,7 @@ func (c Container) ResultService() *result.Service {
 			RoundRepo:       &round.PostgresRoundRepository{Connection: c.Database},
 			SeasonRepo:      &season.PostgresSeasonRepository{Connection: c.Database},
 			TeamRepo:        &team.PostgresTeamRepository{Connection: c.Database},
-			VenueRepo:       &venue.PostgresVenueRepository{Connection: c.Database},
+			VenueRepo:       c.VenueRepository(),
 			Logger:          c.Logger,
 		},
 		Logger: c.Logger,

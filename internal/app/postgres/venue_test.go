@@ -79,8 +79,8 @@ func TestVenueRepository_GetById(t *testing.T) {
 		a.Nil(r.Address)
 		a.Equal("London", *r.City)
 		a.Nil(r.Capacity)
-		a.Equal("2019-01-21 16:08:49 +0000 UTC", r.CreatedAt.String())
-		a.Equal("2019-01-21 16:08:49 +0000 UTC", r.UpdatedAt.String())
+		a.Equal("2019-01-14 11:25:00 +0000 UTC", r.CreatedAt.String())
+		a.Equal("2019-01-14 11:25:00 +0000 UTC", r.UpdatedAt.String())
 	})
 
 	t.Run("returns error if round does not exist", func(t *testing.T) {
@@ -133,8 +133,8 @@ func TestVenueRepository_Update(t *testing.T) {
 		a.Equal("Stratford", *r.Address)
 		a.Equal("London", *r.City)
 		a.Equal(60000, *r.Capacity)
-		a.Equal("2019-01-21 16:08:49 +0000 UTC", r.CreatedAt.String())
-		a.Equal("2019-01-21 16:08:49 +0000 UTC", r.UpdatedAt.String())
+		a.Equal("2019-01-14 11:25:00 +0000 UTC", r.CreatedAt.String())
+		a.Equal("2019-01-14 11:25:00 +0000 UTC", r.UpdatedAt.String())
 	})
 
 	t.Run("returns an error if venue does not exist", func(t *testing.T) {

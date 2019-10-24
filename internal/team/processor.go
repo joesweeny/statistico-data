@@ -62,9 +62,9 @@ func (s Processor) currentSeason(done chan bool) {
 	done <- true
 }
 
-func (s Processor) parseTeamsSync(ch chan<- sportmonks.Team, ids []int) {
+func (s Processor) parseTeamsSync(ch chan<- sportmonks.Team, ids []int64) {
 	for _, id := range ids {
-		res, err := s.Client.TeamsBySeasonId(id, []string{}, 5)
+		res, err := s.Client.TeamsBySeasonId(int(id), []string{}, 5)
 
 		if err != nil {
 			log.Printf("Error when calling client. Message: %s", err.Error())
@@ -78,7 +78,7 @@ func (s Processor) parseTeamsSync(ch chan<- sportmonks.Team, ids []int) {
 	close(ch)
 }
 
-func (s Processor) parseTeamsAsync(ids []int) {
+func (s Processor) parseTeamsAsync(ids []int64) {
 	for _, id := range ids {
 		waitGroup.Add(1)
 
@@ -98,7 +98,7 @@ func (s Processor) parseTeamsAsync(ids []int) {
 			}
 
 			defer waitGroup.Done()
-		}(id)
+		}(int(id))
 	}
 }
 
