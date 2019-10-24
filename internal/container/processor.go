@@ -13,7 +13,6 @@ import (
 	"github.com/statistico/statistico-data/internal/stats/player"
 	"github.com/statistico/statistico-data/internal/stats/team"
 	"github.com/statistico/statistico-data/internal/team"
-	"github.com/statistico/statistico-data/internal/venue"
 )
 
 type Processor interface {
@@ -137,12 +136,11 @@ func (c Container) TeamStatsProcessor() team_stats.Processor {
 	}
 }
 
-func (c Container) VenueProcessor() *venue.Processor {
-	return &venue.Processor{
-		Repository: &venue.PostgresVenueRepository{Connection: c.Database},
-		SeasonRepo: &season.PostgresSeasonRepository{Connection: c.Database},
-		Factory:    venue.Factory{Clock: clock()},
-		Client:     c.SportMonksClient,
-		Logger:     c.Logger,
-	}
+func (c Container) VenueProcessor() *process.VenueProcessor {
+	return process.NewVenueProcessor(
+		c.VenueRepository(),
+		&season.PostgresSeasonRepository{Connection: c.Database},
+		c.VenueRequester(),
+		c.NewLogger,
+	)
 }

@@ -2,6 +2,7 @@ package proto
 
 import (
 	"github.com/golang/protobuf/ptypes/wrappers"
+	"github.com/statistico/statistico-data/internal/app"
 	"github.com/statistico/statistico-data/internal/model"
 	pbCompetition "github.com/statistico/statistico-data/internal/proto/competition"
 	pbResult "github.com/statistico/statistico-data/internal/proto/result"
@@ -264,7 +265,7 @@ func TeamStatsToProto(t *model.TeamStats) *pbTeamStats.TeamStats {
 	return &stats
 }
 
-func VenueToProto(v *model.Venue) *pbVenue.Venue {
+func VenueToProto(v *app.Venue) *pbVenue.Venue {
 	id := wrappers.Int64Value{
 		Value: int64(v.ID),
 	}

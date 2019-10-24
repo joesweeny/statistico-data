@@ -55,9 +55,9 @@ func (s Processor) currentSeason(done chan bool) {
 	go s.updateSquads(squads, done, &counter)
 }
 
-func (s Processor) handleSeasons(ids []int, done chan bool, c *int) {
+func (s Processor) handleSeasons(ids []int64, done chan bool, c *int) {
 	for _, id := range ids {
-		res, err := s.Client.TeamsBySeasonId(id, []string{}, 5)
+		res, err := s.Client.TeamsBySeasonId(int(id), []string{}, 5)
 
 		if err != nil {
 			s.Logger.Printf("Error when calling client. Message: %s\n", err.Error())
@@ -70,7 +70,7 @@ func (s Processor) handleSeasons(ids []int, done chan bool, c *int) {
 				done <- true
 			}
 
-			s.handleTeam(id, t, c, done)
+			s.handleTeam(int(id), t, c, done)
 		}
 	}
 

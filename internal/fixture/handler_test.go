@@ -1,6 +1,8 @@
 package fixture
 
 import (
+	"github.com/statistico/statistico-data/internal/app"
+	m "github.com/statistico/statistico-data/internal/app/mock"
 	"github.com/statistico/statistico-data/internal/model"
 	"github.com/statistico/statistico-data/internal/season"
 	"github.com/stretchr/testify/assert"
@@ -15,8 +17,8 @@ func TestHandleFixture(t *testing.T) {
 	teamRepo := new(mockTeamRepository)
 	compRepo := new(mockCompetitionRepository)
 	roundRepo := new(mockRoundRepository)
-	seasonRepo := new(mockSeasonRepository)
-	venueRepo := new(mockVenueRepository)
+	seasonRepo := new(m.SeasonRepository)
+	venueRepo := new(m.VenueRepository)
 	handler := Handler{
 		TeamRepo:        teamRepo,
 		CompetitionRepo: compRepo,
@@ -27,17 +29,19 @@ func TestHandleFixture(t *testing.T) {
 	}
 
 	t.Run("hydrates new proto fixture struct", func(t *testing.T) {
+		t.Helper()
+
 		ven := 87
 		ref := 5
 		fixture := newFixture(99)
 		fixture.VenueID = &ven
 		fixture.RefereeID = &ref
 
-		seasonRepo.On("Id", 14567).Return(newSeason(), nil)
+		seasonRepo.On("Id", int64(14567)).Return(newSeason(), nil)
 		compRepo.On("GetById", 45).Return(newCompetition(), nil)
 		teamRepo.On("GetById", 451).Return(newTeam(451, "West Ham"), nil)
 		teamRepo.On("GetById", 924).Return(newTeam(924, "Chelsea"), nil)
-		venueRepo.On("GetById", 87).Return(newVenue(), nil)
+		venueRepo.On("GetById", int64(87)).Return(newVenue(), nil)
 		roundRepo.On("GetById", 165789).Return(newRound(), nil)
 
 		proto, err := handler.HandleFixture(fixture)
@@ -74,7 +78,7 @@ func TestHandleFixture(t *testing.T) {
 		fixture := newFixture(99)
 		fixture.RoundID = nil
 
-		seasonRepo.On("Id", 14567).Return(newSeason(), nil)
+		seasonRepo.On("Id", int64(14567)).Return(newSeason(), nil)
 		compRepo.On("GetById", 45).Return(newCompetition(), nil)
 		teamRepo.On("GetById", 451).Return(newTeam(451, "West Ham"), nil)
 		teamRepo.On("GetById", 924).Return(newTeam(924, "Chelsea"), nil)
@@ -108,7 +112,7 @@ func TestHandleFixture(t *testing.T) {
 		compRepo := new(mockCompetitionRepository)
 		roundRepo := new(mockRoundRepository)
 		seasonRepo := new(mockSeasonRepository)
-		venueRepo := new(mockVenueRepository)
+		venueRepo := m.VenueRepository{}
 		handler := Handler{
 			TeamRepo:        teamRepo,
 			CompetitionRepo: compRepo,
@@ -122,7 +126,7 @@ func TestHandleFixture(t *testing.T) {
 		fixture := newFixture(99)
 		fixture.VenueID = &ven
 
-		seasonRepo.On("Id", 14567).Return(&model.Season{}, season.ErrNotFound)
+		seasonRepo.On("Id", int64(14567)).Return(&model.Season{}, season.ErrNotFound)
 		compRepo.AssertNotCalled(t, "GetById", 45)
 		teamRepo.AssertNotCalled(t, "GetById", 451)
 		teamRepo.AssertNotCalled(t, "GetById", 924)
@@ -181,26 +185,6 @@ func (m mockCompetitionRepository) GetById(id int) (*model.Competition, error) {
 	return c, args.Error(1)
 }
 
-type mockVenueRepository struct {
-	mock.Mock
-}
-
-func (m mockVenueRepository) Insert(v *model.Venue) error {
-	args := m.Called(v)
-	return args.Error(0)
-}
-
-func (m mockVenueRepository) Update(v *model.Venue) error {
-	args := m.Called(v)
-	return args.Error(0)
-}
-
-func (m mockVenueRepository) GetById(id int) (*model.Venue, error) {
-	args := m.Called(id)
-	v := args.Get(0).(*model.Venue)
-	return v, args.Error(1)
-}
-
 type mockRoundRepository struct {
 	mock.Mock
 }
@@ -254,9 +238,9 @@ func newTeam(id int, name string) *model.Team {
 	}
 }
 
-func newVenue() *model.Venue {
-	return &model.Venue{
-		ID:        87,
+func newVenue() *app.Venue {
+	return &app.Venue{
+		ID:        int64(87),
 		Name:      "London Stadium",
 		CreatedAt: time.Unix(1548086929, 0),
 		UpdatedAt: time.Unix(1548086929, 0),

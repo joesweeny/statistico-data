@@ -1,25 +1,24 @@
-package venue
+package postgres_test
 
 import (
-	"database/sql"
-	"fmt"
-	"github.com/statistico/statistico-data/internal/config"
-	"github.com/statistico/statistico-data/internal/model"
+	"github.com/statistico/statistico-data/internal/app"
+	"github.com/statistico/statistico-data/internal/app/postgres"
+	"github.com/statistico/statistico-data/internal/app/test"
 	"github.com/stretchr/testify/assert"
 	"testing"
 	"time"
 )
 
-func TestInsert(t *testing.T) {
-	conn, cleanUp := getConnection(t)
-	repo := PostgresVenueRepository{Connection: conn}
+func TestVenueRepository_Insert(t *testing.T) {
+	conn, cleanUp := test.GetConnection(t, "sportmonks_venue")
+	repo := postgres.NewVenueRepository(conn, test.Clock)
 
 	t.Run("increase table count", func(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
 
 		for i := 1; i < 4; i++ {
-			c := newVenue(i)
+			c := newVenue(int64(i))
 
 			if err := repo.Insert(c); err != nil {
 				t.Errorf("Error when inserting record into the database: %s", err.Error())
@@ -50,13 +49,11 @@ func TestInsert(t *testing.T) {
 			t.Fatalf("Test failed, expected %s, got nil", e)
 		}
 	})
-
-	conn.Close()
 }
 
-func TestGetById(t *testing.T) {
-	conn, cleanUp := getConnection(t)
-	repo := PostgresVenueRepository{Connection: conn}
+func TestVenueRepository_GetById(t *testing.T) {
+	conn, cleanUp := test.GetConnection(t, "sportmonks_venue")
+	repo := postgres.NewVenueRepository(conn, test.Clock)
 
 	t.Run("venue can be retrieved by ID", func(t *testing.T) {
 		t.Helper()
@@ -65,48 +62,40 @@ func TestGetById(t *testing.T) {
 		v := newVenue(13)
 
 		if err := repo.Insert(v); err != nil {
-			t.Errorf("Error when inserting record into the database: %s", err.Error())
+			t.Fatalf("Error when inserting record into the database: %s", err.Error())
 		}
 
 		r, err := repo.GetById(13)
 
 		if err != nil {
-			t.Errorf("Error when retrieving a record from the database: %s", err.Error())
+			t.Fatalf("Error when retrieving a record from the database: %s", err.Error())
 		}
 
 		a := assert.New(t)
 
-		a.Equal(13, r.ID)
+		a.Equal(int64(13), r.ID)
 		a.Equal("London Stadium", r.Name)
 		a.Equal("Grass", *r.Surface)
 		a.Nil(r.Address)
 		a.Equal("London", *r.City)
 		a.Nil(r.Capacity)
-		a.Equal("2019-01-21 16:08:49 +0000 UTC", r.CreatedAt.String())
-		a.Equal("2019-01-21 16:08:49 +0000 UTC", r.UpdatedAt.String())
+		a.Equal("2019-01-14 11:25:00 +0000 UTC", r.CreatedAt.String())
+		a.Equal("2019-01-14 11:25:00 +0000 UTC", r.UpdatedAt.String())
 	})
 
 	t.Run("returns error if round does not exist", func(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
 
-		_, err := repo.GetById(99)
-
-		if err == nil {
-			t.Errorf("Test failed, expected %v, got nil", err)
-		}
-
-		if err != ErrNotFound {
-			t.Fatalf("Test failed, expected %v, got %s", ErrNotFound, err)
+		if _, err := repo.GetById(99); err == nil {
+			t.Fatalf("Test failed, expected %v, got nil", err)
 		}
 	})
-
-	conn.Close()
 }
 
-func TestUpdate(t *testing.T) {
-	conn, cleanUp := getConnection(t)
-	repo := PostgresVenueRepository{Connection: conn}
+func TestVenueRepository_Update(t *testing.T) {
+	conn, cleanUp := test.GetConnection(t, "sportmonks_venue")
+	repo := postgres.NewVenueRepository(conn, test.Clock)
 
 	t.Run("modifies existing venue", func(t *testing.T) {
 		t.Helper()
@@ -127,25 +116,25 @@ func TestUpdate(t *testing.T) {
 		v.Surface = nil
 
 		if err := repo.Update(v); err != nil {
-			t.Errorf("Error when updating a record in the database: %s", err.Error())
+			t.Fatalf("Error when updating a record in the database: %s", err.Error())
 		}
 
 		r, err := repo.GetById(2)
 
 		if err != nil {
-			t.Errorf("Error when updating a record in the database: %s", err.Error())
+			t.Fatalf("Error when updating a record in the database: %s", err.Error())
 		}
 
 		a := assert.New(t)
 
-		a.Equal(2, r.ID)
+		a.Equal(int64(2), r.ID)
 		a.Equal("Upton Park", r.Name)
 		a.Nil(r.Surface)
 		a.Equal("Stratford", *r.Address)
 		a.Equal("London", *r.City)
 		a.Equal(60000, *r.Capacity)
-		a.Equal("2019-01-21 16:08:49 +0000 UTC", r.CreatedAt.String())
-		a.Equal("2019-01-21 16:08:49 +0000 UTC", r.UpdatedAt.String())
+		a.Equal("2019-01-14 11:25:00 +0000 UTC", r.CreatedAt.String())
+		a.Equal("2019-01-14 11:25:00 +0000 UTC", r.UpdatedAt.String())
 	})
 
 	t.Run("returns an error if venue does not exist", func(t *testing.T) {
@@ -158,41 +147,14 @@ func TestUpdate(t *testing.T) {
 		if err == nil {
 			t.Fatalf("Test failed, expected nil, got %v", err)
 		}
-
-		if err != ErrNotFound {
-			t.Fatalf("Test failed, expected %v, got %v", ErrNotFound, err)
-		}
 	})
-
-	conn.Close()
 }
 
-var db = config.GetConfig().Database
-
-func getConnection(t *testing.T) (*sql.DB, func()) {
-	psqlInfo := fmt.Sprintf("host=%s port=%s user=%s "+
-		"password=%s dbname=%s sslmode=disable",
-		db.Host, db.Port, db.User, db.Password, db.Name)
-
-	db, err := sql.Open(db.Driver, psqlInfo)
-
-	if err != nil {
-		panic(err)
-	}
-
-	return db, func() {
-		_, err := db.Exec("delete from sportmonks_venue")
-		if err != nil {
-			t.Fatalf("Failed to clear database. %s", err.Error())
-		}
-	}
-}
-
-func newVenue(id int) *model.Venue {
+func newVenue(id int64) *app.Venue {
 	var s = "Grass"
 	var c = "London"
 
-	return &model.Venue{
+	return &app.Venue{
 		ID:        id,
 		Name:      "London Stadium",
 		Surface:   &s,

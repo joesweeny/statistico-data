@@ -58,7 +58,7 @@ func TestProcess(t *testing.T) {
 	t.Run("inserts new squad", func(t *testing.T) {
 		done := make(chan bool)
 
-		seasonRepo.On("Ids").Return([]int{100}, nil)
+		seasonRepo.On("Ids").Return([]int64{100}, nil)
 		squadRepo.On("BySeasonAndTeam", 100, 56).Return(&model.Squad{}, ErrNotFound)
 		squadRepo.On("Insert", mock.Anything).Return(nil)
 		squadRepo.AssertNotCalled(t, "Update", mock.Anything)
@@ -102,20 +102,20 @@ func (m mockSeasonRepository) Update(c *model.Season) error {
 	return args.Error(0)
 }
 
-func (m mockSeasonRepository) Id(id int) (*model.Season, error) {
+func (m mockSeasonRepository) Id(id int64) (*model.Season, error) {
 	args := m.Called(id)
 	c := args.Get(0).(*model.Season)
 	return c, args.Error(1)
 }
 
-func (m mockSeasonRepository) Ids() ([]int, error) {
+func (m mockSeasonRepository) Ids() ([]int64, error) {
 	args := m.Called()
-	return args.Get(0).([]int), args.Error(1)
+	return args.Get(0).([]int64), args.Error(1)
 }
 
-func (m mockSeasonRepository) CurrentSeasonIds() ([]int, error) {
+func (m mockSeasonRepository) CurrentSeasonIds() ([]int64, error) {
 	args := m.Called()
-	return args.Get(0).([]int), args.Error(1)
+	return args.Get(0).([]int64), args.Error(1)
 }
 
 type mockSquadRepository struct {

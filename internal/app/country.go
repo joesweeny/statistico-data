@@ -4,7 +4,7 @@ import (
 	"time"
 )
 
-// Country domain entity
+// Country domain entity.
 type Country struct {
 	ID        int64     `json:"id"`
 	Name      string    `json:"name"`
@@ -23,7 +23,7 @@ type CountryRepository interface {
 
 // CountryRequester provides an interface allowing this application to request data from an external
 // data provider. The requester implementation is responsible for creating the channel, filtering struct data into
-// the channel before closing the channel once successful execution is complete
+// the channel before closing the channel once successful execution is complete.
 type CountryRequester interface {
 	Countries() <-chan *Country
 }

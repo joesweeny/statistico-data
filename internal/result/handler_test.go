@@ -1,6 +1,8 @@
 package result
 
 import (
+	"github.com/statistico/statistico-data/internal/app"
+	m "github.com/statistico/statistico-data/internal/app/mock"
 	"github.com/statistico/statistico-data/internal/model"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -12,8 +14,8 @@ func TestHandleResult(t *testing.T) {
 	teamRepo := new(mockTeamRepository)
 	compRepo := new(mockCompetitionRepository)
 	roundRepo := new(mockRoundRepository)
-	seasonRepo := new(mockSeasonRepository)
-	venueRepo := new(mockVenueRepository)
+	seasonRepo := new(m.SeasonRepository)
+	venueRepo := new(m.VenueRepository)
 	handler := Handler{
 		CompetitionRepo: compRepo,
 		RoundRepo:       roundRepo,
@@ -40,11 +42,11 @@ func TestHandleResult(t *testing.T) {
 		res.AwayLeaguePosition = &pos2
 		res.Minutes = &min
 
-		seasonRepo.On("Id", 14567).Return(newSeason(), nil)
+		seasonRepo.On("Id", int64(14567)).Return(newSeason(), nil)
 		compRepo.On("GetById", 45).Return(newCompetition(), nil)
 		teamRepo.On("GetById", 451).Return(newTeam(451, "West Ham"), nil)
 		teamRepo.On("GetById", 924).Return(newTeam(924, "Chelsea"), nil)
-		venueRepo.On("GetById", 87).Return(newVenue(), nil)
+		venueRepo.On("GetById", int64(87)).Return(newVenue(), nil)
 		roundRepo.On("GetById", 165789).Return(newRound(), nil)
 
 		proto, err := handler.HandleResult(newFixture(), &res)
@@ -133,56 +135,6 @@ func (m mockCompetitionRepository) GetById(id int) (*model.Competition, error) {
 	return c, args.Error(1)
 }
 
-type mockVenueRepository struct {
-	mock.Mock
-}
-
-func (m mockVenueRepository) Insert(v *model.Venue) error {
-	args := m.Called(v)
-	return args.Error(0)
-}
-
-func (m mockVenueRepository) Update(v *model.Venue) error {
-	args := m.Called(v)
-	return args.Error(0)
-}
-
-func (m mockVenueRepository) GetById(id int) (*model.Venue, error) {
-	args := m.Called(id)
-	v := args.Get(0).(*model.Venue)
-	return v, args.Error(1)
-}
-
-type mockSeasonRepository struct {
-	mock.Mock
-}
-
-func (m mockSeasonRepository) Insert(c *model.Season) error {
-	args := m.Called(c)
-	return args.Error(0)
-}
-
-func (m mockSeasonRepository) Update(c *model.Season) error {
-	args := m.Called(&c)
-	return args.Error(0)
-}
-
-func (m mockSeasonRepository) Id(id int) (*model.Season, error) {
-	args := m.Called(id)
-	c := args.Get(0).(*model.Season)
-	return c, args.Error(1)
-}
-
-func (m mockSeasonRepository) Ids() ([]int, error) {
-	args := m.Called()
-	return args.Get(0).([]int), args.Error(1)
-}
-
-func (m mockSeasonRepository) CurrentSeasonIds() ([]int, error) {
-	args := m.Called()
-	return args.Get(0).([]int), args.Error(1)
-}
-
 type mockRoundRepository struct {
 	mock.Mock
 }
@@ -236,8 +188,8 @@ func newTeam(id int, name string) *model.Team {
 	}
 }
 
-func newVenue() *model.Venue {
-	return &model.Venue{
+func newVenue() *app.Venue {
+	return &app.Venue{
 		ID:        87,
 		Name:      "London Stadium",
 		CreatedAt: time.Unix(1548086929, 0),
