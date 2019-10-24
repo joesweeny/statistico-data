@@ -51,3 +51,7 @@ func transformVenue(v *spClient.Venue) *app.Venue {
 		Capacity:  &v.Capacity,
 	}
 }
+
+func NewVenueRequester(client *spClient.HTTPClient, log *logrus.Logger) *VenueRequester {
+	return &VenueRequester{client: client, logger: log}
+}
