@@ -23,6 +23,8 @@ func (p CompetitionProcessor) Process(command string, option string, done chan b
 	}
 
 	ch := p.requester.Competitions()
+
+	go p.persistCompetitions(ch, done)
 }
 
 func (p CompetitionProcessor) persistCompetitions(ch <-chan *app.Competition, done chan bool) {
