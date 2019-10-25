@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/golang/protobuf/ptypes/wrappers"
 	"github.com/statistico/statistico-data/internal/app"
-	"github.com/statistico/statistico-data/internal/competition"
 	"github.com/statistico/statistico-data/internal/model"
 	"github.com/statistico/statistico-data/internal/proto"
 	pbResult "github.com/statistico/statistico-data/internal/proto/result"
@@ -15,7 +14,7 @@ import (
 )
 
 type Handler struct {
-	CompetitionRepo competition.Repository
+	CompetitionRepo app.CompetitionRepository
 	RoundRepo       round.Repository
 	SeasonRepo      season.Repository
 	TeamRepo        team.Repository
@@ -32,7 +31,7 @@ func (h Handler) HandleResult(f *model.Fixture, r *model.Result) (*pbResult.Resu
 		return nil, e
 	}
 
-	c, err := h.CompetitionRepo.GetById(s.LeagueID)
+	c, err := h.CompetitionRepo.ByID(int64(s.LeagueID))
 
 	if err != nil {
 		e := fmt.Errorf("error when retrieving Result: FixtureID %d, Competition ID %d", r.FixtureID, s.LeagueID)
