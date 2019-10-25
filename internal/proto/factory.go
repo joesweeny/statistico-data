@@ -23,7 +23,7 @@ func TeamToProto(t *model.Team) *pbTeam.Team {
 	return &x
 }
 
-func CompetitionToProto(c *model.Competition) *pbCompetition.Competition {
+func CompetitionToProto(c *app.Competition) *pbCompetition.Competition {
 	var x pbCompetition.Competition
 	x.Id = int64(c.ID)
 	x.Name = c.Name
