@@ -1,21 +1,20 @@
 package container
 
 import (
-	"github.com/statistico/statistico-data/internal/competition"
 	"github.com/statistico/statistico-data/internal/fixture"
 	"github.com/statistico/statistico-data/internal/result"
 	"github.com/statistico/statistico-data/internal/round"
 	"github.com/statistico/statistico-data/internal/season"
-	"github.com/statistico/statistico-data/internal/team"
 	"github.com/statistico/statistico-data/internal/stats/player"
 	"github.com/statistico/statistico-data/internal/stats/team"
+	"github.com/statistico/statistico-data/internal/team"
 )
 
 func (c Container) FixtureService() *fixture.Service {
 	return &fixture.Service{
 		Repository: &fixture.PostgresFixtureRepository{Connection: c.Database},
 		Handler: fixture.Handler{
-			CompetitionRepo: &competition.PostgresCompetitionRepository{Connection: c.Database},
+			CompetitionRepo: c.CompetitionRepository(),
 			RoundRepo:       &round.PostgresRoundRepository{Connection: c.Database},
 			SeasonRepo:      &season.PostgresSeasonRepository{Connection: c.Database},
 			TeamRepo:        &team.PostgresTeamRepository{Connection: c.Database},
@@ -31,7 +30,7 @@ func (c Container) ResultService() *result.Service {
 		FixtureRepo: &fixture.PostgresFixtureRepository{Connection: c.Database},
 		ResultRepo:  &result.PostgresResultRepository{Connection: c.Database},
 		Handler: result.Handler{
-			CompetitionRepo: &competition.PostgresCompetitionRepository{Connection: c.Database},
+			CompetitionRepo: c.CompetitionRepository(),
 			RoundRepo:       &round.PostgresRoundRepository{Connection: c.Database},
 			SeasonRepo:      &season.PostgresSeasonRepository{Connection: c.Database},
 			TeamRepo:        &team.PostgresTeamRepository{Connection: c.Database},

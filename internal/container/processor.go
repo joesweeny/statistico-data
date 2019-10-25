@@ -2,7 +2,6 @@ package container
 
 import (
 	"github.com/statistico/statistico-data/internal/app/process"
-	"github.com/statistico/statistico-data/internal/competition"
 	"github.com/statistico/statistico-data/internal/event"
 	"github.com/statistico/statistico-data/internal/fixture"
 	"github.com/statistico/statistico-data/internal/player"
@@ -19,13 +18,12 @@ type Processor interface {
 	Process(command string, option string, done chan bool)
 }
 
-func (c Container) CompetitionProcessor() *competition.Processor {
-	return &competition.Processor{
-		Repository: &competition.PostgresCompetitionRepository{Connection: c.Database},
-		Factory:    competition.Factory{Clock: clock()},
-		Client:     c.SportMonksClient,
-		Logger:     c.Logger,
-	}
+func (c Container) CompetitionProcessor() *process.CompetitionProcessor {
+	return process.NewCompetitionProcessor(
+		c.CompetitionRepository(),
+		c.CompetitionRequester(),
+		c.NewLogger,
+	)
 }
 
 func (c Container) CountryProcessor() *process.CountryProcessor {
