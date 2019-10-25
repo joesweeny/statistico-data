@@ -151,4 +151,3 @@ func newCompetition(id int64) *app.Competition {
 		UpdatedAt: time.Unix(1546965200, 0),
 	}
 }
-
