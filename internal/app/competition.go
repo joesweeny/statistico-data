@@ -20,3 +20,10 @@ type CompetitionRepository interface {
 	Update(c *Competition) error
 	ByID(id int64) (*Competition, error)
 }
+
+// CompetitionRequester provides an interface allowing this application to request data from an external
+// data provider. The requester implementation is responsible for creating the channel, filtering struct data into
+// the channel before closing the channel once successful execution is complete.
+type CompetitionRequester interface {
+	Competitions() <-chan *Competition
+}

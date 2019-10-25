@@ -31,11 +31,11 @@ func (c CountryRequester) parseCountries(pages int, ch chan<- *app.Country) {
 	defer close(ch)
 
 	for i := 1; i <= pages; i++ {
-		c.callClient(i, ch)
+		c.sendCountryRequest(i, ch)
 	}
 }
 
-func (c CountryRequester) callClient(page int, ch chan<- *app.Country) {
+func (c CountryRequester) sendCountryRequest(page int, ch chan<- *app.Country) {
 	res, _, err := c.client.Countries(context.Background(), page, []string{})
 
 	if err != nil {
