@@ -5,7 +5,5 @@ ENV GO111MODULE=on
 WORKDIR /opt
 COPY go.mod .
 COPY go.sum .
-RUN go get gotest.tools/gotestsum
-RUN go mod download
 
 CMD ["/bin/sh"]
