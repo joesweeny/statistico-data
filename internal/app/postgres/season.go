@@ -127,3 +127,7 @@ func rowToSeason(r *sql.Row) (*app.Season, error) {
 
 	return &s, nil
 }
+
+func NewSeasonRepository(connection *sql.DB, clock clockwork.Clock) *SeasonRepository {
+	return &SeasonRepository{connection: connection, clock: clock}
+}
