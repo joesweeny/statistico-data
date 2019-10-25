@@ -40,14 +40,14 @@ func (p CountryProcessor) persist(c *app.Country) {
 
 	if err != nil {
 		if err := p.repository.Insert(c); err != nil {
-			p.logger.Warningf("Error '%s' occurred when inserting Country struct: %+v\n,", err.Error(), *c)
+			p.logger.Warningf("Error '%s' occurred when inserting country struct: %+v\n,", err.Error(), *c)
 		}
 
 		return
 	}
 
 	if err := p.repository.Update(c); err != nil {
-		p.logger.Warningf("Error '%s' occurred when updating Competition struct: %+v\n,", err.Error(), *c)
+		p.logger.Warningf("Error '%s' occurred when updating country struct: %+v\n,", err.Error(), *c)
 	}
 
 	return
