@@ -5,7 +5,6 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/statistico/statistico-data/internal/app"
 	spClient "github.com/statistico/statistico-sportmonks-go-client"
-
 )
 
 type SeasonRequester struct {
@@ -23,14 +22,16 @@ func (s SeasonRequester) Seasons() <-chan *app.Season {
 
 	ch := make(chan *app.Season, meta.Pagination.Total)
 
+	go s.parseSeasons(meta.Pagination.TotalPages, ch)
 
+	return ch
 }
 
 func (s SeasonRequester) parseSeasons(pages int, ch chan<- *app.Season) {
 	defer close(ch)
 
 	for i := 1; i <= pages; i++ {
-		//c.sendCountryRequest(i, ch)
+		s.sendSeasonRequest(i, ch)
 	}
 }
 
@@ -43,10 +44,15 @@ func (s SeasonRequester) sendSeasonRequest(page int, ch chan<- *app.Season) {
 	}
 
 	for _, season := range res {
-
+		ch <- transformSeason(&season)
 	}
 }
 
-func transformSeason() *app.Season {
-	
+func transformSeason(s *spClient.Season) *app.Season {
+	return &app.Season{
+		ID:        int64(s.ID),
+		Name:      s.Name,
+		CompetitionID:  int64(s.LeagueID),
+		IsCurrent: s.IsCurrentSeason,
+	}
 }
