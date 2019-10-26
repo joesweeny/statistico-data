@@ -36,7 +36,7 @@ func (s SeasonRequester) parseSeasons(pages int, ch chan<- *app.Season) {
 }
 
 func (s SeasonRequester) sendSeasonRequest(page int, ch chan<- *app.Season) {
-	res, _ , err := s.client.Seasons(context.Background(), page, []string{})
+	res, _, err := s.client.Seasons(context.Background(), page, []string{})
 
 	if err != nil {
 		s.logger.Fatalf("Error when calling client '%s' when making season request", err.Error())
@@ -50,9 +50,13 @@ func (s SeasonRequester) sendSeasonRequest(page int, ch chan<- *app.Season) {
 
 func transformSeason(s *spClient.Season) *app.Season {
 	return &app.Season{
-		ID:        int64(s.ID),
-		Name:      s.Name,
-		CompetitionID:  int64(s.LeagueID),
-		IsCurrent: s.IsCurrentSeason,
+		ID:            int64(s.ID),
+		Name:          s.Name,
+		CompetitionID: int64(s.LeagueID),
+		IsCurrent:     s.IsCurrentSeason,
 	}
+}
+
+func NewSeasonRequester(client *spClient.HTTPClient, log *logrus.Logger) *SeasonRequester {
+	return &SeasonRequester{client: client, logger: log}
 }

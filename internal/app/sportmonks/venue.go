@@ -44,11 +44,11 @@ func (v VenueRequester) callClient(seasonId int64, ch chan<- *app.Venue) {
 func transformVenue(v *spClient.Venue) *app.Venue {
 	return &app.Venue{
 		ID:       int64(v.ID),
-		Name:      v.Name,
-		Surface:   &v.Surface,
-		Address:   v.Address,
-		City:      &v.City,
-		Capacity:  &v.Capacity,
+		Name:     v.Name,
+		Surface:  &v.Surface,
+		Address:  v.Address,
+		City:     &v.City,
+		Capacity: &v.Capacity,
 	}
 }
 

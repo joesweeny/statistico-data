@@ -13,7 +13,7 @@ type CountryRequester struct {
 }
 
 func (c CountryRequester) Countries() <-chan *app.Country {
-	_, meta, err := c.client.Countries(context.Background(),1, []string{})
+	_, meta, err := c.client.Countries(context.Background(), 1, []string{})
 
 	if err != nil {
 		c.logger.Fatalf("Error when calling client '%s' when making country request", err.Error())
