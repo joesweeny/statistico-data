@@ -3,7 +3,6 @@ package process
 import (
 	"github.com/sirupsen/logrus"
 	"github.com/statistico/statistico-data/internal/app"
-	"github.com/statistico/statistico-data/internal/season"
 )
 
 const venue = "venue"
@@ -11,7 +10,7 @@ const venueCurrentSeason = "venue:current-season"
 
 type VenueProcessor struct {
 	venueRepo  app.VenueRepository
-	seasonRepo season.Repository
+	seasonRepo app.SeasonRepository
 	requester  app.VenueRequester
 	logger     *logrus.Logger
 }
@@ -29,7 +28,7 @@ func (p VenueProcessor) Process(command string, option string, done chan bool) {
 }
 
 func (p VenueProcessor) processAllSeasons(done chan bool) {
-	ids, err := p.seasonRepo.Ids()
+	ids, err := p.seasonRepo.IDs()
 
 	if err != nil {
 		p.logger.Fatalf("Error when retrieving season ids: %s", err.Error())
@@ -42,7 +41,7 @@ func (p VenueProcessor) processAllSeasons(done chan bool) {
 }
 
 func (p VenueProcessor) processCurrentSeason(done chan bool) {
-	ids, err := p.seasonRepo.CurrentSeasonIds()
+	ids, err := p.seasonRepo.CurrentSeasonIDs()
 
 	if err != nil {
 		p.logger.Fatalf("Error when retrieving season ids: %s", err.Error())
@@ -80,6 +79,6 @@ func (p VenueProcessor) persist(v *app.Venue) {
 	return
 }
 
-func NewVenueProcessor(r app.VenueRepository, s season.Repository, v app.VenueRequester, log *logrus.Logger) *VenueProcessor {
+func NewVenueProcessor(r app.VenueRepository, s app.SeasonRepository, v app.VenueRequester, log *logrus.Logger) *VenueProcessor {
 	return &VenueProcessor{venueRepo: r, seasonRepo: s, requester: v, logger: log}
 }

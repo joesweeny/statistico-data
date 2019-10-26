@@ -40,14 +40,14 @@ func (s SeasonProcessor) persist(a *app.Season) {
 
 	if err != nil {
 		if err := s.repository.Insert(a); err != nil {
-			s.logger.Warningf("Error '%s' occurred when inserting season struct: %+v\n,", err.Error(), *c)
+			s.logger.Warningf("Error '%s' occurred when inserting season struct: %+v\n,", err.Error(), *a)
 		}
 
 		return
 	}
 
 	if err := s.repository.Update(a); err != nil {
-		s.logger.Warningf("Error '%s' occurred when updating season struct: %+v\n,", err.Error(), *c)
+		s.logger.Warningf("Error '%s' occurred when updating season struct: %+v\n,", err.Error(), *a)
 	}
 
 	return
