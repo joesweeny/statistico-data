@@ -8,7 +8,7 @@ import (
 const competition = "competition"
 
 // CompetitionProcessor is used to process data from an external data source to this applications
-// chosen data store
+// chosen data store.
 type CompetitionProcessor struct {
 	repository app.CompetitionRepository
 	requester app.CompetitionRequester
@@ -16,7 +16,7 @@ type CompetitionProcessor struct {
 }
 
 // Process fetches data from external an external data source using the CompetitionRequester
-// before persisting to the storage engine using the CompetitionRequester
+// before persisting to the storage engine using the CompetitionRepository.
 func (p CompetitionProcessor) Process(command string, option string, done chan bool) {
 	if command != competition {
 		p.logger.Fatalf("Command %s is not supported", command)
@@ -47,7 +47,7 @@ func (p CompetitionProcessor) persist(c *app.Competition) {
 	}
 
 	if err := p.repository.Update(c); err != nil {
-		p.logger.Warningf("Error '%s' occurred when updating ompetition struct: %+v\n,", err.Error(), *c)
+		p.logger.Warningf("Error '%s' occurred when updating competition struct: %+v\n,", err.Error(), *c)
 	}
 
 	return
