@@ -53,6 +53,6 @@ func (s SeasonProcessor) persist(a *app.Season) {
 	return
 }
 
-func NewSeasonRequester(r app.SeasonRepository, a app.SeasonRequester, log *logrus.Logger) *SeasonProcessor {
+func NewSeasonProcessor(r app.SeasonRepository, a app.SeasonRequester, log *logrus.Logger) *SeasonProcessor {
 	return &SeasonProcessor{repository: r, requester: a, logger: log}
 }
