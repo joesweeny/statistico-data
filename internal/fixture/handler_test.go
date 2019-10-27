@@ -1,10 +1,10 @@
 package fixture
 
 import (
+	"errors"
 	"github.com/statistico/statistico-data/internal/app"
 	m "github.com/statistico/statistico-data/internal/app/mock"
 	"github.com/statistico/statistico-data/internal/model"
-	"github.com/statistico/statistico-data/internal/season"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"io/ioutil"
@@ -126,7 +126,7 @@ func TestHandleFixture(t *testing.T) {
 		fixture := newFixture(99)
 		fixture.VenueID = &ven
 
-		seasonRepo.On("ByID", int64(14567)).Return(&app.Season{}, season.ErrNotFound)
+		seasonRepo.On("ByID", int64(14567)).Return(&app.Season{}, errors.New("not found"))
 		compRepo.AssertNotCalled(t, "GetById", 45)
 		teamRepo.AssertNotCalled(t, "GetById", 451)
 		teamRepo.AssertNotCalled(t, "GetById", 924)
@@ -140,7 +140,7 @@ func TestHandleFixture(t *testing.T) {
 		}
 
 		if err == nil {
-			t.Fatalf("Test failed, expected %s, got nil", season.ErrNotFound)
+			t.Fatalf("Test failed, expected %s, got nil", errors.New("not found"))
 		}
 	})
 }

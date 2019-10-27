@@ -7,6 +7,7 @@ import (
 	"github.com/pkg/errors"
 	"github.com/statistico/sportmonks-go-client"
 	"github.com/statistico/statistico-data/internal/model"
+	m "github.com/statistico/statistico-data/internal/app/mock"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"io/ioutil"
@@ -19,7 +20,7 @@ import (
 func TestProcess(t *testing.T) {
 	t.Helper()
 	fixtureRepo := new(mockFixtureRepository)
-	seasonRepo := new(mockSeasonRepository)
+	seasonRepo := new(m.SeasonRepository)
 
 	server := newTestClient(func(req *http.Request) *http.Response {
 		assert.Equal(t, req.URL.String(), "http://example.com/api/v2.0/seasons/123?api_token=my-key&include=fixtures")
@@ -47,7 +48,7 @@ func TestProcess(t *testing.T) {
 	t.Run("inserts new fixture", func(t *testing.T) {
 		done := make(chan bool)
 
-		seasonRepo.On("Ids").Return([]int64{123}, nil)
+		seasonRepo.On("IDs").Return([]int64{123}, nil)
 		fixtureRepo.On("ById", uint64(34)).Return(&model.Fixture{}, errors.New("not found"))
 		fixtureRepo.On("Insert", mock.Anything).Return(nil)
 		fixtureRepo.AssertNotCalled(t, "Update", mock.Anything)
@@ -58,7 +59,7 @@ func TestProcess(t *testing.T) {
 		done := make(chan bool)
 
 		f := newFixture(34)
-		seasonRepo.On("Ids").Return([]int{123}, nil)
+		seasonRepo.On("IDs").Return([]int{123}, nil)
 		fixtureRepo.On("ById", uint64(34)).Return(f, nil)
 		fixtureRepo.On("Update", &f).Return(nil)
 		fixtureRepo.AssertNotCalled(t, "Insert", mock.Anything)
@@ -68,7 +69,7 @@ func TestProcess(t *testing.T) {
 	t.Run("inserts new fixture", func(t *testing.T) {
 		done := make(chan bool)
 
-		seasonRepo.On("CurrentSeasonIds").Return([]int64{123}, nil)
+		seasonRepo.On("CurrentSeasonIDs").Return([]int64{123}, nil)
 		fixtureRepo.On("ById", uint64(34)).Return(&model.Fixture{}, errors.New("not found"))
 		fixtureRepo.On("Insert", mock.Anything).Return(nil)
 		fixtureRepo.AssertNotCalled(t, "Update", mock.Anything)
@@ -79,7 +80,7 @@ func TestProcess(t *testing.T) {
 		done := make(chan bool)
 
 		f := newFixture(34)
-		seasonRepo.On("CurrentSeasonIds").Return([]int64{123}, nil)
+		seasonRepo.On("CurrentSeasonIDs").Return([]int64{123}, nil)
 		fixtureRepo.On("ById", 34).Return(f, nil)
 		fixtureRepo.On("Update", &f).Return(nil)
 		fixtureRepo.AssertNotCalled(t, "Insert", mock.Anything)
@@ -97,36 +98,6 @@ func newTestClient(fn roundTripFunc) *http.Client {
 	return &http.Client{
 		Transport: roundTripFunc(fn),
 	}
-}
-
-type mockSeasonRepository struct {
-	mock.Mock
-}
-
-func (m mockSeasonRepository) Insert(c *model.Season) error {
-	args := m.Called(c)
-	return args.Error(0)
-}
-
-func (m mockSeasonRepository) Update(c *model.Season) error {
-	args := m.Called(&c)
-	return args.Error(0)
-}
-
-func (m mockSeasonRepository) Id(id int64) (*model.Season, error) {
-	args := m.Called(id)
-	c := args.Get(0).(*model.Season)
-	return c, args.Error(1)
-}
-
-func (m mockSeasonRepository) Ids() ([]int64, error) {
-	args := m.Called()
-	return args.Get(0).([]int64), args.Error(1)
-}
-
-func (m mockSeasonRepository) CurrentSeasonIds() ([]int64, error) {
-	args := m.Called()
-	return args.Get(0).([]int64), args.Error(1)
 }
 
 type mockFixtureRepository struct {

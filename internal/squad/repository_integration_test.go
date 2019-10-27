@@ -3,9 +3,11 @@ package squad
 import (
 	"database/sql"
 	"fmt"
+	"github.com/jonboulle/clockwork"
+	"github.com/statistico/statistico-data/internal/app"
+	"github.com/statistico/statistico-data/internal/app/postgres"
 	"github.com/statistico/statistico-data/internal/config"
 	"github.com/statistico/statistico-data/internal/model"
-	"github.com/statistico/statistico-data/internal/season"
 	"github.com/stretchr/testify/assert"
 	"testing"
 	"time"
@@ -179,7 +181,7 @@ func TestAll(t *testing.T) {
 func TestCurrentSeason(t *testing.T) {
 	conn, cleanUp := getConnection(t)
 	repo := PostgresSquadRepository{Connection: conn}
-	seasonRepo := season.PostgresSeasonRepository{Connection: conn}
+	seasonRepo := postgres.NewSeasonRepository(conn, clockwork.NewFakeClock())
 
 	t.Run("returns squads only for current season", func(t *testing.T) {
 		t.Helper()
@@ -252,11 +254,11 @@ func newSquad(season, team int) *model.Squad {
 	}
 }
 
-func newSeason(current bool, seasonId int) *model.Season {
-	return &model.Season{
+func newSeason(current bool, seasonId int64) *app.Season {
+	return &app.Season{
 		ID:        seasonId,
 		Name:      "Current Season",
-		LeagueID:  4,
+		CompetitionID:  int64(4),
 		IsCurrent: current,
 		CreatedAt: time.Unix(1546965200, 0),
 		UpdatedAt: time.Unix(1546965200, 0),
