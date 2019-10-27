@@ -25,8 +25,8 @@ func (r *CompetitionRepository) Insert(c *app.Competition) error {
 		c.Name,
 		c.CountryID,
 		c.IsCup,
-		c.CreatedAt.Unix(),
-		c.UpdatedAt.Unix(),
+		r.clock.Now().Unix(),
+		r.clock.Now().Unix(),
 	)
 
 	return err
@@ -47,7 +47,7 @@ func (r *CompetitionRepository) Update(c *app.Competition) error {
 		c.ID,
 		c.Name,
 		c.IsCup,
-		c.UpdatedAt.Unix(),
+		r.clock.Now().Unix(),
 	)
 
 	return err
