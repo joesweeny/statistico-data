@@ -2,6 +2,7 @@ package process_test
 
 import (
 	"errors"
+	"github.com/sirupsen/logrus"
 	"github.com/sirupsen/logrus/hooks/test"
 	"github.com/statistico/statistico-data/internal/app"
 	"github.com/statistico/statistico-data/internal/app/mock"
@@ -82,6 +83,80 @@ func TestSeasonProcessor_Process(t *testing.T) {
 		repo.AssertExpectations(t)
 		requester.AssertExpectations(t)
 		assert.Nil(t, hook.LastEntry())
+	})
+
+	t.Run("logs error when unable to insert season", func(t *testing.T) {
+		t.Helper()
+
+		repo := new(mock.SeasonRepository)
+		requester := new(mock.SeasonRequester)
+		logger, hook := test.NewNullLogger()
+
+		processor := process.NewSeasonProcessor(repo, requester, logger)
+
+		done := make(chan bool)
+
+		current := newSeason(8, true)
+		old := newSeason(2, false)
+
+		seasons := make([]*app.Season, 2)
+		seasons[0] = current
+		seasons[1] = old
+
+		ch :=seasonChannel(seasons)
+
+		requester.On("Seasons").Return(ch)
+
+		repo.On("ByID", int64(8)).Return(&app.Season{}, errors.New("not found"))
+		repo.On("ByID", int64(2)).Return(&app.Season{}, errors.New("not found"))
+		repo.On("Insert", current).Return(errors.New("error occurred"))
+		repo.On("Insert", old).Return(nil)
+
+		processor.Process("season", "", done)
+
+		<-done
+
+		repo.AssertExpectations(t)
+		requester.AssertExpectations(t)
+		assert.Equal(t, 1, len(hook.Entries))
+		assert.Equal(t, logrus.WarnLevel, hook.LastEntry().Level)
+	})
+
+	t.Run("logs error when unable to update season", func(t *testing.T) {
+		t.Helper()
+
+		repo := new(mock.SeasonRepository)
+		requester := new(mock.SeasonRequester)
+		logger, hook := test.NewNullLogger()
+
+		processor := process.NewSeasonProcessor(repo, requester, logger)
+
+		done := make(chan bool)
+
+		current := newSeason(8, true)
+		old := newSeason(2, false)
+
+		seasons := make([]*app.Season, 2)
+		seasons[0] = current
+		seasons[1] = old
+
+		ch :=seasonChannel(seasons)
+
+		requester.On("Seasons").Return(ch)
+
+		repo.On("ByID", int64(8)).Return(current, nil)
+		repo.On("ByID", int64(2)).Return(old, nil)
+		repo.On("Update", &current).Return(errors.New("error occurred"))
+		repo.On("Update", &old).Return(nil)
+
+		processor.Process("season", "", done)
+
+		<-done
+
+		repo.AssertExpectations(t)
+		requester.AssertExpectations(t)
+		assert.Equal(t, 1, len(hook.Entries))
+		assert.Equal(t, logrus.WarnLevel, hook.LastEntry().Level)
 	})
 }
 
