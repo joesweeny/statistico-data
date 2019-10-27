@@ -25,8 +25,8 @@ func (r *SeasonRepository) Insert(s *app.Season) error {
 		s.Name,
 		s.CompetitionID,
 		s.IsCurrent,
-		s.CreatedAt.Unix(),
-		s.UpdatedAt.Unix(),
+		r.clock.Now().Unix(),
+		r.clock.Now().Unix(),
 	)
 
 	return err
@@ -48,7 +48,7 @@ func (r *SeasonRepository) Update(s *app.Season) error {
 		s.Name,
 		s.CompetitionID,
 		s.IsCurrent,
-		s.UpdatedAt.Unix(),
+		r.clock.Now().Unix(),
 	)
 
 	return err

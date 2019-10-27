@@ -135,8 +135,8 @@ func TestSeasonRepository_ByID(t *testing.T) {
 		a.Equal("2018-2019", r.Name)
 		a.Equal(int64(560), r.CompetitionID)
 		a.True(r.IsCurrent)
-		a.Equal("2019-01-08 16:33:20 +0000 UTC", r.CreatedAt.String())
-		a.Equal("2019-01-08 16:33:20 +0000 UTC", r.UpdatedAt.String())
+		a.Equal("2019-01-14 11:25:00 +0000 UTC", r.CreatedAt.String())
+		a.Equal("2019-01-14 11:25:00 +0000 UTC", r.UpdatedAt.String())
 	})
 
 	t.Run("returns error if season does not exist", func(t *testing.T) {

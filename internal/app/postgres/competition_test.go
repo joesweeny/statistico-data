@@ -77,8 +77,8 @@ func TestCompetitionRepository_ByID(t *testing.T) {
 		a.Equal("Premier League", r.Name)
 		a.Equal(int64(462), r.CountryID)
 		a.Equal(false, r.IsCup)
-		a.Equal("2019-01-08 16:33:20 +0000 UTC", r.CreatedAt.String())
-		a.Equal("2019-01-08 16:33:20 +0000 UTC", r.UpdatedAt.String())
+		a.Equal("2019-01-14 11:25:00 +0000 UTC", r.CreatedAt.String())
+		a.Equal("2019-01-14 11:25:00 +0000 UTC", r.UpdatedAt.String())
 	})
 
 	t.Run("returns an error if country does not exist", func(t *testing.T) {
@@ -124,8 +124,8 @@ func TestCompetitionRepository_Update(t *testing.T) {
 		a.Equal("New League Name", r.Name)
 		a.Equal(int64(462), r.CountryID)
 		a.Equal(true, r.IsCup)
-		a.Equal("2019-01-08 16:33:20 +0000 UTC", r.CreatedAt.String())
-		a.Equal("2019-01-08 16:33:20 +0000 UTC", r.UpdatedAt.String())
+		a.Equal("2019-01-14 11:25:00 +0000 UTC", r.CreatedAt.String())
+		a.Equal("2019-01-14 11:25:00 +0000 UTC", r.UpdatedAt.String())
 	})
 
 	t.Run("returns error if record does not exist", func(t *testing.T) {
