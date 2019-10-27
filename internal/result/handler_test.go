@@ -42,7 +42,7 @@ func TestHandleResult(t *testing.T) {
 		res.AwayLeaguePosition = &pos2
 		res.Minutes = &min
 
-		seasonRepo.On("Id", int64(14567)).Return(newSeason(), nil)
+		seasonRepo.On("ByID", int64(14567)).Return(newSeason(), nil)
 		compRepo.On("ByID", int64(45)).Return(newCompetition(), nil)
 		teamRepo.On("GetById", 451).Return(newTeam(451, "West Ham"), nil)
 		teamRepo.On("GetById", 924).Return(newTeam(924, "Chelsea"), nil)
@@ -146,11 +146,11 @@ func newCompetition() *app.Competition {
 	}
 }
 
-func newSeason() *model.Season {
-	return &model.Season{
-		ID:        14567,
+func newSeason() *app.Season {
+	return &app.Season{
+		ID:        int64(14567),
 		Name:      "2018-2019",
-		LeagueID:  45,
+		CompetitionID:  int64(45),
 		IsCurrent: true,
 		CreatedAt: time.Unix(1546965200, 0),
 		UpdatedAt: time.Unix(1546965200, 0),

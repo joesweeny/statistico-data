@@ -88,7 +88,7 @@ func (c Container) ResultProcessor() *result.Processor {
 func (c Container) RoundProcessor() *round.Processor {
 	return &round.Processor{
 		Repository: &round.PostgresRoundRepository{Connection: c.Database},
-		SeasonRepo: &season.PostgresSeasonRepository{Connection: c.Database},
+		SeasonRepo: c.SeasonRepository(),
 		Factory:    round.Factory{Clock: clock()},
 		Client:     c.SportMonksClient,
 		Logger:     c.Logger,
@@ -117,7 +117,7 @@ func (c Container) SquadProcessor() *squad.Processor {
 func (c Container) TeamProcessor() *team.Processor {
 	return &team.Processor{
 		Repository: &team.PostgresTeamRepository{Connection: c.Database},
-		SeasonRepo: &season.PostgresSeasonRepository{Connection: c.Database},
+		SeasonRepo: c.SeasonRepository(),
 		Factory:    team.Factory{Clock: clock()},
 		Client:     c.SportMonksClient,
 		Logger:     c.Logger,
@@ -137,7 +137,7 @@ func (c Container) TeamStatsProcessor() team_stats.Processor {
 func (c Container) VenueProcessor() *process.VenueProcessor {
 	return process.NewVenueProcessor(
 		c.VenueRepository(),
-		&season.PostgresSeasonRepository{Connection: c.Database},
+		c.SeasonRepository(),
 		c.VenueRequester(),
 		c.NewLogger,
 	)

@@ -8,7 +8,6 @@ import (
 	"github.com/statistico/statistico-data/internal/proto"
 	pbResult "github.com/statistico/statistico-data/internal/proto/result"
 	"github.com/statistico/statistico-data/internal/round"
-	"github.com/statistico/statistico-data/internal/season"
 	"github.com/statistico/statistico-data/internal/team"
 	"log"
 )
@@ -16,14 +15,14 @@ import (
 type Handler struct {
 	CompetitionRepo app.CompetitionRepository
 	RoundRepo       round.Repository
-	SeasonRepo      season.Repository
+	SeasonRepo      app.SeasonRepository
 	TeamRepo        team.Repository
 	VenueRepo       app.VenueRepository
 	Logger          *log.Logger
 }
 
 func (h Handler) HandleResult(f *model.Fixture, r *model.Result) (*pbResult.Result, error) {
-	s, err := h.SeasonRepo.Id(int64(f.SeasonID))
+	s, err := h.SeasonRepo.ByID(int64(f.SeasonID))
 
 	if err != nil {
 		e := fmt.Errorf("error when retrieving Result: FixtureID %d, Season ID %d", r.FixtureID, f.SeasonID)
@@ -31,10 +30,10 @@ func (h Handler) HandleResult(f *model.Fixture, r *model.Result) (*pbResult.Resu
 		return nil, e
 	}
 
-	c, err := h.CompetitionRepo.ByID(int64(s.LeagueID))
+	c, err := h.CompetitionRepo.ByID(s.CompetitionID)
 
 	if err != nil {
-		e := fmt.Errorf("error when retrieving Result: FixtureID %d, Competition ID %d", r.FixtureID, s.LeagueID)
+		e := fmt.Errorf("error when retrieving Result: FixtureID %d, Competition ID %d", r.FixtureID, s.CompetitionID)
 		h.Logger.Println(e)
 		return nil, e
 	}

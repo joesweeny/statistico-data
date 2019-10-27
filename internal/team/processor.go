@@ -2,15 +2,15 @@ package team
 
 import (
 	"github.com/statistico/sportmonks-go-client"
+	"github.com/statistico/statistico-data/internal/app"
 	"github.com/statistico/statistico-data/internal/model"
-	"github.com/statistico/statistico-data/internal/season"
 	"log"
 	"sync"
 )
 
 type Processor struct {
 	Repository
-	SeasonRepo season.Repository
+	SeasonRepo app.SeasonRepository
 	Factory
 	Client *sportmonks.Client
 	Logger *log.Logger
@@ -34,7 +34,7 @@ func (s Processor) Process(command string, option string, done chan bool) {
 }
 
 func (s Processor) allSeasons(done chan bool) {
-	ids, err := s.SeasonRepo.Ids()
+	ids, err := s.SeasonRepo.IDs()
 
 	if err != nil {
 		s.Logger.Fatalf("Error when retrieving Season IDs: %s", err.Error())
@@ -48,7 +48,7 @@ func (s Processor) allSeasons(done chan bool) {
 }
 
 func (s Processor) currentSeason(done chan bool) {
-	ids, err := s.SeasonRepo.CurrentSeasonIds()
+	ids, err := s.SeasonRepo.CurrentSeasonIDs()
 
 	if err != nil {
 		s.Logger.Fatalf("Error when retrieving Season IDs: %s", err.Error())
