@@ -23,11 +23,11 @@ func TestSeasonProcessor_Process(t *testing.T) {
 
 		done := make(chan bool)
 
-		new := newSeason(8, true)
+		current := newSeason(8, true)
 		old := newSeason(2, false)
 
 		seasons := make([]*app.Season, 2)
-		seasons[0] = new
+		seasons[0] = current
 		seasons[1] = old
 
 		ch :=seasonChannel(seasons)
@@ -36,8 +36,44 @@ func TestSeasonProcessor_Process(t *testing.T) {
 
 		repo.On("ByID", int64(8)).Return(&app.Season{}, errors.New("not found"))
 		repo.On("ByID", int64(2)).Return(&app.Season{}, errors.New("not found"))
-		repo.On("Insert", new).Return(nil)
+		repo.On("Insert", current).Return(nil)
 		repo.On("Insert", old).Return(nil)
+
+		processor.Process("season", "", done)
+
+		<-done
+
+		repo.AssertExpectations(t)
+		requester.AssertExpectations(t)
+		assert.Nil(t, hook.LastEntry())
+	})
+
+	t.Run("updates existing season", func(t *testing.T) {
+		t.Helper()
+
+		repo := new(mock.SeasonRepository)
+		requester := new(mock.SeasonRequester)
+		logger, hook := test.NewNullLogger()
+
+		processor := process.NewSeasonProcessor(repo, requester, logger)
+
+		done := make(chan bool)
+
+		current := newSeason(8, true)
+		old := newSeason(2, false)
+
+		seasons := make([]*app.Season, 2)
+		seasons[0] = current
+		seasons[1] = old
+
+		ch :=seasonChannel(seasons)
+
+		requester.On("Seasons").Return(ch)
+
+		repo.On("ByID", int64(8)).Return(current, nil)
+		repo.On("ByID", int64(2)).Return(old, nil)
+		repo.On("Update", &current).Return(nil)
+		repo.On("Update", &old).Return(nil)
 
 		processor.Process("season", "", done)
 
