@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"github.com/jonboulle/clockwork"
 	"github.com/statistico/sportmonks-go-client"
+	m "github.com/statistico/statistico-data/internal/app/mock"
 	"github.com/statistico/statistico-data/internal/model"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -17,7 +18,7 @@ import (
 func TestProcess(t *testing.T) {
 	t.Helper()
 	squadRepo := new(mockSquadRepository)
-	seasonRepo := new(mockSeasonRepository)
+	seasonRepo := new(m.SeasonRepository)
 
 	server := newTestClient(func(req *http.Request) *http.Response {
 		if req.URL.String() == "http://example.com/api/v2.0/teams/season/100?api_token=my-key" {
@@ -58,7 +59,7 @@ func TestProcess(t *testing.T) {
 	t.Run("inserts new squad", func(t *testing.T) {
 		done := make(chan bool)
 
-		seasonRepo.On("Ids").Return([]int64{100}, nil)
+		seasonRepo.On("IDs").Return([]int64{100}, nil)
 		squadRepo.On("BySeasonAndTeam", 100, 56).Return(&model.Squad{}, ErrNotFound)
 		squadRepo.On("Insert", mock.Anything).Return(nil)
 		squadRepo.AssertNotCalled(t, "Update", mock.Anything)
@@ -86,36 +87,6 @@ func newTestClient(fn roundTripFunc) *http.Client {
 	return &http.Client{
 		Transport: roundTripFunc(fn),
 	}
-}
-
-type mockSeasonRepository struct {
-	mock.Mock
-}
-
-func (m mockSeasonRepository) Insert(c *model.Season) error {
-	args := m.Called(c)
-	return args.Error(0)
-}
-
-func (m mockSeasonRepository) Update(c *model.Season) error {
-	args := m.Called(&c)
-	return args.Error(0)
-}
-
-func (m mockSeasonRepository) Id(id int64) (*model.Season, error) {
-	args := m.Called(id)
-	c := args.Get(0).(*model.Season)
-	return c, args.Error(1)
-}
-
-func (m mockSeasonRepository) Ids() ([]int64, error) {
-	args := m.Called()
-	return args.Get(0).([]int64), args.Error(1)
-}
-
-func (m mockSeasonRepository) CurrentSeasonIds() ([]int64, error) {
-	args := m.Called()
-	return args.Get(0).([]int64), args.Error(1)
 }
 
 type mockSquadRepository struct {

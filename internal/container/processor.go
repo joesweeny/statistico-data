@@ -7,7 +7,6 @@ import (
 	"github.com/statistico/statistico-data/internal/player"
 	"github.com/statistico/statistico-data/internal/result"
 	"github.com/statistico/statistico-data/internal/round"
-	"github.com/statistico/statistico-data/internal/season"
 	"github.com/statistico/statistico-data/internal/squad"
 	"github.com/statistico/statistico-data/internal/stats/player"
 	"github.com/statistico/statistico-data/internal/stats/team"
@@ -47,7 +46,7 @@ func (c Container) EventProcessor() event.Processor {
 func (c Container) FixtureProcessor() *fixture.Processor {
 	return &fixture.Processor{
 		Repository: &fixture.PostgresFixtureRepository{Connection: c.Database},
-		SeasonRepo: &season.PostgresSeasonRepository{Connection: c.Database},
+		SeasonRepo: c.SeasonRepository(),
 		Factory:    fixture.Factory{Clock: clock()},
 		Client:     c.SportMonksClient,
 		Logger:     c.Logger,
@@ -95,19 +94,18 @@ func (c Container) RoundProcessor() *round.Processor {
 	}
 }
 
-func (c Container) SeasonProcessor() *season.Processor {
-	return &season.Processor{
-		Repository: &season.PostgresSeasonRepository{Connection: c.Database},
-		Factory:    season.Factory{Clock: clock()},
-		Client:     c.SportMonksClient,
-		Logger:     c.Logger,
-	}
+func (c Container) SeasonProcessor() *process.SeasonProcessor {
+	return process.NewSeasonProcessor(
+		c.SeasonRepository(),
+		c.SeasonRequester(),
+		c.NewLogger,
+	)
 }
 
 func (c Container) SquadProcessor() *squad.Processor {
 	return &squad.Processor{
 		Repository: &squad.PostgresSquadRepository{Connection: c.Database},
-		SeasonRepo: &season.PostgresSeasonRepository{Connection: c.Database},
+		SeasonRepo: c.SeasonRepository(),
 		Factory:    squad.Factory{Clock: clock()},
 		Client:     c.SportMonksClient,
 		Logger:     c.Logger,
