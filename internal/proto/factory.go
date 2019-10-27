@@ -102,7 +102,7 @@ func RoundToProto(r *model.Round) *pbRound.Round {
 	}
 }
 
-func SeasonToProto(s *model.Season) *pbSeason.Season {
+func SeasonToProto(s *app.Season) *pbSeason.Season {
 	var x pbSeason.Season
 	x.Id = int64(s.ID)
 	x.Name = s.Name

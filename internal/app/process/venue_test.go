@@ -34,7 +34,7 @@ func TestVenueProcessor_Process(t *testing.T) {
 
 		ids := []int64{32}
 
-		seasonRepo.On("Ids").Return(ids, nil)
+		seasonRepo.On("IDs").Return(ids, nil)
 
 		requester.On("VenuesBySeasonIDs", ids).Return(ch)
 
@@ -74,7 +74,7 @@ func TestVenueProcessor_Process(t *testing.T) {
 
 		ids := []int64{32}
 
-		seasonRepo.On("Ids").Return(ids, nil)
+		seasonRepo.On("IDs").Return(ids, nil)
 
 		requester.On("VenuesBySeasonIDs", ids).Return(ch)
 
@@ -114,7 +114,7 @@ func TestVenueProcessor_Process(t *testing.T) {
 
 		ids := []int64{32}
 
-		seasonRepo.On("Ids").Return(ids, nil)
+		seasonRepo.On("IDs").Return(ids, nil)
 
 		requester.On("VenuesBySeasonIDs", ids).Return(ch)
 
@@ -155,7 +155,7 @@ func TestVenueProcessor_Process(t *testing.T) {
 
 		ids := []int64{32}
 
-		seasonRepo.On("Ids").Return(ids, nil)
+		seasonRepo.On("IDs").Return(ids, nil)
 
 		requester.On("VenuesBySeasonIDs", ids).Return(ch)
 
@@ -196,7 +196,7 @@ func TestVenueProcessor_Process(t *testing.T) {
 
 		ids := []int64{32}
 
-		seasonRepo.On("CurrentSeasonIds").Return(ids, nil)
+		seasonRepo.On("CurrentSeasonIDs").Return(ids, nil)
 
 		requester.On("VenuesBySeasonIDs", ids).Return(ch)
 
@@ -236,7 +236,7 @@ func TestVenueProcessor_Process(t *testing.T) {
 
 		ids := []int64{32}
 
-		seasonRepo.On("CurrentSeasonIds").Return(ids, nil)
+		seasonRepo.On("CurrentSeasonIDs").Return(ids, nil)
 
 		requester.On("VenuesBySeasonIDs", ids).Return(ch)
 
@@ -276,7 +276,7 @@ func TestVenueProcessor_Process(t *testing.T) {
 
 		ids := []int64{32}
 
-		seasonRepo.On("CurrentSeasonIds").Return(ids, nil)
+		seasonRepo.On("CurrentSeasonIDs").Return(ids, nil)
 
 		requester.On("VenuesBySeasonIDs", ids).Return(ch)
 
@@ -317,7 +317,7 @@ func TestVenueProcessor_Process(t *testing.T) {
 
 		ids := []int64{32}
 
-		seasonRepo.On("CurrentSeasonIds").Return(ids, nil)
+		seasonRepo.On("CurrentSeasonIDs").Return(ids, nil)
 
 		requester.On("VenuesBySeasonIDs", ids).Return(ch)
 

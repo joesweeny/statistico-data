@@ -221,4 +221,3 @@ func newSeason(id int64, current bool) *app.Season {
 		UpdatedAt: time.Unix(1546965200, 0),
 	}
 }
-

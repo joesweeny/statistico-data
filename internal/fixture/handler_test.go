@@ -1,10 +1,10 @@
 package fixture
 
 import (
+	"errors"
 	"github.com/statistico/statistico-data/internal/app"
 	m "github.com/statistico/statistico-data/internal/app/mock"
 	"github.com/statistico/statistico-data/internal/model"
-	"github.com/statistico/statistico-data/internal/season"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"io/ioutil"
@@ -37,7 +37,7 @@ func TestHandleFixture(t *testing.T) {
 		fixture.VenueID = &ven
 		fixture.RefereeID = &ref
 
-		seasonRepo.On("Id", int64(14567)).Return(newSeason(), nil)
+		seasonRepo.On("ByID", int64(14567)).Return(newSeason(), nil)
 		compRepo.On("ByID", int64(45)).Return(newCompetition(), nil)
 		teamRepo.On("GetById", 451).Return(newTeam(451, "West Ham"), nil)
 		teamRepo.On("GetById", 924).Return(newTeam(924, "Chelsea"), nil)
@@ -78,7 +78,7 @@ func TestHandleFixture(t *testing.T) {
 		fixture := newFixture(99)
 		fixture.RoundID = nil
 
-		seasonRepo.On("Id", int64(14567)).Return(newSeason(), nil)
+		seasonRepo.On("ByID", int64(14567)).Return(newSeason(), nil)
 		compRepo.On("ByID", int64(45)).Return(newCompetition(), nil)
 		teamRepo.On("GetById", 451).Return(newTeam(451, "West Ham"), nil)
 		teamRepo.On("GetById", 924).Return(newTeam(924, "Chelsea"), nil)
@@ -111,7 +111,7 @@ func TestHandleFixture(t *testing.T) {
 		teamRepo := new(mockTeamRepository)
 		compRepo := new(m.CompetitionRepository)
 		roundRepo := new(mockRoundRepository)
-		seasonRepo := new(mockSeasonRepository)
+		seasonRepo := new(m.SeasonRepository)
 		venueRepo := new(m.VenueRepository)
 		handler := Handler{
 			TeamRepo:        teamRepo,
@@ -126,7 +126,7 @@ func TestHandleFixture(t *testing.T) {
 		fixture := newFixture(99)
 		fixture.VenueID = &ven
 
-		seasonRepo.On("Id", int64(14567)).Return(&model.Season{}, season.ErrNotFound)
+		seasonRepo.On("ByID", int64(14567)).Return(&app.Season{}, errors.New("not found"))
 		compRepo.AssertNotCalled(t, "GetById", 45)
 		teamRepo.AssertNotCalled(t, "GetById", 451)
 		teamRepo.AssertNotCalled(t, "GetById", 924)
@@ -140,7 +140,7 @@ func TestHandleFixture(t *testing.T) {
 		}
 
 		if err == nil {
-			t.Fatalf("Test failed, expected %s, got nil", season.ErrNotFound)
+			t.Fatalf("Test failed, expected %s, got nil", errors.New("not found"))
 		}
 	})
 }
@@ -196,11 +196,11 @@ func newCompetition() *app.Competition {
 	}
 }
 
-func newSeason() *model.Season {
-	return &model.Season{
-		ID:        14567,
+func newSeason() *app.Season {
+	return &app.Season{
+		ID:        int64(14567),
 		Name:      "2018-2019",
-		LeagueID:  45,
+		CompetitionID:  int64(45),
 		IsCurrent: true,
 		CreatedAt: time.Unix(1546965200, 0),
 		UpdatedAt: time.Unix(1546965200, 0),
