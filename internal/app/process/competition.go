@@ -7,7 +7,7 @@ import (
 
 const competition = "competition"
 
-// CompetitionProcessor is used to process data from an external data source to this applications
+// CompetitionProcessor is used to process data from external data source to this applications
 // chosen data store.
 type CompetitionProcessor struct {
 	repository app.CompetitionRepository
