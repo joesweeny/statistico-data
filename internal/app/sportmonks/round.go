@@ -46,7 +46,7 @@ func (r RoundRequester) sendRoundRequest(seasonID int64, ch chan<- *app.Round) {
 		x, err := transformRound(&round)
 
 		if err != nil {
-			r.logger.Println(err)
+			r.logger.Warningf(err.Error())
 			continue
 		}
 
@@ -58,13 +58,13 @@ func transformRound(r *spClient.Round) (*app.Round, error) {
 	start, err := time.Parse(dateFormat, r.Start)
 
 	if err != nil {
-		return nil, errors.New(fmt.Sprintf("error when parsing round from client. ID '%d', error %s", r.ID, err))
+		return nil, errors.New(fmt.Sprintf("error parsing round from client. ID '%d', error %s", r.ID, err))
 	}
 
 	end, err := time.Parse(dateFormat, r.End)
 
 	if err != nil {
-		return nil, errors.New(fmt.Sprintf("error when parsing round from client. ID '%d', error %s", r.ID, err))
+		return nil, errors.New(fmt.Sprintf("error parsing round from client. ID '%d', error %s", r.ID, err))
 	}
 
 	return &app.Round{
@@ -74,4 +74,8 @@ func transformRound(r *spClient.Round) (*app.Round, error) {
 		StartDate: start,
 		EndDate:   end,
 	}, nil
+}
+
+func NewRoundRequester(client *spClient.HTTPClient, log *logrus.Logger) *RoundRequester {
+	return &RoundRequester{client: client, logger: log}
 }
