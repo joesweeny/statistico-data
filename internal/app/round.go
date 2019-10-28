@@ -20,3 +20,10 @@ type RoundRepository interface {
 	Update(r *Round) error
 	ByID(id int64) (*Round, error)
 }
+
+// RoundRequester provides an interface allowing this application to request data from an external
+// data provider. The requester implementation is responsible for creating the channel, filtering struct data into
+// the channel before closing the channel once successful execution is complete.
+type RoundRequester interface {
+	RoundsBySeasonIDs(seasonIDs []int64) <-chan *Round
+}
