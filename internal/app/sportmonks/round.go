@@ -2,7 +2,6 @@ package sportmonks
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"github.com/sirupsen/logrus"
 	"github.com/statistico/statistico-data/internal/app"
@@ -58,13 +57,13 @@ func transformRound(r *spClient.Round) (*app.Round, error) {
 	start, err := time.Parse(dateFormat, r.Start)
 
 	if err != nil {
-		return nil, errors.New(fmt.Sprintf("error parsing round from client. ID '%d', error %s", r.ID, err))
+		return nil, fmt.Errorf("error parsing round from client. ID '%d', error %s", r.ID, err)
 	}
 
 	end, err := time.Parse(dateFormat, r.End)
 
 	if err != nil {
-		return nil, errors.New(fmt.Sprintf("error parsing round from client. ID '%d', error %s", r.ID, err))
+		return nil, fmt.Errorf("error parsing round from client. ID '%d', error %s", r.ID, err)
 	}
 
 	return &app.Round{

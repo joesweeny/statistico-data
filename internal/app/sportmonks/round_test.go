@@ -3,10 +3,6 @@ package sportmonks_test
 import (
 	"bytes"
 	"github.com/sirupsen/logrus"
-
-	//"github.com/sirupsen/logrus"
-
-	//"github.com/sirupsen/logrus"
 	"github.com/sirupsen/logrus/hooks/test"
 	"github.com/statistico/statistico-data/internal/app/mock"
 	"github.com/statistico/statistico-data/internal/app/sportmonks"
@@ -109,10 +105,7 @@ func TestRoundsBySeasonIDs(t *testing.T) {
 		a.Equal("2011-09-17", x.StartDate.Format("2006-01-02"))
 		a.Equal("2011-09-18", x.EndDate.Format("2006-01-02"))
 
-		t.Errorf("Entry: %+v", hook.LastEntry().Level)
-
-		//a.Equal(t, int(1), len(hook.Entries))
-		a.Equal(t, logrus.WarnLevel.String(), hook.LastEntry().Level)
+		a.Equal(logrus.WarnLevel, hook.LastEntry().Level)
 		a.Equal(
 			`error parsing round from client. ID '234', error parsing time "Today" as "2006-01-02": cannot parse "Today" as "2006"`,
 			hook.LastEntry().Message,
