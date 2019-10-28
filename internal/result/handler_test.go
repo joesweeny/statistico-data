@@ -13,7 +13,7 @@ import (
 func TestHandleResult(t *testing.T) {
 	teamRepo := new(mockTeamRepository)
 	compRepo := new(m.CompetitionRepository)
-	roundRepo := new(mockRoundRepository)
+	roundRepo := new(m.RoundRepository)
 	seasonRepo := new(m.SeasonRepository)
 	venueRepo := new(m.VenueRepository)
 	handler := Handler{
@@ -47,7 +47,7 @@ func TestHandleResult(t *testing.T) {
 		teamRepo.On("GetById", 451).Return(newTeam(451, "West Ham"), nil)
 		teamRepo.On("GetById", 924).Return(newTeam(924, "Chelsea"), nil)
 		venueRepo.On("GetById", int64(87)).Return(newVenue(), nil)
-		roundRepo.On("GetById", 165789).Return(newRound(), nil)
+		roundRepo.On("ByID", int64(165789)).Return(newRound(), nil)
 
 		proto, err := handler.HandleResult(newFixture(), &res)
 
@@ -115,26 +115,6 @@ func (m mockTeamRepository) GetById(id int) (*model.Team, error) {
 	return c, args.Error(1)
 }
 
-type mockRoundRepository struct {
-	mock.Mock
-}
-
-func (m mockRoundRepository) Insert(c *model.Round) error {
-	args := m.Called(c)
-	return args.Error(0)
-}
-
-func (m mockRoundRepository) Update(c *model.Round) error {
-	args := m.Called(&c)
-	return args.Error(0)
-}
-
-func (m mockRoundRepository) GetById(id int) (*model.Round, error) {
-	args := m.Called(id)
-	c := args.Get(0).(*model.Round)
-	return c, args.Error(1)
-}
-
 func newCompetition() *app.Competition {
 	return &app.Competition{
 		ID:        4,
@@ -192,8 +172,8 @@ func newFixture() *model.Fixture {
 	}
 }
 
-func newRound() *model.Round {
-	return &model.Round{
+func newRound() *app.Round {
+	return &app.Round{
 		ID:        165789,
 		Name:      "18",
 		SeasonID:  14567,

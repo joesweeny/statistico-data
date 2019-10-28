@@ -6,7 +6,6 @@ import (
 	"github.com/statistico/statistico-data/internal/fixture"
 	"github.com/statistico/statistico-data/internal/player"
 	"github.com/statistico/statistico-data/internal/result"
-	"github.com/statistico/statistico-data/internal/round"
 	"github.com/statistico/statistico-data/internal/squad"
 	"github.com/statistico/statistico-data/internal/stats/player"
 	"github.com/statistico/statistico-data/internal/stats/team"
@@ -84,14 +83,13 @@ func (c Container) ResultProcessor() *result.Processor {
 	}
 }
 
-func (c Container) RoundProcessor() *round.Processor {
-	return &round.Processor{
-		Repository: &round.PostgresRoundRepository{Connection: c.Database},
-		SeasonRepo: c.SeasonRepository(),
-		Factory:    round.Factory{Clock: clock()},
-		Client:     c.SportMonksClient,
-		Logger:     c.Logger,
-	}
+func (c Container) RoundProcessor() *process.RoundProcessor {
+	return process.NewRoundProcessor(
+		c.RoundRepository(),
+		c.SeasonRepository(),
+		c.RoundRequester(),
+		c.NewLogger,
+	)
 }
 
 func (c Container) SeasonProcessor() *process.SeasonProcessor {
