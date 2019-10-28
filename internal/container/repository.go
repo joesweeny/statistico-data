@@ -12,6 +12,10 @@ func (c Container) CountryRepository() *postgres.CountryRepository {
 	return postgres.NewCountryRepository(c.Database, c.Clock)
 }
 
+func (c Container) RoundRepository() *postgres.RoundRepository {
+	return postgres.NewRoundRepository(c.Database, c.Clock)
+}
+
 func (c Container) SeasonRepository() *postgres.SeasonRepository {
 	return postgres.NewSeasonRepository(c.Database, c.Clock)
 }
