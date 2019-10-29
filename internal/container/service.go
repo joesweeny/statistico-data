@@ -5,7 +5,6 @@ import (
 	"github.com/statistico/statistico-data/internal/result"
 	"github.com/statistico/statistico-data/internal/stats/player"
 	"github.com/statistico/statistico-data/internal/stats/team"
-	"github.com/statistico/statistico-datateamRepo"
 )
 
 func (c Container) FixtureService() *fixture.Service {

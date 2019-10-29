@@ -4,9 +4,7 @@ import (
 	"errors"
 	"github.com/statistico/statistico-data/internal/app"
 	m "github.com/statistico/statistico-data/internal/app/mock"
-	"github.com/statistico/statistico-data/internal/model"
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/mock"
 	"io/ioutil"
 	"log"
 	"testing"
@@ -14,7 +12,7 @@ import (
 )
 
 func TestHandleFixture(t *testing.T) {
-	teamRepo := new(mockTeamRepository)
+	teamRepo := new(m.TeamRepository)
 	compRepo := new(m.CompetitionRepository)
 	roundRepo := new(m.RoundRepository)
 	seasonRepo := new(m.SeasonRepository)
@@ -39,8 +37,8 @@ func TestHandleFixture(t *testing.T) {
 
 		seasonRepo.On("ByID", int64(14567)).Return(newSeason(), nil)
 		compRepo.On("ByID", int64(45)).Return(newCompetition(), nil)
-		teamRepo.On("GetById", 451).Return(newTeam(451, "West Ham"), nil)
-		teamRepo.On("GetById", 924).Return(newTeam(924, "Chelsea"), nil)
+		teamRepo.On("ByID", int64(451)).Return(newTeam(451, "West Ham"), nil)
+		teamRepo.On("ByID", int64(924)).Return(newTeam(924, "Chelsea"), nil)
 		venueRepo.On("GetById", int64(87)).Return(newVenue(), nil)
 		roundRepo.On("ByID", int64(165789)).Return(newRound(), nil)
 
@@ -80,8 +78,8 @@ func TestHandleFixture(t *testing.T) {
 
 		seasonRepo.On("ByID", int64(14567)).Return(newSeason(), nil)
 		compRepo.On("ByID", int64(45)).Return(newCompetition(), nil)
-		teamRepo.On("GetById", 451).Return(newTeam(451, "West Ham"), nil)
-		teamRepo.On("GetById", 924).Return(newTeam(924, "Chelsea"), nil)
+		teamRepo.On("ByID", int64(451)).Return(newTeam(451, "West Ham"), nil)
+		teamRepo.On("ByID", int64(924)).Return(newTeam(924, "Chelsea"), nil)
 
 		proto, err := handler.HandleFixture(fixture)
 
@@ -108,7 +106,7 @@ func TestHandleFixture(t *testing.T) {
 	})
 
 	t.Run("error is returned if season not found", func(t *testing.T) {
-		teamRepo := new(mockTeamRepository)
+		teamRepo := new(m.TeamRepository)
 		compRepo := new(m.CompetitionRepository)
 		roundRepo := new(m.RoundRepository)
 		seasonRepo := new(m.SeasonRepository)
@@ -128,8 +126,8 @@ func TestHandleFixture(t *testing.T) {
 
 		seasonRepo.On("ByID", int64(14567)).Return(&app.Season{}, errors.New("not found"))
 		compRepo.AssertNotCalled(t, "GetById", 45)
-		teamRepo.AssertNotCalled(t, "GetById", 451)
-		teamRepo.AssertNotCalled(t, "GetById", 924)
+		teamRepo.AssertNotCalled(t, "ByID", int64(451))
+		teamRepo.AssertNotCalled(t, "ByID", int64(924))
 		venueRepo.AssertNotCalled(t, "GetById", 87)
 		roundRepo.AssertNotCalled(t, "ByID", int64(165789))
 
@@ -145,25 +143,7 @@ func TestHandleFixture(t *testing.T) {
 	})
 }
 
-type mockTeamRepository struct {
-	mock.Mock
-}
 
-func (m mockTeamRepository) Insert(c *model.Team) error {
-	args := m.Called(c)
-	return args.Error(0)
-}
-
-func (m mockTeamRepository) Update(c *model.Team) error {
-	args := m.Called(&c)
-	return args.Error(0)
-}
-
-func (m mockTeamRepository) GetById(id int) (*model.Team, error) {
-	args := m.Called(id)
-	c := args.Get(0).(*model.Team)
-	return c, args.Error(1)
-}
 
 func newCompetition() *app.Competition {
 	return &app.Competition{
@@ -187,11 +167,11 @@ func newSeason() *app.Season {
 	}
 }
 
-func newTeam(id int, name string) *model.Team {
-	return &model.Team{
-		ID:           id,
+func newTeam(id int, name string) *app.Team {
+	return &app.Team{
+		ID:           int64(id),
 		Name:         name,
-		VenueID:      560,
+		VenueID:      int64(560),
 		NationalTeam: false,
 		CreatedAt:    time.Unix(1546965200, 0),
 		UpdatedAt:    time.Unix(1546965200, 0),
