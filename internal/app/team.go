@@ -24,3 +24,10 @@ type TeamRepository interface {
 	Update(t *Team) error
 	ByID(id int64) (*Team, error)
 }
+
+// TeamRequester provides an interface allowing this application to request data from an external
+// data provider. The requester implementation is responsible for creating the channel, filtering struct data into
+// the channel before closing the channel once successful execution is complete.
+type TeamRequester interface {
+	TeamsBySeasonID(seasonID int64) <-chan *Team
+}
