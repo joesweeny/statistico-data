@@ -78,7 +78,7 @@ func TestTeamRepository_ByID(t *testing.T) {
 		a.Equal(int64(560), r.VenueID)
 		a.Equal(false, r.NationalTeam)
 		a.Nil(r.ShortCode)
-		a.Nil(r.CountryID)
+		a.Equal(int64(462), r.CountryID)
 		a.Nil(r.Founded)
 		a.Nil(r.Logo)
 		a.Equal("2019-01-14 11:25:00 +0000 UTC", r.CreatedAt.String())
@@ -163,6 +163,7 @@ func newTeam(id int64) *app.Team {
 		ID:           id,
 		Name:         "West Ham United",
 		VenueID:      560,
+		CountryID:    int64(462),
 		NationalTeam: false,
 		CreatedAt:    time.Unix(1546965200, 0),
 		UpdatedAt:    time.Unix(1546965200, 0),
