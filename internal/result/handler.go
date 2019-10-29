@@ -7,7 +7,6 @@ import (
 	"github.com/statistico/statistico-data/internal/model"
 	"github.com/statistico/statistico-data/internal/proto"
 	pbResult "github.com/statistico/statistico-data/internal/proto/result"
-	"github.com/statistico/statistico-data/internal/team"
 	"log"
 )
 
@@ -15,7 +14,7 @@ type Handler struct {
 	CompetitionRepo app.CompetitionRepository
 	RoundRepo       app.RoundRepository
 	SeasonRepo      app.SeasonRepository
-	TeamRepo        team.Repository
+	TeamRepo        app.TeamRepository
 	VenueRepo       app.VenueRepository
 	Logger          *log.Logger
 }
@@ -37,7 +36,7 @@ func (h Handler) HandleResult(f *model.Fixture, r *model.Result) (*pbResult.Resu
 		return nil, e
 	}
 
-	home, err := h.TeamRepo.GetById(f.HomeTeamID)
+	home, err := h.TeamRepo.ByID(int64(f.HomeTeamID))
 
 	if err != nil {
 		e := fmt.Errorf("error when retrieving Result: FixtureID %d, Home Team ID %d", r.FixtureID, f.HomeTeamID)
@@ -45,7 +44,7 @@ func (h Handler) HandleResult(f *model.Fixture, r *model.Result) (*pbResult.Resu
 		return nil, e
 	}
 
-	away, err := h.TeamRepo.GetById(f.AwayTeamID)
+	away, err := h.TeamRepo.ByID(int64(f.AwayTeamID))
 
 	if err != nil {
 		e := fmt.Errorf("error when retrieving Result: FixtureID %d, Away Team ID %d", r.FixtureID, f.AwayTeamID)
