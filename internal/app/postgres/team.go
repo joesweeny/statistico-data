@@ -97,3 +97,7 @@ func rowToTeam(r *sql.Row) (*app.Team, error) {
 
 	return &t, nil
 }
+
+func NewTeamRepository(connection *sql.DB, clock clockwork.Clock) *TeamRepository {
+	return &TeamRepository{connection: connection, clock: clock}
+}
