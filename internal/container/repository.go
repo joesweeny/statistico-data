@@ -20,6 +20,10 @@ func (c Container) SeasonRepository() *postgres.SeasonRepository {
 	return postgres.NewSeasonRepository(c.Database, c.Clock)
 }
 
+func (c Container) TeamRepository() *postgres.TeamRepository {
+	return postgres.NewTeamRepository(c.Database, c.Clock)
+}
+
 func (c Container) VenueRepository() *postgres.VenueRepository {
 	return postgres.NewVenueRepository(c.Database, c.Clock)
 }
