@@ -15,7 +15,7 @@ import (
 	"time"
 )
 
-func TeamToProto(t *model.Team) *pbTeam.Team {
+func TeamToProto(t *app.Team) *pbTeam.Team {
 	var x pbTeam.Team
 	x.Id = int64(t.ID)
 	x.Name = t.Name
@@ -279,7 +279,7 @@ func VenueToProto(v *app.Venue) *pbVenue.Venue {
 	return &ven
 }
 
-func ToMatchData(home *model.Team, away *model.Team, res *model.Result) *pbResult.MatchData {
+func ToMatchData(home *app.Team, away *app.Team, res *model.Result) *pbResult.MatchData {
 	return &pbResult.MatchData{
 		HomeTeam: TeamToProto(home),
 		AwayTeam: TeamToProto(away),
