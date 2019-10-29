@@ -32,7 +32,7 @@ func transformPlayer(p *spClient.Player) *app.Player {
 		BirthPlace:  &p.BirthPlace,
 		DateOfBirth: &p.BirthDate,
 		PositionID:  p.PositionID,
-		Image:       &p.ImagePath,
+		Image:       p.ImagePath,
 	}
 }
 

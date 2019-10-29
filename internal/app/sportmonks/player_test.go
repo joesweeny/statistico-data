@@ -7,7 +7,6 @@ import (
 	"github.com/statistico/statistico-data/internal/app/sportmonks"
 	spClient "github.com/statistico/statistico-sportmonks-go-client"
 	"github.com/stretchr/testify/assert"
-	"golang.org/x/tools/go/ssa/interp/testdata/src/fmt"
 	"io/ioutil"
 	"net/http"
 	"testing"
@@ -34,8 +33,6 @@ func TestPlayerRequester_PlayerByID(t *testing.T) {
 
 		player := requester.PlayerByID(int64(219591))
 
-		fmt.Printf("Player %+v", player)
-
 		a := assert.New(t)
 
 		a.Equal(int64(219591), player.ID)
@@ -45,7 +42,7 @@ func TestPlayerRequester_PlayerByID(t *testing.T) {
 		a.Equal("Ciudad del Este", *player.BirthPlace)
 		a.Equal("23/08/1991", *player.DateOfBirth)
 		a.Equal(2, player.PositionID)
-		a.Nil(&player.Image)
+		a.Equal("https://cdn.sportmonks.com/images/soccer/player/1/1.png", player.Image)
 	})
 }
 
@@ -65,6 +62,6 @@ var playerResponse = `{
 		"birthplace": "Ciudad del Este",
 		"height": "188 cm",
 		"weight": "82 kg",
-		"image_path": null
+		"image_path": "https://cdn.sportmonks.com/images/soccer/player/1/1.png"
 	}
 }`
