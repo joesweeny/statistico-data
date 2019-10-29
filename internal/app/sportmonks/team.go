@@ -28,7 +28,6 @@ func (t TeamRequester) parseTeams(seasonIDs []int64, ch chan<- *app.Team) {
 
 	for _, id := range seasonIDs {
 		waitGroup.Add(1)
-
 		go t.sendTeamRequests(id, ch, waitGroup)
 	}
 
