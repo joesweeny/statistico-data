@@ -9,7 +9,6 @@ import (
 	"github.com/statistico/statistico-data/internal/squad"
 	"github.com/statistico/statistico-data/internal/stats/player"
 	"github.com/statistico/statistico-data/internal/stats/team"
-	"github.com/statistico/statistico-data/internal/team"
 )
 
 type Processor interface {
@@ -110,14 +109,13 @@ func (c Container) SquadProcessor() *squad.Processor {
 	}
 }
 
-func (c Container) TeamProcessor() *team.Processor {
-	return &team.Processor{
-		Repository: &team.PostgresTeamRepository{Connection: c.Database},
-		SeasonRepo: c.SeasonRepository(),
-		Factory:    team.Factory{Clock: clock()},
-		Client:     c.SportMonksClient,
-		Logger:     c.Logger,
-	}
+func (c Container) TeamProcessor() *process.TeamProcessor {
+	return process.NewTeamProcessor(
+		c.TeamRepository(),
+		c.SeasonRepository(),
+		c.TeamRequester(),
+		c.NewLogger,
+	)
 }
 
 func (c Container) TeamStatsProcessor() team_stats.Processor {
