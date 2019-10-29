@@ -24,3 +24,9 @@ type PlayerRepository interface {
 	Update(m *Player) error
 	ByID(id int64) (*Player, error)
 }
+
+// PlayerRequester provides an interface allowing this application to request player data from an external
+// data provider
+type PlayerRequester interface {
+	PlayerByID(id int64) *Player
+}
