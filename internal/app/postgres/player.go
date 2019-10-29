@@ -28,8 +28,8 @@ func (p *PlayerRepository) Insert(m *app.Player) error {
 		m.DateOfBirth,
 		m.PositionID,
 		m.Image,
-		m.CreatedAt.Unix(),
-		m.UpdatedAt.Unix(),
+		p.clock.Now().Unix(),
+		p.clock.Now().Unix(),
 	)
 
 	return err
@@ -43,7 +43,7 @@ func (p *PlayerRepository) Update(m *app.Player) error {
 	query := `
 	UPDATE sportmonks_player set country_id = $2, position_id = $3, image = $4, updated_at = $5 where id = $1`
 
-	_, err := p.connection.Exec(query, m.ID, m.CountryId, m.PositionID, m.Image, m.UpdatedAt.Unix())
+	_, err := p.connection.Exec(query, m.ID, m.CountryId, m.PositionID, m.Image, p.clock.Now().Unix())
 
 	return err
 }
@@ -82,4 +82,8 @@ func rowToPlayer(r *sql.Row) (*app.Player, error) {
 	m.UpdatedAt = time.Unix(updated, 0)
 
 	return &m, nil
+}
+
+func NewPlayerRepository(connection *sql.DB, clock clockwork.Clock) *PlayerRepository {
+	return &PlayerRepository{connection: connection, clock: clock}
 }
