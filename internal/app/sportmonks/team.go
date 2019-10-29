@@ -28,13 +28,13 @@ func (t TeamRequester) parseTeams(seasonIDs []int64, ch chan<- *app.Team) {
 
 	for _, id := range seasonIDs {
 		waitGroup.Add(1)
-		go t.sendTeamRequests(id, ch, waitGroup)
+		go t.sendTeamRequests(id, ch, &waitGroup)
 	}
 
 	waitGroup.Wait()
 }
 
-func (t TeamRequester) sendTeamRequests(seasonID int64, ch chan<- *app.Team, w sync.WaitGroup) {
+func (t TeamRequester) sendTeamRequests(seasonID int64, ch chan<- *app.Team, w *sync.WaitGroup) {
 	_, meta, err := t.client.TeamsBySeasonID(context.Background(), int(seasonID), 1, []string{})
 
 	if err != nil {
