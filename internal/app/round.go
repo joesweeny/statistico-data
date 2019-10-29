@@ -4,6 +4,7 @@ import (
 	"time"
 )
 
+// Round domain entity.
 type Round struct {
 	ID        int64       `json:"id"`
 	Name      string    `json:"name"`

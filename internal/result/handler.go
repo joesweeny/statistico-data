@@ -7,14 +7,13 @@ import (
 	"github.com/statistico/statistico-data/internal/model"
 	"github.com/statistico/statistico-data/internal/proto"
 	pbResult "github.com/statistico/statistico-data/internal/proto/result"
-	"github.com/statistico/statistico-data/internal/round"
 	"github.com/statistico/statistico-data/internal/team"
 	"log"
 )
 
 type Handler struct {
 	CompetitionRepo app.CompetitionRepository
-	RoundRepo       round.Repository
+	RoundRepo       app.RoundRepository
 	SeasonRepo      app.SeasonRepository
 	TeamRepo        team.Repository
 	VenueRepo       app.VenueRepository
@@ -63,7 +62,7 @@ func (h Handler) HandleResult(f *model.Fixture, r *model.Result) (*pbResult.Resu
 	}
 
 	if f.RoundID != nil {
-		rd, err := h.RoundRepo.GetById(*f.RoundID)
+		rd, err := h.RoundRepo.ByID(int64(*f.RoundID))
 
 		if err != nil {
 			e := fmt.Errorf("error when retrieving Result: FixtureID %d, Round ID %d", r.FixtureID, f.RoundID)

@@ -8,6 +8,8 @@ import (
 const venue = "venue"
 const venueCurrentSeason = "venue:current-season"
 
+// Process fetches data from external data source using the VenueRequester
+// before persisting to the storage engine using the VenueRepository
 type VenueProcessor struct {
 	venueRepo  app.VenueRepository
 	seasonRepo app.SeasonRepository

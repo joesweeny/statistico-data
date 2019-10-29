@@ -15,7 +15,7 @@ type CountryProcessor struct {
 	logger     *logrus.Logger
 }
 
-// Process fetches data from external an external data source using the CountryRequester
+// Process fetches data from external data source using the CountryRequester
 // before persisting to the storage engine using the CountryRepository
 func (p CountryProcessor) Process(command string, option string, done chan bool) {
 	if command != country {

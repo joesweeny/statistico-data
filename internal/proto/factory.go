@@ -92,7 +92,7 @@ func PlayerStatsToProto(p *model.PlayerStats) *pbPlayerStats.PlayerStats {
 	return &stats
 }
 
-func RoundToProto(r *model.Round) *pbRound.Round {
+func RoundToProto(r *app.Round) *pbRound.Round {
 	return &pbRound.Round{
 		Id:        int64(r.ID),
 		Name:      r.Name,

@@ -155,4 +155,3 @@ func newRound(id int64) *app.Round {
 		EndDate:   time.Unix(1548086929, 0),
 	}
 }
-
