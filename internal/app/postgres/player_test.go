@@ -79,7 +79,7 @@ func TestPlayerRepository_ByID(t *testing.T) {
 		a.Equal("Buenos Aires", *m.BirthPlace)
 		a.Equal("1984-03-12", *m.DateOfBirth)
 		a.Equal(3, m.PositionID)
-		a.Equal("path/to/image", *m.Image)
+		a.Equal("path/to/image", m.Image)
 		a.Equal("2019-01-14 11:25:00 +0000 UTC", r.CreatedAt.String())
 		a.Equal("2019-01-14 11:25:00 +0000 UTC", r.UpdatedAt.String())
 	})
@@ -108,10 +108,8 @@ func TestPlayerRepository_Update(t *testing.T) {
 			t.Errorf("Error when inserting record into the database: %s", err.Error())
 		}
 
-		var image *string
 		var d = time.Date(2019, 01, 14, 11, 25, 00, 00, time.UTC)
 
-		m.Image = image
 		m.UpdatedAt = d
 
 		if err := repo.Update(m); err != nil {
@@ -132,7 +130,7 @@ func TestPlayerRepository_Update(t *testing.T) {
 		a.Equal("Buenos Aires", *m.BirthPlace)
 		a.Equal("1984-03-12", *m.DateOfBirth)
 		a.Equal(3, m.PositionID)
-		a.Nil(m.Image)
+		a.Equal("path/to/image", m.Image)
 		a.Equal("2019-01-14 11:25:00 +0000 UTC", r.CreatedAt.String())
 		a.Equal("2019-01-14 11:25:00 +0000 UTC", r.UpdatedAt.String())
 	})
@@ -153,7 +151,6 @@ func TestPlayerRepository_Update(t *testing.T) {
 func newPlayer(id int64) *app.Player {
 	var place = "Buenos Aires"
 	var dob = "1984-03-12"
-	var path = "path/to/image"
 	return &app.Player{
 		ID:          id,
 		CountryId:   int64(154),
@@ -162,7 +159,7 @@ func newPlayer(id int64) *app.Player {
 		BirthPlace:  &place,
 		DateOfBirth: &dob,
 		PositionID:  3,
-		Image:       &path,
+		Image:       "path/to/image",
 		CreatedAt:   time.Unix(1546965200, 0),
 		UpdatedAt:   time.Unix(1546965200, 0),
 	}
