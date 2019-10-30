@@ -16,7 +16,7 @@ func (p PlayerRequester) PlayerByID(id int64) *app.Player {
 	res, _, err := p.client.PlayerByID(context.Background(), int(id), []string{})
 
 	if err != nil {
-		p.logger.Fatalf("Error calling client '%s' when making player request", err.Error())
+		p.logger.Warnf("Error calling client '%s' when making player request", err.Error())
 		return nil
 	}
 
