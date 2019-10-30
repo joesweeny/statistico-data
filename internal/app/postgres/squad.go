@@ -117,7 +117,7 @@ func parseRows(r *sql.Rows, m []app.Squad) ([]app.Squad, error) {
 
 		for _, i := range players {
 			text, _ := strconv.Atoi(i)
-			squad.PlayerIDs = append(squad.PlayerIDs, text)
+			squad.PlayerIDs = append(squad.PlayerIDs, int64(text))
 		}
 
 		squad.CreatedAt = time.Unix(created, 0)
@@ -127,4 +127,8 @@ func parseRows(r *sql.Rows, m []app.Squad) ([]app.Squad, error) {
 	}
 
 	return m, nil
+}
+
+func NewSquadRepository(connection *sql.DB, clock clockwork.Clock) *SquadRepository {
+	return &SquadRepository{connection: connection, clock: clock}
 }
