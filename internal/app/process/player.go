@@ -5,7 +5,6 @@ import (
 	"github.com/statistico/statistico-data/internal/app"
 	"github.com/statistico/statistico-data/internal/model"
 	"github.com/statistico/statistico-data/internal/squad"
-	"log"
 	"sync"
 )
 
@@ -81,7 +80,7 @@ func (p PlayerProcessor) parsePlayers(ch <-chan *app.Player, done chan bool) {
 
 func (p PlayerProcessor) persist(x *app.Player) {
 	if err := p.playerRepo.Insert(x); err != nil {
-		log.Printf("Error '%s' occurred when inserting Player struct: %+v\n,", err.Error(), &x)
+		p.logger.Warnf("Error '%s' occurred inserting player struct when processing: %+v\n,", err.Error(), *x)
 	}
 }
 
