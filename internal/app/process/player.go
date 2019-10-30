@@ -72,6 +72,7 @@ func (p PlayerProcessor) parseSquads(s []model.Squad, ch chan<- *app.Player, don
 
 func (p PlayerProcessor) parsePlayers(ch <-chan *app.Player, done chan bool) {
 	for x := range ch {
+		p.logger.Warnf("Inserting player: %+v\n,", *x)
 		p.persist(x)
 	}
 
