@@ -60,9 +60,9 @@ func (p PlayerProcessor) parseSquads(s []model.Squad, ch chan<- *app.Player, don
 				ch <- p.requester.PlayerByID(int64(id))
 
 				*counter++
-
-				wg.Done()
 			}
+
+			wg.Done()
 		}(sq, c)
 	}
 
