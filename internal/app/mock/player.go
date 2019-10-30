@@ -23,14 +23,6 @@ func (m PlayerRepository) Update(p *app.Player) error {
 func (m PlayerRepository) ByID(id int64) (*app.Player, error) {
 	fmt.Println("Hello inside Mock")
 	args := m.Called(id)
-
-	a := args.Get(0).(*app.Player)
-	b := args.Error(1)
-
-	fmt.Println("Hello you cunt")
-
-	fmt.Printf("Player %+v", a)
-	fmt.Printf("Mock Error %+v", b)
 	return args.Get(0).(*app.Player), args.Error(1)
 }
 
