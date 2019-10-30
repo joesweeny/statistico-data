@@ -80,7 +80,7 @@ func (p PlayerProcessor) parsePlayers(ch <-chan *app.Player, done chan bool) {
 
 func (p PlayerProcessor) persist(x *app.Player) {
 	if err := p.playerRepo.Insert(x); err != nil {
-		p.logger.Warnf("Error '%s' occurred when inserting Player struct: %+v\n,", err.Error(), *x)
+		p.logger.Warnf("Error '%s' occurred inserting player struct when processing: %+v\n,", err.Error(), *x)
 	}
 }
 

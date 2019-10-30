@@ -136,7 +136,7 @@ func TestPlayerProcessor_Process(t *testing.T) {
 		processor.Process("player", "", done)
 
 		<-done
-		
+
 		requester.AssertExpectations(t)
 		playerRepo.AssertExpectations(t)
 		squadRepo.AssertExpectations(t)
