@@ -41,7 +41,7 @@ func (p PlayerProcessor) Process(command string, option string, done chan bool) 
 func (p PlayerProcessor) parseSquads(s []model.Squad, ch chan<- *app.Player, done chan bool, c *int) {
 	for _, sq := range s {
 		for _, id := range sq.PlayerIDs {
-			if _, err := p.playerRepo.ByID(int64(id)); err != nil {
+			if _, err := p.playerRepo.ByID(int64(id)); err == nil {
 				continue
 			}
 
@@ -50,11 +50,9 @@ func (p PlayerProcessor) parseSquads(s []model.Squad, ch chan<- *app.Player, don
 				done <- true
 			}
 
-			res := p.requester.PlayerByID(int64(id))
+			ch <- p.requester.PlayerByID(int64(id))
 
 			*c++
-
-			ch <- res
 		}
 	}
 
@@ -73,4 +71,8 @@ func (p PlayerProcessor) persist(x *app.Player) {
 	if err := p.playerRepo.Insert(x); err != nil {
 		log.Printf("Error '%s' occurred when inserting Player struct: %+v\n,", err.Error(), &x)
 	}
+}
+
+func NewPlayerProcessor(r app.PlayerRepository, s squad.Repository, q app.PlayerRequester, log *logrus.Logger) *PlayerProcessor {
+	return &PlayerProcessor{playerRepo: r, squadRepo: s, requester: q, logger: log}
 }
