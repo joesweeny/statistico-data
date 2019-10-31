@@ -1,11 +1,9 @@
 package postgres_test
 
 import (
-	"github.com/jonboulle/clockwork"
 	"github.com/statistico/statistico-data/internal/app"
 	"github.com/statistico/statistico-data/internal/app/postgres"
 	"github.com/statistico/statistico-data/internal/app/test"
-	"github.com/statistico/statistico-data/internal/model"
 	"github.com/stretchr/testify/assert"
 	"testing"
 	"time"
@@ -62,9 +60,9 @@ func TestSquadRepository_BySeasonAndTeam(t *testing.T) {
 		a := assert.New(t)
 		a.Equal(int64(45), r.SeasonID)
 		a.Equal(int64(986), m.TeamID)
-		a.Equal([]int{34, 57, 89}, m.PlayerIDs)
-		a.Equal("2019-01-08 16:33:20 +0000 UTC", r.CreatedAt.String())
-		a.Equal("2019-01-08 16:33:20 +0000 UTC", r.UpdatedAt.String())
+		a.Equal([]int64{34, 57, 89}, m.PlayerIDs)
+		a.Equal("2019-01-14 11:25:00 +0000 UTC", r.CreatedAt.String())
+		a.Equal("2019-01-14 11:25:00 +0000 UTC", r.UpdatedAt.String())
 	})
 
 	t.Run("returns error if record does not exist", func(t *testing.T) {
@@ -77,9 +75,9 @@ func TestSquadRepository_BySeasonAndTeam(t *testing.T) {
 	})
 }
 
-func TestUpdate(t *testing.T) {
-	conn, cleanUp := getConnection(t)
-	repo := PostgresSquadRepository{Connection: conn}
+func TestSquadRepository_Update(t *testing.T) {
+	conn, cleanUp := test.GetConnection(t, "sportmonks_squad")
+	repo := postgres.NewSquadRepository(conn, test.Clock)
 
 	t.Run("modifies existing squad", func(t *testing.T) {
 		t.Helper()
@@ -91,7 +89,7 @@ func TestUpdate(t *testing.T) {
 			t.Errorf("Error when inserting record into the database: %s", err.Error())
 		}
 
-		m.PlayerIDs = []int{432, 567, 2, 87095}
+		m.PlayerIDs = []int64{int64(432), int64(567), int64(2), int64(87095)}
 		m.UpdatedAt = time.Date(2019, 01, 14, 11, 25, 00, 00, time.UTC)
 
 		if err := repo.Update(m); err != nil {
@@ -105,10 +103,10 @@ func TestUpdate(t *testing.T) {
 		}
 
 		a := assert.New(t)
-		a.Equal(25, r.SeasonID)
-		a.Equal(62, m.TeamID)
-		a.Equal([]int{432, 567, 2, 87095}, m.PlayerIDs)
-		a.Equal("2019-01-08 16:33:20 +0000 UTC", r.CreatedAt.String())
+		a.Equal(int64(25), r.SeasonID)
+		a.Equal(int64(62), m.TeamID)
+		a.Equal([]int64{432, 567, 2, 87095}, m.PlayerIDs)
+		a.Equal("2019-01-14 11:25:00 +0000 UTC", r.CreatedAt.String())
 		a.Equal("2019-01-14 11:25:00 +0000 UTC", r.UpdatedAt.String())
 	})
 
@@ -122,25 +120,19 @@ func TestUpdate(t *testing.T) {
 		if err == nil {
 			t.Fatalf("Test failed, expected nil, got %v", err)
 		}
-
-		if err != ErrNotFound {
-			t.Fatalf("Test failed, expected %v, got %v", ErrNotFound, err)
-		}
 	})
-
-	conn.Close()
 }
 
-func TestAll(t *testing.T) {
-	conn, cleanUp := getConnection(t)
-	repo := PostgresSquadRepository{Connection: conn}
+func TestSquadRepository_All(t *testing.T) {
+	conn, cleanUp := test.GetConnection(t, "sportmonks_squad")
+	repo := postgres.NewSquadRepository(conn, test.Clock)
 
 	t.Run("returns all squad records from the database", func(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
 
-		squads := []model.Squad{
-			*newSquad(39, 25067),
+		squads := []app.Squad{
+			*newSquad(9, 25067),
 			*newSquad(99, 98),
 			*newSquad(301, 2),
 			*newSquad(23, 6),
@@ -148,7 +140,11 @@ func TestAll(t *testing.T) {
 		}
 
 		for _, squad := range squads {
-			repo.Insert(&squad)
+			err := repo.Insert(&squad)
+
+			if err != nil {
+				t.Fatalf("Test failed, expected nil, got %v", err)
+			}
 		}
 
 		all, err := repo.All()
@@ -160,29 +156,41 @@ func TestAll(t *testing.T) {
 		a := assert.New(t)
 
 		a.Equal(5, len(all))
-		a.Equal(all[:1], squads[3:4])
-		a.Equal(all[1:2], squads[4:5])
-		a.Equal(all[2:3], squads[0:1])
+		a.Equal(all[:1], squads[0:1])
+		a.Equal(all[1:2], squads[3:4])
+		a.Equal(all[2:3], squads[4:5])
 		a.Equal(all[3:4], squads[1:2])
 		a.Equal(all[4:], squads[2:3])
 	})
 }
 
-func TestCurrentSeason(t *testing.T) {
-	conn, cleanUp := getConnection(t)
-	repo := PostgresSquadRepository{Connection: conn}
-	seasonRepo := postgres.NewSeasonRepository(conn, clockwork.NewFakeClock())
+func TestSquadRepository_CurrentSeason(t *testing.T) {
+	conn, cleanUpSquad := test.GetConnection(t, "sportmonks_squad")
+	repo := postgres.NewSquadRepository(conn, test.Clock)
+	conn, cleanUpSeason := test.GetConnection(t, "sportmonks_season")
+	seasonRepo := postgres.NewSeasonRepository(conn, test.Clock)
 
 	t.Run("returns squads only for current season", func(t *testing.T) {
 		t.Helper()
-		defer cleanUp()
+		defer cleanUpSquad()
+		defer cleanUpSeason()
 
-		seasonRepo.Insert(newSeason(true, 39))
-		seasonRepo.Insert(newSeason(false, 99))
-		seasonRepo.Insert(newSeason(false, 4502))
-		seasonRepo.Insert(newSeason(true, 23))
+		seasons := []*app.Season{
+			newSeason(39, true),
+			newSeason(99, false),
+			newSeason(4502, false),
+			newSeason(23, true),
+		}
 
-		squads := []model.Squad{
+		for _, s := range seasons {
+			err := seasonRepo.Insert(s)
+
+			if err != nil {
+				t.Fatalf("Test failed, expected nil, got %v", err)
+			}
+		}
+
+		squads := []app.Squad{
 			*newSquad(39, 25067),
 			*newSquad(99, 98),
 			*newSquad(301, 2),
@@ -191,7 +199,11 @@ func TestCurrentSeason(t *testing.T) {
 		}
 
 		for _, squad := range squads {
-			repo.Insert(&squad)
+			err := repo.Insert(&squad)
+
+			if err != nil {
+				t.Fatalf("Test failed, expected nil, got %v", err)
+			}
 		}
 
 		current, err := repo.CurrentSeason()
@@ -214,7 +226,7 @@ func newSquad(season, team int64) *app.Squad {
 		SeasonID:  season,
 		TeamID:    team,
 		PlayerIDs: []int64{34, 57, 89},
-		CreatedAt: time.Unix(1546965200, 0),
-		UpdatedAt: time.Unix(1546965200, 0),
+		CreatedAt: time.Unix(1547465100, 0),
+		UpdatedAt: time.Unix(1547465100, 0),
 	}
 }

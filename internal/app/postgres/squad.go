@@ -61,7 +61,7 @@ func (r *SquadRepository) BySeasonAndTeam(seasonId, teamId int64) (*app.Squad, e
 	err := r.connection.QueryRow(query, seasonId, teamId).Scan(&s.SeasonID, &s.TeamID, pq.Array(&players), &created, &updated)
 
 	if err != nil {
-		return &s, fmt.Errorf("squad with Team ID %d and Season ID %s does not exist", teamId, seasonId)
+		return &s, fmt.Errorf("squad with Team ID %d and Season ID %d does not exist", teamId, seasonId)
 	}
 
 	for _, i := range players {
