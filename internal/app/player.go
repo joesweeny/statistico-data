@@ -28,5 +28,5 @@ type PlayerRepository interface {
 // PlayerRequester provides an interface allowing this application to request player data from an external
 // data provider
 type PlayerRequester interface {
-	PlayerByID(id int64) *Player
+	PlayerByID(id int64) (*Player, error)
 }
