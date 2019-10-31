@@ -142,6 +142,49 @@ func TestPlayerProcessor_Process(t *testing.T) {
 		squadRepo.AssertExpectations(t)
 		assert.NotNil(t, hook.LastEntry().Message)
 	})
+
+	t.Run("player is not inserted in requester returns nil", func(t *testing.T) {
+		t.Helper()
+
+		playerRepo := new(mock.PlayerRepository)
+		squadRepo := new(mock.SquadRepository)
+		requester := new(mock.PlayerRequester)
+		logger, hook := test.NewNullLogger()
+
+		processor := process.NewPlayerProcessor(playerRepo, squadRepo, requester, logger)
+
+		done := make(chan bool)
+
+		def := newPlayer(1)
+		mid := newPlayer(2)
+		str := newPlayer(3)
+
+		squad := newSquad()
+
+		squadRepo.On("All").Return(squad, nil)
+
+		playerRepo.On("ByID", int64(1)).Return(&app.Player{}, errors.New("not found"))
+		playerRepo.On("ByID", int64(2)).Return(&app.Player{}, errors.New("not found"))
+		playerRepo.On("ByID", int64(3)).Return(&app.Player{}, errors.New("not found"))
+
+		requester.On("PlayerByID", int64(1)).Return(def)
+		requester.On("PlayerByID", int64(1)).Return(nil)
+		requester.On("PlayerByID", int64(3)).Return(str)
+
+		playerRepo.On("Insert", def).Return(nil)
+		playerRepo.On("Insert", str).Return(nil)
+
+		playerRepo.AssertNotCalled(t, "Insert", mid)
+
+		processor.Process("player", "", done)
+
+		<-done
+
+		requester.AssertExpectations(t)
+		playerRepo.AssertExpectations(t)
+		squadRepo.AssertExpectations(t)
+		assert.Nil(t, hook.LastEntry())
+	})
 }
 
 func newPlayer(id int64) *app.Player {

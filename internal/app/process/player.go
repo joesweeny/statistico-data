@@ -55,7 +55,7 @@ func (p PlayerProcessor) parseSquads(s []model.Squad, ch chan<- *app.Player, don
 				if _, err := p.playerRepo.ByID(int64(id)); err == nil {
 					continue
 				}
-				
+
 				if pl := p.requester.PlayerByID(int64(id)); pl != nil {
 					ch <- pl
 				}
