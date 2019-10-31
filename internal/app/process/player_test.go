@@ -168,7 +168,7 @@ func TestPlayerProcessor_Process(t *testing.T) {
 		playerRepo.On("ByID", int64(3)).Return(&app.Player{}, errors.New("not found"))
 
 		requester.On("PlayerByID", int64(1)).Return(def)
-		requester.On("PlayerByID", int64(1)).Return(nil)
+		requester.On("PlayerByID", int64(2)).Return(nil)
 		requester.On("PlayerByID", int64(3)).Return(str)
 
 		playerRepo.On("Insert", def).Return(nil)
