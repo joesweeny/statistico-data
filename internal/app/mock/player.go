@@ -1,7 +1,6 @@
 package mock
 
 import (
-	"fmt"
 	"github.com/statistico/statistico-data/internal/app"
 	"github.com/stretchr/testify/mock"
 )
@@ -21,7 +20,6 @@ func (m PlayerRepository) Update(p *app.Player) error {
 }
 
 func (m PlayerRepository) ByID(id int64) (*app.Player, error) {
-	fmt.Println("Hello inside Mock")
 	args := m.Called(id)
 	return args.Get(0).(*app.Player), args.Error(1)
 }
@@ -30,7 +28,7 @@ type PlayerRequester struct {
 	mock.Mock
 }
 
-func (m PlayerRequester) PlayerByID(id int64) *app.Player {
+func (m PlayerRequester) PlayerByID(id int64) (*app.Player, error) {
 	args := m.Called(id)
-	return args.Get(0).(*app.Player)
+	return args.Get(0).(*app.Player), args.Error(1)
 }

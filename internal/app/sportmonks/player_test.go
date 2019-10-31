@@ -31,7 +31,11 @@ func TestPlayerRequester_PlayerByID(t *testing.T) {
 
 		requester := sportmonks.NewPlayerRequester(&client, logger)
 
-		player := requester.PlayerByID(int64(219591))
+		player, err := requester.PlayerByID(int64(219591))
+
+		if err != nil {
+			t.Fatalf("Test failed, expected nil, got %v", err)
+		}
 
 		a := assert.New(t)
 
