@@ -2,6 +2,7 @@ package sportmonks
 
 import (
 	"context"
+	"fmt"
 	"github.com/sirupsen/logrus"
 	"github.com/statistico/statistico-data/internal/app"
 	spClient "github.com/statistico/statistico-sportmonks-go-client"
@@ -12,15 +13,15 @@ type PlayerRequester struct {
 	logger *logrus.Logger
 }
 
-func (p PlayerRequester) PlayerByID(id int64) *app.Player {
+func (p PlayerRequester) PlayerByID(id int64) (*app.Player, error) {
 	res, _, err := p.client.PlayerByID(context.Background(), int(id), []string{})
 
 	if err != nil {
 		p.logger.Warnf("Error calling client '%s' when making player request", err.Error())
-		return nil
+		return nil, fmt.Errorf("unable to fetch player with id %d", id)
 	}
 
-	return transformPlayer(res)
+	return transformPlayer(res), nil
 }
 
 func transformPlayer(p *spClient.Player) *app.Player {

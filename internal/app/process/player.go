@@ -56,7 +56,11 @@ func (p PlayerProcessor) parseSquads(s []model.Squad, ch chan<- *app.Player, don
 					continue
 				}
 
-				ch <- p.requester.PlayerByID(int64(id))
+				pl, err := p.requester.PlayerByID(int64(id))
+
+				if err == nil {
+					ch <- pl
+				}
 
 				*counter++
 			}
