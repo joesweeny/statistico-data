@@ -9,3 +9,4 @@ type Repository interface {
 	All() ([]model.Squad, error)
 	CurrentSeason() ([]model.Squad, error)
 }
+
