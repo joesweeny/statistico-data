@@ -29,7 +29,7 @@ func TestPlayerProcessor_Process(t *testing.T) {
 		mid := newPlayer(2)
 		str := newPlayer(3)
 
-		squad := newSquad()
+		squad := newModelSquad()
 
 		squadRepo.On("All").Return(squad, nil)
 
@@ -71,7 +71,7 @@ func TestPlayerProcessor_Process(t *testing.T) {
 		mid := newPlayer(2)
 		str := newPlayer(3)
 
-		squad := newSquad()
+		squad := newModelSquad()
 
 		squadRepo.On("All").Return(squad, nil)
 
@@ -115,7 +115,7 @@ func TestPlayerProcessor_Process(t *testing.T) {
 		mid := newPlayer(2)
 		str := newPlayer(3)
 
-		squad := newSquad()
+		squad := newModelSquad()
 
 		squadRepo.On("All").Return(squad, nil)
 
@@ -159,7 +159,7 @@ func TestPlayerProcessor_Process(t *testing.T) {
 		mid := newPlayer(2)
 		str := newPlayer(3)
 
-		squad := newSquad()
+		squad := newModelSquad()
 
 		squadRepo.On("All").Return(squad, nil)
 
@@ -196,7 +196,7 @@ func newPlayer(id int64) *app.Player {
 	}
 }
 
-func newSquad() []model.Squad {
+func newModelSquad() []model.Squad {
 	var squads []model.Squad
 
 	s := model.Squad{
