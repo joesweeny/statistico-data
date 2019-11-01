@@ -5,7 +5,6 @@ import (
 	"github.com/statistico/statistico-data/internal/event"
 	"github.com/statistico/statistico-data/internal/fixture"
 	"github.com/statistico/statistico-data/internal/result"
-	"github.com/statistico/statistico-data/internal/squad"
 	"github.com/statistico/statistico-data/internal/stats/player"
 	"github.com/statistico/statistico-data/internal/stats/team"
 )
@@ -53,7 +52,7 @@ func (c Container) FixtureProcessor() *fixture.Processor {
 func (c Container) PlayerProcessor() *process.PlayerProcessor {
 	return process.NewPlayerProcessor(
 		c.PlayerRepository(),
-		&squad.PostgresSquadRepository{Connection: c.Database},
+		c.SquadRepository(),
 		c.PlayerRequester(),
 		c.NewLogger,
 	)
@@ -97,14 +96,13 @@ func (c Container) SeasonProcessor() *process.SeasonProcessor {
 	)
 }
 
-func (c Container) SquadProcessor() *squad.Processor {
-	return &squad.Processor{
-		Repository: &squad.PostgresSquadRepository{Connection: c.Database},
-		SeasonRepo: c.SeasonRepository(),
-		Factory:    squad.Factory{Clock: clock()},
-		Client:     c.SportMonksClient,
-		Logger:     c.Logger,
-	}
+func (c Container) SquadProcessor() *process.SquadProcessor {
+	return process.NewSquadProcessor(
+		c.SquadRepository(),
+		c.SeasonRepository(),
+		c.SquadRequester(),
+		c.NewLogger,
+	)
 }
 
 func (c Container) TeamProcessor() *process.TeamProcessor {
