@@ -26,5 +26,5 @@ type SquadRepository interface {
 // data provider. The requester implementation is responsible for creating the channel, filtering struct data into
 // the channel before closing the channel once successful execution is complete.
 type SquadRequester interface {
-	SquadsBySeasonIDs(seasonIDs []int64) <-chan Squad
+	SquadsBySeasonIDs(seasonIDs []int64) <-chan *Squad
 }
