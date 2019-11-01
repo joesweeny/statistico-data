@@ -6,7 +6,6 @@ import (
 	"github.com/statistico/statistico-data/internal/app"
 	"github.com/statistico/statistico-data/internal/app/mock"
 	"github.com/statistico/statistico-data/internal/app/process"
-	"github.com/statistico/statistico-data/internal/model"
 	"github.com/stretchr/testify/assert"
 	"testing"
 	"time"
@@ -29,7 +28,7 @@ func TestPlayerProcessor_Process(t *testing.T) {
 		mid := newPlayer(2)
 		str := newPlayer(3)
 
-		squad := newSquad()
+		squad := newPlayerSquad()
 
 		squadRepo.On("All").Return(squad, nil)
 
@@ -71,7 +70,7 @@ func TestPlayerProcessor_Process(t *testing.T) {
 		mid := newPlayer(2)
 		str := newPlayer(3)
 
-		squad := newSquad()
+		squad := newPlayerSquad()
 
 		squadRepo.On("All").Return(squad, nil)
 
@@ -115,7 +114,7 @@ func TestPlayerProcessor_Process(t *testing.T) {
 		mid := newPlayer(2)
 		str := newPlayer(3)
 
-		squad := newSquad()
+		squad := newPlayerSquad()
 
 		squadRepo.On("All").Return(squad, nil)
 
@@ -159,7 +158,7 @@ func TestPlayerProcessor_Process(t *testing.T) {
 		mid := newPlayer(2)
 		str := newPlayer(3)
 
-		squad := newSquad()
+		squad := newPlayerSquad()
 
 		squadRepo.On("All").Return(squad, nil)
 
@@ -196,13 +195,13 @@ func newPlayer(id int64) *app.Player {
 	}
 }
 
-func newSquad() []model.Squad {
-	var squads []model.Squad
+func newPlayerSquad() []app.Squad {
+	var squads []app.Squad
 
-	s := model.Squad{
+	s := app.Squad{
 		SeasonID:  45,
 		TeamID:    98,
-		PlayerIDs: []int{1, 2, 3},
+		PlayerIDs: []int64{1, 2, 3},
 		CreatedAt: time.Now(),
 		UpdatedAt: time.Now(),
 	}

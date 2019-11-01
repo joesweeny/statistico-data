@@ -3,8 +3,6 @@ package process
 import (
 	"github.com/sirupsen/logrus"
 	"github.com/statistico/statistico-data/internal/app"
-	"github.com/statistico/statistico-data/internal/model"
-	"github.com/statistico/statistico-data/internal/squad"
 	"sync"
 )
 
@@ -15,7 +13,7 @@ var counter int
 
 type PlayerProcessor struct {
 	playerRepo app.PlayerRepository
-	squadRepo squad.Repository
+	squadRepo app.SquadRepository
 	requester app.PlayerRequester
 	logger     *logrus.Logger
 }
@@ -38,7 +36,7 @@ func (p PlayerProcessor) Process(command string, option string, done chan bool) 
 	go p.parsePlayers(ch, done)
 }
 
-func (p PlayerProcessor) parseSquads(s []model.Squad, ch chan<- *app.Player, done chan bool, c *int) {
+func (p PlayerProcessor) parseSquads(s []app.Squad, ch chan<- *app.Player, done chan bool, c *int) {
 	var wg sync.WaitGroup
 
 	for _, sq := range s {
@@ -50,7 +48,7 @@ func (p PlayerProcessor) parseSquads(s []model.Squad, ch chan<- *app.Player, don
 			close(ch)
 		}
 
-		go func(sq model.Squad, counter *int) {
+		go func(sq app.Squad, counter *int) {
 			for _, id := range sq.PlayerIDs {
 				if _, err := p.playerRepo.ByID(int64(id)); err == nil {
 					continue
@@ -88,6 +86,6 @@ func (p PlayerProcessor) persist(x *app.Player) {
 	}
 }
 
-func NewPlayerProcessor(r app.PlayerRepository, s squad.Repository, q app.PlayerRequester, log *logrus.Logger) *PlayerProcessor {
+func NewPlayerProcessor(r app.PlayerRepository, s app.SquadRepository, q app.PlayerRequester, log *logrus.Logger) *PlayerProcessor {
 	return &PlayerProcessor{playerRepo: r, squadRepo: s, requester: q, logger: log}
 }
