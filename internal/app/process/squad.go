@@ -65,15 +65,15 @@ func (s SquadProcessor) persist(x *app.Squad) {
 	_, err := s.squadRepo.BySeasonAndTeam(x.TeamID, x.SeasonID)
 
 	if err != nil {
-		if err := s.squadRepo.Insert(x); err != nil {
-			s.logger.Warningf("Error '%s' occurred when inserting squad struct: %+v\n,", err.Error(), *x)
+		if newErr := s.squadRepo.Insert(x); newErr != nil {
+			s.logger.Warningf("Error '%s' occurred when inserting squad struct: %+v\n,", newErr.Error(), *x)
 		}
 
 		return
 	}
 
-	if err := s.squadRepo.Update(x); err != nil {
-		s.logger.Warningf("Error '%s' occurred when updating squad struct: %+v\n,", err.Error(), *x)
+	if newErr := s.squadRepo.Update(x); newErr != nil {
+		s.logger.Warningf("Error '%s' occurred when updating squad struct: %+v\n,", newErr.Error(), *x)
 	}
 
 	return
