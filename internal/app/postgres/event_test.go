@@ -195,8 +195,8 @@ func newSubstitutionEvent(id int64) *app.SubstitutionEvent {
 	true := true
 	return &app.SubstitutionEvent{
 		ID:          id,
-		FixtureID: int64(45),
-		TeamID:    int64(4509),
+		FixtureID:   int64(45),
+		TeamID:      int64(4509),
 		PlayerInID:  int64(3401),
 		PlayerOutID: int64(901),
 		Minute:      82,
