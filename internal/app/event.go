@@ -35,3 +35,10 @@ type EventRepository interface {
 	GoalEventByID(id int64) (*GoalEvent, error)
 	SubstitutionEventByID(id int64) (*SubstitutionEvent, error)
 }
+
+// EventRequester provides an interface allowing this application to request data from an external
+// data provider. The requester implementation is responsible for creating the channel, filtering struct data into
+// the channel before closing the channel once successful execution is complete.
+type EventRequester interface {
+	EventsByFixtureID(id int64) (<-chan *GoalEvent, <-chan *SubstitutionEvent)
+}
