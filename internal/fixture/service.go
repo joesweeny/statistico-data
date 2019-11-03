@@ -1,11 +1,11 @@
 package fixture
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"github.com/statistico/statistico-data/internal/app"
 	pb "github.com/statistico/statistico-data/internal/proto/fixture"
-	"golang.org/x/net/context"
 	"log"
 	"time"
 )
