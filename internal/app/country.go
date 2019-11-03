@@ -18,7 +18,7 @@ type Country struct {
 type CountryRepository interface {
 	Insert(c *Country) error
 	Update(c *Country) error
-	GetById(id uint64) (*Country, error)
+	ByID(id uint64) (*Country, error)
 }
 
 // CountryRequester provides an interface allowing this application to request data from an external

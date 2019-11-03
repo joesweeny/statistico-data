@@ -32,8 +32,8 @@ func TestCountryProcessor_Process(t *testing.T) {
 
 		requester.On("Countries").Return(ch)
 
-		repo.On("GetById", uint64(180)).Return(&app.Country{}, errors.New("not Found"))
-		repo.On("GetById", uint64(5)).Return(&app.Country{}, errors.New("not Found"))
+		repo.On("ByID", uint64(180)).Return(&app.Country{}, errors.New("not Found"))
+		repo.On("ByID", uint64(5)).Return(&app.Country{}, errors.New("not Found"))
 		repo.On("Insert", eng).Return(nil)
 		repo.On("Insert", ger).Return(nil)
 
@@ -66,8 +66,8 @@ func TestCountryProcessor_Process(t *testing.T) {
 
 		requester.On("Countries").Return(ch)
 
-		repo.On("GetById", uint64(180)).Return(eng, nil)
-		repo.On("GetById", uint64(5)).Return(ger, nil)
+		repo.On("ByID", uint64(180)).Return(eng, nil)
+		repo.On("ByID", uint64(5)).Return(ger, nil)
 		repo.On("Update", &eng).Return(nil)
 		repo.On("Update", &ger).Return(nil)
 
@@ -100,8 +100,8 @@ func TestCountryProcessor_Process(t *testing.T) {
 
 		requester.On("Countries").Return(ch)
 
-		repo.On("GetById", uint64(180)).Return(&app.Country{}, errors.New("not Found"))
-		repo.On("GetById", uint64(5)).Return(&app.Country{}, errors.New("not Found"))
+		repo.On("ByID", uint64(180)).Return(&app.Country{}, errors.New("not Found"))
+		repo.On("ByID", uint64(5)).Return(&app.Country{}, errors.New("not Found"))
 		repo.On("Insert", eng).Return(errors.New("error occurred"))
 		repo.On("Insert", ger).Return(nil)
 
@@ -135,8 +135,8 @@ func TestCountryProcessor_Process(t *testing.T) {
 
 		requester.On("Countries").Return(ch)
 
-		repo.On("GetById", uint64(180)).Return(eng, nil)
-		repo.On("GetById", uint64(5)).Return(ger, nil)
+		repo.On("ByID", uint64(180)).Return(eng, nil)
+		repo.On("ByID", uint64(5)).Return(ger, nil)
 		repo.On("Update", &eng).Return(errors.New("error occurred"))
 		repo.On("Update", &ger).Return(nil)
 

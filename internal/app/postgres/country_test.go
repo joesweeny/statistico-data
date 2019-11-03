@@ -70,7 +70,7 @@ func TestCountryRepository_Update(t *testing.T) {
 			t.Fatalf("Error when updating a record in the database: %s", err.Error())
 		}
 
-		r, err := repo.GetById(c.ID)
+		r, err := repo.ByID(c.ID)
 
 		if err != nil {
 			t.Fatalf("Error when updating a record in the database: %s", err.Error())
@@ -109,7 +109,7 @@ func TestCountryRepository_GetById(t *testing.T) {
 			t.Fatalf("Error when inserting record into the database: %s", err.Error())
 		}
 
-		r, err := repo.GetById(62)
+		r, err := repo.ByID(62)
 
 		if err != nil {
 			t.Fatalf("Error when retrieving a record from the database: %s", err.Error())
@@ -129,7 +129,7 @@ func TestCountryRepository_GetById(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
 
-		if _, err := repo.GetById(4); err == nil {
+		if _, err := repo.ByID(4); err == nil {
 			t.Fatalf("Test failed, expected %v, got nil", err)
 		}
 	})
