@@ -61,17 +61,26 @@ func (e EventRequester) sendEventRequest(fixtureId int64, g chan<- *app.GoalEven
 
 func transformGoalEvent(s *spClient.GoalEvent) *app.GoalEvent {
 	teamId, _ := strconv.Atoi(s.TeamID)
-	assist := int64(*s.PlayerAssistID)
 
-	return &app.GoalEvent{
+	var assist *int64 = nil
+
+	if s.PlayerAssistID != nil {
+		val := *s.PlayerAssistID
+		i := int64(val)
+		assist = &i
+	}
+
+	event := app.GoalEvent{
 		ID:             int64(s.ID),
 		FixtureID:      int64(s.FixtureID),
 		TeamID:         int64(teamId),
 		PlayerID:       int64(s.PlayerID),
-		PlayerAssistID: &assist,
+		PlayerAssistID: assist,
 		Minute:         s.Minute,
 		Score:          s.Result,
 	}
+
+	return &event
 }
 
 func transformSubstitutionEvent(s *spClient.SubstitutionEvent) *app.SubstitutionEvent {
@@ -81,9 +90,13 @@ func transformSubstitutionEvent(s *spClient.SubstitutionEvent) *app.Substitution
 		ID:             int64(s.ID),
 		FixtureID:      int64(s.FixtureID),
 		TeamID:         int64(teamId),
-		PlayerInID:  int64(s.PlayerInID),
-		PlayerOutID: int64(s.PlayerOutID),
-		Minute:      s.Minute,
-		Injured:     s.Injured,
+		PlayerInID:  	int64(s.PlayerInID),
+		PlayerOutID: 	int64(s.PlayerOutID),
+		Minute:      	s.Minute,
+		Injured:     	s.Injured,
 	}
+}
+
+func NewEventRequester(client *spClient.HTTPClient, log *logrus.Logger) *EventRequester {
+	return &EventRequester{client: client, logger: log}
 }
