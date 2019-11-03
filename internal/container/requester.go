@@ -13,6 +13,10 @@ func (c Container) CountryRequester() app.CountryRequester {
 	return sportmonks.NewCountryRequester(c.NewSportMonksClient, c.NewLogger)
 }
 
+func (c Container) EventRequester() app.EventRequester {
+	return sportmonks.NewEventRequester(c.NewSportMonksClient, c.NewLogger)
+}
+
 func (c Container) RoundRequester() app.RoundRequester {
 	return sportmonks.NewRoundRequester(c.NewSportMonksClient, c.NewLogger)
 }
