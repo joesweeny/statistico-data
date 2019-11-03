@@ -9,7 +9,7 @@ const team = "team"
 const teamCurrentSeason = "team:current-season"
 
 // TeamProcessor fetches data from external data source using the TeamRequester
-// before persisting to the storage engine using the TeamRepository
+// before persisting to the storage engine using the TeamRepository.
 type TeamProcessor struct {
 	teamRepo app.TeamRepository
 	seasonRepo app.SeasonRepository
