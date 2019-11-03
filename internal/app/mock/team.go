@@ -19,7 +19,7 @@ func (m TeamRepository) Update(c *app.Team) error {
 	return args.Error(0)
 }
 
-func (m TeamRepository) ByID(id int64) (*app.Team, error) {
+func (m TeamRepository) ByID(id uint64) (*app.Team, error) {
 	args := m.Called(id)
 	c := args.Get(0).(*app.Team)
 	return c, args.Error(1)
@@ -29,7 +29,7 @@ type TeamRequester struct {
 	mock.Mock
 }
 
-func (t TeamRequester) TeamsBySeasonIDs(seasonIDs []int64) <-chan *app.Team {
+func (t TeamRequester) TeamsBySeasonIDs(seasonIDs []uint64) <-chan *app.Team {
 	args := t.Called(seasonIDs)
 	return args.Get(0).(chan *app.Team)
 }

@@ -6,7 +6,7 @@ import (
 
 // Country domain entity.
 type Country struct {
-	ID        int64     `json:"id"`
+	ID        uint64     `json:"id"`
 	Name      string    `json:"name"`
 	Continent string    `json:"continent"`
 	ISO       string    `json:"iso"`
@@ -18,7 +18,7 @@ type Country struct {
 type CountryRepository interface {
 	Insert(c *Country) error
 	Update(c *Country) error
-	GetById(id int64) (*Country, error)
+	GetById(id uint64) (*Country, error)
 }
 
 // CountryRequester provides an interface allowing this application to request data from an external

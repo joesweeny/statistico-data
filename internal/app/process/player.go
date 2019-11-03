@@ -50,11 +50,11 @@ func (p PlayerProcessor) parseSquads(s []app.Squad, ch chan<- *app.Player, done 
 
 		go func(sq app.Squad, counter *int) {
 			for _, id := range sq.PlayerIDs {
-				if _, err := p.playerRepo.ByID(int64(id)); err == nil {
+				if _, err := p.playerRepo.ByID(uint64(id)); err == nil {
 					continue
 				}
 
-				pl, err := p.requester.PlayerByID(int64(id))
+				pl, err := p.requester.PlayerByID(uint64(id))
 
 				if err == nil {
 					ch <- pl

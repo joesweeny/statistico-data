@@ -33,7 +33,7 @@ func (p *RoundRepository) Insert(r *app.Round) error {
 	return err
 }
 
-func (p *RoundRepository) ByID(id int64) (*app.Round, error) {
+func (p *RoundRepository) ByID(id uint64) (*app.Round, error) {
 	query := `SELECT * FROM sportmonks_round where id = $1`
 	row := p.connection.QueryRow(query, id)
 

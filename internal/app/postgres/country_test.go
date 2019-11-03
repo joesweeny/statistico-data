@@ -17,7 +17,7 @@ func TestCountryRepository_Insert(t *testing.T) {
 		defer cleanUp()
 
 		for i := 1; i < 4; i++ {
-			c := newCountry(int64(i))
+			c := newCountry(uint64(i))
 
 			if err := repo.Insert(c); err != nil {
 				t.Errorf("Error when inserting record into the database: %s", err.Error())
@@ -117,7 +117,7 @@ func TestCountryRepository_GetById(t *testing.T) {
 
 		a := assert.New(t)
 
-		a.Equal(int64(62), r.ID)
+		a.Equal(uint64(62), r.ID)
 		a.Equal("England", r.Name)
 		a.Equal("Europe", r.Continent)
 		a.Equal("ENG", r.ISO)
@@ -135,7 +135,7 @@ func TestCountryRepository_GetById(t *testing.T) {
 	})
 }
 
-func newCountry(id int64) *app.Country {
+func newCountry(id uint64) *app.Country {
 	c := app.Country{
 		ID:        id,
 		Name:      "England",

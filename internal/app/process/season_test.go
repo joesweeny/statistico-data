@@ -35,8 +35,8 @@ func TestSeasonProcessor_Process(t *testing.T) {
 
 		requester.On("Seasons").Return(ch)
 
-		repo.On("ByID", int64(8)).Return(&app.Season{}, errors.New("not found"))
-		repo.On("ByID", int64(2)).Return(&app.Season{}, errors.New("not found"))
+		repo.On("ByID", uint64(8)).Return(&app.Season{}, errors.New("not found"))
+		repo.On("ByID", uint64(2)).Return(&app.Season{}, errors.New("not found"))
 		repo.On("Insert", current).Return(nil)
 		repo.On("Insert", old).Return(nil)
 
@@ -71,8 +71,8 @@ func TestSeasonProcessor_Process(t *testing.T) {
 
 		requester.On("Seasons").Return(ch)
 
-		repo.On("ByID", int64(8)).Return(current, nil)
-		repo.On("ByID", int64(2)).Return(old, nil)
+		repo.On("ByID", uint64(8)).Return(current, nil)
+		repo.On("ByID", uint64(2)).Return(old, nil)
 		repo.On("Update", &current).Return(nil)
 		repo.On("Update", &old).Return(nil)
 
@@ -107,8 +107,8 @@ func TestSeasonProcessor_Process(t *testing.T) {
 
 		requester.On("Seasons").Return(ch)
 
-		repo.On("ByID", int64(8)).Return(&app.Season{}, errors.New("not found"))
-		repo.On("ByID", int64(2)).Return(&app.Season{}, errors.New("not found"))
+		repo.On("ByID", uint64(8)).Return(&app.Season{}, errors.New("not found"))
+		repo.On("ByID", uint64(2)).Return(&app.Season{}, errors.New("not found"))
 		repo.On("Insert", current).Return(errors.New("error occurred"))
 		repo.On("Insert", old).Return(nil)
 
@@ -144,8 +144,8 @@ func TestSeasonProcessor_Process(t *testing.T) {
 
 		requester.On("Seasons").Return(ch)
 
-		repo.On("ByID", int64(8)).Return(current, nil)
-		repo.On("ByID", int64(2)).Return(old, nil)
+		repo.On("ByID", uint64(8)).Return(current, nil)
+		repo.On("ByID", uint64(2)).Return(old, nil)
 		repo.On("Update", &current).Return(errors.New("error occurred"))
 		repo.On("Update", &old).Return(nil)
 
@@ -160,11 +160,11 @@ func TestSeasonProcessor_Process(t *testing.T) {
 	})
 }
 
-func newSeason(id int64, current bool) *app.Season {
+func newSeason(id uint64, current bool) *app.Season {
 	return &app.Season{
 		ID:        id,
 		Name:      "2018-2019",
-		CompetitionID:  int64(560),
+		CompetitionID:  uint64(560),
 		IsCurrent: current,
 		CreatedAt: time.Unix(1546965200, 0),
 		UpdatedAt: time.Unix(1546965200, 0),

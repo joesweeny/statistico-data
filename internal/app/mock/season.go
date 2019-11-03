@@ -19,20 +19,20 @@ func (m SeasonRepository) Update(c *app.Season) error {
 	return args.Error(0)
 }
 
-func (m SeasonRepository) ByID(id int64) (*app.Season, error) {
+func (m SeasonRepository) ByID(id uint64) (*app.Season, error) {
 	args := m.Called(id)
 	c := args.Get(0).(*app.Season)
 	return c, args.Error(1)
 }
 
-func (m SeasonRepository) IDs() ([]int64, error) {
+func (m SeasonRepository) IDs() ([]uint64, error) {
 	args := m.Called()
-	return args.Get(0).([]int64), args.Error(1)
+	return args.Get(0).([]uint64), args.Error(1)
 }
 
-func (m SeasonRepository) CurrentSeasonIDs() ([]int64, error) {
+func (m SeasonRepository) CurrentSeasonIDs() ([]uint64, error) {
 	args := m.Called()
-	return args.Get(0).([]int64), args.Error(1)
+	return args.Get(0).([]uint64), args.Error(1)
 }
 
 type SeasonRequester struct {

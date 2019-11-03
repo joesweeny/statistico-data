@@ -6,9 +6,9 @@ import (
 
 // Season domain entity.
 type Season struct {
-	ID        int64       `json:"id"`
+	ID        uint64       `json:"id"`
 	Name      string    `json:"name"`
-	CompetitionID  int64       `json:"league_id"`
+	CompetitionID  uint64       `json:"league_id"`
 	IsCurrent bool      `json:"current"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
@@ -18,9 +18,9 @@ type Season struct {
 type SeasonRepository interface {
 	Insert(s *Season) error
 	Update(s *Season) error
-	ByID(id int64) (*Season, error)
-	IDs() ([]int64, error)
-	CurrentSeasonIDs() ([]int64, error)
+	ByID(id uint64) (*Season, error)
+	IDs() ([]uint64, error)
+	CurrentSeasonIDs() ([]uint64, error)
 }
 
 // SeasonRequester provides an interface allowing this application to request data from an external

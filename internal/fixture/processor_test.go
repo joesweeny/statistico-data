@@ -48,7 +48,7 @@ func TestProcess(t *testing.T) {
 	t.Run("inserts new fixture", func(t *testing.T) {
 		done := make(chan bool)
 
-		seasonRepo.On("IDs").Return([]int64{123}, nil)
+		seasonRepo.On("IDs").Return([]uint64{123}, nil)
 		fixtureRepo.On("ById", uint64(34)).Return(&model.Fixture{}, errors.New("not found"))
 		fixtureRepo.On("Insert", mock.Anything).Return(nil)
 		fixtureRepo.AssertNotCalled(t, "Update", mock.Anything)
@@ -59,7 +59,7 @@ func TestProcess(t *testing.T) {
 		done := make(chan bool)
 
 		f := newFixture(34)
-		seasonRepo.On("IDs").Return([]int{123}, nil)
+		seasonRepo.On("IDs").Return([]uint{123}, nil)
 		fixtureRepo.On("ById", uint64(34)).Return(f, nil)
 		fixtureRepo.On("Update", &f).Return(nil)
 		fixtureRepo.AssertNotCalled(t, "Insert", mock.Anything)
@@ -69,7 +69,7 @@ func TestProcess(t *testing.T) {
 	t.Run("inserts new fixture", func(t *testing.T) {
 		done := make(chan bool)
 
-		seasonRepo.On("CurrentSeasonIDs").Return([]int64{123}, nil)
+		seasonRepo.On("CurrentSeasonIDs").Return([]uint64{123}, nil)
 		fixtureRepo.On("ById", uint64(34)).Return(&model.Fixture{}, errors.New("not found"))
 		fixtureRepo.On("Insert", mock.Anything).Return(nil)
 		fixtureRepo.AssertNotCalled(t, "Update", mock.Anything)
@@ -80,7 +80,7 @@ func TestProcess(t *testing.T) {
 		done := make(chan bool)
 
 		f := newFixture(34)
-		seasonRepo.On("CurrentSeasonIDs").Return([]int64{123}, nil)
+		seasonRepo.On("CurrentSeasonIDs").Return([]uint64{123}, nil)
 		fixtureRepo.On("ById", 34).Return(f, nil)
 		fixtureRepo.On("Update", &f).Return(nil)
 		fixtureRepo.AssertNotCalled(t, "Insert", mock.Anything)

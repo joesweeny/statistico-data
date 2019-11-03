@@ -20,7 +20,7 @@ type Handler struct {
 }
 
 func (h Handler) HandleResult(f *model.Fixture, r *model.Result) (*pbResult.Result, error) {
-	s, err := h.SeasonRepo.ByID(int64(f.SeasonID))
+	s, err := h.SeasonRepo.ByID(uint64(f.SeasonID))
 
 	if err != nil {
 		e := fmt.Errorf("error when retrieving Result: FixtureID %d, Season ID %d", r.FixtureID, f.SeasonID)
@@ -36,7 +36,7 @@ func (h Handler) HandleResult(f *model.Fixture, r *model.Result) (*pbResult.Resu
 		return nil, e
 	}
 
-	home, err := h.TeamRepo.ByID(int64(f.HomeTeamID))
+	home, err := h.TeamRepo.ByID(uint64(f.HomeTeamID))
 
 	if err != nil {
 		e := fmt.Errorf("error when retrieving Result: FixtureID %d, Home Team ID %d", r.FixtureID, f.HomeTeamID)
@@ -44,7 +44,7 @@ func (h Handler) HandleResult(f *model.Fixture, r *model.Result) (*pbResult.Resu
 		return nil, e
 	}
 
-	away, err := h.TeamRepo.ByID(int64(f.AwayTeamID))
+	away, err := h.TeamRepo.ByID(uint64(f.AwayTeamID))
 
 	if err != nil {
 		e := fmt.Errorf("error when retrieving Result: FixtureID %d, Away Team ID %d", r.FixtureID, f.AwayTeamID)
@@ -61,7 +61,7 @@ func (h Handler) HandleResult(f *model.Fixture, r *model.Result) (*pbResult.Resu
 	}
 
 	if f.RoundID != nil {
-		rd, err := h.RoundRepo.ByID(int64(*f.RoundID))
+		rd, err := h.RoundRepo.ByID(uint64(*f.RoundID))
 
 		if err != nil {
 			e := fmt.Errorf("error when retrieving Result: FixtureID %d, Round ID %d", r.FixtureID, f.RoundID)
@@ -73,7 +73,7 @@ func (h Handler) HandleResult(f *model.Fixture, r *model.Result) (*pbResult.Resu
 	}
 
 	if f.VenueID != nil {
-		v, err := h.VenueRepo.GetById(int64(*f.VenueID))
+		v, err := h.VenueRepo.GetById(uint64(*f.VenueID))
 
 		if err != nil {
 			e := fmt.Errorf("error when retrieving Result: FixtureID %d, Venue ID %d", r.FixtureID, f.VenueID)

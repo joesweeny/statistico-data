@@ -50,9 +50,9 @@ func (s SeasonRequester) sendSeasonRequest(page int, ch chan<- *app.Season) {
 
 func transformSeason(s *spClient.Season) *app.Season {
 	return &app.Season{
-		ID:            int64(s.ID),
+		ID:            uint64(s.ID),
 		Name:          s.Name,
-		CompetitionID: int64(s.LeagueID),
+		CompetitionID: uint64(s.LeagueID),
 		IsCurrent:     s.IsCurrentSeason,
 	}
 }

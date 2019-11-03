@@ -32,22 +32,22 @@ func TestRoundsBySeasonIDs(t *testing.T) {
 
 		requester := sportmonks.NewRoundRequester(&client, logger)
 
-		ch := requester.RoundsBySeasonIDs([]int64{int64(100), int64(234)})
+		ch := requester.RoundsBySeasonIDs([]uint64{uint64(100), uint64(234)})
 
 		x := <- ch
 		y := <- ch
 
 		a := assert.New(t)
 
-		a.Equal(int64(100), x.ID)
+		a.Equal(uint64(100), x.ID)
 		a.Equal("5", x.Name)
-		a.Equal(int64(9), x.SeasonID)
+		a.Equal(uint64(9), x.SeasonID)
 		a.Equal("2011-09-17", x.StartDate.Format("2006-01-02"))
 		a.Equal("2011-09-18", x.EndDate.Format("2006-01-02"))
 
-		a.Equal(int64(234), y.ID)
+		a.Equal(uint64(234), y.ID)
 		a.Equal("34", y.Name)
-		a.Equal(int64(9), y.SeasonID)
+		a.Equal(uint64(9), y.SeasonID)
 		a.Equal("2018-09-17", y.StartDate.Format("2006-01-02"))
 		a.Equal("2019-09-18", y.EndDate.Format("2006-01-02"))
 	})
@@ -93,15 +93,15 @@ func TestRoundsBySeasonIDs(t *testing.T) {
 
 		requester := sportmonks.NewRoundRequester(&client, logger)
 
-		ch := requester.RoundsBySeasonIDs([]int64{int64(100), int64(234)})
+		ch := requester.RoundsBySeasonIDs([]uint64{uint64(100), uint64(234)})
 
 		x := <- ch
 
 		a := assert.New(t)
 
-		a.Equal(int64(100), x.ID)
+		a.Equal(uint64(100), x.ID)
 		a.Equal("5", x.Name)
-		a.Equal(int64(9), x.SeasonID)
+		a.Equal(uint64(9), x.SeasonID)
 		a.Equal("2011-09-17", x.StartDate.Format("2006-01-02"))
 		a.Equal("2011-09-18", x.EndDate.Format("2006-01-02"))
 

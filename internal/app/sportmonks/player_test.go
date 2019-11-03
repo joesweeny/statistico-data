@@ -31,7 +31,7 @@ func TestPlayerRequester_PlayerByID(t *testing.T) {
 
 		requester := sportmonks.NewPlayerRequester(&client, logger)
 
-		player, err := requester.PlayerByID(int64(219591))
+		player, err := requester.PlayerByID(uint64(219591))
 
 		if err != nil {
 			t.Fatalf("Test failed, expected nil, got %v", err)
@@ -39,8 +39,8 @@ func TestPlayerRequester_PlayerByID(t *testing.T) {
 
 		a := assert.New(t)
 
-		a.Equal(int64(219591), player.ID)
-		a.Equal(int64(1190), player.CountryId)
+		a.Equal(uint64(219591), player.ID)
+		a.Equal(uint64(1190), player.CountryId)
 		a.Equal("Fabián Cornelio", player.FirstName)
 		a.Equal("Balbuena González", player.LastName)
 		a.Equal("Ciudad del Este", *player.BirthPlace)

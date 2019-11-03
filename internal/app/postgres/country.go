@@ -60,7 +60,7 @@ func (p *CountryRepository) Update(c *app.Country) error {
 }
 
 // Retrieve an existing domain Country struct from database.
-func (p *CountryRepository) GetById(id int64) (*app.Country, error) {
+func (p *CountryRepository) GetById(id uint64) (*app.Country, error) {
 	query := `SELECT * from sportmonks_country where id = $1`
 	row := p.connection.QueryRow(query, id)
 

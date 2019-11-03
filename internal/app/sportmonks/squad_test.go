@@ -33,7 +33,7 @@ func TestSquadRequester_SquadsBySeasonIDs(t *testing.T) {
 
 		requester := sportmonks.NewSquadRequester(&client, logger)
 
-		ch := requester.SquadsBySeasonIDs([]int64{int64(435), int64(33), int64(2)})
+		ch := requester.SquadsBySeasonIDs([]uint64{uint64(435), uint64(33), uint64(2)})
 
 		x := <- ch
 		y := <- ch
@@ -41,14 +41,14 @@ func TestSquadRequester_SquadsBySeasonIDs(t *testing.T) {
 
 		a := assert.New(t)
 		//
-		a.Equal(int64(1), x.TeamID)
-		a.Equal([]int64{int64(219591)}, x.PlayerIDs)
+		a.Equal(uint64(1), x.TeamID)
+		a.Equal([]uint64{uint64(219591)}, x.PlayerIDs)
 
-		a.Equal(int64(1), y.TeamID)
-		a.Equal([]int64{int64(219591)}, x.PlayerIDs)
+		a.Equal(uint64(1), y.TeamID)
+		a.Equal([]uint64{uint64(219591)}, x.PlayerIDs)
 
-		a.Equal(int64(1), z.TeamID)
-		a.Equal([]int64{int64(219591)}, x.PlayerIDs)
+		a.Equal(uint64(1), z.TeamID)
+		a.Equal([]uint64{uint64(219591)}, x.PlayerIDs)
 	})
 }
 

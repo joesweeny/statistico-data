@@ -13,7 +13,7 @@ type SquadRequester struct {
 	logger *logrus.Logger
 }
 
-func (s SquadRequester) SquadsBySeasonIDs(seasonIDs []int64) <-chan *app.Squad {
+func (s SquadRequester) SquadsBySeasonIDs(seasonIDs []uint64) <-chan *app.Squad {
 	ch := make(chan *app.Squad, 500)
 
 	go s.parseSquads(seasonIDs, ch)
@@ -21,7 +21,7 @@ func (s SquadRequester) SquadsBySeasonIDs(seasonIDs []int64) <-chan *app.Squad {
 	return ch
 }
 
-func (s SquadRequester) parseSquads(seasonIDs []int64, ch chan<- *app.Squad) {
+func (s SquadRequester) parseSquads(seasonIDs []uint64, ch chan<- *app.Squad) {
 	defer close(ch)
 
 	var wg sync.WaitGroup
@@ -34,7 +34,7 @@ func (s SquadRequester) parseSquads(seasonIDs []int64, ch chan<- *app.Squad) {
 	wg.Wait()
 }
 
-func (s SquadRequester) sendSquadRequests(seasonID int64, ch chan<- *app.Squad, w *sync.WaitGroup) {
+func (s SquadRequester) sendSquadRequests(seasonID uint64, ch chan<- *app.Squad, w *sync.WaitGroup) {
 	_, meta, err := s.client.TeamsBySeasonID(context.Background(), int(seasonID), 1, []string{"squad"})
 
 	if err != nil {
@@ -58,14 +58,14 @@ func (s SquadRequester) sendSquadRequests(seasonID int64, ch chan<- *app.Squad, 
 	w.Done()
 }
 
-func transformSquad(t *spClient.Team, seasonID int64) *app.Squad {
+func transformSquad(t *spClient.Team, seasonID uint64) *app.Squad {
 	squad := app.Squad{
 		SeasonID:  seasonID,
-		TeamID:    int64(t.ID),
+		TeamID:    uint64(t.ID),
 	}
 
 	for _, player := range t.Squad() {
-		squad.PlayerIDs = append(squad.PlayerIDs, int64(player.PlayerID))
+		squad.PlayerIDs = append(squad.PlayerIDs, uint64(player.PlayerID))
 	}
 
 	return &squad

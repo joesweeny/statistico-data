@@ -19,7 +19,7 @@ func (m CountryRepository) Update(c *app.Country) error {
 	return args.Error(0)
 }
 
-func (m CountryRepository) GetById(id int64) (*app.Country, error) {
+func (m CountryRepository) GetById(id uint64) (*app.Country, error) {
 	args := m.Called(id)
 	c := args.Get(0).(*app.Country)
 	return c, args.Error(1)

@@ -18,7 +18,7 @@ func TestSeasonRepository_Insert(t *testing.T) {
 		defer cleanUp()
 
 		for i := 1; i < 4; i++ {
-			s := newSeason(int64(i), true)
+			s := newSeason(uint64(i), true)
 
 			if err := repo.Insert(s); err != nil {
 				t.Errorf("Error when inserting record into the database: %s", err.Error())
@@ -68,7 +68,7 @@ func TestSeasonRepository_Update(t *testing.T) {
 		var d = time.Date(2019, 01, 14, 11, 25, 00, 00, time.UTC)
 
 		s.IsCurrent = false
-		s.CompetitionID = int64(2)
+		s.CompetitionID = uint64(2)
 		s.UpdatedAt = d
 
 		if err := repo.Update(s); err != nil {
@@ -83,9 +83,9 @@ func TestSeasonRepository_Update(t *testing.T) {
 
 		a := assert.New(t)
 
-		a.Equal(int64(50), r.ID)
+		a.Equal(uint64(50), r.ID)
 		a.Equal("2018-2019", r.Name)
-		a.Equal(int64(2), r.CompetitionID)
+		a.Equal(uint64(2), r.CompetitionID)
 		a.Equal(false, r.IsCurrent)
 		a.Equal("2019-01-14 11:25:00 +0000 UTC", r.UpdatedAt.String())
 	})
@@ -131,9 +131,9 @@ func TestSeasonRepository_ByID(t *testing.T) {
 
 		a := assert.New(t)
 
-		a.Equal(int64(146), r.ID)
+		a.Equal(uint64(146), r.ID)
 		a.Equal("2018-2019", r.Name)
-		a.Equal(int64(560), r.CompetitionID)
+		a.Equal(uint64(560), r.CompetitionID)
 		a.True(r.IsCurrent)
 		a.Equal("2019-01-14 11:25:00 +0000 UTC", r.CreatedAt.String())
 		a.Equal("2019-01-14 11:25:00 +0000 UTC", r.UpdatedAt.String())
@@ -158,7 +158,7 @@ func TestSeasonRepository_IDs(t *testing.T) {
 		defer cleanUp()
 
 		for i := 1; i <= 4; i++ {
-			s := newSeason(int64(i), true)
+			s := newSeason(uint64(i), true)
 
 			if err := repo.Insert(s); err != nil {
 				t.Errorf("Error when inserting record into the dataCurrentSeasonIdsbase: %s", err.Error())
@@ -167,7 +167,7 @@ func TestSeasonRepository_IDs(t *testing.T) {
 
 		ids, err := repo.IDs()
 
-		want := []int64{1, 2, 3, 4}
+		want := []uint64{1, 2, 3, 4}
 
 		if err != nil {
 			t.Fatalf("Test failed, expected %v, got %s", want, err.Error())
@@ -188,7 +188,7 @@ func TestSeasonRepository_CurrentSeasonIDs(t *testing.T) {
 		var seasons []app.Season
 
 		for i := 1; i <= 4; i++ {
-			s := newSeason(int64(i), true)
+			s := newSeason(uint64(i), true)
 
 			seasons = append(seasons, *s)
 
@@ -207,15 +207,15 @@ func TestSeasonRepository_CurrentSeasonIDs(t *testing.T) {
 			t.Fatalf("Test failed, expected %v, got %s", seasons, err.Error())
 		}
 
-		assert.Equal(t, []int64{1, 2, 3, 4}, retrieved)
+		assert.Equal(t, []uint64{1, 2, 3, 4}, retrieved)
 	})
 }
 
-func newSeason(id int64, current bool) *app.Season {
+func newSeason(id uint64, current bool) *app.Season {
 	return &app.Season{
 		ID:        id,
 		Name:      "2018-2019",
-		CompetitionID:  int64(560),
+		CompetitionID:  uint64(560),
 		IsCurrent: current,
 		CreatedAt: time.Unix(1546965200, 0),
 		UpdatedAt: time.Unix(1546965200, 0),
