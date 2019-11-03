@@ -20,28 +20,28 @@ func TestTeamProcessor_Process(t *testing.T) {
 		seasonRepo := new(mock.SeasonRepository)
 		requester := new(mock.TeamRequester)
 		logger, hook := test.NewNullLogger()
-		
+
 		processor := process.NewTeamProcessor(teamRepo, seasonRepo, requester, logger)
-		
+
 		done := make(chan bool)
-		
+
 		whu := newTeam(1, "West Ham United")
-		ncu := newTeam(14, "Newcastle United") 
-		
+		ncu := newTeam(14, "Newcastle United")
+
 		teams := make([]*app.Team, 2)
 		teams[0] = whu
 		teams[1] = ncu
-		
+
 		ch := teamChannel(teams)
 
-		ids := []int64{45, 51}
+		ids := []uint64{45, 51}
 
 		seasonRepo.On("IDs").Return(ids, nil)
 
 		requester.On("TeamsBySeasonIDs", ids).Return(ch)
 
-		teamRepo.On("ByID", int64(1)).Return(&app.Team{}, errors.New("not Found"))
-		teamRepo.On("ByID", int64(14)).Return(&app.Team{}, errors.New("not Found"))
+		teamRepo.On("ByID", uint64(1)).Return(&app.Team{}, errors.New("not Found"))
+		teamRepo.On("ByID", uint64(14)).Return(&app.Team{}, errors.New("not Found"))
 		teamRepo.On("Insert", whu).Return(nil)
 		teamRepo.On("Insert", ncu).Return(nil)
 
@@ -76,14 +76,14 @@ func TestTeamProcessor_Process(t *testing.T) {
 
 		ch := teamChannel(teams)
 
-		ids := []int64{45, 51}
+		ids := []uint64{45, 51}
 
 		seasonRepo.On("IDs").Return(ids, nil)
 
 		requester.On("TeamsBySeasonIDs", ids).Return(ch)
 
-		teamRepo.On("ByID", int64(1)).Return(whu, nil)
-		teamRepo.On("ByID", int64(14)).Return(ncu, nil)
+		teamRepo.On("ByID", uint64(1)).Return(whu, nil)
+		teamRepo.On("ByID", uint64(14)).Return(ncu, nil)
 		teamRepo.On("Update", &whu).Return(nil)
 		teamRepo.On("Update", &ncu).Return(nil)
 
@@ -120,14 +120,14 @@ func TestTeamProcessor_Process(t *testing.T) {
 
 		ch := teamChannel(teams)
 
-		ids := []int64{45, 51}
+		ids := []uint64{45, 51}
 
 		seasonRepo.On("IDs").Return(ids, nil)
 
 		requester.On("TeamsBySeasonIDs", ids).Return(ch)
 
-		teamRepo.On("ByID", int64(1)).Return(&app.Team{}, errors.New("not Found"))
-		teamRepo.On("ByID", int64(14)).Return(&app.Team{}, errors.New("not Found"))
+		teamRepo.On("ByID", uint64(1)).Return(&app.Team{}, errors.New("not Found"))
+		teamRepo.On("ByID", uint64(14)).Return(&app.Team{}, errors.New("not Found"))
 		teamRepo.On("Insert", whu).Return(errors.New("error occurred"))
 		teamRepo.On("Insert", ncu).Return(nil)
 
@@ -165,14 +165,14 @@ func TestTeamProcessor_Process(t *testing.T) {
 
 		ch := teamChannel(teams)
 
-		ids := []int64{45, 51}
+		ids := []uint64{45, 51}
 
 		seasonRepo.On("IDs").Return(ids, nil)
 
 		requester.On("TeamsBySeasonIDs", ids).Return(ch)
 
-		teamRepo.On("ByID", int64(1)).Return(whu, nil)
-		teamRepo.On("ByID", int64(14)).Return(ncu, nil)
+		teamRepo.On("ByID", uint64(1)).Return(whu, nil)
+		teamRepo.On("ByID", uint64(14)).Return(ncu, nil)
 		teamRepo.On("Update", &whu).Return(errors.New("error occurred"))
 		teamRepo.On("Update", &ncu).Return(nil)
 
@@ -208,14 +208,14 @@ func TestTeamProcessor_Process(t *testing.T) {
 
 		ch := teamChannel(teams)
 
-		ids := []int64{45, 51}
+		ids := []uint64{45, 51}
 
 		seasonRepo.On("CurrentSeasonIDs").Return(ids, nil)
 
 		requester.On("TeamsBySeasonIDs", ids).Return(ch)
 
-		teamRepo.On("ByID", int64(1)).Return(&app.Team{}, errors.New("not Found"))
-		teamRepo.On("ByID", int64(14)).Return(&app.Team{}, errors.New("not Found"))
+		teamRepo.On("ByID", uint64(1)).Return(&app.Team{}, errors.New("not Found"))
+		teamRepo.On("ByID", uint64(14)).Return(&app.Team{}, errors.New("not Found"))
 		teamRepo.On("Insert", whu).Return(nil)
 		teamRepo.On("Insert", ncu).Return(nil)
 
@@ -250,14 +250,14 @@ func TestTeamProcessor_Process(t *testing.T) {
 
 		ch := teamChannel(teams)
 
-		ids := []int64{45, 51}
+		ids := []uint64{45, 51}
 
 		seasonRepo.On("CurrentSeasonIDs").Return(ids, nil)
 
 		requester.On("TeamsBySeasonIDs", ids).Return(ch)
 
-		teamRepo.On("ByID", int64(1)).Return(whu, nil)
-		teamRepo.On("ByID", int64(14)).Return(ncu, nil)
+		teamRepo.On("ByID", uint64(1)).Return(whu, nil)
+		teamRepo.On("ByID", uint64(14)).Return(ncu, nil)
 		teamRepo.On("Update", &whu).Return(nil)
 		teamRepo.On("Update", &ncu).Return(nil)
 
@@ -294,14 +294,14 @@ func TestTeamProcessor_Process(t *testing.T) {
 
 		ch := teamChannel(teams)
 
-		ids := []int64{45, 51}
+		ids := []uint64{45, 51}
 
 		seasonRepo.On("CurrentSeasonIDs").Return(ids, nil)
 
 		requester.On("TeamsBySeasonIDs", ids).Return(ch)
 
-		teamRepo.On("ByID", int64(1)).Return(&app.Team{}, errors.New("not Found"))
-		teamRepo.On("ByID", int64(14)).Return(&app.Team{}, errors.New("not Found"))
+		teamRepo.On("ByID", uint64(1)).Return(&app.Team{}, errors.New("not Found"))
+		teamRepo.On("ByID", uint64(14)).Return(&app.Team{}, errors.New("not Found"))
 		teamRepo.On("Insert", whu).Return(errors.New("error occurred"))
 		teamRepo.On("Insert", ncu).Return(nil)
 
@@ -339,14 +339,14 @@ func TestTeamProcessor_Process(t *testing.T) {
 
 		ch := teamChannel(teams)
 
-		ids := []int64{45, 51}
+		ids := []uint64{45, 51}
 
 		seasonRepo.On("CurrentSeasonIDs").Return(ids, nil)
 
 		requester.On("TeamsBySeasonIDs", ids).Return(ch)
 
-		teamRepo.On("ByID", int64(1)).Return(whu, nil)
-		teamRepo.On("ByID", int64(14)).Return(ncu, nil)
+		teamRepo.On("ByID", uint64(1)).Return(whu, nil)
+		teamRepo.On("ByID", uint64(14)).Return(ncu, nil)
 		teamRepo.On("Update", &whu).Return(errors.New("error occurred"))
 		teamRepo.On("Update", &ncu).Return(nil)
 
@@ -362,12 +362,12 @@ func TestTeamProcessor_Process(t *testing.T) {
 	})
 }
 
-func newTeam(id int64, name string) *app.Team {
+func newTeam(id uint64, name string) *app.Team {
 	return &app.Team{
 		ID:           id,
 		Name:         name,
 		VenueID:      560,
-		CountryID:    int64(462),
+		CountryID:    uint64(462),
 		NationalTeam: false,
 		CreatedAt:    time.Unix(1546965200, 0),
 		UpdatedAt:    time.Unix(1546965200, 0),

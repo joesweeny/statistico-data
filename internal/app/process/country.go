@@ -36,7 +36,7 @@ func (p CountryProcessor) persistCountries(ch <-chan *app.Country, done chan boo
 }
 
 func (p CountryProcessor) persist(c *app.Country) {
-	_, err := p.repository.GetById(c.ID)
+	_, err := p.repository.ByID(c.ID)
 
 	if err != nil {
 		if err := p.repository.Insert(c); err != nil {

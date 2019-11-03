@@ -18,7 +18,7 @@ func TestRoundRepository_Insert(t *testing.T) {
 		defer cleanUp()
 
 		for i := 1; i < 4; i++ {
-			c := newRound(int64(i))
+			c := newRound(uint64(i))
 
 			if err := repo.Insert(c); err != nil {
 				t.Errorf("Error when inserting record into the database: %s", err.Error())
@@ -73,9 +73,9 @@ func TestRoundRepository_GetByID(t *testing.T) {
 
 		a := assert.New(t)
 
-		a.Equal(int64(43), r.ID)
+		a.Equal(uint64(43), r.ID)
 		a.Equal("5", r.Name)
-		a.Equal(int64(4387), r.SeasonID)
+		a.Equal(uint64(4387), r.SeasonID)
 		a.Equal("2019-01-21 16:08:49 +0000 UTC", r.StartDate.String())
 		a.Equal("2019-01-21 16:08:49 +0000 UTC", r.EndDate.String())
 		a.Equal("2019-01-14 11:25:00 +0000 UTC", r.CreatedAt.String())
@@ -124,9 +124,9 @@ func TestRoundRepository_Update(t *testing.T) {
 
 		a := assert.New(t)
 
-		a.Equal(int64(897), r.ID)
+		a.Equal(uint64(897), r.ID)
 		a.Equal("5", r.Name)
-		a.Equal(int64(4387), r.SeasonID)
+		a.Equal(uint64(4387), r.SeasonID)
 		a.Equal("2019-01-14 11:25:00 +0000 UTC", r.StartDate.String())
 		a.Equal("2019-01-14 11:29:00 +0000 UTC", r.EndDate.String())
 		a.Equal("2019-01-14 11:25:00 +0000 UTC", r.CreatedAt.String())
@@ -146,11 +146,11 @@ func TestRoundRepository_Update(t *testing.T) {
 	})
 }
 
-func newRound(id int64) *app.Round {
+func newRound(id uint64) *app.Round {
 	return &app.Round{
 		ID:        id,
 		Name:      "5",
-		SeasonID:  int64(4387),
+		SeasonID:  uint64(4387),
 		StartDate: time.Unix(1548086929, 0),
 		EndDate:   time.Unix(1548086929, 0),
 	}

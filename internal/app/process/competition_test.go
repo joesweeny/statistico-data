@@ -34,8 +34,8 @@ func TestCompetitionProcessor_Process(t *testing.T) {
 
 		requester.On("Competitions").Return(ch)
 
-		repo.On("ByID", int64(8)).Return(&app.Competition{}, errors.New("not found"))
-		repo.On("ByID", int64(16)).Return(&app.Competition{}, errors.New("not found"))
+		repo.On("ByID", uint64(8)).Return(&app.Competition{}, errors.New("not found"))
+		repo.On("ByID", uint64(16)).Return(&app.Competition{}, errors.New("not found"))
 		repo.On("Insert", prem).Return(nil)
 		repo.On("Insert", cham).Return(nil)
 
@@ -70,8 +70,8 @@ func TestCompetitionProcessor_Process(t *testing.T) {
 
 		requester.On("Competitions").Return(ch)
 
-		repo.On("ByID", int64(8)).Return(prem, nil)
-		repo.On("ByID", int64(16)).Return(&app.Competition{}, errors.New("not found"))
+		repo.On("ByID", uint64(8)).Return(prem, nil)
+		repo.On("ByID", uint64(16)).Return(&app.Competition{}, errors.New("not found"))
 		repo.On("Update", &prem).Return(nil)
 		repo.On("Insert", cham).Return(nil)
 
@@ -106,8 +106,8 @@ func TestCompetitionProcessor_Process(t *testing.T) {
 
 		requester.On("Competitions").Return(ch)
 
-		repo.On("ByID", int64(8)).Return(&app.Competition{}, errors.New("not found"))
-		repo.On("ByID", int64(16)).Return(&app.Competition{}, errors.New("not found"))
+		repo.On("ByID", uint64(8)).Return(&app.Competition{}, errors.New("not found"))
+		repo.On("ByID", uint64(16)).Return(&app.Competition{}, errors.New("not found"))
 		repo.On("Insert", prem).Return(errors.New("error occurred"))
 		repo.On("Insert", cham).Return(nil)
 
@@ -143,8 +143,8 @@ func TestCompetitionProcessor_Process(t *testing.T) {
 
 		requester.On("Competitions").Return(ch)
 
-		repo.On("ByID", int64(8)).Return(prem, nil)
-		repo.On("ByID", int64(16)).Return(cham, nil)
+		repo.On("ByID", uint64(8)).Return(prem, nil)
+		repo.On("ByID", uint64(16)).Return(cham, nil)
 		repo.On("Update", &prem).Return(errors.New("error occurred"))
 		repo.On("Update", &cham).Return(nil)
 
@@ -159,11 +159,11 @@ func TestCompetitionProcessor_Process(t *testing.T) {
 	})
 }
 
-func newCompetition(id int64, name string) *app.Competition {
+func newCompetition(id uint64, name string) *app.Competition {
 	return &app.Competition{
 		ID:        id,
 		Name:      name,
-		CountryID: int64(462),
+		CountryID: uint64(462),
 		IsCup:     false,
 	}
 }

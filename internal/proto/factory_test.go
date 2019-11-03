@@ -2,16 +2,16 @@ package proto
 
 import (
 	"github.com/statistico/statistico-data/internal/model"
-	"testing"
 	"github.com/stretchr/testify/assert"
+	"testing"
 )
 
 func TestPlayerStatsToProto(t *testing.T) {
 	t.Run("a new PlayerStats proto struct is hydrated", func(t *testing.T) {
 		var (
-			goals = 2
+			goals   = 2
 			assists = 1
-			onGoal = 3
+			onGoal  = 3
 		)
 
 		stats := newPlayerStats(&goals, &assists, &onGoal)
@@ -29,7 +29,7 @@ func TestPlayerStatsToProto(t *testing.T) {
 
 	t.Run("nullable fields are handled", func(t *testing.T) {
 		stats := &model.PlayerStats{
-			PlayerID:        77,
+			PlayerID: 77,
 		}
 
 		proto := PlayerStatsToProto(stats)
@@ -49,9 +49,9 @@ func TestPlayerStatsToLineupPlayerProto(t *testing.T) {
 	form := 8
 
 	player := model.PlayerStats{
-		PlayerID: 105,
-		Position: &pos,
-		IsSubstitute: false,
+		PlayerID:          105,
+		Position:          &pos,
+		IsSubstitute:      false,
 		FormationPosition: &form,
 	}
 
@@ -116,13 +116,13 @@ func newPlayerStats(goals *int, assists *int, onGoal *int) *model.PlayerStats {
 	shots := 5
 	conceded := 0
 	return &model.PlayerStats{
-		PlayerID:        77,
-		PlayerShots:     model.PlayerShots{
-			Total: 	&shots,
+		PlayerID: 77,
+		PlayerShots: model.PlayerShots{
+			Total:  &shots,
 			OnGoal: onGoal,
 		},
-		PlayerGoals:     model.PlayerGoals{
-			Scored: goals,
+		PlayerGoals: model.PlayerGoals{
+			Scored:   goals,
 			Conceded: &conceded,
 		},
 		Assists: assists,
@@ -140,10 +140,10 @@ func newTeamStats() *model.TeamStats {
 	return &model.TeamStats{
 		TeamID: 850,
 		TeamShots: model.TeamShots{
-			Total: &total,
+			Total:   &total,
 			Blocked: &blocked,
 		},
-		Corners: &corners,
+		Corners:  &corners,
 		RedCards: &redCards,
 		TeamAttacks: model.TeamAttacks{
 			Dangerous: &dangerous,

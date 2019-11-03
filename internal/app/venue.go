@@ -4,7 +4,7 @@ import "time"
 
 // Venue domain entity.
 type Venue struct {
-	ID        int64     `json:"id"`
+	ID        uint64    `json:"id"`
 	Name      string    `json:"name"`
 	Surface   *string   `json:"surface"`
 	Address   *string   `json:"address"`
@@ -18,12 +18,12 @@ type Venue struct {
 type VenueRepository interface {
 	Insert(v *Venue) error
 	Update(v *Venue) error
-	GetById(id int64) (*Venue, error)
+	GetById(id uint64) (*Venue, error)
 }
 
 // VenueRequester provides an interface allowing this application to request data from an external
 // data provider. The requester implementation is responsible for creating the channel, filtering struct data into
 // the channel before closing the channel once successful execution is complete.
 type VenueRequester interface {
-	VenuesBySeasonIDs(seasonIDs []int64) <-chan *Venue
+	VenuesBySeasonIDs(seasonIDs []uint64) <-chan *Venue
 }

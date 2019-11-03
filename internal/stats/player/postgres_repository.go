@@ -133,7 +133,7 @@ func (p *PostgresPlayerStatsRepository) ByFixtureAndTeam(fixtureId, teamId uint6
 	var (
 		created int64
 		updated int64
-		stats []*model.PlayerStats
+		stats   []*model.PlayerStats
 	)
 
 	defer rows.Close()

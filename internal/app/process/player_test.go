@@ -32,13 +32,13 @@ func TestPlayerProcessor_Process(t *testing.T) {
 
 		squadRepo.On("All").Return(squad, nil)
 
-		playerRepo.On("ByID", int64(1)).Return(&app.Player{}, errors.New("not found"))
-		playerRepo.On("ByID", int64(2)).Return(&app.Player{}, errors.New("not found"))
-		playerRepo.On("ByID", int64(3)).Return(&app.Player{}, errors.New("not found"))
+		playerRepo.On("ByID", uint64(1)).Return(&app.Player{}, errors.New("not found"))
+		playerRepo.On("ByID", uint64(2)).Return(&app.Player{}, errors.New("not found"))
+		playerRepo.On("ByID", uint64(3)).Return(&app.Player{}, errors.New("not found"))
 
-		requester.On("PlayerByID", int64(1)).Return(def, nil)
-		requester.On("PlayerByID", int64(2)).Return(mid, nil)
-		requester.On("PlayerByID", int64(3)).Return(str, nil)
+		requester.On("PlayerByID", uint64(1)).Return(def, nil)
+		requester.On("PlayerByID", uint64(2)).Return(mid, nil)
+		requester.On("PlayerByID", uint64(3)).Return(str, nil)
 
 		playerRepo.On("Insert", def).Return(nil)
 		playerRepo.On("Insert", mid).Return(nil)
@@ -74,14 +74,14 @@ func TestPlayerProcessor_Process(t *testing.T) {
 
 		squadRepo.On("All").Return(squad, nil)
 
-		playerRepo.On("ByID", int64(1)).Return(&app.Player{}, errors.New("not found"))
-		playerRepo.On("ByID", int64(2)).Return(&app.Player{}, nil)
-		playerRepo.On("ByID", int64(3)).Return(&app.Player{}, errors.New("not found"))
+		playerRepo.On("ByID", uint64(1)).Return(&app.Player{}, errors.New("not found"))
+		playerRepo.On("ByID", uint64(2)).Return(&app.Player{}, nil)
+		playerRepo.On("ByID", uint64(3)).Return(&app.Player{}, errors.New("not found"))
 
-		requester.On("PlayerByID", int64(1)).Return(def, nil)
-		requester.On("PlayerByID", int64(3)).Return(str, nil)
+		requester.On("PlayerByID", uint64(1)).Return(def, nil)
+		requester.On("PlayerByID", uint64(3)).Return(str, nil)
 
-		requester.AssertNotCalled(t, "PlayerByID", int64(2))
+		requester.AssertNotCalled(t, "PlayerByID", uint64(2))
 
 		playerRepo.On("Insert", def).Return(nil)
 		playerRepo.On("Insert", str).Return(nil)
@@ -118,14 +118,14 @@ func TestPlayerProcessor_Process(t *testing.T) {
 
 		squadRepo.On("All").Return(squad, nil)
 
-		playerRepo.On("ByID", int64(1)).Return(&app.Player{}, errors.New("not found"))
-		playerRepo.On("ByID", int64(2)).Return(&app.Player{}, nil)
-		playerRepo.On("ByID", int64(3)).Return(&app.Player{}, errors.New("not found"))
+		playerRepo.On("ByID", uint64(1)).Return(&app.Player{}, errors.New("not found"))
+		playerRepo.On("ByID", uint64(2)).Return(&app.Player{}, nil)
+		playerRepo.On("ByID", uint64(3)).Return(&app.Player{}, errors.New("not found"))
 
-		requester.On("PlayerByID", int64(1)).Return(def, nil)
-		requester.On("PlayerByID", int64(3)).Return(str, nil)
+		requester.On("PlayerByID", uint64(1)).Return(def, nil)
+		requester.On("PlayerByID", uint64(3)).Return(str, nil)
 
-		requester.AssertNotCalled(t, "PlayerByID", int64(2))
+		requester.AssertNotCalled(t, "PlayerByID", uint64(2))
 
 		playerRepo.On("Insert", def).Return(nil)
 		playerRepo.On("Insert", str).Return(errors.New("cannot insert"))
@@ -162,13 +162,13 @@ func TestPlayerProcessor_Process(t *testing.T) {
 
 		squadRepo.On("All").Return(squad, nil)
 
-		playerRepo.On("ByID", int64(1)).Return(&app.Player{}, errors.New("not found"))
-		playerRepo.On("ByID", int64(2)).Return(&app.Player{}, errors.New("not found"))
-		playerRepo.On("ByID", int64(3)).Return(&app.Player{}, errors.New("not found"))
+		playerRepo.On("ByID", uint64(1)).Return(&app.Player{}, errors.New("not found"))
+		playerRepo.On("ByID", uint64(2)).Return(&app.Player{}, errors.New("not found"))
+		playerRepo.On("ByID", uint64(3)).Return(&app.Player{}, errors.New("not found"))
 
-		requester.On("PlayerByID", int64(1)).Return(def, nil)
-		requester.On("PlayerByID", int64(2)).Return(&app.Player{}, errors.New("oh damn"))
-		requester.On("PlayerByID", int64(3)).Return(str, nil)
+		requester.On("PlayerByID", uint64(1)).Return(def, nil)
+		requester.On("PlayerByID", uint64(2)).Return(&app.Player{}, errors.New("oh damn"))
+		requester.On("PlayerByID", uint64(3)).Return(str, nil)
 
 		playerRepo.On("Insert", def).Return(nil)
 		playerRepo.On("Insert", str).Return(nil)
@@ -186,12 +186,12 @@ func TestPlayerProcessor_Process(t *testing.T) {
 	})
 }
 
-func newPlayer(id int64) *app.Player {
+func newPlayer(id uint64) *app.Player {
 	return &app.Player{
-		ID:          id,
-		CountryId:   int64(154),
-		FirstName:   "Manuel",
-		LastName:    "Lanzini",
+		ID:        id,
+		CountryId: uint64(154),
+		FirstName: "Manuel",
+		LastName:  "Lanzini",
 	}
 }
 
@@ -201,7 +201,7 @@ func newPlayerSquad() []app.Squad {
 	s := app.Squad{
 		SeasonID:  45,
 		TeamID:    98,
-		PlayerIDs: []int64{1, 2, 3},
+		PlayerIDs: []uint64{1, 2, 3},
 		CreatedAt: time.Now(),
 		UpdatedAt: time.Now(),
 	}

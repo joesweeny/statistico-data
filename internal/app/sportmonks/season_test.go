@@ -39,9 +39,9 @@ func TestSeasonRequester_Seasons(t *testing.T) {
 
 		a := assert.New(t)
 
-		a.Equal(int64(16029), season.ID)
+		a.Equal(uint64(16029), season.ID)
 		a.Equal("2019/2020", season.Name)
-		a.Equal(int64(2), season.CompetitionID)
+		a.Equal(uint64(2), season.CompetitionID)
 		a.Equal(true, season.IsCurrent)
 	})
 }

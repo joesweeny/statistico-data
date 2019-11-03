@@ -11,9 +11,9 @@ const roundCurrentSeason = "round:current-season"
 // Process fetches data from external data source using the RoundRequester
 // before persisting to the storage engine using the RoundRepository
 type RoundProcessor struct {
-	roundRepo app.RoundRepository
+	roundRepo  app.RoundRepository
 	seasonRepo app.SeasonRepository
-	requester app.RoundRequester
+	requester  app.RoundRequester
 	logger     *logrus.Logger
 }
 

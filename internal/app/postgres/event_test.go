@@ -18,7 +18,7 @@ func TestEventRepository_InsertGoalEvent(t *testing.T) {
 		defer cleanUp()
 
 		for i := 1; i < 4; i++ {
-			m := newGoalEvent(int64(i))
+			m := newGoalEvent(uint64(i))
 
 			if err := repo.InsertGoalEvent(m); err != nil {
 				t.Errorf("Error when inserting record into the database: %s", err.Error())
@@ -60,7 +60,7 @@ func TestEventRepository_InsertSubstitutionEvent(t *testing.T) {
 		defer cleanUp()
 
 		for i := 1; i < 4; i++ {
-			m := newSubstitutionEvent(int64(i))
+			m := newSubstitutionEvent(uint64(i))
 
 			if err := repo.InsertSubstitutionEvent(m); err != nil {
 				t.Errorf("Error when inserting record into the database: %s", err.Error())
@@ -114,10 +114,10 @@ func TestEventRepository_GoalEventByID(t *testing.T) {
 		}
 
 		a := assert.New(t)
-		a.Equal(int64(33), r.ID)
-		a.Equal(int64(45), r.FixtureID)
-		a.Equal(int64(4509), r.TeamID)
-		a.Equal(int64(3401), r.PlayerID)
+		a.Equal(uint64(33), r.ID)
+		a.Equal(uint64(45), r.FixtureID)
+		a.Equal(uint64(4509), r.TeamID)
+		a.Equal(uint64(3401), r.PlayerID)
 		a.Nil(r.PlayerAssistID)
 		a.Equal(82, r.Minute)
 		a.Equal("0-1", r.Score)
@@ -157,11 +157,11 @@ func TestEventRepository_SubstitutionEventByID(t *testing.T) {
 		}
 
 		a := assert.New(t)
-		a.Equal(int64(33), r.ID)
-		a.Equal(int64(45), r.FixtureID)
-		a.Equal(int64(4509), r.TeamID)
-		a.Equal(int64(3401), r.PlayerInID)
-		a.Equal(int64(901), r.PlayerOutID)
+		a.Equal(uint64(33), r.ID)
+		a.Equal(uint64(45), r.FixtureID)
+		a.Equal(uint64(4509), r.TeamID)
+		a.Equal(uint64(3401), r.PlayerInID)
+		a.Equal(uint64(901), r.PlayerOutID)
 		a.Equal(82, r.Minute)
 		a.True(*r.Injured)
 		a.Equal("2019-01-14 11:25:00 +0000 UTC", r.CreatedAt.String())
@@ -179,26 +179,26 @@ func TestEventRepository_SubstitutionEventByID(t *testing.T) {
 	})
 }
 
-func newGoalEvent(id int64) *app.GoalEvent {
+func newGoalEvent(id uint64) *app.GoalEvent {
 	return &app.GoalEvent{
 		ID:        id,
-		FixtureID: int64(45),
-		TeamID:    int64(4509),
-		PlayerID:  int64(3401),
+		FixtureID: uint64(45),
+		TeamID:    uint64(4509),
+		PlayerID:  uint64(3401),
 		Minute:    82,
 		Score:     "0-1",
 		CreatedAt: time.Unix(1546965200, 0),
 	}
 }
 
-func newSubstitutionEvent(id int64) *app.SubstitutionEvent {
+func newSubstitutionEvent(id uint64) *app.SubstitutionEvent {
 	true := true
 	return &app.SubstitutionEvent{
 		ID:          id,
-		FixtureID:   int64(45),
-		TeamID:      int64(4509),
-		PlayerInID:  int64(3401),
-		PlayerOutID: int64(901),
+		FixtureID:   uint64(45),
+		TeamID:      uint64(4509),
+		PlayerInID:  uint64(3401),
+		PlayerOutID: uint64(901),
 		Minute:      82,
 		Injured:     &true,
 		CreatedAt:   time.Unix(1546965200, 0),

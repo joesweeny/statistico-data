@@ -13,7 +13,7 @@ type TeamRequester struct {
 	logger *logrus.Logger
 }
 
-func (t TeamRequester) TeamsBySeasonIDs(seasonIDs []int64) <-chan *app.Team {
+func (t TeamRequester) TeamsBySeasonIDs(seasonIDs []uint64) <-chan *app.Team {
 	ch := make(chan *app.Team, 500)
 
 	go t.parseTeams(seasonIDs, ch)
@@ -21,7 +21,7 @@ func (t TeamRequester) TeamsBySeasonIDs(seasonIDs []int64) <-chan *app.Team {
 	return ch
 }
 
-func (t TeamRequester) parseTeams(seasonIDs []int64, ch chan<- *app.Team) {
+func (t TeamRequester) parseTeams(seasonIDs []uint64, ch chan<- *app.Team) {
 	defer close(ch)
 
 	var waitGroup sync.WaitGroup
@@ -34,7 +34,7 @@ func (t TeamRequester) parseTeams(seasonIDs []int64, ch chan<- *app.Team) {
 	waitGroup.Wait()
 }
 
-func (t TeamRequester) sendTeamRequests(seasonID int64, ch chan<- *app.Team, w *sync.WaitGroup) {
+func (t TeamRequester) sendTeamRequests(seasonID uint64, ch chan<- *app.Team, w *sync.WaitGroup) {
 	_, meta, err := t.client.TeamsBySeasonID(context.Background(), int(seasonID), 1, []string{})
 
 	if err != nil {
@@ -60,11 +60,11 @@ func (t TeamRequester) sendTeamRequests(seasonID int64, ch chan<- *app.Team, w *
 
 func transformTeam(t *spClient.Team) *app.Team {
 	return &app.Team{
-		ID:           int64(t.ID),
+		ID:           uint64(t.ID),
 		Name:         t.Name,
 		ShortCode:    &t.ShortCode,
-		CountryID:    int64(t.CountryID),
-		VenueID:      int64(t.VenueID),
+		CountryID:    uint64(t.CountryID),
+		VenueID:      uint64(t.VenueID),
 		NationalTeam: t.NationalTeam,
 		Founded:      &t.Founded,
 		Logo:         t.LogoPath,

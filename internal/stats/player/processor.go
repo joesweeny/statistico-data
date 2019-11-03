@@ -20,9 +20,9 @@ var counter int
 type Processor struct {
 	PlayerRepository
 	PlayerFactory
-	Logger *log.Logger
+	Logger      *log.Logger
 	FixtureRepo fixture.Repository
-	Client          *sportmonks.Client
+	Client      *sportmonks.Client
 }
 
 func (p Processor) Process(command string, option string, done chan bool) {

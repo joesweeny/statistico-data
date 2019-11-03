@@ -18,7 +18,7 @@ func TestVenueRepository_Insert(t *testing.T) {
 		defer cleanUp()
 
 		for i := 1; i < 4; i++ {
-			c := newVenue(int64(i))
+			c := newVenue(uint64(i))
 
 			if err := repo.Insert(c); err != nil {
 				t.Errorf("Error when inserting record into the database: %s", err.Error())
@@ -73,7 +73,7 @@ func TestVenueRepository_GetById(t *testing.T) {
 
 		a := assert.New(t)
 
-		a.Equal(int64(13), r.ID)
+		a.Equal(uint64(13), r.ID)
 		a.Equal("London Stadium", r.Name)
 		a.Equal("Grass", *r.Surface)
 		a.Nil(r.Address)
@@ -127,7 +127,7 @@ func TestVenueRepository_Update(t *testing.T) {
 
 		a := assert.New(t)
 
-		a.Equal(int64(2), r.ID)
+		a.Equal(uint64(2), r.ID)
 		a.Equal("Upton Park", r.Name)
 		a.Nil(r.Surface)
 		a.Equal("Stratford", *r.Address)
@@ -150,7 +150,7 @@ func TestVenueRepository_Update(t *testing.T) {
 	})
 }
 
-func newVenue(id int64) *app.Venue {
+func newVenue(id uint64) *app.Venue {
 	var s = "Grass"
 	var c = "London"
 

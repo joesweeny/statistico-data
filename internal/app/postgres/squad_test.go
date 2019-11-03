@@ -18,7 +18,7 @@ func TestSquadRepository_Insert(t *testing.T) {
 		defer cleanUp()
 
 		for i := 1; i < 4; i++ {
-			c := newSquad(int64(i), int64(i+1))
+			c := newSquad(uint64(i), uint64(i+1))
 
 			if err := repo.Insert(c); err != nil {
 				t.Errorf("Error when inserting record into the database: %s", err.Error())
@@ -58,9 +58,9 @@ func TestSquadRepository_BySeasonAndTeam(t *testing.T) {
 		}
 
 		a := assert.New(t)
-		a.Equal(int64(45), r.SeasonID)
-		a.Equal(int64(986), m.TeamID)
-		a.Equal([]int64{34, 57, 89}, m.PlayerIDs)
+		a.Equal(uint64(45), r.SeasonID)
+		a.Equal(uint64(986), m.TeamID)
+		a.Equal([]uint64{34, 57, 89}, m.PlayerIDs)
 		a.Equal("2019-01-14 11:25:00 +0000 UTC", r.CreatedAt.String())
 		a.Equal("2019-01-14 11:25:00 +0000 UTC", r.UpdatedAt.String())
 	})
@@ -89,7 +89,7 @@ func TestSquadRepository_Update(t *testing.T) {
 			t.Errorf("Error when inserting record into the database: %s", err.Error())
 		}
 
-		m.PlayerIDs = []int64{int64(432), int64(567), int64(2), int64(87095)}
+		m.PlayerIDs = []uint64{uint64(432), uint64(567), uint64(2), uint64(87095)}
 		m.UpdatedAt = time.Date(2019, 01, 14, 11, 25, 00, 00, time.UTC)
 
 		if err := repo.Update(m); err != nil {
@@ -103,9 +103,9 @@ func TestSquadRepository_Update(t *testing.T) {
 		}
 
 		a := assert.New(t)
-		a.Equal(int64(25), r.SeasonID)
-		a.Equal(int64(62), m.TeamID)
-		a.Equal([]int64{432, 567, 2, 87095}, m.PlayerIDs)
+		a.Equal(uint64(25), r.SeasonID)
+		a.Equal(uint64(62), m.TeamID)
+		a.Equal([]uint64{432, 567, 2, 87095}, m.PlayerIDs)
 		a.Equal("2019-01-14 11:25:00 +0000 UTC", r.CreatedAt.String())
 		a.Equal("2019-01-14 11:25:00 +0000 UTC", r.UpdatedAt.String())
 	})
@@ -221,11 +221,11 @@ func TestSquadRepository_CurrentSeason(t *testing.T) {
 	})
 }
 
-func newSquad(season, team int64) *app.Squad {
+func newSquad(season, team uint64) *app.Squad {
 	return &app.Squad{
 		SeasonID:  season,
 		TeamID:    team,
-		PlayerIDs: []int64{34, 57, 89},
+		PlayerIDs: []uint64{34, 57, 89},
 		CreatedAt: time.Unix(1547465100, 0),
 		UpdatedAt: time.Unix(1547465100, 0),
 	}

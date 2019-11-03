@@ -21,7 +21,7 @@ var waitGroup sync.WaitGroup
 type Processor struct {
 	Repository
 	Factory
-	Logger 		*log.Logger
+	Logger      *log.Logger
 	FixtureRepo fixture.Repository
 	Client      *sportmonks.Client
 }

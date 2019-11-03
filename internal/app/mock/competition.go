@@ -19,7 +19,7 @@ func (m CompetitionRepository) Update(c *app.Competition) error {
 	return args.Error(0)
 }
 
-func (m CompetitionRepository) ByID(id int64) (*app.Competition, error) {
+func (m CompetitionRepository) ByID(id uint64) (*app.Competition, error) {
 	args := m.Called(id)
 	c := args.Get(0).(*app.Competition)
 	return c, args.Error(1)
