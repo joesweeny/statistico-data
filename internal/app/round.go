@@ -6,9 +6,9 @@ import (
 
 // Round domain entity.
 type Round struct {
-	ID        uint64       `json:"id"`
+	ID        uint64    `json:"id"`
 	Name      string    `json:"name"`
-	SeasonID  uint64       `json:"season_id"`
+	SeasonID  uint64    `json:"season_id"`
 	StartDate time.Time `json:"start_date"`
 	EndDate   time.Time `json:"end_date"`
 	CreatedAt time.Time `json:"created_at"`

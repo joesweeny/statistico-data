@@ -279,7 +279,7 @@ func TestByFixtureAndTeam(t *testing.T) {
 			t.Errorf("Error when retrieving a record from the database: %s", err.Error())
 		}
 
-		assert.Equal(t,4, len(stats))
+		assert.Equal(t, 4, len(stats))
 
 		for _, s := range stats {
 			assert.Equal(t, 100, s.TeamID)
@@ -310,13 +310,13 @@ func TestByFixtureAndTeam(t *testing.T) {
 			t.Errorf("Error when retrieving a record from the database: %s", err.Error())
 		}
 
-		assert.Equal(t,5, len(stats))
+		assert.Equal(t, 5, len(stats))
 
 		for i, s := range stats {
 			assert.Equal(t, 30, s.FixtureID)
 			assert.Equal(t, 100, s.TeamID)
-			assert.Equal(t, i + 1, *s.FormationPosition)
-			assert.Equal(t, i + 1, s.PlayerID)
+			assert.Equal(t, i+1, *s.FormationPosition)
+			assert.Equal(t, i+1, s.PlayerID)
 		}
 	})
 }
@@ -345,19 +345,19 @@ func getPlayerConnection(t *testing.T) (*sql.DB, func()) {
 func newPlayerStats(fixtureId, playerId, teamId, formation int) *model.PlayerStats {
 	pos := "M"
 	return &model.PlayerStats{
-		FixtureID:       fixtureId,
-		PlayerID:        playerId,
-		TeamID:          teamId,
-		Position:        &pos,
+		FixtureID:         fixtureId,
+		PlayerID:          playerId,
+		TeamID:            teamId,
+		Position:          &pos,
 		FormationPosition: &formation,
-		IsSubstitute:    false,
-		PlayerShots:     model.PlayerShots{},
-		PlayerGoals:     model.PlayerGoals{},
-		PlayerFouls:     model.PlayerFouls{},
-		PlayerCrosses:   model.PlayerCrosses{},
-		PlayerPasses:    model.PlayerPasses{},
-		PlayerPenalties: model.PlayerPenalties{},
-		CreatedAt:       time.Unix(1546965200, 0),
-		UpdatedAt:       time.Unix(1546965200, 0),
+		IsSubstitute:      false,
+		PlayerShots:       model.PlayerShots{},
+		PlayerGoals:       model.PlayerGoals{},
+		PlayerFouls:       model.PlayerFouls{},
+		PlayerCrosses:     model.PlayerCrosses{},
+		PlayerPasses:      model.PlayerPasses{},
+		PlayerPenalties:   model.PlayerPenalties{},
+		CreatedAt:         time.Unix(1546965200, 0),
+		UpdatedAt:         time.Unix(1546965200, 0),
 	}
 }

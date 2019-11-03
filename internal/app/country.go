@@ -6,7 +6,7 @@ import (
 
 // Country domain entity.
 type Country struct {
-	ID        uint64     `json:"id"`
+	ID        uint64    `json:"id"`
 	Name      string    `json:"name"`
 	Continent string    `json:"continent"`
 	ISO       string    `json:"iso"`

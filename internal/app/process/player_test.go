@@ -188,10 +188,10 @@ func TestPlayerProcessor_Process(t *testing.T) {
 
 func newPlayer(id uint64) *app.Player {
 	return &app.Player{
-		ID:          id,
-		CountryId:   uint64(154),
-		FirstName:   "Manuel",
-		LastName:    "Lanzini",
+		ID:        id,
+		CountryId: uint64(154),
+		FirstName: "Manuel",
+		LastName:  "Lanzini",
 	}
 }
 

@@ -13,8 +13,8 @@ var counter int
 
 type PlayerProcessor struct {
 	playerRepo app.PlayerRepository
-	squadRepo app.SquadRepository
-	requester app.PlayerRequester
+	squadRepo  app.SquadRepository
+	requester  app.PlayerRequester
 	logger     *logrus.Logger
 }
 

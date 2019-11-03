@@ -143,8 +143,6 @@ func TestHandleFixture(t *testing.T) {
 	})
 }
 
-
-
 func newCompetition() *app.Competition {
 	return &app.Competition{
 		ID:        4,
@@ -158,12 +156,12 @@ func newCompetition() *app.Competition {
 
 func newSeason() *app.Season {
 	return &app.Season{
-		ID:        uint64(14567),
-		Name:      "2018-2019",
-		CompetitionID:  uint64(45),
-		IsCurrent: true,
-		CreatedAt: time.Unix(1546965200, 0),
-		UpdatedAt: time.Unix(1546965200, 0),
+		ID:            uint64(14567),
+		Name:          "2018-2019",
+		CompetitionID: uint64(45),
+		IsCurrent:     true,
+		CreatedAt:     time.Unix(1546965200, 0),
+		UpdatedAt:     time.Unix(1546965200, 0),
 	}
 }
 

@@ -87,13 +87,13 @@ func transformSubstitutionEvent(s *spClient.SubstitutionEvent) *app.Substitution
 	teamId, _ := strconv.Atoi(s.TeamID)
 
 	return &app.SubstitutionEvent{
-		ID:             uint64(s.ID),
-		FixtureID:      uint64(s.FixtureID),
-		TeamID:         uint64(teamId),
-		PlayerInID:  	uint64(s.PlayerInID),
-		PlayerOutID: 	uint64(s.PlayerOutID),
-		Minute:      	s.Minute,
-		Injured:     	s.Injured,
+		ID:          uint64(s.ID),
+		FixtureID:   uint64(s.FixtureID),
+		TeamID:      uint64(teamId),
+		PlayerInID:  uint64(s.PlayerInID),
+		PlayerOutID: uint64(s.PlayerOutID),
+		Minute:      s.Minute,
+		Injured:     s.Injured,
 	}
 }
 

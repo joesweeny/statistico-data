@@ -33,11 +33,11 @@ func TestEventRequester_EventsByFixtureIDs(t *testing.T) {
 
 		goals, subs := requester.EventsByFixtureIDs([]uint64{uint64(5), uint64(23)})
 
-		goalOne := <- goals
-		goalTwo := <- goals
+		goalOne := <-goals
+		goalTwo := <-goals
 
-		subOne := <- subs
-		subTwo := <- subs
+		subOne := <-subs
+		subTwo := <-subs
 
 		a := assert.New(t)
 

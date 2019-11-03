@@ -6,20 +6,20 @@ import (
 	"github.com/jonboulle/clockwork"
 	"github.com/sirupsen/logrus"
 	"github.com/statistico/sportmonks-go-client"
-	spClient "github.com/statistico/statistico-sportmonks-go-client"
 	"github.com/statistico/statistico-data/internal/config"
+	spClient "github.com/statistico/statistico-sportmonks-go-client"
 	"log"
 	"os"
 	"time"
 )
 
 type Container struct {
-	Clock            clockwork.Clock
-	Config           *config.Config
-	Database         *sql.DB
-	Logger           *log.Logger
-	NewLogger        *logrus.Logger
-	SportMonksClient *sportmonks.Client
+	Clock               clockwork.Clock
+	Config              *config.Config
+	Database            *sql.DB
+	Logger              *log.Logger
+	NewLogger           *logrus.Logger
+	SportMonksClient    *sportmonks.Client
 	NewSportMonksClient *spClient.HTTPClient
 }
 
@@ -41,7 +41,7 @@ func Bootstrap(config *config.Config) *Container {
 func databaseConnection(config *config.Config) *sql.DB {
 	db := config.Database
 
-	dsn := "host=%s port=%s user=%s "+
+	dsn := "host=%s port=%s user=%s " +
 		"password=%s dbname=%s sslmode=disable"
 
 	psqlInfo := fmt.Sprintf(dsn, db.Host, db.Port, db.User, db.Password, db.Name)

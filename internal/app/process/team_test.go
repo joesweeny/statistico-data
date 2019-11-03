@@ -20,18 +20,18 @@ func TestTeamProcessor_Process(t *testing.T) {
 		seasonRepo := new(mock.SeasonRepository)
 		requester := new(mock.TeamRequester)
 		logger, hook := test.NewNullLogger()
-		
+
 		processor := process.NewTeamProcessor(teamRepo, seasonRepo, requester, logger)
-		
+
 		done := make(chan bool)
-		
+
 		whu := newTeam(1, "West Ham United")
-		ncu := newTeam(14, "Newcastle United") 
-		
+		ncu := newTeam(14, "Newcastle United")
+
 		teams := make([]*app.Team, 2)
 		teams[0] = whu
 		teams[1] = ncu
-		
+
 		ch := teamChannel(teams)
 
 		ids := []uint64{45, 51}

@@ -6,14 +6,14 @@ import (
 
 // Player domain entity.
 type Player struct {
-	ID          uint64       `json:"id"`
-	CountryId   uint64       `json:"country_id"`
+	ID          uint64    `json:"id"`
+	CountryId   uint64    `json:"country_id"`
 	FirstName   string    `json:"first_name"`
 	LastName    string    `json:"last_name"`
 	BirthPlace  *string   `json:"birth_place"`
 	DateOfBirth *string   `json:"date_of_birth"`
 	PositionID  int       `json:"position_id"`
-	Image       string   `json:"image_path"`
+	Image       string    `json:"image_path"`
 	CreatedAt   time.Time `json:"created_at"`
 	UpdatedAt   time.Time `json:"updated_at"`
 }

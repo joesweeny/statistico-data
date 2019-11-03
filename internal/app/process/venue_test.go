@@ -344,10 +344,10 @@ func newVenue(id uint64, name string) *app.Venue {
 
 	return &app.Venue{
 		ID:       id,
-		Name:      name,
-		Surface:   &surface,
-		City:      &city,
-		Capacity:  &capacity,
+		Name:     name,
+		Surface:  &surface,
+		City:     &city,
+		Capacity: &capacity,
 	}
 }
 

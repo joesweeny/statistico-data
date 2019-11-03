@@ -4,7 +4,7 @@ import "time"
 
 // Venue domain entity.
 type Venue struct {
-	ID        uint64     `json:"id"`
+	ID        uint64    `json:"id"`
 	Name      string    `json:"name"`
 	Surface   *string   `json:"surface"`
 	Address   *string   `json:"address"`

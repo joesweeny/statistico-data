@@ -31,7 +31,7 @@ func TestSeasonProcessor_Process(t *testing.T) {
 		seasons[0] = current
 		seasons[1] = old
 
-		ch :=seasonChannel(seasons)
+		ch := seasonChannel(seasons)
 
 		requester.On("Seasons").Return(ch)
 
@@ -67,7 +67,7 @@ func TestSeasonProcessor_Process(t *testing.T) {
 		seasons[0] = current
 		seasons[1] = old
 
-		ch :=seasonChannel(seasons)
+		ch := seasonChannel(seasons)
 
 		requester.On("Seasons").Return(ch)
 
@@ -103,7 +103,7 @@ func TestSeasonProcessor_Process(t *testing.T) {
 		seasons[0] = current
 		seasons[1] = old
 
-		ch :=seasonChannel(seasons)
+		ch := seasonChannel(seasons)
 
 		requester.On("Seasons").Return(ch)
 
@@ -140,7 +140,7 @@ func TestSeasonProcessor_Process(t *testing.T) {
 		seasons[0] = current
 		seasons[1] = old
 
-		ch :=seasonChannel(seasons)
+		ch := seasonChannel(seasons)
 
 		requester.On("Seasons").Return(ch)
 
@@ -162,12 +162,12 @@ func TestSeasonProcessor_Process(t *testing.T) {
 
 func newSeason(id uint64, current bool) *app.Season {
 	return &app.Season{
-		ID:        id,
-		Name:      "2018-2019",
-		CompetitionID:  uint64(560),
-		IsCurrent: current,
-		CreatedAt: time.Unix(1546965200, 0),
-		UpdatedAt: time.Unix(1546965200, 0),
+		ID:            id,
+		Name:          "2018-2019",
+		CompetitionID: uint64(560),
+		IsCurrent:     current,
+		CreatedAt:     time.Unix(1546965200, 0),
+		UpdatedAt:     time.Unix(1546965200, 0),
 	}
 }
 

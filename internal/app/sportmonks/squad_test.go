@@ -35,9 +35,9 @@ func TestSquadRequester_SquadsBySeasonIDs(t *testing.T) {
 
 		ch := requester.SquadsBySeasonIDs([]uint64{uint64(435), uint64(33), uint64(2)})
 
-		x := <- ch
-		y := <- ch
-		z := <- ch
+		x := <-ch
+		y := <-ch
+		z := <-ch
 
 		a := assert.New(t)
 		//

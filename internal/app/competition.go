@@ -6,9 +6,9 @@ import (
 
 // Competition domain entity.
 type Competition struct {
-	ID        uint64       `json:"id"`
+	ID        uint64    `json:"id"`
 	Name      string    `json:"name"`
-	CountryID uint64       `json:"country_id"`
+	CountryID uint64    `json:"country_id"`
 	IsCup     bool      `json:"is_cup"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`

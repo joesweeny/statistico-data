@@ -6,11 +6,11 @@ import (
 
 // GoalEvent domain entity.
 type GoalEvent struct {
-	ID             uint64       `json:"id"`
-	FixtureID      uint64       `json:"fixture_id"`
-	TeamID         uint64       `json:"team_id"`
-	PlayerID       uint64       `json:"player_id"`
-	PlayerAssistID *uint64      `json:"player_assist_id"`
+	ID             uint64    `json:"id"`
+	FixtureID      uint64    `json:"fixture_id"`
+	TeamID         uint64    `json:"team_id"`
+	PlayerID       uint64    `json:"player_id"`
+	PlayerAssistID *uint64   `json:"player_assist_id"`
 	Minute         int       `json:"minute"`
 	Score          string    `json:"score"`
 	CreatedAt      time.Time `json:"created_at"`
@@ -18,11 +18,11 @@ type GoalEvent struct {
 
 // SubstitutionEvent domain entity.
 type SubstitutionEvent struct {
-	ID          uint64       `json:"id"`
-	FixtureID   uint64       `json:"fixture_id"`
-	TeamID      uint64       `json:"team_id"`
-	PlayerInID  uint64       `json:"player_in_id"`
-	PlayerOutID uint64       `json:"player_out_id"`
+	ID          uint64    `json:"id"`
+	FixtureID   uint64    `json:"fixture_id"`
+	TeamID      uint64    `json:"team_id"`
+	PlayerInID  uint64    `json:"player_in_id"`
+	PlayerOutID uint64    `json:"player_out_id"`
 	Minute      int       `json:"minute"`
 	Injured     *bool     `json:"injured"`
 	CreatedAt   time.Time `json:"created_at"`

@@ -60,8 +60,8 @@ func (s SquadRequester) sendSquadRequests(seasonID uint64, ch chan<- *app.Squad,
 
 func transformSquad(t *spClient.Team, seasonID uint64) *app.Squad {
 	squad := app.Squad{
-		SeasonID:  seasonID,
-		TeamID:    uint64(t.ID),
+		SeasonID: seasonID,
+		TeamID:   uint64(t.ID),
 	}
 
 	for _, player := range t.Squad() {

@@ -34,8 +34,8 @@ func TestRoundsBySeasonIDs(t *testing.T) {
 
 		ch := requester.RoundsBySeasonIDs([]uint64{uint64(100), uint64(234)})
 
-		x := <- ch
-		y := <- ch
+		x := <-ch
+		y := <-ch
 
 		a := assert.New(t)
 
@@ -95,7 +95,7 @@ func TestRoundsBySeasonIDs(t *testing.T) {
 
 		ch := requester.RoundsBySeasonIDs([]uint64{uint64(100), uint64(234)})
 
-		x := <- ch
+		x := <-ch
 
 		a := assert.New(t)
 

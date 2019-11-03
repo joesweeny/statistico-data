@@ -6,12 +6,12 @@ import (
 
 // Season domain entity.
 type Season struct {
-	ID        uint64       `json:"id"`
-	Name      string    `json:"name"`
-	CompetitionID  uint64       `json:"league_id"`
-	IsCurrent bool      `json:"current"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
+	ID            uint64    `json:"id"`
+	Name          string    `json:"name"`
+	CompetitionID uint64    `json:"league_id"`
+	IsCurrent     bool      `json:"current"`
+	CreatedAt     time.Time `json:"created_at"`
+	UpdatedAt     time.Time `json:"updated_at"`
 }
 
 // SeasonRepository provides an interface to persist Season domain struct objects to a storage engine.

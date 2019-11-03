@@ -213,11 +213,11 @@ func TestSeasonRepository_CurrentSeasonIDs(t *testing.T) {
 
 func newSeason(id uint64, current bool) *app.Season {
 	return &app.Season{
-		ID:        id,
-		Name:      "2018-2019",
-		CompetitionID:  uint64(560),
-		IsCurrent: current,
-		CreatedAt: time.Unix(1546965200, 0),
-		UpdatedAt: time.Unix(1546965200, 0),
+		ID:            id,
+		Name:          "2018-2019",
+		CompetitionID: uint64(560),
+		IsCurrent:     current,
+		CreatedAt:     time.Unix(1546965200, 0),
+		UpdatedAt:     time.Unix(1546965200, 0),
 	}
 }
