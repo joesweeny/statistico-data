@@ -229,3 +229,7 @@ func rowToFixture(r *sql.Row, id uint64) (*app.Fixture, error) {
 
 	return &f, nil
 }
+
+func NewFixtureRepository(connection *sql.DB, clock clockwork.Clock) *FixtureRepository {
+	return &FixtureRepository{connection: connection, clock: clock}
+}

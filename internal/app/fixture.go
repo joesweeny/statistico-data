@@ -6,13 +6,13 @@ import (
 
 // Fixture domain entity.
 type Fixture struct {
-	ID         int64      `json:"id"`
-	SeasonID   int64       `json:"season_id"`
-	RoundID    *int64      `json:"round_id"`
-	VenueID    *int64      `json:"venue_id"`
-	HomeTeamID int64       `json:"home_team_id"`
-	AwayTeamID int64       `json:"away_team_id"`
-	RefereeID  *int64      `json:"referee_id"`
+	ID         uint64      `json:"id"`
+	SeasonID   uint64       `json:"season_id"`
+	RoundID    *uint64      `json:"round_id"`
+	VenueID    *uint64      `json:"venue_id"`
+	HomeTeamID uint64       `json:"home_team_id"`
+	AwayTeamID uint64       `json:"away_team_id"`
+	RefereeID  *uint64      `json:"referee_id"`
 	Date       time.Time `json:"date"`
 	CreatedAt  time.Time `json:"created_at"`
 	UpdatedAt  time.Time `json:"updated_at"`
