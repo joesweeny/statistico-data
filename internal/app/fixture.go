@@ -30,3 +30,10 @@ type FixtureRepository interface {
 	BySeasonID(id uint64, before time.Time) ([]Fixture, error)
 	ByHomeAndAwayTeam(homeTeamId, awayTeamId uint64, limit uint32, before time.Time) ([]Fixture, error)
 }
+
+// FixtureRequester provides an interface allowing this application to request data from an external
+// data provider. The requester implementation is responsible for creating the channel, filtering struct data into
+// the channel before closing the channel once successful execution is complete.
+type FixtureRequester interface {
+	FixturesBySeasonIDs(ids []uint64) <-chan *Fixture
+}

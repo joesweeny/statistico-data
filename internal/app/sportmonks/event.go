@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/sirupsen/logrus"
 	"github.com/statistico/statistico-data/internal/app"
+	"github.com/statistico/statistico-data/internal/app/helpers"
 	spClient "github.com/statistico/statistico-sportmonks-go-client"
 	"strconv"
 	"sync"
@@ -62,20 +63,12 @@ func (e EventRequester) sendEventRequest(fixtureId uint64, g chan<- *app.GoalEve
 func transformGoalEvent(s *spClient.GoalEvent) *app.GoalEvent {
 	teamId, _ := strconv.Atoi(s.TeamID)
 
-	var assist *uint64 = nil
-
-	if s.PlayerAssistID != nil {
-		val := *s.PlayerAssistID
-		i := uint64(val)
-		assist = &i
-	}
-
 	event := app.GoalEvent{
 		ID:             uint64(s.ID),
 		FixtureID:      uint64(s.FixtureID),
 		TeamID:         uint64(teamId),
 		PlayerID:       uint64(s.PlayerID),
-		PlayerAssistID: assist,
+		PlayerAssistID: helpers.NullableUint64(s.PlayerAssistID),
 		Minute:         s.Minute,
 		Score:          s.Result,
 	}
