@@ -22,11 +22,11 @@ type Fixture struct {
 type FixtureRepository interface {
 	Insert(f *Fixture) error
 	Update(f *Fixture) error
-	ById(id uint64) (*Fixture, error)
+	ByID(id uint64) (*Fixture, error)
 	IDs() ([]uint64, error)
 	IDsBetween(from, to time.Time) ([]uint64, error)
 	Between(from, to time.Time) ([]Fixture, error)
-	ByTeamID(id int64, limit int32, before time.Time) ([]Fixture, error)
-	BySeasonID(id int64, before time.Time) ([]Fixture, error)
-	ByHomeAndAwayTeam(homeTeamId, awayTeamId int64, limit uint32, before time.Time) ([]Fixture, error)
+	ByTeamID(id uint64, limit int32, before time.Time) ([]Fixture, error)
+	BySeasonID(id uint64, before time.Time) ([]Fixture, error)
+	ByHomeAndAwayTeam(homeTeamId, awayTeamId uint64, limit uint32, before time.Time) ([]Fixture, error)
 }
