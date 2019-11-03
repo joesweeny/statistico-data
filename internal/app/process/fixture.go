@@ -24,7 +24,7 @@ func (f FixtureProcessor) Process(command string, option string, done chan bool)
 	case fixtureCurrentSeason:
 		go f.processCurrentSeason(done)
 	default:
-		t.logger.Fatalf("Command %s is not supported", command)
+		f.logger.Fatalf("Command %s is not supported", command)
 		return
 	}
 }

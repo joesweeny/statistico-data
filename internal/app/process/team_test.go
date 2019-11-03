@@ -100,8 +100,6 @@ func TestTeamProcessor_Process(t *testing.T) {
 	t.Run("logs error when unable to insert team into repository when processing team command", func(t *testing.T) {
 		t.Helper()
 
-		t.Helper()
-
 		teamRepo := new(mock.TeamRepository)
 		seasonRepo := new(mock.SeasonRepository)
 		requester := new(mock.TeamRequester)
