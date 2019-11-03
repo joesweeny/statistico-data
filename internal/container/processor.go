@@ -39,14 +39,13 @@ func (c Container) EventProcessor() event.Processor {
 	}
 }
 
-func (c Container) FixtureProcessor() *fixture.Processor {
-	return &fixture.Processor{
-		Repository: &fixture.PostgresFixtureRepository{Connection: c.Database},
-		SeasonRepo: c.SeasonRepository(),
-		Factory:    fixture.Factory{Clock: clock()},
-		Client:     c.SportMonksClient,
-		Logger:     c.Logger,
-	}
+func (c Container) FixtureProcessor() *process.FixtureProcessor {
+	return process.NewFixtureProcessor(
+		c.FixtureRepository(),
+		c.SeasonRepository(),
+		c.FixtureRequester(),
+		c.NewLogger,
+	)
 }
 
 func (c Container) PlayerProcessor() *process.PlayerProcessor {
@@ -63,7 +62,7 @@ func (c Container) PlayerStatsProcessor() player_stats.Processor {
 		PlayerRepository: &player_stats.PostgresPlayerStatsRepository{Connection: c.Database},
 		PlayerFactory:    player_stats.PlayerFactory{Clock: clock()},
 		Logger:           c.Logger,
-		FixtureRepo:      &fixture.PostgresFixtureRepository{Connection: c.Database},
+		FixtureRepo:      c.FixtureRepository(),
 		Client:           c.SportMonksClient,
 	}
 }
@@ -71,7 +70,7 @@ func (c Container) PlayerStatsProcessor() player_stats.Processor {
 func (c Container) ResultProcessor() *result.Processor {
 	return &result.Processor{
 		Repository:  &result.PostgresResultRepository{Connection: c.Database},
-		FixtureRepo: &fixture.PostgresFixtureRepository{Connection: c.Database},
+		FixtureRepo: c.FixtureRepository(),
 		Factory:     result.Factory{Clock: c.Clock},
 		Client:      c.SportMonksClient,
 		Logger:      c.Logger,
