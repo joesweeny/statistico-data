@@ -50,7 +50,7 @@ func (c CountryRequester) sendCountryRequest(page int, ch chan<- *app.Country) {
 
 func transformCountry(s *spClient.Country) *app.Country {
 	return &app.Country{
-		ID:        int64(s.ID),
+		ID:        uint64(s.ID),
 		Name:      s.Name,
 		Continent: s.Extra.Continent,
 		ISO:       s.Extra.ISO,

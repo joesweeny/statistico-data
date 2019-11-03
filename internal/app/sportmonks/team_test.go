@@ -31,37 +31,37 @@ func TestTeamsBySeasonIDs(t *testing.T) {
 
 		requester := sportmonks.NewTeamRequester(&client, logger)
 
-		ch := requester.TeamsBySeasonIDs([]int64{int64(435), int64(33), int64(2)})
+		ch := requester.TeamsBySeasonIDs([]uint64{uint64(435), uint64(33), uint64(2)})
 
-		x := <- ch
-		y := <- ch
-		z := <- ch
+		x := <-ch
+		y := <-ch
+		z := <-ch
 
 		a := assert.New(t)
 
-		a.Equal(int64(1), x.ID)
+		a.Equal(uint64(1), x.ID)
 		a.Equal("West Ham United", x.Name)
 		a.Equal("WHU", *x.ShortCode)
-		a.Equal(int64(462), x.CountryID)
-		a.Equal(int64(214), x.VenueID)
+		a.Equal(uint64(462), x.CountryID)
+		a.Equal(uint64(214), x.VenueID)
 		a.Equal(false, x.NationalTeam)
 		a.Equal(1895, *x.Founded)
 		a.Equal("https://cdn.sportmonks.com/images/soccer/teams/1/1.png", *x.Logo)
 
-		a.Equal(int64(1), y.ID)
+		a.Equal(uint64(1), y.ID)
 		a.Equal("West Ham United", y.Name)
 		a.Equal("WHU", *y.ShortCode)
-		a.Equal(int64(462), y.CountryID)
-		a.Equal(int64(214), y.VenueID)
+		a.Equal(uint64(462), y.CountryID)
+		a.Equal(uint64(214), y.VenueID)
 		a.Equal(false, y.NationalTeam)
 		a.Equal(1895, *y.Founded)
 		a.Equal("https://cdn.sportmonks.com/images/soccer/teams/1/1.png", *y.Logo)
 
-		a.Equal(int64(1), z.ID)
+		a.Equal(uint64(1), z.ID)
 		a.Equal("West Ham United", z.Name)
 		a.Equal("WHU", *z.ShortCode)
-		a.Equal(int64(462), z.CountryID)
-		a.Equal(int64(214), z.VenueID)
+		a.Equal(uint64(462), z.CountryID)
+		a.Equal(uint64(214), z.VenueID)
 		a.Equal(false, z.NationalTeam)
 		a.Equal(1895, *z.Founded)
 		a.Equal("https://cdn.sportmonks.com/images/soccer/teams/1/1.png", *z.Logo)

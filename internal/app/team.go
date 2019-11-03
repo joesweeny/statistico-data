@@ -6,11 +6,11 @@ import (
 
 // Team domain entity.
 type Team struct {
-	ID           int64      `json:"id"`
+	ID           uint64    `json:"id"`
 	Name         string    `json:"name"`
 	ShortCode    *string   `json:"short_code"`
-	CountryID    int64      `json:"country_id"`
-	VenueID      int64       `json:"venue_id"`
+	CountryID    uint64    `json:"country_id"`
+	VenueID      uint64    `json:"venue_id"`
 	NationalTeam bool      `json:"national_team"`
 	Founded      *int      `json:"founded"`
 	Logo         *string   `json:"logo"`
@@ -22,12 +22,12 @@ type Team struct {
 type TeamRepository interface {
 	Insert(t *Team) error
 	Update(t *Team) error
-	ByID(id int64) (*Team, error)
+	ByID(id uint64) (*Team, error)
 }
 
 // TeamRequester provides an interface allowing this application to request data from an external
 // data provider. The requester implementation is responsible for creating the channel, filtering struct data into
 // the channel before closing the channel once successful execution is complete.
 type TeamRequester interface {
-	TeamsBySeasonIDs(seasonID []int64) <-chan *Team
+	TeamsBySeasonIDs(seasonID []uint64) <-chan *Team
 }

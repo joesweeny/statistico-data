@@ -546,7 +546,7 @@ func TestTeamIdsForSeason(t *testing.T) {
 	conn, cleanUp := getConnection(t)
 	repo := PostgresFixtureRepository{Connection: conn}
 
-	t.Run("returns an int slice of Team IDs", func(t *testing.T ) {
+	t.Run("returns an int slice of Team IDs", func(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
 
@@ -595,7 +595,7 @@ func TestTeamIdsForSeason(t *testing.T) {
 			t.Fatalf("Test failed, expected nil, got %s", err.Error())
 		}
 
-		assert.Equal(t,0, len(ids))
+		assert.Equal(t, 0, len(ids))
 	})
 }
 

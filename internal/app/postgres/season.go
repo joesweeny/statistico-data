@@ -54,26 +54,26 @@ func (r *SeasonRepository) Update(s *app.Season) error {
 	return err
 }
 
-func (r *SeasonRepository) ByID(id int64) (*app.Season, error) {
+func (r *SeasonRepository) ByID(id uint64) (*app.Season, error) {
 	query := `SELECT * FROM sportmonks_season where id = $1`
 	row := r.connection.QueryRow(query, id)
 
 	return rowToSeason(row)
 }
 
-func (r *SeasonRepository) IDs() ([]int64, error) {
+func (r *SeasonRepository) IDs() ([]uint64, error) {
 	query := `SELECT id FROM sportmonks_season ORDER BY id ASC`
 
 	rows, err := r.connection.Query(query)
 
 	if err != nil {
-		return []int64{}, err
+		return []uint64{}, err
 	}
 
 	defer rows.Close()
 
-	var id int64
-	var ids []int64
+	var id uint64
+	var ids []uint64
 
 	for rows.Next() {
 		if err := rows.Scan(&id); err != nil {
@@ -86,21 +86,21 @@ func (r *SeasonRepository) IDs() ([]int64, error) {
 	return ids, nil
 }
 
-func (r *SeasonRepository) CurrentSeasonIDs() ([]int64, error) {
+func (r *SeasonRepository) CurrentSeasonIDs() ([]uint64, error) {
 	query := `SELECT id FROM sportmonks_season where is_current = true ORDER BY id ASC`
 
 	rows, err := r.connection.Query(query)
 
 	if err != nil {
-		return []int64{}, err
+		return []uint64{}, err
 	}
 
 	defer rows.Close()
 
-	var seasons []int64
+	var seasons []uint64
 
 	for rows.Next() {
-		var id int64
+		var id uint64
 
 		if err := rows.Scan(&id); err != nil {
 			return seasons, err

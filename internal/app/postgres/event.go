@@ -53,7 +53,7 @@ func (e *EventRepository) InsertSubstitutionEvent(s *app.SubstitutionEvent) erro
 	return err
 }
 
-func (e *EventRepository) GoalEventByID(id int64) (*app.GoalEvent, error) {
+func (e *EventRepository) GoalEventByID(id uint64) (*app.GoalEvent, error) {
 	query := `SELECT * FROM sportmonks_goal_event WHERE id = $1`
 
 	var g = app.GoalEvent{}
@@ -72,7 +72,7 @@ func (e *EventRepository) GoalEventByID(id int64) (*app.GoalEvent, error) {
 	return &g, nil
 }
 
-func (g *EventRepository) SubstitutionEventByID(id int64) (*app.SubstitutionEvent, error) {
+func (g *EventRepository) SubstitutionEventByID(id uint64) (*app.SubstitutionEvent, error) {
 	query := `SELECT * FROM sportmonks_substitution_event WHERE id = $1`
 
 	var s = app.SubstitutionEvent{}

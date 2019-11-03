@@ -36,7 +36,7 @@ func (p *CountryRepository) Insert(c *app.Country) error {
 
 // Update an existing domain Country struct to database.
 func (p *CountryRepository) Update(c *app.Country) error {
-	_, err := p.GetById(c.ID)
+	_, err := p.ByID(c.ID)
 
 	if err != nil {
 		return err
@@ -60,7 +60,7 @@ func (p *CountryRepository) Update(c *app.Country) error {
 }
 
 // Retrieve an existing domain Country struct from database.
-func (p *CountryRepository) GetById(id int64) (*app.Country, error) {
+func (p *CountryRepository) ByID(id uint64) (*app.Country, error) {
 	query := `SELECT * from sportmonks_country where id = $1`
 	row := p.connection.QueryRow(query, id)
 

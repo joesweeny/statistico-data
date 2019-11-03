@@ -19,7 +19,7 @@ func (m PlayerRepository) Update(p *app.Player) error {
 	return args.Error(0)
 }
 
-func (m PlayerRepository) ByID(id int64) (*app.Player, error) {
+func (m PlayerRepository) ByID(id uint64) (*app.Player, error) {
 	args := m.Called(id)
 	return args.Get(0).(*app.Player), args.Error(1)
 }
@@ -28,7 +28,7 @@ type PlayerRequester struct {
 	mock.Mock
 }
 
-func (m PlayerRequester) PlayerByID(id int64) (*app.Player, error) {
+func (m PlayerRequester) PlayerByID(id uint64) (*app.Player, error) {
 	args := m.Called(id)
 	return args.Get(0).(*app.Player), args.Error(1)
 }

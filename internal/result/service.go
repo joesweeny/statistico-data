@@ -2,12 +2,12 @@ package result
 
 import (
 	"errors"
+	"fmt"
 	"github.com/statistico/statistico-data/internal/fixture"
+	"github.com/statistico/statistico-data/internal/model"
 	pb "github.com/statistico/statistico-data/internal/proto/result"
 	"log"
 	"time"
-	"github.com/statistico/statistico-data/internal/model"
-	"fmt"
 )
 
 const maxLimit = 10000

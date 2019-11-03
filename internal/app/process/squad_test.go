@@ -34,14 +34,14 @@ func TestSquadProcessor_Process(t *testing.T) {
 
 		ch := squadChannel(squads)
 
-		ids := []int64{45, 51}
+		ids := []uint64{45, 51}
 
 		seasonRepo.On("IDs").Return(ids, nil)
 
 		requester.On("SquadsBySeasonIDs", ids).Return(ch)
 
-		squadRepo.On("BySeasonAndTeam", int64(1), int64(12962)).Return(&app.Squad{}, errors.New("not Found"))
-		squadRepo.On("BySeasonAndTeam", int64(14), int64(12962)).Return(&app.Squad{}, errors.New("not Found"))
+		squadRepo.On("BySeasonAndTeam", uint64(1), uint64(12962)).Return(&app.Squad{}, errors.New("not Found"))
+		squadRepo.On("BySeasonAndTeam", uint64(14), uint64(12962)).Return(&app.Squad{}, errors.New("not Found"))
 		squadRepo.On("Insert", whu).Return(nil)
 		squadRepo.On("Insert", ncu).Return(nil)
 
@@ -76,14 +76,14 @@ func TestSquadProcessor_Process(t *testing.T) {
 
 		ch := squadChannel(squads)
 
-		ids := []int64{45, 51}
+		ids := []uint64{45, 51}
 
 		seasonRepo.On("IDs").Return(ids, nil)
 
 		requester.On("SquadsBySeasonIDs", ids).Return(ch)
 
-		squadRepo.On("BySeasonAndTeam", int64(1), int64(12962)).Return(whu, nil)
-		squadRepo.On("BySeasonAndTeam", int64(14), int64(12962)).Return(ncu, nil)
+		squadRepo.On("BySeasonAndTeam", uint64(1), uint64(12962)).Return(whu, nil)
+		squadRepo.On("BySeasonAndTeam", uint64(14), uint64(12962)).Return(ncu, nil)
 		squadRepo.On("Update", &whu).Return(nil)
 		squadRepo.On("Update", &ncu).Return(nil)
 
@@ -118,14 +118,14 @@ func TestSquadProcessor_Process(t *testing.T) {
 
 		ch := squadChannel(squads)
 
-		ids := []int64{45, 51}
+		ids := []uint64{45, 51}
 
 		seasonRepo.On("IDs").Return(ids, nil)
 
 		requester.On("SquadsBySeasonIDs", ids).Return(ch)
 
-		squadRepo.On("BySeasonAndTeam", int64(1), int64(12962)).Return(&app.Squad{}, errors.New("not Found"))
-		squadRepo.On("BySeasonAndTeam", int64(14), int64(12962)).Return(&app.Squad{}, errors.New("not Found"))
+		squadRepo.On("BySeasonAndTeam", uint64(1), uint64(12962)).Return(&app.Squad{}, errors.New("not Found"))
+		squadRepo.On("BySeasonAndTeam", uint64(14), uint64(12962)).Return(&app.Squad{}, errors.New("not Found"))
 		squadRepo.On("Insert", whu).Return(errors.New("error occurred"))
 		squadRepo.On("Insert", ncu).Return(nil)
 
@@ -161,14 +161,14 @@ func TestSquadProcessor_Process(t *testing.T) {
 
 		ch := squadChannel(squads)
 
-		ids := []int64{45, 51}
+		ids := []uint64{45, 51}
 
 		seasonRepo.On("IDs").Return(ids, nil)
 
 		requester.On("SquadsBySeasonIDs", ids).Return(ch)
 
-		squadRepo.On("BySeasonAndTeam", int64(1), int64(12962)).Return(whu, nil)
-		squadRepo.On("BySeasonAndTeam", int64(14), int64(12962)).Return(ncu, nil)
+		squadRepo.On("BySeasonAndTeam", uint64(1), uint64(12962)).Return(whu, nil)
+		squadRepo.On("BySeasonAndTeam", uint64(14), uint64(12962)).Return(ncu, nil)
 		squadRepo.On("Update", &whu).Return(errors.New("error occurred"))
 		squadRepo.On("Update", &ncu).Return(nil)
 
@@ -204,14 +204,14 @@ func TestSquadProcessor_Process(t *testing.T) {
 
 		ch := squadChannel(squads)
 
-		ids := []int64{45, 51}
+		ids := []uint64{45, 51}
 
 		seasonRepo.On("CurrentSeasonIDs").Return(ids, nil)
 
 		requester.On("SquadsBySeasonIDs", ids).Return(ch)
 
-		squadRepo.On("BySeasonAndTeam", int64(1), int64(12962)).Return(&app.Squad{}, errors.New("not Found"))
-		squadRepo.On("BySeasonAndTeam", int64(14), int64(12962)).Return(&app.Squad{}, errors.New("not Found"))
+		squadRepo.On("BySeasonAndTeam", uint64(1), uint64(12962)).Return(&app.Squad{}, errors.New("not Found"))
+		squadRepo.On("BySeasonAndTeam", uint64(14), uint64(12962)).Return(&app.Squad{}, errors.New("not Found"))
 		squadRepo.On("Insert", whu).Return(nil)
 		squadRepo.On("Insert", ncu).Return(nil)
 
@@ -246,14 +246,14 @@ func TestSquadProcessor_Process(t *testing.T) {
 
 		ch := squadChannel(squads)
 
-		ids := []int64{45, 51}
+		ids := []uint64{45, 51}
 
 		seasonRepo.On("CurrentSeasonIDs").Return(ids, nil)
 
 		requester.On("SquadsBySeasonIDs", ids).Return(ch)
 
-		squadRepo.On("BySeasonAndTeam", int64(1), int64(12962)).Return(whu, nil)
-		squadRepo.On("BySeasonAndTeam", int64(14), int64(12962)).Return(ncu, nil)
+		squadRepo.On("BySeasonAndTeam", uint64(1), uint64(12962)).Return(whu, nil)
+		squadRepo.On("BySeasonAndTeam", uint64(14), uint64(12962)).Return(ncu, nil)
 		squadRepo.On("Update", &whu).Return(nil)
 		squadRepo.On("Update", &ncu).Return(nil)
 
@@ -288,14 +288,14 @@ func TestSquadProcessor_Process(t *testing.T) {
 
 		ch := squadChannel(squads)
 
-		ids := []int64{45, 51}
+		ids := []uint64{45, 51}
 
 		seasonRepo.On("CurrentSeasonIDs").Return(ids, nil)
 
 		requester.On("SquadsBySeasonIDs", ids).Return(ch)
 
-		squadRepo.On("BySeasonAndTeam", int64(1), int64(12962)).Return(&app.Squad{}, errors.New("not Found"))
-		squadRepo.On("BySeasonAndTeam", int64(14), int64(12962)).Return(&app.Squad{}, errors.New("not Found"))
+		squadRepo.On("BySeasonAndTeam", uint64(1), uint64(12962)).Return(&app.Squad{}, errors.New("not Found"))
+		squadRepo.On("BySeasonAndTeam", uint64(14), uint64(12962)).Return(&app.Squad{}, errors.New("not Found"))
 		squadRepo.On("Insert", whu).Return(errors.New("error occurred"))
 		squadRepo.On("Insert", ncu).Return(nil)
 
@@ -331,14 +331,14 @@ func TestSquadProcessor_Process(t *testing.T) {
 
 		ch := squadChannel(squads)
 
-		ids := []int64{45, 51}
+		ids := []uint64{45, 51}
 
 		seasonRepo.On("CurrentSeasonIDs").Return(ids, nil)
 
 		requester.On("SquadsBySeasonIDs", ids).Return(ch)
 
-		squadRepo.On("BySeasonAndTeam", int64(1), int64(12962)).Return(whu, nil)
-		squadRepo.On("BySeasonAndTeam", int64(14), int64(12962)).Return(ncu, nil)
+		squadRepo.On("BySeasonAndTeam", uint64(1), uint64(12962)).Return(whu, nil)
+		squadRepo.On("BySeasonAndTeam", uint64(14), uint64(12962)).Return(ncu, nil)
 		squadRepo.On("Update", &whu).Return(errors.New("error occurred"))
 		squadRepo.On("Update", &ncu).Return(nil)
 
@@ -354,11 +354,11 @@ func TestSquadProcessor_Process(t *testing.T) {
 	})
 }
 
-func newSquad(season, team int64) *app.Squad {
+func newSquad(season, team uint64) *app.Squad {
 	return &app.Squad{
 		SeasonID:  season,
 		TeamID:    team,
-		PlayerIDs: []int64{34, 57, 89},
+		PlayerIDs: []uint64{34, 57, 89},
 		CreatedAt: time.Unix(1547465100, 0),
 		UpdatedAt: time.Unix(1547465100, 0),
 	}

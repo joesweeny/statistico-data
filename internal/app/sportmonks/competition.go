@@ -50,9 +50,9 @@ func (c CompetitionRequester) sendCompetitionRequest(page int, ch chan<- *app.Co
 
 func transformCompetition(s *spClient.League) *app.Competition {
 	return &app.Competition{
-		ID:        int64(s.ID),
+		ID:        uint64(s.ID),
 		Name:      s.Name,
-		CountryID: int64(s.CountryID),
+		CountryID: uint64(s.CountryID),
 		IsCup:     s.IsCup,
 	}
 }

@@ -1,17 +1,17 @@
 package player_stats
 
 import (
-	"testing"
 	"github.com/statistico/statistico-data/internal/model"
 	"github.com/stretchr/testify/assert"
+	"testing"
 )
 
 func TestHandlePlayerStats(t *testing.T) {
 	t.Run("returns a slice of proto PlayerStats structs", func(t *testing.T) {
 		var (
-			goals = 1
+			goals   = 1
 			assists = 1
-			onGoal = 2
+			onGoal  = 2
 		)
 
 		x := []*model.PlayerStats{
@@ -29,21 +29,21 @@ func TestHandlePlayerStats(t *testing.T) {
 func TestHandleStartingLineupPlayers(t *testing.T) {
 	t.Run("returns a slice of proto LineupPlayer structs who are not substitutes", func(t *testing.T) {
 		var (
-			playerId1 = 1
+			playerId1  = 1
 			formation1 = 1
-			pos1 = "M"
+			pos1       = "M"
 		)
 
 		var (
-			playerId2 = 2
+			playerId2  = 2
 			formation2 = 2
-			pos2 = "M"
+			pos2       = "M"
 		)
 
 		var (
-			playerId3 = 3
+			playerId3  = 3
 			formation3 = 3
-			pos3 = "M"
+			pos3       = "M"
 		)
 
 		x := []*model.PlayerStats{
@@ -59,9 +59,9 @@ func TestHandleStartingLineupPlayers(t *testing.T) {
 		a.Equal(2, len(lineup))
 
 		for i, l := range lineup {
-			a.Equal(uint64(i + 1), l.PlayerId)
+			a.Equal(uint64(i+1), l.PlayerId)
 			a.Equal("M", l.Position)
-			a.Equal(uint32(i + 1), l.FormationPosition.GetValue())
+			a.Equal(uint32(i+1), l.FormationPosition.GetValue())
 			a.False(l.IsSubstitute)
 		}
 	})
@@ -70,21 +70,21 @@ func TestHandleStartingLineupPlayers(t *testing.T) {
 func TestHandleSubstituteLineupPlayers(t *testing.T) {
 	t.Run("returns a slice of proto LineupPlayer structs who are substitutes", func(t *testing.T) {
 		var (
-			playerId1 = 1
+			playerId1  = 1
 			formation1 = 1
-			pos1 = "M"
+			pos1       = "M"
 		)
 
 		var (
-			playerId2 = 2
+			playerId2  = 2
 			formation2 = 2
-			pos2 = "M"
+			pos2       = "M"
 		)
 
 		var (
-			playerId3 = 3
+			playerId3  = 3
 			formation3 = 3
-			pos3 = "M"
+			pos3       = "M"
 		)
 
 		x := []*model.PlayerStats{
@@ -100,9 +100,9 @@ func TestHandleSubstituteLineupPlayers(t *testing.T) {
 		a.Equal(1, len(lineup))
 
 		for i, l := range lineup {
-			a.Equal(uint64(i + 1), l.PlayerId)
+			a.Equal(uint64(i+1), l.PlayerId)
 			a.Equal("M", l.Position)
-			a.Equal(uint32(i + 1), l.FormationPosition.GetValue())
+			a.Equal(uint32(i+1), l.FormationPosition.GetValue())
 			a.True(l.IsSubstitute)
 		}
 	})
@@ -112,13 +112,13 @@ func modelPlayerStats(goals *int, assists *int, onGoal *int) *model.PlayerStats 
 	shots := 5
 	conceded := 0
 	return &model.PlayerStats{
-		PlayerID:        77,
-		PlayerShots:     model.PlayerShots{
-			Total: 	&shots,
+		PlayerID: 77,
+		PlayerShots: model.PlayerShots{
+			Total:  &shots,
 			OnGoal: onGoal,
 		},
-		PlayerGoals:     model.PlayerGoals{
-			Scored: goals,
+		PlayerGoals: model.PlayerGoals{
+			Scored:   goals,
 			Conceded: &conceded,
 		},
 		Assists: assists,
@@ -127,9 +127,9 @@ func modelPlayerStats(goals *int, assists *int, onGoal *int) *model.PlayerStats 
 
 func modelPlayerLineup(playerId int, formation *int, position *string, sub bool) *model.PlayerStats {
 	return &model.PlayerStats{
-		PlayerID: playerId,
-		Position: position,
-		IsSubstitute: sub,
+		PlayerID:          playerId,
+		Position:          position,
+		IsSubstitute:      sub,
 		FormationPosition: formation,
 	}
 }

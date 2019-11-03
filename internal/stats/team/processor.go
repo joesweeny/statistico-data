@@ -22,8 +22,8 @@ type Processor struct {
 	TeamRepository
 	TeamFactory
 	FixtureRepo fixture.Repository
-	Logger *log.Logger
-	Client          *sportmonks.Client
+	Logger      *log.Logger
+	Client      *sportmonks.Client
 }
 
 func (p Processor) Process(command string, option string, done chan bool) {

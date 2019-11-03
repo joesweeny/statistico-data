@@ -53,7 +53,7 @@ func (r *CompetitionRepository) Update(c *app.Competition) error {
 	return err
 }
 
-func (r *CompetitionRepository) ByID(id int64) (*app.Competition, error) {
+func (r *CompetitionRepository) ByID(id uint64) (*app.Competition, error) {
 	query := `SELECT * FROM sportmonks_competition where id = $1`
 	row := r.connection.QueryRow(query, id)
 

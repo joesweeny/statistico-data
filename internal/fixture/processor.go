@@ -55,7 +55,7 @@ func (s Processor) currentSeason(done chan bool) {
 	go s.callClient(ids, done)
 }
 
-func (s Processor) callClient(ids []int64, done chan bool) {
+func (s Processor) callClient(ids []uint64, done chan bool) {
 	q := []string{"fixtures"}
 
 	for _, id := range ids {

@@ -48,7 +48,7 @@ func (p *PlayerRepository) Update(m *app.Player) error {
 	return err
 }
 
-func (p *PlayerRepository) ByID(id int64) (*app.Player, error) {
+func (p *PlayerRepository) ByID(id uint64) (*app.Player, error) {
 	query := `SELECT * FROM sportmonks_player where id = $1`
 	row := p.connection.QueryRow(query, id)
 

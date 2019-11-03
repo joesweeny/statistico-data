@@ -12,7 +12,7 @@ type VenueRequester struct {
 	logger *logrus.Logger
 }
 
-func (v VenueRequester) VenuesBySeasonIDs(seasonIDs []int64) <-chan *app.Venue {
+func (v VenueRequester) VenuesBySeasonIDs(seasonIDs []uint64) <-chan *app.Venue {
 	ch := make(chan *app.Venue, 500)
 
 	go v.parseVenues(seasonIDs, ch)
@@ -20,7 +20,7 @@ func (v VenueRequester) VenuesBySeasonIDs(seasonIDs []int64) <-chan *app.Venue {
 	return ch
 }
 
-func (v VenueRequester) parseVenues(seasonIDs []int64, ch chan<- *app.Venue) {
+func (v VenueRequester) parseVenues(seasonIDs []uint64, ch chan<- *app.Venue) {
 	defer close(ch)
 
 	for _, id := range seasonIDs {
@@ -28,7 +28,7 @@ func (v VenueRequester) parseVenues(seasonIDs []int64, ch chan<- *app.Venue) {
 	}
 }
 
-func (v VenueRequester) callClient(seasonId int64, ch chan<- *app.Venue) {
+func (v VenueRequester) callClient(seasonId uint64, ch chan<- *app.Venue) {
 	res, _, err := v.client.VenuesBySeasonID(context.Background(), int(seasonId))
 
 	if err != nil {
@@ -43,7 +43,7 @@ func (v VenueRequester) callClient(seasonId int64, ch chan<- *app.Venue) {
 
 func transformVenue(v *spClient.Venue) *app.Venue {
 	return &app.Venue{
-		ID:       int64(v.ID),
+		ID:       uint64(v.ID),
 		Name:     v.Name,
 		Surface:  &v.Surface,
 		Address:  v.Address,

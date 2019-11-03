@@ -17,7 +17,7 @@ type RoundRequester struct {
 	logger *logrus.Logger
 }
 
-func (r RoundRequester) RoundsBySeasonIDs(seasonIDs []int64) <-chan *app.Round {
+func (r RoundRequester) RoundsBySeasonIDs(seasonIDs []uint64) <-chan *app.Round {
 	ch := make(chan *app.Round, 500)
 
 	go r.parseRounds(seasonIDs, ch)
@@ -25,7 +25,7 @@ func (r RoundRequester) RoundsBySeasonIDs(seasonIDs []int64) <-chan *app.Round {
 	return ch
 }
 
-func (r RoundRequester) parseRounds(seasonIDs []int64, ch chan<- *app.Round) {
+func (r RoundRequester) parseRounds(seasonIDs []uint64, ch chan<- *app.Round) {
 	defer close(ch)
 
 	for _, id := range seasonIDs {
@@ -33,7 +33,7 @@ func (r RoundRequester) parseRounds(seasonIDs []int64, ch chan<- *app.Round) {
 	}
 }
 
-func (r RoundRequester) sendRoundRequest(seasonID int64, ch chan<- *app.Round) {
+func (r RoundRequester) sendRoundRequest(seasonID uint64, ch chan<- *app.Round) {
 	res, _, err := r.client.RoundsBySeasonID(context.Background(), int(seasonID), []string{})
 
 	if err != nil {
@@ -67,9 +67,9 @@ func transformRound(r *spClient.Round) (*app.Round, error) {
 	}
 
 	return &app.Round{
-		ID:        int64(r.ID),
+		ID:        uint64(r.ID),
 		Name:      strconv.Itoa(r.Name),
-		SeasonID:  int64(r.SeasonID),
+		SeasonID:  uint64(r.SeasonID),
 		StartDate: start,
 		EndDate:   end,
 	}, nil

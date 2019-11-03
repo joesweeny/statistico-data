@@ -13,7 +13,7 @@ type PlayerRequester struct {
 	logger *logrus.Logger
 }
 
-func (p PlayerRequester) PlayerByID(id int64) (*app.Player, error) {
+func (p PlayerRequester) PlayerByID(id uint64) (*app.Player, error) {
 	res, _, err := p.client.PlayerByID(context.Background(), int(id), []string{})
 
 	if err != nil {
@@ -26,8 +26,8 @@ func (p PlayerRequester) PlayerByID(id int64) (*app.Player, error) {
 
 func transformPlayer(p *spClient.Player) *app.Player {
 	return &app.Player{
-		ID:          int64(p.ID),
-		CountryId:   int64(p.CountryID),
+		ID:          uint64(p.ID),
+		CountryId:   uint64(p.CountryID),
 		FirstName:   p.FirstName,
 		LastName:    p.LastName,
 		BirthPlace:  &p.BirthPlace,
