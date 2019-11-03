@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/statistico/statistico-data/internal/fixture"
+	"github.com/statistico/statistico-data/internal/app"
 	"github.com/statistico/statistico-data/internal/proto"
 	pb "github.com/statistico/statistico-data/internal/proto/stats/team"
 	"log"
@@ -12,12 +12,12 @@ import (
 
 type Service struct {
 	TeamRepository    TeamRepository
-	FixtureRepository fixture.Repository
+	FixtureRepository app.FixtureRepository
 	Logger            *log.Logger
 }
 
 func (s Service) GetTeamStatsForFixture(c context.Context, r *pb.FixtureRequest) (*pb.StatsResponse, error) {
-	fix, err := s.FixtureRepository.ById(r.FixtureId)
+	fix, err := s.FixtureRepository.ByID(r.FixtureId)
 
 	if err != nil {
 		m := fmt.Sprintf("Fixture with ID %d does not exist", r.FixtureId)

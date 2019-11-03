@@ -4,19 +4,19 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/statistico/statistico-data/internal/fixture"
+	"github.com/statistico/statistico-data/internal/app"
 	pb "github.com/statistico/statistico-data/internal/proto/stats/player"
 	"log"
 )
 
 type Service struct {
 	PlayerRepository PlayerRepository
-	FixtureRepo      fixture.Repository
+	FixtureRepo      app.FixtureRepository
 	Logger           *log.Logger
 }
 
 func (s Service) GetPlayerStatsForFixture(c context.Context, r *pb.FixtureRequest) (*pb.StatsResponse, error) {
-	fix, err := s.FixtureRepo.ById(r.FixtureId)
+	fix, err := s.FixtureRepo.ByID(r.FixtureId)
 
 	if err != nil {
 		m := fmt.Sprintf("Fixture with ID %d does not exist", r.FixtureId)
@@ -49,7 +49,7 @@ func (s Service) GetPlayerStatsForFixture(c context.Context, r *pb.FixtureReques
 }
 
 func (s Service) GetLineUpForFixture(c context.Context, r *pb.FixtureRequest) (*pb.LineupResponse, error) {
-	fix, err := s.FixtureRepo.ById(r.FixtureId)
+	fix, err := s.FixtureRepo.ByID(r.FixtureId)
 
 	if err != nil {
 		m := fmt.Sprintf("Fixture with ID %d does not exist", r.FixtureId)

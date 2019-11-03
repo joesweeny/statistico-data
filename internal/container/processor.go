@@ -3,7 +3,6 @@ package container
 import (
 	"github.com/statistico/statistico-data/internal/app/process"
 	"github.com/statistico/statistico-data/internal/event"
-	"github.com/statistico/statistico-data/internal/fixture"
 	"github.com/statistico/statistico-data/internal/result"
 	"github.com/statistico/statistico-data/internal/stats/player"
 	"github.com/statistico/statistico-data/internal/stats/team"
@@ -34,7 +33,7 @@ func (c Container) EventProcessor() event.Processor {
 		Repository:  &event.PostgresEventRepository{Connection: c.Database},
 		Factory:     event.Factory{Clock: clock()},
 		Logger:      c.Logger,
-		FixtureRepo: &fixture.PostgresFixtureRepository{Connection: c.Database},
+		FixtureRepo: c.FixtureRepository(),
 		Client:      c.SportMonksClient,
 	}
 }
@@ -118,7 +117,7 @@ func (c Container) TeamStatsProcessor() team_stats.Processor {
 		TeamRepository: &team_stats.PostgresTeamStatsRepository{Connection: c.Database},
 		TeamFactory:    team_stats.TeamFactory{Clock: clock()},
 		Logger:         c.Logger,
-		FixtureRepo:    &fixture.PostgresFixtureRepository{Connection: c.Database},
+		FixtureRepo:    c.FixtureRepository(),
 		Client:         c.SportMonksClient,
 	}
 }

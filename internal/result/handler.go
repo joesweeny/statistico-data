@@ -19,8 +19,8 @@ type Handler struct {
 	Logger          *log.Logger
 }
 
-func (h Handler) HandleResult(f *model.Fixture, r *model.Result) (*pbResult.Result, error) {
-	s, err := h.SeasonRepo.ByID(uint64(f.SeasonID))
+func (h Handler) HandleResult(f *app.Fixture, r *model.Result) (*pbResult.Result, error) {
+	s, err := h.SeasonRepo.ByID(f.SeasonID)
 
 	if err != nil {
 		e := fmt.Errorf("error when retrieving Result: FixtureID %d, Season ID %d", r.FixtureID, f.SeasonID)
