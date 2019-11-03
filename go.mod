@@ -12,7 +12,7 @@ require (
 	github.com/pkg/errors v0.8.1
 	github.com/sirupsen/logrus v1.4.2
 	github.com/statistico/sportmonks-go-client v0.0.0-20190808134647-c309060826ed
-	github.com/statistico/statistico-sportmonks-go-client v0.0.0-20191103211307-199e3501cbf0
+	github.com/statistico/statistico-sportmonks-go-client v0.0.0-20191103213849-15d44394a96d
 	github.com/stretchr/testify v1.4.0
 	golang.org/x/crypto v0.0.0-20191029031824-8986dd9e96cf // indirect
 	golang.org/x/net v0.0.0-20191101175033-0deb6923b6d9

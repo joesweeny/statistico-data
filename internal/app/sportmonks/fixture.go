@@ -47,6 +47,8 @@ func (f FixtureRequester) sendFixtureRequests(seasonID uint64, ch chan<- *app.Fi
 	for _, fixture := range res.Fixtures() {
 		ch <- transformFixture(&fixture)
 	}
+
+	w.Done()
 }
 
 func transformFixture(s *spClient.Fixture) *app.Fixture {
