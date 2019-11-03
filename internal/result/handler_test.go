@@ -136,10 +136,10 @@ func newVenue() *app.Venue {
 	}
 }
 
-func newFixture() *model.Fixture {
-	var roundId = 165789
+func newFixture() *app.Fixture {
+	var roundId = uint64(165789)
 
-	return &model.Fixture{
+	return &app.Fixture{
 		ID:         92,
 		SeasonID:   14567,
 		RoundID:    &roundId,

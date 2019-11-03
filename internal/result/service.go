@@ -3,8 +3,7 @@ package result
 import (
 	"errors"
 	"fmt"
-	"github.com/statistico/statistico-data/internal/fixture"
-	"github.com/statistico/statistico-data/internal/model"
+	"github.com/statistico/statistico-data/internal/app"
 	pb "github.com/statistico/statistico-data/internal/proto/result"
 	"log"
 	"time"
@@ -15,7 +14,7 @@ const maxLimit = 10000
 var ErrTimeParse = errors.New("unable to parse date provided in Request")
 
 type Service struct {
-	FixtureRepo fixture.Repository
+	FixtureRepo app.FixtureRepository
 	ResultRepo  Repository
 	Handler
 	Logger *log.Logger
@@ -51,7 +50,7 @@ func (s Service) GetResultsForTeam(r *pb.TeamRequest, stream pb.ResultService_Ge
 		limit = maxLimit
 	}
 
-	fixtures, err := s.FixtureRepo.ByTeamId(r.TeamId, limit, date)
+	fixtures, err := s.FixtureRepo.ByTeamID(uint64(r.TeamId), limit, date)
 
 	if err != nil {
 		s.Logger.Printf("Error retrieving Fixture(s) in Result Service. Error: %s", err.Error())
@@ -68,7 +67,7 @@ func (s Service) GetResultsForSeason(r *pb.SeasonRequest, stream pb.ResultServic
 		return ErrTimeParse
 	}
 
-	fixtures, err := s.FixtureRepo.BySeasonId(r.SeasonId, date)
+	fixtures, err := s.FixtureRepo.BySeasonID(uint64(r.SeasonId), date)
 
 	if err != nil {
 		s.Logger.Printf("Error retrieving Fixture(s) in Result Service. Error: %s", err.Error())
@@ -78,9 +77,9 @@ func (s Service) GetResultsForSeason(r *pb.SeasonRequest, stream pb.ResultServic
 	return s.sendResults(fixtures, stream)
 }
 
-func (s Service) sendResults(f []model.Fixture, stream pb.ResultService_GetResultsForTeamServer) error {
+func (s Service) sendResults(f []app.Fixture, stream pb.ResultService_GetResultsForTeamServer) error {
 	for _, fix := range f {
-		res, err := s.ResultRepo.GetByFixtureId(fix.ID)
+		res, err := s.ResultRepo.GetByFixtureId(int(fix.ID))
 
 		if err != nil {
 			return fmt.Errorf("fixture with ID %d does not exist", fix.ID)

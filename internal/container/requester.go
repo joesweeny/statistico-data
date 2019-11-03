@@ -17,6 +17,10 @@ func (c Container) EventRequester() app.EventRequester {
 	return sportmonks.NewEventRequester(c.NewSportMonksClient, c.NewLogger)
 }
 
+func (c Container) FixtureRequester() app.FixtureRequester {
+	return sportmonks.NewFixtureRequester(c.NewSportMonksClient, c.NewLogger)
+}
+
 func (c Container) RoundRequester() app.RoundRequester {
 	return sportmonks.NewRoundRequester(c.NewSportMonksClient, c.NewLogger)
 }

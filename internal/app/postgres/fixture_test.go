@@ -535,8 +535,6 @@ func newFixture(id uint64) *app.Fixture {
 		HomeTeamID: 451,
 		AwayTeamID: 924,
 		Date:       time.Unix(1548086929, 0),
-		CreatedAt:  time.Unix(1546965200, 0),
-		UpdatedAt:  time.Unix(1546965200, 0),
 	}
 }
 
