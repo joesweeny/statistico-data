@@ -34,14 +34,14 @@ func TestRoundProcessor_Process(t *testing.T) {
 
 		ch := roundChannel(rounds)
 
-		ids := []int64{45, 51}
+		ids := []uint64{45, 51}
 
 		seasonRepo.On("IDs").Return(ids, nil)
 
 		requester.On("RoundsBySeasonIDs", ids).Return(ch)
 
-		roundRepo.On("ByID", int64(45)).Return(&app.Round{}, errors.New("not Found"))
-		roundRepo.On("ByID", int64(51)).Return(&app.Round{}, errors.New("not Found"))
+		roundRepo.On("ByID", uint64(45)).Return(&app.Round{}, errors.New("not Found"))
+		roundRepo.On("ByID", uint64(51)).Return(&app.Round{}, errors.New("not Found"))
 		roundRepo.On("Insert", one).Return(nil)
 		roundRepo.On("Insert", two).Return(nil)
 
@@ -76,14 +76,14 @@ func TestRoundProcessor_Process(t *testing.T) {
 
 		ch := roundChannel(rounds)
 
-		ids := []int64{45, 51}
+		ids := []uint64{45, 51}
 
 		seasonRepo.On("IDs").Return(ids, nil)
 
 		requester.On("RoundsBySeasonIDs", ids).Return(ch)
 
-		roundRepo.On("ByID", int64(45)).Return(one, nil)
-		roundRepo.On("ByID", int64(51)).Return(two, nil)
+		roundRepo.On("ByID", uint64(45)).Return(one, nil)
+		roundRepo.On("ByID", uint64(51)).Return(two, nil)
 		roundRepo.On("Update", &one).Return(nil)
 		roundRepo.On("Update", &two).Return(nil)
 
@@ -118,14 +118,14 @@ func TestRoundProcessor_Process(t *testing.T) {
 
 		ch := roundChannel(rounds)
 
-		ids := []int64{45, 51}
+		ids := []uint64{45, 51}
 
 		seasonRepo.On("IDs").Return(ids, nil)
 
 		requester.On("RoundsBySeasonIDs", ids).Return(ch)
 
-		roundRepo.On("ByID", int64(45)).Return(&app.Round{}, errors.New("not Found"))
-		roundRepo.On("ByID", int64(51)).Return(two, nil)
+		roundRepo.On("ByID", uint64(45)).Return(&app.Round{}, errors.New("not Found"))
+		roundRepo.On("ByID", uint64(51)).Return(two, nil)
 		roundRepo.On("Insert", one).Return(errors.New("error occurred"))
 		roundRepo.On("Update", &two).Return(nil)
 
@@ -161,14 +161,14 @@ func TestRoundProcessor_Process(t *testing.T) {
 
 		ch := roundChannel(rounds)
 
-		ids := []int64{45, 51}
+		ids := []uint64{45, 51}
 
 		seasonRepo.On("IDs").Return(ids, nil)
 
 		requester.On("RoundsBySeasonIDs", ids).Return(ch)
 
-		roundRepo.On("ByID", int64(45)).Return(&app.Round{}, errors.New("not Found"))
-		roundRepo.On("ByID", int64(51)).Return(two, nil)
+		roundRepo.On("ByID", uint64(45)).Return(&app.Round{}, errors.New("not Found"))
+		roundRepo.On("ByID", uint64(51)).Return(two, nil)
 		roundRepo.On("Insert", one).Return(nil)
 		roundRepo.On("Update", &two).Return(errors.New("error occurred"))
 
@@ -204,14 +204,14 @@ func TestRoundProcessor_Process(t *testing.T) {
 
 		ch := roundChannel(rounds)
 
-		ids := []int64{45, 51}
+		ids := []uint64{45, 51}
 
 		seasonRepo.On("CurrentSeasonIDs").Return(ids, nil)
 
 		requester.On("RoundsBySeasonIDs", ids).Return(ch)
 
-		roundRepo.On("ByID", int64(45)).Return(&app.Round{}, errors.New("not Found"))
-		roundRepo.On("ByID", int64(51)).Return(&app.Round{}, errors.New("not Found"))
+		roundRepo.On("ByID", uint64(45)).Return(&app.Round{}, errors.New("not Found"))
+		roundRepo.On("ByID", uint64(51)).Return(&app.Round{}, errors.New("not Found"))
 		roundRepo.On("Insert", one).Return(nil)
 		roundRepo.On("Insert", two).Return(nil)
 
@@ -246,14 +246,14 @@ func TestRoundProcessor_Process(t *testing.T) {
 
 		ch := roundChannel(rounds)
 
-		ids := []int64{45, 51}
+		ids := []uint64{45, 51}
 
 		seasonRepo.On("CurrentSeasonIDs").Return(ids, nil)
 
 		requester.On("RoundsBySeasonIDs", ids).Return(ch)
 
-		roundRepo.On("ByID", int64(45)).Return(one, nil)
-		roundRepo.On("ByID", int64(51)).Return(two, nil)
+		roundRepo.On("ByID", uint64(45)).Return(one, nil)
+		roundRepo.On("ByID", uint64(51)).Return(two, nil)
 		roundRepo.On("Update", &one).Return(nil)
 		roundRepo.On("Update", &two).Return(nil)
 
@@ -288,14 +288,14 @@ func TestRoundProcessor_Process(t *testing.T) {
 
 		ch := roundChannel(rounds)
 
-		ids := []int64{45, 51}
+		ids := []uint64{45, 51}
 
 		seasonRepo.On("CurrentSeasonIDs").Return(ids, nil)
 
 		requester.On("RoundsBySeasonIDs", ids).Return(ch)
 
-		roundRepo.On("ByID", int64(45)).Return(&app.Round{}, errors.New("not Found"))
-		roundRepo.On("ByID", int64(51)).Return(two, nil)
+		roundRepo.On("ByID", uint64(45)).Return(&app.Round{}, errors.New("not Found"))
+		roundRepo.On("ByID", uint64(51)).Return(two, nil)
 		roundRepo.On("Insert", one).Return(errors.New("error occurred"))
 		roundRepo.On("Update", &two).Return(nil)
 
@@ -331,14 +331,14 @@ func TestRoundProcessor_Process(t *testing.T) {
 
 		ch := roundChannel(rounds)
 
-		ids := []int64{45, 51}
+		ids := []uint64{45, 51}
 
 		seasonRepo.On("CurrentSeasonIDs").Return(ids, nil)
 
 		requester.On("RoundsBySeasonIDs", ids).Return(ch)
 
-		roundRepo.On("ByID", int64(45)).Return(&app.Round{}, errors.New("not Found"))
-		roundRepo.On("ByID", int64(51)).Return(two, nil)
+		roundRepo.On("ByID", uint64(45)).Return(&app.Round{}, errors.New("not Found"))
+		roundRepo.On("ByID", uint64(51)).Return(two, nil)
 		roundRepo.On("Insert", one).Return(nil)
 		roundRepo.On("Update", &two).Return(errors.New("error occurred"))
 
@@ -354,11 +354,11 @@ func TestRoundProcessor_Process(t *testing.T) {
 	})
 }
 
-func newRound(id int64) *app.Round {
+func newRound(id uint64) *app.Round {
 	return &app.Round{
 		ID:        id,
 		Name:      "5",
-		SeasonID:  int64(4387),
+		SeasonID:  uint64(4387),
 		StartDate: time.Unix(1548086929, 0),
 		EndDate:   time.Unix(1548086929, 0),
 	}

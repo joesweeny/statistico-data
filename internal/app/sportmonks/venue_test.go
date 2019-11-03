@@ -31,13 +31,13 @@ func TestVenuesBySeasonIDs(t *testing.T) {
 
 		requester := sportmonks.NewVenueRequester(&client, logger)
 
-		ch := requester.VenuesBySeasonIDs([]int64{int64(500)})
+		ch := requester.VenuesBySeasonIDs([]uint64{uint64(500)})
 
 		ven := <-ch
 
 		a := assert.New(t)
 
-		a.Equal(int64(200), ven.ID)
+		a.Equal(uint64(200), ven.ID)
 		a.Equal("Turf Moor", ven.Name)
 		a.Equal("grass", *ven.Surface)
 		a.Equal("Harry Potts Way", *ven.Address)

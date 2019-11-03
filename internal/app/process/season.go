@@ -11,8 +11,8 @@ const season = "season"
 // chosen data store.
 type SeasonProcessor struct {
 	repository app.SeasonRepository
-	requester app.SeasonRequester
-	logger *logrus.Logger
+	requester  app.SeasonRequester
+	logger     *logrus.Logger
 }
 
 // Process fetches data from external an external data source using the SeasonRequester

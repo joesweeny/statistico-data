@@ -18,7 +18,7 @@ func TestPlayerRepository_Insert(t *testing.T) {
 		defer cleanUp()
 
 		for i := 1; i < 4; i++ {
-			c := newPlayer(int64(i))
+			c := newPlayer(uint64(i))
 
 			if err := repo.Insert(c); err != nil {
 				t.Errorf("Error when inserting record into the database: %s", err.Error())
@@ -59,7 +59,7 @@ func TestPlayerRepository_ByID(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
 
-		m := newPlayer(int64(43))
+		m := newPlayer(uint64(43))
 
 		if err := repo.Insert(m); err != nil {
 			t.Errorf("Error when inserting record into the database: %s", err.Error())
@@ -72,8 +72,8 @@ func TestPlayerRepository_ByID(t *testing.T) {
 		}
 
 		a := assert.New(t)
-		a.Equal(int64(43), r.ID)
-		a.Equal(int64(154), m.CountryId)
+		a.Equal(uint64(43), r.ID)
+		a.Equal(uint64(154), m.CountryId)
 		a.Equal("Manuel", m.FirstName)
 		a.Equal("Lanzini", m.LastName)
 		a.Equal("Buenos Aires", *m.BirthPlace)
@@ -123,8 +123,8 @@ func TestPlayerRepository_Update(t *testing.T) {
 		}
 
 		a := assert.New(t)
-		a.Equal(int64(46), r.ID)
-		a.Equal(int64(154), m.CountryId)
+		a.Equal(uint64(46), r.ID)
+		a.Equal(uint64(154), m.CountryId)
 		a.Equal("Manuel", m.FirstName)
 		a.Equal("Lanzini", m.LastName)
 		a.Equal("Buenos Aires", *m.BirthPlace)
@@ -148,12 +148,12 @@ func TestPlayerRepository_Update(t *testing.T) {
 	})
 }
 
-func newPlayer(id int64) *app.Player {
+func newPlayer(id uint64) *app.Player {
 	var place = "Buenos Aires"
 	var dob = "1984-03-12"
 	return &app.Player{
 		ID:          id,
-		CountryId:   int64(154),
+		CountryId:   uint64(154),
 		FirstName:   "Manuel",
 		LastName:    "Lanzini",
 		BirthPlace:  &place,

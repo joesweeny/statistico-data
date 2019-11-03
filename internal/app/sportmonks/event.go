@@ -14,7 +14,7 @@ type EventRequester struct {
 	logger *logrus.Logger
 }
 
-func (e EventRequester) EventsByFixtureIDs(ids []int64) (<-chan *app.GoalEvent, <-chan *app.SubstitutionEvent) {
+func (e EventRequester) EventsByFixtureIDs(ids []uint64) (<-chan *app.GoalEvent, <-chan *app.SubstitutionEvent) {
 	goal := make(chan *app.GoalEvent, 500)
 	sub := make(chan *app.SubstitutionEvent, 500)
 
@@ -23,7 +23,7 @@ func (e EventRequester) EventsByFixtureIDs(ids []int64) (<-chan *app.GoalEvent, 
 	return goal, sub
 }
 
-func (e EventRequester) parseEvents(ids []int64, g chan<- *app.GoalEvent, s chan<- *app.SubstitutionEvent) {
+func (e EventRequester) parseEvents(ids []uint64, g chan<- *app.GoalEvent, s chan<- *app.SubstitutionEvent) {
 	defer close(g)
 	defer close(s)
 
@@ -37,7 +37,7 @@ func (e EventRequester) parseEvents(ids []int64, g chan<- *app.GoalEvent, s chan
 	wg.Wait()
 }
 
-func (e EventRequester) sendEventRequest(fixtureId int64, g chan<- *app.GoalEvent, s chan<- *app.SubstitutionEvent, w *sync.WaitGroup) {
+func (e EventRequester) sendEventRequest(fixtureId uint64, g chan<- *app.GoalEvent, s chan<- *app.SubstitutionEvent, w *sync.WaitGroup) {
 	includes := []string{"goals", "substitutions"}
 	var filters map[string][]int
 
@@ -62,19 +62,19 @@ func (e EventRequester) sendEventRequest(fixtureId int64, g chan<- *app.GoalEven
 func transformGoalEvent(s *spClient.GoalEvent) *app.GoalEvent {
 	teamId, _ := strconv.Atoi(s.TeamID)
 
-	var assist *int64 = nil
+	var assist *uint64 = nil
 
 	if s.PlayerAssistID != nil {
 		val := *s.PlayerAssistID
-		i := int64(val)
+		i := uint64(val)
 		assist = &i
 	}
 
 	event := app.GoalEvent{
-		ID:             int64(s.ID),
-		FixtureID:      int64(s.FixtureID),
-		TeamID:         int64(teamId),
-		PlayerID:       int64(s.PlayerID),
+		ID:             uint64(s.ID),
+		FixtureID:      uint64(s.FixtureID),
+		TeamID:         uint64(teamId),
+		PlayerID:       uint64(s.PlayerID),
 		PlayerAssistID: assist,
 		Minute:         s.Minute,
 		Score:          s.Result,
@@ -87,13 +87,13 @@ func transformSubstitutionEvent(s *spClient.SubstitutionEvent) *app.Substitution
 	teamId, _ := strconv.Atoi(s.TeamID)
 
 	return &app.SubstitutionEvent{
-		ID:             int64(s.ID),
-		FixtureID:      int64(s.FixtureID),
-		TeamID:         int64(teamId),
-		PlayerInID:  	int64(s.PlayerInID),
-		PlayerOutID: 	int64(s.PlayerOutID),
-		Minute:      	s.Minute,
-		Injured:     	s.Injured,
+		ID:          uint64(s.ID),
+		FixtureID:   uint64(s.FixtureID),
+		TeamID:      uint64(teamId),
+		PlayerInID:  uint64(s.PlayerInID),
+		PlayerOutID: uint64(s.PlayerOutID),
+		Minute:      s.Minute,
+		Injured:     s.Injured,
 	}
 }
 

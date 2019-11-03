@@ -19,7 +19,7 @@ func (m SquadRepository) Update(c *app.Squad) error {
 	return args.Error(0)
 }
 
-func (m SquadRepository) BySeasonAndTeam(seasonId, teamId int64) (*app.Squad, error) {
+func (m SquadRepository) BySeasonAndTeam(seasonId, teamId uint64) (*app.Squad, error) {
 	args := m.Called(seasonId, teamId)
 	c := args.Get(0).(*app.Squad)
 	return c, args.Error(1)
@@ -39,7 +39,7 @@ type SquadRequester struct {
 	mock.Mock
 }
 
-func (m SquadRequester) SquadsBySeasonIDs(seasonIDs []int64) <-chan *app.Squad {
+func (m SquadRequester) SquadsBySeasonIDs(seasonIDs []uint64) <-chan *app.Squad {
 	args := m.Called(seasonIDs)
 	return args.Get(0).(chan *app.Squad)
 }

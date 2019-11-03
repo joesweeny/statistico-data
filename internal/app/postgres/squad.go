@@ -50,7 +50,7 @@ func (r *SquadRepository) Update(s *app.Squad) error {
 	return err
 }
 
-func (r *SquadRepository) BySeasonAndTeam(seasonId, teamId int64) (*app.Squad, error) {
+func (r *SquadRepository) BySeasonAndTeam(seasonId, teamId uint64) (*app.Squad, error) {
 	query := `SELECT * FROM sportmonks_squad where season_id = $1 AND team_id = $2`
 
 	var s = app.Squad{}
@@ -66,7 +66,7 @@ func (r *SquadRepository) BySeasonAndTeam(seasonId, teamId int64) (*app.Squad, e
 
 	for _, i := range players {
 		text, _ := strconv.Atoi(i)
-		s.PlayerIDs = append(s.PlayerIDs, int64(text))
+		s.PlayerIDs = append(s.PlayerIDs, uint64(text))
 	}
 
 	s.CreatedAt = time.Unix(created, 0)
@@ -117,7 +117,7 @@ func parseRows(r *sql.Rows, m []app.Squad) ([]app.Squad, error) {
 
 		for _, i := range players {
 			text, _ := strconv.Atoi(i)
-			squad.PlayerIDs = append(squad.PlayerIDs, int64(text))
+			squad.PlayerIDs = append(squad.PlayerIDs, uint64(text))
 		}
 
 		squad.CreatedAt = time.Unix(created, 0)

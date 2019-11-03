@@ -41,12 +41,12 @@ func TestHandleResult(t *testing.T) {
 		res.AwayLeaguePosition = &pos2
 		res.Minutes = &min
 
-		seasonRepo.On("ByID", int64(14567)).Return(newSeason(), nil)
-		compRepo.On("ByID", int64(45)).Return(newCompetition(), nil)
-		teamRepo.On("ByID", int64(451)).Return(newTeam(451, "West Ham"), nil)
-		teamRepo.On("ByID", int64(924)).Return(newTeam(924, "Chelsea"), nil)
-		venueRepo.On("GetById", int64(87)).Return(newVenue(), nil)
-		roundRepo.On("ByID", int64(165789)).Return(newRound(), nil)
+		seasonRepo.On("ByID", uint64(14567)).Return(newSeason(), nil)
+		compRepo.On("ByID", uint64(45)).Return(newCompetition(), nil)
+		teamRepo.On("ByID", uint64(451)).Return(newTeam(451, "West Ham"), nil)
+		teamRepo.On("ByID", uint64(924)).Return(newTeam(924, "Chelsea"), nil)
+		venueRepo.On("GetById", uint64(87)).Return(newVenue(), nil)
+		roundRepo.On("ByID", uint64(165789)).Return(newRound(), nil)
 
 		proto, err := handler.HandleResult(newFixture(), &res)
 
@@ -107,20 +107,20 @@ func newCompetition() *app.Competition {
 
 func newSeason() *app.Season {
 	return &app.Season{
-		ID:        int64(14567),
-		Name:      "2018-2019",
-		CompetitionID:  int64(45),
-		IsCurrent: true,
-		CreatedAt: time.Unix(1546965200, 0),
-		UpdatedAt: time.Unix(1546965200, 0),
+		ID:            uint64(14567),
+		Name:          "2018-2019",
+		CompetitionID: uint64(45),
+		IsCurrent:     true,
+		CreatedAt:     time.Unix(1546965200, 0),
+		UpdatedAt:     time.Unix(1546965200, 0),
 	}
 }
 
 func newTeam(id int, name string) *app.Team {
 	return &app.Team{
-		ID:           int64(id),
+		ID:           uint64(id),
 		Name:         name,
-		VenueID:      int64(560),
+		VenueID:      uint64(560),
 		NationalTeam: false,
 		CreatedAt:    time.Unix(1546965200, 0),
 		UpdatedAt:    time.Unix(1546965200, 0),

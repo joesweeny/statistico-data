@@ -32,14 +32,14 @@ func TestVenueProcessor_Process(t *testing.T) {
 
 		ch := venueChannel(venues)
 
-		ids := []int64{32}
+		ids := []uint64{32}
 
 		seasonRepo.On("IDs").Return(ids, nil)
 
 		requester.On("VenuesBySeasonIDs", ids).Return(ch)
 
-		venueRepo.On("GetById", int64(44)).Return(&app.Venue{}, errors.New("not Found"))
-		venueRepo.On("GetById", int64(100)).Return(&app.Venue{}, errors.New("not Found"))
+		venueRepo.On("GetById", uint64(44)).Return(&app.Venue{}, errors.New("not Found"))
+		venueRepo.On("GetById", uint64(100)).Return(&app.Venue{}, errors.New("not Found"))
 		venueRepo.On("Insert", whu).Return(nil)
 		venueRepo.On("Insert", ars).Return(nil)
 
@@ -72,14 +72,14 @@ func TestVenueProcessor_Process(t *testing.T) {
 
 		ch := venueChannel(venues)
 
-		ids := []int64{32}
+		ids := []uint64{32}
 
 		seasonRepo.On("IDs").Return(ids, nil)
 
 		requester.On("VenuesBySeasonIDs", ids).Return(ch)
 
-		venueRepo.On("GetById", int64(44)).Return(whu, nil)
-		venueRepo.On("GetById", int64(100)).Return(ars, nil)
+		venueRepo.On("GetById", uint64(44)).Return(whu, nil)
+		venueRepo.On("GetById", uint64(100)).Return(ars, nil)
 		venueRepo.On("Update", whu).Return(nil)
 		venueRepo.On("Update", ars).Return(nil)
 
@@ -112,14 +112,14 @@ func TestVenueProcessor_Process(t *testing.T) {
 
 		ch := venueChannel(venues)
 
-		ids := []int64{32}
+		ids := []uint64{32}
 
 		seasonRepo.On("IDs").Return(ids, nil)
 
 		requester.On("VenuesBySeasonIDs", ids).Return(ch)
 
-		venueRepo.On("GetById", int64(44)).Return(&app.Venue{}, errors.New("not Found"))
-		venueRepo.On("GetById", int64(100)).Return(&app.Venue{}, errors.New("not Found"))
+		venueRepo.On("GetById", uint64(44)).Return(&app.Venue{}, errors.New("not Found"))
+		venueRepo.On("GetById", uint64(100)).Return(&app.Venue{}, errors.New("not Found"))
 		venueRepo.On("Insert", whu).Return(errors.New("error occurred"))
 		venueRepo.On("Insert", ars).Return(nil)
 
@@ -153,14 +153,14 @@ func TestVenueProcessor_Process(t *testing.T) {
 
 		ch := venueChannel(venues)
 
-		ids := []int64{32}
+		ids := []uint64{32}
 
 		seasonRepo.On("IDs").Return(ids, nil)
 
 		requester.On("VenuesBySeasonIDs", ids).Return(ch)
 
-		venueRepo.On("GetById", int64(44)).Return(whu, nil)
-		venueRepo.On("GetById", int64(100)).Return(&app.Venue{}, errors.New("not Found"))
+		venueRepo.On("GetById", uint64(44)).Return(whu, nil)
+		venueRepo.On("GetById", uint64(100)).Return(&app.Venue{}, errors.New("not Found"))
 		venueRepo.On("Update", whu).Return(errors.New("error occurred"))
 		venueRepo.On("Insert", ars).Return(nil)
 
@@ -194,14 +194,14 @@ func TestVenueProcessor_Process(t *testing.T) {
 
 		ch := venueChannel(venues)
 
-		ids := []int64{32}
+		ids := []uint64{32}
 
 		seasonRepo.On("CurrentSeasonIDs").Return(ids, nil)
 
 		requester.On("VenuesBySeasonIDs", ids).Return(ch)
 
-		venueRepo.On("GetById", int64(44)).Return(&app.Venue{}, errors.New("not Found"))
-		venueRepo.On("GetById", int64(100)).Return(&app.Venue{}, errors.New("not Found"))
+		venueRepo.On("GetById", uint64(44)).Return(&app.Venue{}, errors.New("not Found"))
+		venueRepo.On("GetById", uint64(100)).Return(&app.Venue{}, errors.New("not Found"))
 		venueRepo.On("Insert", whu).Return(nil)
 		venueRepo.On("Insert", ars).Return(nil)
 
@@ -234,14 +234,14 @@ func TestVenueProcessor_Process(t *testing.T) {
 
 		ch := venueChannel(venues)
 
-		ids := []int64{32}
+		ids := []uint64{32}
 
 		seasonRepo.On("CurrentSeasonIDs").Return(ids, nil)
 
 		requester.On("VenuesBySeasonIDs", ids).Return(ch)
 
-		venueRepo.On("GetById", int64(44)).Return(whu, nil)
-		venueRepo.On("GetById", int64(100)).Return(ars, nil)
+		venueRepo.On("GetById", uint64(44)).Return(whu, nil)
+		venueRepo.On("GetById", uint64(100)).Return(ars, nil)
 		venueRepo.On("Update", whu).Return(nil)
 		venueRepo.On("Update", ars).Return(nil)
 
@@ -274,14 +274,14 @@ func TestVenueProcessor_Process(t *testing.T) {
 
 		ch := venueChannel(venues)
 
-		ids := []int64{32}
+		ids := []uint64{32}
 
 		seasonRepo.On("CurrentSeasonIDs").Return(ids, nil)
 
 		requester.On("VenuesBySeasonIDs", ids).Return(ch)
 
-		venueRepo.On("GetById", int64(44)).Return(&app.Venue{}, errors.New("not Found"))
-		venueRepo.On("GetById", int64(100)).Return(&app.Venue{}, errors.New("not Found"))
+		venueRepo.On("GetById", uint64(44)).Return(&app.Venue{}, errors.New("not Found"))
+		venueRepo.On("GetById", uint64(100)).Return(&app.Venue{}, errors.New("not Found"))
 		venueRepo.On("Insert", whu).Return(errors.New("error occurred"))
 		venueRepo.On("Insert", ars).Return(nil)
 
@@ -315,14 +315,14 @@ func TestVenueProcessor_Process(t *testing.T) {
 
 		ch := venueChannel(venues)
 
-		ids := []int64{32}
+		ids := []uint64{32}
 
 		seasonRepo.On("CurrentSeasonIDs").Return(ids, nil)
 
 		requester.On("VenuesBySeasonIDs", ids).Return(ch)
 
-		venueRepo.On("GetById", int64(44)).Return(whu, nil)
-		venueRepo.On("GetById", int64(100)).Return(&app.Venue{}, errors.New("not Found"))
+		venueRepo.On("GetById", uint64(44)).Return(whu, nil)
+		venueRepo.On("GetById", uint64(100)).Return(&app.Venue{}, errors.New("not Found"))
 		venueRepo.On("Update", whu).Return(errors.New("error occurred"))
 		venueRepo.On("Insert", ars).Return(nil)
 
@@ -337,17 +337,17 @@ func TestVenueProcessor_Process(t *testing.T) {
 	})
 }
 
-func newVenue(id int64, name string) *app.Venue {
+func newVenue(id uint64, name string) *app.Venue {
 	surface := "grass"
 	city := "London"
 	capacity := 60000
 
 	return &app.Venue{
 		ID:       id,
-		Name:      name,
-		Surface:   &surface,
-		City:      &city,
-		Capacity:  &capacity,
+		Name:     name,
+		Surface:  &surface,
+		City:     &city,
+		Capacity: &capacity,
 	}
 }
 

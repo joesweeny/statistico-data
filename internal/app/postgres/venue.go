@@ -59,7 +59,7 @@ func (r *VenueRepository) Update(v *app.Venue) error {
 	return err
 }
 
-func (r *VenueRepository) GetById(id int64) (*app.Venue, error) {
+func (r *VenueRepository) GetById(id uint64) (*app.Venue, error) {
 	query := `SELECT * FROM sportmonks_venue where id = $1`
 	row := r.connection.QueryRow(query, id)
 

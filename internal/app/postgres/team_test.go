@@ -18,7 +18,7 @@ func TestTeamRepository_Insert(t *testing.T) {
 		defer cleanUp()
 
 		for i := 1; i < 4; i++ {
-			c := newTeam(int64(i))
+			c := newTeam(uint64(i))
 
 			if err := repo.Insert(c); err != nil {
 				t.Errorf("Error when inserting record into the database: %s", err.Error())
@@ -73,12 +73,12 @@ func TestTeamRepository_ByID(t *testing.T) {
 
 		a := assert.New(t)
 
-		a.Equal(int64(43), r.ID)
+		a.Equal(uint64(43), r.ID)
 		a.Equal("West Ham United", r.Name)
-		a.Equal(int64(560), r.VenueID)
+		a.Equal(uint64(560), r.VenueID)
 		a.Equal(false, r.NationalTeam)
 		a.Nil(r.ShortCode)
-		a.Equal(int64(462), r.CountryID)
+		a.Equal(uint64(462), r.CountryID)
 		a.Nil(r.Founded)
 		a.Nil(r.Logo)
 		a.Equal("2019-01-14 11:25:00 +0000 UTC", r.CreatedAt.String())
@@ -116,7 +116,7 @@ func TestTeamRepository_Update(t *testing.T) {
 
 		m.Name = "West Ham London Boooo"
 		m.ShortCode = &shortCode
-		m.CountryID = int64(5)
+		m.CountryID = uint64(5)
 		m.Founded = &founded
 		m.Logo = &logo
 		m.UpdatedAt = d
@@ -133,12 +133,12 @@ func TestTeamRepository_Update(t *testing.T) {
 
 		a := assert.New(t)
 
-		a.Equal(int64(43), r.ID)
+		a.Equal(uint64(43), r.ID)
 		a.Equal("West Ham London Boooo", r.Name)
-		a.Equal(int64(560), r.VenueID)
+		a.Equal(uint64(560), r.VenueID)
 		a.Equal(false, r.NationalTeam)
 		a.Equal("WHU", *r.ShortCode)
-		a.Equal(int64(5), r.CountryID)
+		a.Equal(uint64(5), r.CountryID)
 		a.Equal(1898, *r.Founded)
 		a.Equal("http://path.to/logo", *r.Logo)
 		a.Equal("2019-01-14 11:25:00 +0000 UTC", r.CreatedAt.String())
@@ -158,12 +158,12 @@ func TestTeamRepository_Update(t *testing.T) {
 	})
 }
 
-func newTeam(id int64) *app.Team {
+func newTeam(id uint64) *app.Team {
 	return &app.Team{
 		ID:           id,
 		Name:         "West Ham United",
 		VenueID:      560,
-		CountryID:    int64(462),
+		CountryID:    uint64(462),
 		NationalTeam: false,
 		CreatedAt:    time.Unix(1546965200, 0),
 		UpdatedAt:    time.Unix(1546965200, 0),

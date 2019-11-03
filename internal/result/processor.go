@@ -22,9 +22,9 @@ type Processor struct {
 	Repository
 	FixtureRepo fixture.Repository
 	Factory
-	Client          *sportmonks.Client
-	Logger          *log.Logger
-	Clock 			clockwork.Clock
+	Client *sportmonks.Client
+	Logger *log.Logger
+	Clock  clockwork.Clock
 }
 
 func (p Processor) Process(command string, option string, done chan bool) {
@@ -166,4 +166,3 @@ func (p Processor) handleResult(fix sportmonks.Fixture) {
 
 	return
 }
-

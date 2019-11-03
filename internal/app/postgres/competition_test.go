@@ -18,7 +18,7 @@ func TestCompetitionRepository_Insert(t *testing.T) {
 		defer cleanUp()
 
 		for i := 1; i < 4; i++ {
-			c := newCompetition(int64(i))
+			c := newCompetition(uint64(i))
 
 			if err := repo.Insert(c); err != nil {
 				t.Errorf("Error when inserting record into the database: %s", err.Error())
@@ -73,9 +73,9 @@ func TestCompetitionRepository_ByID(t *testing.T) {
 
 		a := assert.New(t)
 
-		a.Equal(int64(45), r.ID)
+		a.Equal(uint64(45), r.ID)
 		a.Equal("Premier League", r.Name)
-		a.Equal(int64(462), r.CountryID)
+		a.Equal(uint64(462), r.CountryID)
 		a.Equal(false, r.IsCup)
 		a.Equal("2019-01-14 11:25:00 +0000 UTC", r.CreatedAt.String())
 		a.Equal("2019-01-14 11:25:00 +0000 UTC", r.UpdatedAt.String())
@@ -120,9 +120,9 @@ func TestCompetitionRepository_Update(t *testing.T) {
 
 		a := assert.New(t)
 
-		a.Equal(int64(45), r.ID)
+		a.Equal(uint64(45), r.ID)
 		a.Equal("New League Name", r.Name)
-		a.Equal(int64(462), r.CountryID)
+		a.Equal(uint64(462), r.CountryID)
 		a.Equal(true, r.IsCup)
 		a.Equal("2019-01-14 11:25:00 +0000 UTC", r.CreatedAt.String())
 		a.Equal("2019-01-14 11:25:00 +0000 UTC", r.UpdatedAt.String())
@@ -141,11 +141,11 @@ func TestCompetitionRepository_Update(t *testing.T) {
 	})
 }
 
-func newCompetition(id int64) *app.Competition {
+func newCompetition(id uint64) *app.Competition {
 	return &app.Competition{
 		ID:        id,
 		Name:      "Premier League",
-		CountryID: int64(462),
+		CountryID: uint64(462),
 		IsCup:     false,
 		CreatedAt: time.Unix(1546965200, 0),
 		UpdatedAt: time.Unix(1546965200, 0),

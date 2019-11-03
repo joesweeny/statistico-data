@@ -11,8 +11,8 @@ const competition = "competition"
 // chosen data store.
 type CompetitionProcessor struct {
 	repository app.CompetitionRepository
-	requester app.CompetitionRequester
-	logger *logrus.Logger
+	requester  app.CompetitionRequester
+	logger     *logrus.Logger
 }
 
 // Process fetches data from external an external data source using the CompetitionRequester

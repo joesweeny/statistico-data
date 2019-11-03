@@ -1,18 +1,18 @@
 package player_stats
 
 import (
-	"github.com/statistico/statistico-data/internal/fixture"
-	pb "github.com/statistico/statistico-data/internal/proto/stats/player"
-	"log"
 	"context"
 	"errors"
 	"fmt"
+	"github.com/statistico/statistico-data/internal/fixture"
+	pb "github.com/statistico/statistico-data/internal/proto/stats/player"
+	"log"
 )
 
 type Service struct {
 	PlayerRepository PlayerRepository
 	FixtureRepo      fixture.Repository
-	Logger 			 *log.Logger
+	Logger           *log.Logger
 }
 
 func (s Service) GetPlayerStatsForFixture(c context.Context, r *pb.FixtureRequest) (*pb.StatsResponse, error) {

@@ -39,9 +39,9 @@ func TestCompetitionRequester_Competitions(t *testing.T) {
 
 		a := assert.New(t)
 
-		a.Equal(int64(82), bun.ID)
+		a.Equal(uint64(82), bun.ID)
 		a.Equal("Bundesliga", bun.Name)
-		a.Equal(int64(11), bun.CountryID)
+		a.Equal(uint64(11), bun.CountryID)
 		a.Equal(false, bun.IsCup)
 	})
 }

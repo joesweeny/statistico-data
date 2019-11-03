@@ -62,7 +62,7 @@ func (r TeamRepository) Update(m *app.Team) error {
 	return err
 }
 
-func (r TeamRepository) ByID(id int64) (*app.Team, error) {
+func (r TeamRepository) ByID(id uint64) (*app.Team, error) {
 	query := `SELECT * FROM sportmonks_team where id = $1`
 	row := r.connection.QueryRow(query, id)
 

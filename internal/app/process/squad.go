@@ -9,9 +9,9 @@ const squad = "squad"
 const squadCurrentSeason = "squad:current-season"
 
 type SquadProcessor struct {
-	squadRepo app.SquadRepository
+	squadRepo  app.SquadRepository
 	seasonRepo app.SeasonRepository
-	requester app.SquadRequester
+	requester  app.SquadRequester
 	logger     *logrus.Logger
 }
 

@@ -38,11 +38,11 @@ func TestCountries(t *testing.T) {
 
 		a := assert.New(t)
 
-		a.Equal(int64(180), eng.ID)
+		a.Equal(uint64(180), eng.ID)
 		a.Equal("England", eng.Name)
 		a.Equal("Europe", eng.Continent)
 		a.Equal("ENG", eng.ISO)
-		a.Equal(int64(5), ger.ID)
+		a.Equal(uint64(5), ger.ID)
 		a.Equal("Germany", ger.Name)
 		a.Equal("Europe", ger.Continent)
 		a.Equal("DEU", ger.ISO)
