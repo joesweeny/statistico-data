@@ -15,7 +15,7 @@ type FixtureRequester struct {
 	logger *logrus.Logger
 }
 
-func (f FixtureRequester) FixturesBySeasonIds(ids []uint64) <-chan *app.Fixture {
+func (f FixtureRequester) FixturesBySeasonIDs(ids []uint64) <-chan *app.Fixture {
 	ch := make(chan *app.Fixture, 100)
 
 	go f.parseFixtures(ids, ch)
@@ -37,7 +37,7 @@ func (f FixtureRequester) parseFixtures(seasonIDs []uint64, ch chan<- *app.Fixtu
 }
 
 func (f FixtureRequester) sendFixtureRequests(seasonID uint64, ch chan<- *app.Fixture, w *sync.WaitGroup) {
-	res, _ , err := f.client.SeasonByID(context.Background(), int(seasonID), []string{"fixture"})
+	res, _ , err := f.client.SeasonByID(context.Background(), int(seasonID), []string{"fixtures"})
 
 	if err != nil {
 		f.logger.Fatalf("Error when calling client '%s' when making fixtures request", err.Error())
@@ -60,4 +60,8 @@ func transformFixture(s *spClient.Fixture) *app.Fixture {
 		RefereeID:  helpers.NullableUint64(s.RefereeID),
 		Date:       time.Unix(int64(s.Time.StartingAt.Timestamp), 0),
 	}
+}
+
+func NewFixtureRequester(client *spClient.HTTPClient, log *logrus.Logger) *FixtureRequester {
+	return &FixtureRequester{client: client, logger: log}
 }
