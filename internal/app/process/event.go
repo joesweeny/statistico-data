@@ -113,11 +113,13 @@ func (e EventProcessor) parseEvents(g <-chan *app.GoalEvent, s <-chan *app.Subst
 		wg.Done()
 	}(s)
 
+	wg.Wait()
+
 	done <- true
 }
 
 func (e EventProcessor) persistGoalEvent(x *app.GoalEvent) {
-	if _, err := e.eventRepo.GoalEventByID(x.ID); err != nil {
+	if _, err := e.eventRepo.GoalEventByID(x.ID); err == nil {
 		return
 	}
 
@@ -127,7 +129,7 @@ func (e EventProcessor) persistGoalEvent(x *app.GoalEvent) {
 }
 
 func (e EventProcessor) persistSubstitutionEvent(x *app.SubstitutionEvent) {
-	if _, err := e.eventRepo.SubstitutionEventByID(x.ID); err != nil {
+	if _, err := e.eventRepo.SubstitutionEventByID(x.ID); err == nil {
 		return
 	}
 

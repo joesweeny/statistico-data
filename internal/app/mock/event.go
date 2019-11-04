@@ -32,7 +32,7 @@ func (m EventRepository) SubstitutionEventByID(id uint64) (*app.SubstitutionEven
 }
 
 type EventRequester struct {
-	mock.Mock	
+	mock.Mock
 }
 
 func (m EventRequester) EventsByFixtureIDs(ids []uint64) (<-chan *app.GoalEvent, <-chan *app.SubstitutionEvent) {
