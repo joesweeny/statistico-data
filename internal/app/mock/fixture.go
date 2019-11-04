@@ -69,3 +69,4 @@ func (m FixtureRequester) FixturesBySeasonIDs(ids []uint64) <-chan *app.Fixture 
 	args := m.Called(ids)
 	return args.Get(0).(chan *app.Fixture)
 }
+
