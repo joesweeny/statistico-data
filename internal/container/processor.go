@@ -2,7 +2,6 @@ package container
 
 import (
 	"github.com/statistico/statistico-data/internal/app/process"
-	"github.com/statistico/statistico-data/internal/event"
 	"github.com/statistico/statistico-data/internal/result"
 	"github.com/statistico/statistico-data/internal/stats/player"
 	"github.com/statistico/statistico-data/internal/stats/team"
@@ -28,14 +27,14 @@ func (c Container) CountryProcessor() *process.CountryProcessor {
 	)
 }
 
-func (c Container) EventProcessor() event.Processor {
-	return event.Processor{
-		Repository:  &event.PostgresEventRepository{Connection: c.Database},
-		Factory:     event.Factory{Clock: clock()},
-		Logger:      c.Logger,
-		FixtureRepo: c.FixtureRepository(),
-		Client:      c.SportMonksClient,
-	}
+func (c Container) EventProcessor() *process.EventProcessor {
+	return process.NewEventProcessor(
+		c.EventRepository(),
+		c.FixtureRepository(),
+		c.EventRequester(),
+		c.Clock,
+		c.NewLogger,
+	)
 }
 
 func (c Container) FixtureProcessor() *process.FixtureProcessor {
