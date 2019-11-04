@@ -40,7 +40,7 @@ func TestSquadRequester_SquadsBySeasonIDs(t *testing.T) {
 		z := <-ch
 
 		a := assert.New(t)
-		//
+
 		a.Equal(uint64(1), x.TeamID)
 		a.Equal([]uint64{uint64(219591)}, x.PlayerIDs)
 

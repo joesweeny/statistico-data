@@ -16,6 +16,10 @@ func (c Container) EventRepository() *postgres.EventRepository {
 	return postgres.NewEventRepository(c.Database, c.Clock)
 }
 
+func (c Container) FixtureRepository() *postgres.FixtureRepository {
+	return postgres.NewFixtureRepository(c.Database, c.Clock)
+}
+
 func (c Container) PlayerRepository() *postgres.PlayerRepository {
 	return postgres.NewPlayerRepository(c.Database, c.Clock)
 }

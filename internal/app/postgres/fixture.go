@@ -120,7 +120,19 @@ func (r *FixtureRepository) ByTeamID(id uint64, limit int32, before time.Time) (
 	return rowsToFixtureSlice(rows)
 }
 
-func (r *FixtureRepository) BySeasonID(id uint64, before time.Time) ([]app.Fixture, error) {
+func (r *FixtureRepository) BySeasonID(id uint64) ([]app.Fixture, error) {
+	query := `SELECT * FROM sportmonks_fixture WHERE season_id = $1 ORDER BY date ASC, id ASC`
+
+	rows, err := r.connection.Query(query, id)
+
+	if err != nil {
+		return []app.Fixture{}, err
+	}
+
+	return rowsToFixtureSlice(rows)
+}
+
+func (r *FixtureRepository) BySeasonIDBefore(id uint64, before time.Time) ([]app.Fixture, error) {
 	query := `SELECT * FROM sportmonks_fixture WHERE season_id = $1 and date < $2 ORDER BY date ASC, id ASC`
 
 	rows, err := r.connection.Query(query, id, before.Unix())

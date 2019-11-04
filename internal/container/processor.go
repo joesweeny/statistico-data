@@ -3,7 +3,6 @@ package container
 import (
 	"github.com/statistico/statistico-data/internal/app/process"
 	"github.com/statistico/statistico-data/internal/event"
-	"github.com/statistico/statistico-data/internal/fixture"
 	"github.com/statistico/statistico-data/internal/result"
 	"github.com/statistico/statistico-data/internal/stats/player"
 	"github.com/statistico/statistico-data/internal/stats/team"
@@ -34,19 +33,18 @@ func (c Container) EventProcessor() event.Processor {
 		Repository:  &event.PostgresEventRepository{Connection: c.Database},
 		Factory:     event.Factory{Clock: clock()},
 		Logger:      c.Logger,
-		FixtureRepo: &fixture.PostgresFixtureRepository{Connection: c.Database},
+		FixtureRepo: c.FixtureRepository(),
 		Client:      c.SportMonksClient,
 	}
 }
 
-func (c Container) FixtureProcessor() *fixture.Processor {
-	return &fixture.Processor{
-		Repository: &fixture.PostgresFixtureRepository{Connection: c.Database},
-		SeasonRepo: c.SeasonRepository(),
-		Factory:    fixture.Factory{Clock: clock()},
-		Client:     c.SportMonksClient,
-		Logger:     c.Logger,
-	}
+func (c Container) FixtureProcessor() *process.FixtureProcessor {
+	return process.NewFixtureProcessor(
+		c.FixtureRepository(),
+		c.SeasonRepository(),
+		c.FixtureRequester(),
+		c.NewLogger,
+	)
 }
 
 func (c Container) PlayerProcessor() *process.PlayerProcessor {
@@ -63,7 +61,7 @@ func (c Container) PlayerStatsProcessor() player_stats.Processor {
 		PlayerRepository: &player_stats.PostgresPlayerStatsRepository{Connection: c.Database},
 		PlayerFactory:    player_stats.PlayerFactory{Clock: clock()},
 		Logger:           c.Logger,
-		FixtureRepo:      &fixture.PostgresFixtureRepository{Connection: c.Database},
+		FixtureRepo:      c.FixtureRepository(),
 		Client:           c.SportMonksClient,
 	}
 }
@@ -71,7 +69,7 @@ func (c Container) PlayerStatsProcessor() player_stats.Processor {
 func (c Container) ResultProcessor() *result.Processor {
 	return &result.Processor{
 		Repository:  &result.PostgresResultRepository{Connection: c.Database},
-		FixtureRepo: &fixture.PostgresFixtureRepository{Connection: c.Database},
+		FixtureRepo: c.FixtureRepository(),
 		Factory:     result.Factory{Clock: c.Clock},
 		Client:      c.SportMonksClient,
 		Logger:      c.Logger,
@@ -119,7 +117,7 @@ func (c Container) TeamStatsProcessor() team_stats.Processor {
 		TeamRepository: &team_stats.PostgresTeamStatsRepository{Connection: c.Database},
 		TeamFactory:    team_stats.TeamFactory{Clock: clock()},
 		Logger:         c.Logger,
-		FixtureRepo:    &fixture.PostgresFixtureRepository{Connection: c.Database},
+		FixtureRepo:    c.FixtureRepository(),
 		Client:         c.SportMonksClient,
 	}
 }

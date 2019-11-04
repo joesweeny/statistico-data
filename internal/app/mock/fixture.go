@@ -46,7 +46,12 @@ func (m FixtureRepository) ByTeamID(id uint64, limit int32, before time.Time) ([
 	return args.Get(0).([]app.Fixture), args.Error(1)
 }
 
-func (m FixtureRepository) BySeasonID(id uint64, before time.Time) ([]app.Fixture, error) {
+func (m FixtureRepository) BySeasonID(id uint64) ([]app.Fixture, error) {
+	args := m.Called(id)
+	return args.Get(0).([]app.Fixture), args.Error(1)
+}
+
+func (m FixtureRepository) BySeasonIDBefore(id uint64, before time.Time) ([]app.Fixture, error) {
 	args := m.Called(id)
 	return args.Get(0).([]app.Fixture), args.Error(1)
 }
@@ -55,3 +60,13 @@ func (m FixtureRepository) ByHomeAndAwayTeam(homeTeamId, awayTeamId uint64, limi
 	args := m.Called(homeTeamId, awayTeamId, limit, before)
 	return args.Get(0).([]app.Fixture), args.Error(1)
 }
+
+type FixtureRequester struct {
+	mock.Mock
+}
+
+func (m FixtureRequester) FixturesBySeasonIDs(ids []uint64) <-chan *app.Fixture {
+	args := m.Called(ids)
+	return args.Get(0).(chan *app.Fixture)
+}
+

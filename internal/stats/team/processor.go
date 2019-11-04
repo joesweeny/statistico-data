@@ -2,7 +2,7 @@ package team_stats
 
 import (
 	"github.com/statistico/sportmonks-go-client"
-	"github.com/statistico/statistico-data/internal/fixture"
+	"github.com/statistico/statistico-data/internal/app"
 	"log"
 	"strconv"
 	"strings"
@@ -21,7 +21,7 @@ var waitGroup sync.WaitGroup
 type Processor struct {
 	TeamRepository
 	TeamFactory
-	FixtureRepo fixture.Repository
+	FixtureRepo app.FixtureRepository
 	Logger      *log.Logger
 	Client      *sportmonks.Client
 }
@@ -45,28 +45,27 @@ func (p Processor) Process(command string, option string, done chan bool) {
 }
 
 func (p Processor) byId(done chan bool, id int) {
-	fix, err := p.FixtureRepo.ById(uint64(id))
+	fix, err := p.FixtureRepo.ByID(uint64(id))
 
 	if err != nil {
 		p.Logger.Fatalf("Error when retrieving Fixture ID: %d, %s", id, err.Error())
 		return
 	}
 
-	ids := []int{fix.ID}
+	ids := []uint64{fix.ID}
 
 	go p.processStats(ids, done)
 }
 
 func (p Processor) bySeasonId(done chan bool, id int) {
-	// Adding a Clock.Now() here is a bit hacky. Redo by dynamically handling this
-	fix, err := p.FixtureRepo.BySeasonId(int64(id), p.Clock.Now())
+	fix, err := p.FixtureRepo.BySeasonID(uint64(id))
 
 	if err != nil {
 		p.Logger.Fatalf("Error when retrieving fixtures for Season ID: %d, %s", id, err.Error())
 		return
 	}
 
-	var ids []int
+	var ids []uint64
 
 	for _, f := range fix {
 		ids = append(ids, f.ID)
@@ -82,7 +81,7 @@ func (p Processor) statsToday(done chan bool) {
 	from := time.Date(y, m, d, 0, 0, 0, 0, now.Location())
 	to := time.Date(y, m, d, 23, 59, 59, 59, now.Location())
 
-	ids, err := p.FixtureRepo.IdsBetween(from, to)
+	ids, err := p.FixtureRepo.IDsBetween(from, to)
 
 	if err != nil {
 		p.Logger.Fatalf("Error when retrieving Season IDs: %s", err.Error())
@@ -92,14 +91,14 @@ func (p Processor) statsToday(done chan bool) {
 	go p.processStats(ids, done)
 }
 
-func (p Processor) processStats(ids []int, done chan bool) {
+func (p Processor) processStats(ids []uint64, done chan bool) {
 	results := make(chan sportmonks.Fixture, len(ids))
 
 	go p.callClient(ids, results, done, &counter)
 	go p.parseStats(results, done)
 }
 
-func (p Processor) callClient(ids []int, ch chan<- sportmonks.Fixture, done chan bool, c *int) {
+func (p Processor) callClient(ids []uint64, ch chan<- sportmonks.Fixture, done chan bool, c *int) {
 	q := []string{"stats"}
 
 	for _, id := range ids {
@@ -108,7 +107,7 @@ func (p Processor) callClient(ids []int, ch chan<- sportmonks.Fixture, done chan
 			break
 		}
 
-		res, err := p.Client.FixtureById(id, q, 5)
+		res, err := p.Client.FixtureById(int(id), q, 5)
 
 		*c++
 

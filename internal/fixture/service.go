@@ -1,10 +1,11 @@
 package fixture
 
 import (
+	"context"
 	"errors"
 	"fmt"
+	"github.com/statistico/statistico-data/internal/app"
 	pb "github.com/statistico/statistico-data/internal/proto/fixture"
-	"golang.org/x/net/context"
 	"log"
 	"time"
 )
@@ -12,7 +13,7 @@ import (
 var ErrTimeParse = errors.New("unable to parse date provided in Request")
 
 type Service struct {
-	Repository
+	FixtureRepo app.FixtureRepository
 	Handler
 	Logger *log.Logger
 }
@@ -30,7 +31,7 @@ func (s *Service) ListFixtures(r *pb.DateRangeRequest, stream pb.FixtureService_
 		return ErrTimeParse
 	}
 
-	fixtures, err := s.Repository.Between(from, to)
+	fixtures, err := s.FixtureRepo.Between(from, to)
 
 	if err != nil {
 		s.Logger.Printf("Error retrieving Fixture(s). Error: %s", err.Error())
@@ -56,7 +57,7 @@ func (s *Service) ListFixtures(r *pb.DateRangeRequest, stream pb.FixtureService_
 }
 
 func (s *Service) FixtureByID(c context.Context, r *pb.FixtureRequest) (*pb.Fixture, error) {
-	fix, err := s.Repository.ById(uint64(r.FixtureId))
+	fix, err := s.FixtureRepo.ByID(uint64(r.FixtureId))
 
 	if err != nil {
 		m := fmt.Sprintf("Fixture with ID %d does not exist", r.FixtureId)

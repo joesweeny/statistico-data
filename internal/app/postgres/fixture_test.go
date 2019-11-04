@@ -376,7 +376,7 @@ func TestFixtureRepository_BySeasonID(t *testing.T) {
 
 		insertFixtures(t, repo)
 
-		fix, err := repo.BySeasonID(6012, time.Unix(1550066319, 0))
+		fix, err := repo.BySeasonID(6012)
 
 		if err != nil {
 			t.Fatalf("Test failed, expected nil, got %s", err.Error())
@@ -406,7 +406,64 @@ func TestFixtureRepository_BySeasonID(t *testing.T) {
 
 		insertFixtures(t, repo)
 
-		fix, err := repo.BySeasonID(10000, time.Unix(1550066319, 0))
+		fix, err := repo.BySeasonID(10000)
+
+		if err != nil {
+			t.Fatalf("Test failed, expected nil, got %s", err.Error())
+		}
+
+		all, err := repo.IDs()
+
+		if err != nil {
+			t.Fatalf("Test failed, expected nil, got %s", err.Error())
+		}
+
+		assert.Equal(t, 9, len(all))
+		assert.Equal(t, 0, len(fix))
+	})
+}
+
+func TestFixtureRepository_BySeasonIDBefore(t *testing.T) {
+	conn, cleanUp := test.GetConnection(t, "sportmonks_fixture")
+	repo := postgres.NewFixtureRepository(conn, test.Clock)
+
+	t.Run("returns slice of fixture struct matching parameters provided", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+
+		insertFixtures(t, repo)
+
+		fix, err := repo.BySeasonIDBefore(6012, time.Unix(1550066319, 0))
+
+		if err != nil {
+			t.Fatalf("Test failed, expected nil, got %s", err.Error())
+		}
+
+		all, err := repo.IDs()
+
+		if err != nil {
+			t.Fatalf("Test failed, expected nil, got %s", err.Error())
+		}
+
+		assert.Equal(t, 9, len(all))
+		assert.Equal(t, 4, len(fix))
+		assert.Equal(t, uint64(5), fix[0].ID)
+		assert.Equal(t, uint64(6), fix[1].ID)
+		assert.Equal(t, uint64(7), fix[2].ID)
+		assert.Equal(t, uint64(8), fix[3].ID)
+
+		for _, f := range fix {
+			assert.Equal(t, uint64(6012), f.SeasonID)
+		}
+	})
+
+	t.Run("empty result set returned if no results match parameters", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+
+		insertFixtures(t, repo)
+
+		fix, err := repo.BySeasonIDBefore(10000, time.Unix(1550066319, 0))
 
 		if err != nil {
 			t.Fatalf("Test failed, expected nil, got %s", err.Error())
@@ -428,7 +485,7 @@ func TestFixtureRepository_BySeasonID(t *testing.T) {
 
 		insertFixtures(t, repo)
 
-		fix, err := repo.BySeasonID(6012, time.Unix(1550066317, 0))
+		fix, err := repo.BySeasonIDBefore(6012, time.Unix(1550066317, 0))
 
 		if err != nil {
 			t.Fatalf("Test failed, expected nil, got %s", err.Error())
@@ -535,8 +592,6 @@ func newFixture(id uint64) *app.Fixture {
 		HomeTeamID: 451,
 		AwayTeamID: 924,
 		Date:       time.Unix(1548086929, 0),
-		CreatedAt:  time.Unix(1546965200, 0),
-		UpdatedAt:  time.Unix(1546965200, 0),
 	}
 }
 

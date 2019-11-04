@@ -29,8 +29,8 @@ func TestHandleFixture(t *testing.T) {
 	t.Run("hydrates new proto fixture struct", func(t *testing.T) {
 		t.Helper()
 
-		ven := 87
-		ref := 5
+		ven := uint64(87)
+		ref := uint64(5)
 		fixture := newFixture(99)
 		fixture.VenueID = &ven
 		fixture.RefereeID = &ref
@@ -120,7 +120,7 @@ func TestHandleFixture(t *testing.T) {
 			Logger:          log.New(ioutil.Discard, "Error: ", 0),
 		}
 
-		ven := 87
+		ven := uint64(87)
 		fixture := newFixture(99)
 		fixture.VenueID = &ven
 
@@ -141,6 +141,21 @@ func TestHandleFixture(t *testing.T) {
 			t.Fatalf("Test failed, expected %s, got nil", errors.New("not found"))
 		}
 	})
+}
+
+func newFixture(id uint64) *app.Fixture {
+	var roundId = uint64(165789)
+
+	return &app.Fixture{
+		ID:         id,
+		SeasonID:   uint64(14567),
+		RoundID:    &roundId,
+		HomeTeamID: 451,
+		AwayTeamID: 924,
+		Date:       time.Unix(1548086929, 0),
+		CreatedAt:  time.Unix(1546965200, 0),
+		UpdatedAt:  time.Unix(1546965200, 0),
+	}
 }
 
 func newCompetition() *app.Competition {
