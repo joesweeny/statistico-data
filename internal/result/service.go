@@ -67,7 +67,7 @@ func (s Service) GetResultsForSeason(r *pb.SeasonRequest, stream pb.ResultServic
 		return ErrTimeParse
 	}
 
-	fixtures, err := s.FixtureRepo.BySeasonID(uint64(r.SeasonId), date)
+	fixtures, err := s.FixtureRepo.BySeasonIDBefore(uint64(r.SeasonId), date)
 
 	if err != nil {
 		s.Logger.Printf("Error retrieving Fixture(s) in Result Service. Error: %s", err.Error())

@@ -58,8 +58,7 @@ func (p Processor) byId(done chan bool, id int) {
 }
 
 func (p Processor) bySeasonId(done chan bool, id int) {
-	// Adding a Clock.Now() here is a bit hacky. Redo by dynamically handling this
-	fix, err := p.FixtureRepo.BySeasonID(uint64(id), p.Clock.Now())
+	fix, err := p.FixtureRepo.BySeasonID(uint64(id))
 
 	if err != nil {
 		p.Logger.Fatalf("Error when retrieving fixtures for Season ID: %d, %s", id, err.Error())
