@@ -4,7 +4,6 @@ import (
 	"github.com/jonboulle/clockwork"
 	"github.com/sirupsen/logrus"
 	"github.com/statistico/statistico-data/internal/app"
-	"github.com/statistico/statistico-data/internal/fixture"
 	"sync"
 	"time"
 )
@@ -13,7 +12,7 @@ import (
 // before persisting to the storage engine using the EventRepository.
 type EventProcessor struct {
 	eventRepo app.EventRepository
-	fixtureRepo fixture.Repository
+	fixtureRepo app.FixtureRepository
 	requester app.EventRequester
 	clock clockwork.Clock
 	logger     *logrus.Logger
@@ -23,25 +22,27 @@ func (e EventProcessor) Process(command string, option string, done chan bool) {
 
 }
 
-func (e EventProcessor) processTodayEvents(g <-chan *app.GoalEvent, s <-chan *app.SubstitutionEvent, done chan bool) {
+func (e EventProcessor) processTodayEvents(done chan bool) {
 	now := e.clock.Now()
 	y, m, d := now.Date()
 
 	from := time.Date(y, m, d, 0, 0, 0, 0, now.Location())
 	to := time.Date(y, m, d, 23, 59, 59, 59, now.Location())
 
-	ids, err := e.fixtureRepo.IdsBetween(from, to)
+	ids, err := e.fixtureRepo.IDsBetween(from, to)
 
 	if err != nil {
 		e.logger.Fatalf("Error when retrieving fixture ids in event processor: %s", err.Error())
 		return
 	}
 
+	goals, subs := e.requester.EventsByFixtureIDs(ids)
 
+	go e.parseEvents(goals, subs, done)
 }
 
-func (e EventProcessor) persistEvents(g <-chan *app.GoalEvent, s <-chan *app.SubstitutionEvent, done chan bool) {
-	wg := sync.WaitGroup{}
+func (e EventProcessor) parseEvents(g <-chan *app.GoalEvent, s <-chan *app.SubstitutionEvent, done chan bool) {
+	var wg = sync.WaitGroup{}
 
 	wg.Add(2)
 
