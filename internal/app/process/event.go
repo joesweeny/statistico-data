@@ -135,3 +135,7 @@ func (e EventProcessor) persistSubstitutionEvent(x *app.SubstitutionEvent) {
 		e.logger.Warningf("Error '%s' occurred when inserting substitution event struct: %+v\n,", err.Error(), *x)
 	}
 }
+
+func NewEventProcessor(r app.EventRepository, f app.FixtureRepository, q app.EventRequester, c clockwork.Clock, log *logrus.Logger) *EventProcessor {
+	return &EventProcessor{eventRepo: r, fixtureRepo: f, requester: q, clock: c, logger: log}
+}
