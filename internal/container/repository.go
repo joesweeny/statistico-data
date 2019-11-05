@@ -28,6 +28,10 @@ func (c Container) RoundRepository() *postgres.RoundRepository {
 	return postgres.NewRoundRepository(c.Database, c.Clock)
 }
 
+func (c Container) ResultRepository() *postgres.ResultRepository {
+	return postgres.NewResultRepository(c.Database, c.Clock)
+}
+
 func (c Container) SeasonRepository() *postgres.SeasonRepository {
 	return postgres.NewSeasonRepository(c.Database, c.Clock)
 }
