@@ -46,3 +46,7 @@ func transformResult(s *spClient.Fixture) *app.Result {
 		InjuryTime:         s.Time.InjuryTime,
 	}
 }
+
+func NewResultRequester(client *spClient.HTTPClient, log *logrus.Logger) *ResultRequester {
+	return &ResultRequester{client: client, logger: log}
+}
