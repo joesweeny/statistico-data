@@ -33,3 +33,10 @@ type ResultRepository interface {
 	Update(r *Result) error
 	ByFixtureID(id uint64) (*Result, error)
 }
+
+// ResultRequester provides an interface allowing this application to request data from an external
+// data provider. The requester implementation is responsible for creating the channel, filtering struct data into
+// the channel before closing the channel once successful execution is complete.
+type ResultRequester interface {
+	ResultByFixtureID(id uint64) (*Result, error)
+}
