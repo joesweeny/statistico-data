@@ -12,17 +12,30 @@ type ResultRequester struct {
 	logger *logrus.Logger
 }
 
-func (r ResultRequester) ResultByFixtureID(id uint64) (*app.Result, error) {
+func (r ResultRequester) ResultsByFixtureIDs(ids []uint64) <-chan *app.Result {
+	ch := make(chan *app.Result, 100)
+
+	go r.parseResults(ids, ch)
+
+	return ch
+}
+
+func (r ResultRequester) parseResults(ids []uint64, ch chan<- *app.Result) {
+	defer close(ch)
+
 	var filters map[string][]int
 	var includes []string
 
-	res, _ , err := r.client.FixtureByID(context.Background(), int(id), includes, filters)
+	for _, id := range ids {
+		res, _ , err := r.client.FixtureByID(context.Background(), int(id), includes, filters)
 
-	if err != nil {
-		return nil, err
+		if err != nil {
+			r.logger.Fatalf("Error when calling client '%s' when making fixtures request", err.Error())
+			return
+		}
+
+		ch <- transformResult(res)
 	}
-
-	return transformResult(res), nil
 }
 
 func transformResult(s *spClient.Fixture) *app.Result {
