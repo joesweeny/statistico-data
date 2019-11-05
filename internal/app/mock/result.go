@@ -29,8 +29,7 @@ type ResultRequester struct {
 	mock.Mock
 }
 
-func (m ResultRequester) ResultByFixtureID(id uint64) (*app.Result, error) {
+func (m ResultRequester) ResultsByFixtureIDs(id []uint64) <-chan *app.Result {
 	args := m.Called(id)
-	c := args.Get(0).(*app.Result)
-	return c, args.Error(1)
+	return args.Get(0).(<-chan *app.Result)
 }
