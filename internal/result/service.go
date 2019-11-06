@@ -15,7 +15,7 @@ var ErrTimeParse = errors.New("unable to parse date provided in Request")
 
 type Service struct {
 	FixtureRepo app.FixtureRepository
-	ResultRepo  Repository
+	ResultRepo  app.ResultRepository
 	Handler
 	Logger *log.Logger
 }
@@ -79,7 +79,7 @@ func (s Service) GetResultsForSeason(r *pb.SeasonRequest, stream pb.ResultServic
 
 func (s Service) sendResults(f []app.Fixture, stream pb.ResultService_GetResultsForTeamServer) error {
 	for _, fix := range f {
-		res, err := s.ResultRepo.GetByFixtureId(int(fix.ID))
+		res, err := s.ResultRepo.ByFixtureID(uint64(fix.ID))
 
 		if err != nil {
 			return fmt.Errorf("fixture with ID %d does not exist", fix.ID)

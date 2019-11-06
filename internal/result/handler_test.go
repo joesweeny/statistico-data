@@ -3,7 +3,6 @@ package result
 import (
 	"github.com/statistico/statistico-data/internal/app"
 	m "github.com/statistico/statistico-data/internal/app/mock"
-	"github.com/statistico/statistico-data/internal/model"
 	"github.com/stretchr/testify/assert"
 	"testing"
 	"time"
@@ -30,7 +29,7 @@ func TestHandleResult(t *testing.T) {
 		pos1 := 3
 		pos2 := 19
 		min := 90
-		res := model.Result{}
+		res := app.Result{}
 		res.FixtureID = 92
 		res.HomeFormation = &form
 		res.AwayFormation = &form

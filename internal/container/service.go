@@ -25,7 +25,7 @@ func (c Container) FixtureService() *fixture.Service {
 func (c Container) ResultService() *result.Service {
 	return &result.Service{
 		FixtureRepo: c.FixtureRepository(),
-		ResultRepo:  &result.PostgresResultRepository{Connection: c.Database},
+		ResultRepo:  c.ResultRepository(),
 		Handler: result.Handler{
 			CompetitionRepo: c.CompetitionRepository(),
 			RoundRepo:       c.RoundRepository(),

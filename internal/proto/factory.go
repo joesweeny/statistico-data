@@ -279,7 +279,7 @@ func VenueToProto(v *app.Venue) *pbVenue.Venue {
 	return &ven
 }
 
-func ToMatchData(home *app.Team, away *app.Team, res *model.Result) *pbResult.MatchData {
+func ToMatchData(home *app.Team, away *app.Team, res *app.Result) *pbResult.MatchData {
 	return &pbResult.MatchData{
 		HomeTeam: TeamToProto(home),
 		AwayTeam: TeamToProto(away),
@@ -287,7 +287,7 @@ func ToMatchData(home *app.Team, away *app.Team, res *model.Result) *pbResult.Ma
 	}
 }
 
-func ToMatchStats(res *model.Result) *pbResult.MatchStats {
+func ToMatchStats(res *app.Result) *pbResult.MatchStats {
 	stats := pbResult.MatchStats{
 		HomeScore: &wrappers.Int32Value{
 			Value: int32(*res.HomeScore),

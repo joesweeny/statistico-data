@@ -2,7 +2,6 @@ package container
 
 import (
 	"github.com/statistico/statistico-data/internal/app/process"
-	"github.com/statistico/statistico-data/internal/result"
 	"github.com/statistico/statistico-data/internal/stats/player"
 	"github.com/statistico/statistico-data/internal/stats/team"
 )
@@ -65,15 +64,14 @@ func (c Container) PlayerStatsProcessor() player_stats.Processor {
 	}
 }
 
-func (c Container) ResultProcessor() *result.Processor {
-	return &result.Processor{
-		Repository:  &result.PostgresResultRepository{Connection: c.Database},
-		FixtureRepo: c.FixtureRepository(),
-		Factory:     result.Factory{Clock: c.Clock},
-		Client:      c.SportMonksClient,
-		Logger:      c.Logger,
-		Clock:       c.Clock,
-	}
+func (c Container) ResultProcessor() *process.ResultProcessor {
+	return process.NewResultProcessor(
+		c.ResultRepository(),
+		c.FixtureRepository(),
+		c.ResultRequester(),
+		c.Clock,
+		c.NewLogger,
+	)
 }
 
 func (c Container) RoundProcessor() *process.RoundProcessor {
