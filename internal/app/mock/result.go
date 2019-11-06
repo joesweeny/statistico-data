@@ -10,12 +10,12 @@ type ResultRepository struct {
 }
 
 func (m ResultRepository) Insert(r *app.Result) error {
-	args := m.Called(&r)
+	args := m.Called(r)
 	return args.Error(0)
 }
 
 func (m ResultRepository) Update(r *app.Result) error {
-	args := m.Called(&r)
+	args := m.Called(r)
 	return args.Error(0)
 }
 
@@ -31,5 +31,5 @@ type ResultRequester struct {
 
 func (m ResultRequester) ResultsByFixtureIDs(id []uint64) <-chan *app.Result {
 	args := m.Called(id)
-	return args.Get(0).(<-chan *app.Result)
+	return args.Get(0).(chan *app.Result)
 }
