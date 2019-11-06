@@ -31,11 +31,9 @@ func TestResultRequester_ResultByFixtureID(t *testing.T) {
 
 		requester := sportmonks.NewResultRequester(&client, logger)
 
-		result, err := requester.ResultByFixtureID(uint64(11867285))
+		ch := requester.ResultsByFixtureIDs([]uint64{11867285})
 
-		if err != nil {
-			t.Fatalf("Test failed, expected nil, got %v", err)
-		}
+		result := <-ch
 
 		a := assert.New(t)
 
