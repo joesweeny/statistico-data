@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/golang/protobuf/ptypes/wrappers"
 	"github.com/statistico/statistico-data/internal/app"
-	"github.com/statistico/statistico-data/internal/model"
 	"github.com/statistico/statistico-data/internal/proto"
 	pbResult "github.com/statistico/statistico-data/internal/proto/result"
 	"log"
@@ -19,7 +18,7 @@ type Handler struct {
 	Logger          *log.Logger
 }
 
-func (h Handler) HandleResult(f *app.Fixture, r *model.Result) (*pbResult.Result, error) {
+func (h Handler) HandleResult(f *app.Fixture, r *app.Result) (*pbResult.Result, error) {
 	s, err := h.SeasonRepo.ByID(f.SeasonID)
 
 	if err != nil {
