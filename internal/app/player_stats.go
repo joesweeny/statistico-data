@@ -79,3 +79,10 @@ type PlayerStatsRepository interface {
 	ByFixtureAndPlayer(fixtureId, playerId uint64) (*PlayerStats, error)
 	ByFixtureAndTeam(fixtureId, teamId uint64) ([]*PlayerStats, error)
 }
+
+// PlayerStatRequester provides an interface allowing this application to request data from an external
+// data provider. The requester implementation is responsible for creating the channel, filtering struct data into
+// the channel before closing the channel once successful execution is complete.
+type PlayerStatRequester interface {
+	PlayerStatsByFixtureIDs(ids []uint64) <-chan *PlayerStats
+}
