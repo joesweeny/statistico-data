@@ -27,7 +27,7 @@ func (m PlayerStatsRepository) ByFixtureAndPlayer(fixtureID, playerID uint64) (*
 
 func (m PlayerStatsRepository) ByFixtureAndTeam(fixtureID, teamID uint64) ([]*app.PlayerStats, error) {
 	args := m.Called(fixtureID, teamID)
-	c := args.Get(0).(*app.PlayerStats)
+	c := args.Get(0).([]*app.PlayerStats)
 	return c, args.Error(1)
 }
 
