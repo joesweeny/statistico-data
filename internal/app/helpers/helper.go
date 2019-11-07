@@ -16,12 +16,13 @@ func NullableUint64(i *int) *uint64 {
 
 func ParseNullableInt(i interface{}) *int {
 	if i == nil {
+		panic("Hello")
 		return nil
 	}
 
-	if _, ok := i.(int); ok {
-		val := i.(int)
-		return &val
+	if _, ok := i.(*int); ok {
+		val := i.(*int)
+		return val
 	}
 
 	if x, ok := i.(float64); ok {

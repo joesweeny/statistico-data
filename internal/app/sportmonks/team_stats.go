@@ -48,9 +48,9 @@ func transformTeamStats(s *spClient.TeamStats) *app.TeamStats {
 	return &app.TeamStats{
 		FixtureID:     uint64(s.FixtureID),
 		TeamID:        uint64(s.TeamID),
-		TeamShots:     *handleTeamShots(&s.Shots),
-		TeamPasses:    *handleTeamPasses(&s.Passes),
-		TeamAttacks:   *handleTeamAttacks(&s.Attacks),
+		TeamShots:     handleTeamShots(&s.Shots),
+		TeamPasses:    handleTeamPasses(&s.Passes),
+		TeamAttacks:   handleTeamAttacks(&s.Attacks),
 		Fouls:         helpers.ParseNullableInt(s.Fouls),
 		Corners:       helpers.ParseNullableInt(s.Corners),
 		Offsides:      helpers.ParseNullableInt(s.Offsides),
@@ -66,8 +66,8 @@ func transformTeamStats(s *spClient.TeamStats) *app.TeamStats {
 	}
 }
 
-func handleTeamShots(s *spClient.TeamShots) *app.TeamShots {
-	return &app.TeamShots{
+func handleTeamShots(s *spClient.TeamShots) app.TeamShots {
+	return app.TeamShots{
 		Total:      helpers.ParseNullableInt(s.Total),
 		OnGoal:     helpers.ParseNullableInt(s.OnGoal),
 		OffGoal:    helpers.ParseNullableInt(s.OffGoal),
@@ -77,17 +77,21 @@ func handleTeamShots(s *spClient.TeamShots) *app.TeamShots {
 	}
 }
 
-func handleTeamPasses(s *spClient.TeamPasses) *app.TeamPasses {
-	return &app.TeamPasses{
+func handleTeamPasses(s *spClient.TeamPasses) app.TeamPasses {
+	return app.TeamPasses{
 		Total:      helpers.ParseNullableInt(s.Total),
 		Accuracy:   helpers.ParseNullableInt(s.Accurate),
 		Percentage: helpers.ParseNullableInt(s.Percentage),
 	}
 }
 
-func handleTeamAttacks(s *spClient.TeamAttacks) *app.TeamAttacks {
-	return &app.TeamAttacks{
+func handleTeamAttacks(s *spClient.TeamAttacks) app.TeamAttacks {
+	return app.TeamAttacks{
 		Total:     helpers.ParseNullableInt(s.Attacks),
 		Dangerous: helpers.ParseNullableInt(s.DangerousAttacks),
 	}
+}
+
+func NewTeamStatsRequester(client *spClient.HTTPClient, log *logrus.Logger) *TeamStatsRequester {
+	return &TeamStatsRequester{client: client, logger: log}
 }

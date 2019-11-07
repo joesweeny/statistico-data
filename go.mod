@@ -12,13 +12,14 @@ require (
 	github.com/pkg/errors v0.8.1
 	github.com/sirupsen/logrus v1.4.2
 	github.com/statistico/sportmonks-go-client v0.0.0-20190808134647-c309060826ed
-	github.com/statistico/statistico-sportmonks-go-client v0.0.0-20191103213849-15d44394a96d
+	github.com/statistico/statistico-sportmonks-go-client v0.0.0-20191107111652-0ec8dd6ad28a
 	github.com/stretchr/testify v1.4.0
-	golang.org/x/crypto v0.0.0-20191029031824-8986dd9e96cf // indirect
-	golang.org/x/net v0.0.0-20191101175033-0deb6923b6d9
-	golang.org/x/sys v0.0.0-20191029155521-f43be2a4598c // indirect
-	golang.org/x/tools v0.0.0-20191101200257-8dbcdeb83d3f
+	golang.org/x/crypto v0.0.0-20191106202628-ed6320f186d4 // indirect
+	golang.org/x/net v0.0.0-20191105084925-a882066a44e0
+	golang.org/x/sys v0.0.0-20191105231009-c1f44814a5cd // indirect
+	golang.org/x/tools v0.0.0-20191107010934-f79515f33823
 	google.golang.org/appengine v1.4.0 // indirect
 	google.golang.org/genproto v0.0.0-20190404172233-64821d5d2107 // indirect
 	google.golang.org/grpc v1.19.1
+	gopkg.in/yaml.v2 v2.2.5 // indirect
 )
