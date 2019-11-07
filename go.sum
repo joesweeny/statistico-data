@@ -44,6 +44,10 @@ github.com/statistico/statistico-sportmonks-go-client v0.0.0-20191103213849-15d4
 github.com/statistico/statistico-sportmonks-go-client v0.0.0-20191103213849-15d44394a96d/go.mod h1:Cauw+83hBCOj/Ng8HLV9hiXEbfNCjGKpfA6icqwRxsQ=
 github.com/statistico/statistico-sportmonks-go-client v0.0.0-20191107111652-0ec8dd6ad28a h1:oPBMVS4FxjANxyPWEfVy9f2Nhu432ThwFPxeKR0YVBs=
 github.com/statistico/statistico-sportmonks-go-client v0.0.0-20191107111652-0ec8dd6ad28a/go.mod h1:Cauw+83hBCOj/Ng8HLV9hiXEbfNCjGKpfA6icqwRxsQ=
+github.com/statistico/statistico-sportmonks-go-client v0.0.0-20191107194632-bae0b797dff2 h1:Tlu8uSW+WaMZa/15jOHPKEwcoj4HOhboLIfMn5eLPFM=
+github.com/statistico/statistico-sportmonks-go-client v0.0.0-20191107194632-bae0b797dff2/go.mod h1:Cauw+83hBCOj/Ng8HLV9hiXEbfNCjGKpfA6icqwRxsQ=
+github.com/statistico/statistico-sportmonks-go-client v0.0.0-20191107195008-d881ff8fb12a h1:u55to2CIskf4AVOoEixEhjyvJUezcYhYgMDIMswceZI=
+github.com/statistico/statistico-sportmonks-go-client v0.0.0-20191107195008-d881ff8fb12a/go.mod h1:Cauw+83hBCOj/Ng8HLV9hiXEbfNCjGKpfA6icqwRxsQ=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/objx v0.1.1 h1:2vfRuCMp5sSVIDSqO8oNnWJq7mPa6KVP3iPIwFBuy8A=
 github.com/stretchr/objx v0.1.1/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
@@ -103,6 +107,7 @@ golang.org/x/tools v0.0.0-20191012152004-8de300cfc20a h1:TwMENskLwU2NnWBzrJGEWHq
 golang.org/x/tools v0.0.0-20191012152004-8de300cfc20a/go.mod h1:b+2E5dAYhXwXZwtnZ6UAqBI28+e2cm9otk0dWdXHAEo=
 golang.org/x/tools v0.0.0-20191101200257-8dbcdeb83d3f/go.mod h1:b+2E5dAYhXwXZwtnZ6UAqBI28+e2cm9otk0dWdXHAEo=
 golang.org/x/tools v0.0.0-20191107010934-f79515f33823/go.mod h1:b+2E5dAYhXwXZwtnZ6UAqBI28+e2cm9otk0dWdXHAEo=
+golang.org/x/tools v0.0.0-20191107185733-c07e1c6ef61c/go.mod h1:b+2E5dAYhXwXZwtnZ6UAqBI28+e2cm9otk0dWdXHAEo=
 golang.org/x/xerrors v0.0.0-20190717185122-a985d3407aa7/go.mod h1:I/5z698sn9Ka8TeJc9MKroUUfqBBauWjQqLJ2OPfmY0=
 golang.org/x/xerrors v0.0.0-20191011141410-1b5146add898/go.mod h1:I/5z698sn9Ka8TeJc9MKroUUfqBBauWjQqLJ2OPfmY0=
 google.golang.org/appengine v1.1.0/go.mod h1:EbEs0AVv82hx2wNQdGPgUI5lhzA/G0D9YwlJXL52JkM=

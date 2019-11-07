@@ -141,3 +141,7 @@ func handlePenalties(s *spClient.AdditionalPlayerMatchStats) app.PlayerPenalties
 		Won:       s.PenWon,
 	}
 }
+
+func NewPlayerStatsRequester(client *spClient.HTTPClient, log *logrus.Logger) *PlayerStatsRequester {
+	return &PlayerStatsRequester{client: client, logger: log}
+}
