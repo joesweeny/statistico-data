@@ -54,3 +54,10 @@ type TeamStatsRepository interface {
 	UpdateTeamStats(m *TeamStats) error
 	ByFixtureAndTeam(fixtureID, teamID uint64) (*TeamStats, error)
 }
+
+// TeamStatsRequester provides an interface allowing this application to request data from an external
+// data provider. The requester implementation is responsible for creating the channel, filtering struct data into
+// the channel before closing the channel once successful execution is complete.
+type TeamStatsRequester interface {
+	TeamStatsByFixtureIDs(ids []uint64) <-chan *TeamStats
+}

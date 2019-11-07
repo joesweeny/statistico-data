@@ -13,7 +13,7 @@ import (
 )
 
 func TestResultRequester_ResultByFixtureID(t *testing.T) {
-	t.Run("returns result struct", func(t *testing.T) {
+	t.Run("returns result struct channel", func(t *testing.T) {
 		server := mock.HttpClient(func(req *http.Request) (*http.Response, error) {
 			return &http.Response{
 				StatusCode: 200,
