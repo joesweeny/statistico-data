@@ -25,15 +25,15 @@ func (t TeamStatsRequester) parseStats(ids []uint64, ch chan<- *app.TeamStats) {
 	defer close(ch)
 
 	var filters map[string][]int
-	var includes []string
 
 	for _, id := range ids {
-		res, _ , err := t.client.FixtureByID(context.Background(), int(id), includes, filters)
+		res, _ , err := t.client.FixtureByID(context.Background(), int(id), []string{"stats"}, filters)
 
 		if err != nil {
 			t.logger.Fatalf(
-				"Error when calling client '%s' when making fixtures request to parse team stats",
+				"Error when calling client '%s' when making fixtures request to parse team stats for fixture %s",
 				err.Error(),
+				id,
 			)
 			return
 		}
