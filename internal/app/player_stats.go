@@ -1,12 +1,14 @@
 package app
 
-import "time"
+import (
+	"time"
+)
 
 // PlayerStats domain entity.
 type PlayerStats struct {
-	FixtureID         uint64     `json:"fixture_id"`
-	PlayerID          uint64     `json:"player_id"`
-	TeamID            uint64     `json:"team_id"`
+	FixtureID         uint64  `json:"fixture_id"`
+	PlayerID          uint64  `json:"player_id"`
+	TeamID            uint64  `json:"team_id"`
 	Position          *string `json:"position"`
 	FormationPosition *int    `json:"formation_position"`
 	IsSubstitute      bool    `json:"is_substitute"`
@@ -68,4 +70,12 @@ type PlayerPenalties struct {
 	Saved     *int `json:"saved"`
 	Committed *int `json:"committed"`
 	Won       *int `json:"won"`
+}
+
+// PlayerStatsRepository provides an interface to persist PlayerStats domain struct objects to a storage engine.
+type PlayerStatsRepository interface {
+	Insert(p *PlayerStats) error
+	Update(p *PlayerStats) error
+	ByFixtureAndPlayer(fixtureId, playerId uint64) (*PlayerStats, error)
+	ByFixtureAndTeam(fixtureId, teamId uint64) ([]*PlayerStats, error)
 }
