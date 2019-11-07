@@ -24,6 +24,10 @@ func (c Container) PlayerRepository() *postgres.PlayerRepository {
 	return postgres.NewPlayerRepository(c.Database, c.Clock)
 }
 
+func (c Container) PlayerStatsRepository() *postgres.PlayerStatsRepository {
+	return postgres.NewPlayerStatsRepository(c.Database, c.Clock)
+}
+
 func (c Container) RoundRepository() *postgres.RoundRepository {
 	return postgres.NewRoundRepository(c.Database, c.Clock)
 }
