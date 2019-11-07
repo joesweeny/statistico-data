@@ -25,6 +25,11 @@ func ParseNullableInt(i interface{}) *int {
 		return val
 	}
 
+	if _, ok := i.(int); ok {
+		val := i.(int)
+		return &val
+	}
+
 	if x, ok := i.(float64); ok {
 		val := int(x)
 		return &val
