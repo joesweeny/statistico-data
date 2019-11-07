@@ -38,8 +38,8 @@ func TestTeamStatsProcessor_Process(t *testing.T) {
 
 		fixtureRepo.On("ByID", uint64(45)).Return(newFixture(45), nil)
 		requester.On("TeamStatsByFixtureIDs", []uint64{45}).Return(ch)
-		teamStatsRepo.On("ByFixtureAndTeam", uint64(99), uint64(45)).Return(&app.TeamStats{}, errors.New("not found"))
-		teamStatsRepo.On("ByFixtureAndTeam", uint64(2), uint64(45)).Return(&app.TeamStats{}, errors.New("not found"))
+		teamStatsRepo.On("ByFixtureAndTeam", uint64(45), uint64(99)).Return(&app.TeamStats{}, errors.New("not found"))
+		teamStatsRepo.On("ByFixtureAndTeam", uint64(45), uint64(2)).Return(&app.TeamStats{}, errors.New("not found"))
 		teamStatsRepo.On("InsertTeamStats", home).Return(nil)
 		teamStatsRepo.On("InsertTeamStats", away).Return(nil)
 
@@ -77,8 +77,8 @@ func TestTeamStatsProcessor_Process(t *testing.T) {
 
 		fixtureRepo.On("ByID", uint64(45)).Return(newFixture(45), nil)
 		requester.On("TeamStatsByFixtureIDs", []uint64{45}).Return(ch)
-		teamStatsRepo.On("ByFixtureAndTeam", uint64(99), uint64(45)).Return(home, nil)
-		teamStatsRepo.On("ByFixtureAndTeam", uint64(2), uint64(45)).Return(away, nil)
+		teamStatsRepo.On("ByFixtureAndTeam", uint64(45), uint64(99)).Return(home, nil)
+		teamStatsRepo.On("ByFixtureAndTeam", uint64(45), uint64(2)).Return(away, nil)
 		teamStatsRepo.On("UpdateTeamStats", home).Return(nil)
 		teamStatsRepo.On("UpdateTeamStats", away).Return(nil)
 
@@ -116,8 +116,8 @@ func TestTeamStatsProcessor_Process(t *testing.T) {
 
 		fixtureRepo.On("ByID", uint64(45)).Return(newFixture(45), nil)
 		requester.On("TeamStatsByFixtureIDs", []uint64{45}).Return(ch)
-		teamStatsRepo.On("ByFixtureAndTeam", uint64(99), uint64(45)).Return(&app.TeamStats{}, errors.New("not found"))
-		teamStatsRepo.On("ByFixtureAndTeam", uint64(2), uint64(45)).Return(&app.TeamStats{}, errors.New("not found"))
+		teamStatsRepo.On("ByFixtureAndTeam", uint64(45), uint64(99)).Return(&app.TeamStats{}, errors.New("not found"))
+		teamStatsRepo.On("ByFixtureAndTeam", uint64(45), uint64(2)).Return(&app.TeamStats{}, errors.New("not found"))
 		teamStatsRepo.On("InsertTeamStats", home).Return(errors.New("error occurred"))
 		teamStatsRepo.On("InsertTeamStats", away).Return(nil)
 
@@ -156,8 +156,8 @@ func TestTeamStatsProcessor_Process(t *testing.T) {
 
 		fixtureRepo.On("ByID", uint64(45)).Return(newFixture(45), nil)
 		requester.On("TeamStatsByFixtureIDs", []uint64{45}).Return(ch)
-		teamStatsRepo.On("ByFixtureAndTeam", uint64(99), uint64(45)).Return(home, nil)
-		teamStatsRepo.On("ByFixtureAndTeam", uint64(2), uint64(45)).Return(away, nil)
+		teamStatsRepo.On("ByFixtureAndTeam", uint64(45), uint64(99)).Return(home, nil)
+		teamStatsRepo.On("ByFixtureAndTeam", uint64(45), uint64(2)).Return(away, nil)
 		teamStatsRepo.On("UpdateTeamStats", home).Return(nil)
 		teamStatsRepo.On("UpdateTeamStats", away).Return(errors.New("error occurred"))
 
@@ -198,8 +198,8 @@ func TestTeamStatsProcessor_Process(t *testing.T) {
 
 		fixtureRepo.On("BySeasonID", uint64(20)).Return(fix, nil)
 		requester.On("TeamStatsByFixtureIDs", []uint64{45}).Return(ch)
-		teamStatsRepo.On("ByFixtureAndTeam", uint64(99), uint64(45)).Return(&app.TeamStats{}, errors.New("not found"))
-		teamStatsRepo.On("ByFixtureAndTeam", uint64(2), uint64(45)).Return(&app.TeamStats{}, errors.New("not found"))
+		teamStatsRepo.On("ByFixtureAndTeam", uint64(45), uint64(99)).Return(&app.TeamStats{}, errors.New("not found"))
+		teamStatsRepo.On("ByFixtureAndTeam", uint64(45), uint64(2)).Return(&app.TeamStats{}, errors.New("not found"))
 		teamStatsRepo.On("InsertTeamStats", home).Return(nil)
 		teamStatsRepo.On("InsertTeamStats", away).Return(nil)
 
@@ -239,8 +239,8 @@ func TestTeamStatsProcessor_Process(t *testing.T) {
 
 		fixtureRepo.On("BySeasonID", uint64(20)).Return(fix, nil)
 		requester.On("TeamStatsByFixtureIDs", []uint64{45}).Return(ch)
-		teamStatsRepo.On("ByFixtureAndTeam", uint64(99), uint64(45)).Return(home, nil)
-		teamStatsRepo.On("ByFixtureAndTeam", uint64(2), uint64(45)).Return(away, nil)
+		teamStatsRepo.On("ByFixtureAndTeam", uint64(45), uint64(99)).Return(home, nil)
+		teamStatsRepo.On("ByFixtureAndTeam", uint64(45), uint64(2)).Return(away, nil)
 		teamStatsRepo.On("UpdateTeamStats", home).Return(nil)
 		teamStatsRepo.On("UpdateTeamStats", away).Return(nil)
 
@@ -280,8 +280,8 @@ func TestTeamStatsProcessor_Process(t *testing.T) {
 
 		fixtureRepo.On("BySeasonID", uint64(20)).Return(fix, nil)
 		requester.On("TeamStatsByFixtureIDs", []uint64{45}).Return(ch)
-		teamStatsRepo.On("ByFixtureAndTeam", uint64(99), uint64(45)).Return(&app.TeamStats{}, errors.New("not found"))
-		teamStatsRepo.On("ByFixtureAndTeam", uint64(2), uint64(45)).Return(&app.TeamStats{}, errors.New("not found"))
+		teamStatsRepo.On("ByFixtureAndTeam", uint64(45), uint64(99)).Return(&app.TeamStats{}, errors.New("not found"))
+		teamStatsRepo.On("ByFixtureAndTeam", uint64(45), uint64(2)).Return(&app.TeamStats{}, errors.New("not found"))
 		teamStatsRepo.On("InsertTeamStats", home).Return(errors.New("error occurred"))
 		teamStatsRepo.On("InsertTeamStats", away).Return(nil)
 
@@ -322,8 +322,8 @@ func TestTeamStatsProcessor_Process(t *testing.T) {
 
 		fixtureRepo.On("BySeasonID", uint64(20)).Return(fix, nil)
 		requester.On("TeamStatsByFixtureIDs", []uint64{45}).Return(ch)
-		teamStatsRepo.On("ByFixtureAndTeam", uint64(99), uint64(45)).Return(home, nil)
-		teamStatsRepo.On("ByFixtureAndTeam", uint64(2), uint64(45)).Return(away, nil)
+		teamStatsRepo.On("ByFixtureAndTeam", uint64(45), uint64(99)).Return(home, nil)
+		teamStatsRepo.On("ByFixtureAndTeam", uint64(45), uint64(2)).Return(away, nil)
 		teamStatsRepo.On("UpdateTeamStats", home).Return(nil)
 		teamStatsRepo.On("UpdateTeamStats", away).Return(errors.New("error occurred"))
 
@@ -367,8 +367,8 @@ func TestTeamStatsProcessor_Process(t *testing.T) {
 
 		fixtureRepo.On("IDsBetween", from, to).Return([]uint64{34}, nil)
 		requester.On("TeamStatsByFixtureIDs", []uint64{34}).Return(ch)
-		teamStatsRepo.On("ByFixtureAndTeam", uint64(99), uint64(45)).Return(&app.TeamStats{}, errors.New("not found"))
-		teamStatsRepo.On("ByFixtureAndTeam", uint64(2), uint64(45)).Return(&app.TeamStats{}, errors.New("not found"))
+		teamStatsRepo.On("ByFixtureAndTeam", uint64(45), uint64(99)).Return(&app.TeamStats{}, errors.New("not found"))
+		teamStatsRepo.On("ByFixtureAndTeam", uint64(45), uint64(2)).Return(&app.TeamStats{}, errors.New("not found"))
 		teamStatsRepo.On("InsertTeamStats", home).Return(nil)
 		teamStatsRepo.On("InsertTeamStats", away).Return(nil)
 
@@ -411,8 +411,8 @@ func TestTeamStatsProcessor_Process(t *testing.T) {
 
 		fixtureRepo.On("IDsBetween", from, to).Return([]uint64{34}, nil)
 		requester.On("TeamStatsByFixtureIDs", []uint64{34}).Return(ch)
-		teamStatsRepo.On("ByFixtureAndTeam", uint64(99), uint64(45)).Return(home, nil)
-		teamStatsRepo.On("ByFixtureAndTeam", uint64(2), uint64(45)).Return(away, nil)
+		teamStatsRepo.On("ByFixtureAndTeam", uint64(45), uint64(99)).Return(home, nil)
+		teamStatsRepo.On("ByFixtureAndTeam", uint64(45), uint64(2)).Return(away, nil)
 		teamStatsRepo.On("UpdateTeamStats", home).Return(nil)
 		teamStatsRepo.On("UpdateTeamStats", away).Return(nil)
 
@@ -455,8 +455,8 @@ func TestTeamStatsProcessor_Process(t *testing.T) {
 
 		fixtureRepo.On("IDsBetween", from, to).Return([]uint64{34}, nil)
 		requester.On("TeamStatsByFixtureIDs", []uint64{34}).Return(ch)
-		teamStatsRepo.On("ByFixtureAndTeam", uint64(99), uint64(45)).Return(&app.TeamStats{}, errors.New("not found"))
-		teamStatsRepo.On("ByFixtureAndTeam", uint64(2), uint64(45)).Return(&app.TeamStats{}, errors.New("not found"))
+		teamStatsRepo.On("ByFixtureAndTeam", uint64(45), uint64(99)).Return(&app.TeamStats{}, errors.New("not found"))
+		teamStatsRepo.On("ByFixtureAndTeam", uint64(45), uint64(2)).Return(&app.TeamStats{}, errors.New("not found"))
 		teamStatsRepo.On("InsertTeamStats", home).Return(errors.New("error occurred"))
 		teamStatsRepo.On("InsertTeamStats", away).Return(nil)
 
@@ -500,8 +500,8 @@ func TestTeamStatsProcessor_Process(t *testing.T) {
 
 		fixtureRepo.On("IDsBetween", from, to).Return([]uint64{34}, nil)
 		requester.On("TeamStatsByFixtureIDs", []uint64{34}).Return(ch)
-		teamStatsRepo.On("ByFixtureAndTeam", uint64(99), uint64(45)).Return(home, nil)
-		teamStatsRepo.On("ByFixtureAndTeam", uint64(2), uint64(45)).Return(away, nil)
+		teamStatsRepo.On("ByFixtureAndTeam", uint64(45), uint64(99)).Return(home, nil)
+		teamStatsRepo.On("ByFixtureAndTeam", uint64(45), uint64(2)).Return(away, nil)
 		teamStatsRepo.On("UpdateTeamStats", home).Return(nil)
 		teamStatsRepo.On("UpdateTeamStats", away).Return(errors.New("error occurred"))
 
