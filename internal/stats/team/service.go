@@ -11,7 +11,7 @@ import (
 )
 
 type Service struct {
-	TeamRepository    TeamRepository
+	TeamRepository    app.TeamStatsRepository
 	FixtureRepository app.FixtureRepository
 	Logger            *log.Logger
 }

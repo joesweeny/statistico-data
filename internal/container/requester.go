@@ -45,6 +45,10 @@ func (c Container) TeamRequester() app.TeamRequester {
 	return sportmonks.NewTeamRequester(c.NewSportMonksClient, c.NewLogger)
 }
 
+func (c Container) TeamStatsRequester() app.TeamStatsRequester {
+	return sportmonks.NewTeamStatsRequester(c.NewSportMonksClient, c.NewLogger)
+}
+
 func (c Container) VenueRequester() app.VenueRequester {
 	return sportmonks.NewVenueRequester(c.NewSportMonksClient, c.NewLogger)
 }

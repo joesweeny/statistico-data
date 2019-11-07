@@ -113,9 +113,9 @@ func SeasonToProto(s *app.Season) *pbSeason.Season {
 	return &x
 }
 
-func TeamStatsToProto(t *model.TeamStats) *pbTeamStats.TeamStats {
+func TeamStatsToProto(t *app.TeamStats) *pbTeamStats.TeamStats {
 	stats := pbTeamStats.TeamStats{
-		TeamId: uint64(t.TeamID),
+		TeamId: t.TeamID,
 	}
 
 	shots := t.TeamShots
