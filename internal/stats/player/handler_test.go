@@ -1,7 +1,7 @@
 package player_stats
 
 import (
-	"github.com/statistico/statistico-data/internal/model"
+	"github.com/statistico/statistico-data/internal/app"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -14,7 +14,7 @@ func TestHandlePlayerStats(t *testing.T) {
 			onGoal  = 2
 		)
 
-		x := []*model.PlayerStats{
+		x := []*app.PlayerStats{
 			modelPlayerStats(&goals, &assists, &onGoal),
 			modelPlayerStats(&goals, &assists, &onGoal),
 			modelPlayerStats(&goals, &assists, &onGoal),
@@ -46,7 +46,7 @@ func TestHandleStartingLineupPlayers(t *testing.T) {
 			pos3       = "M"
 		)
 
-		x := []*model.PlayerStats{
+		x := []*app.PlayerStats{
 			modelPlayerLineup(playerId1, &formation1, &pos1, false),
 			modelPlayerLineup(playerId2, &formation2, &pos2, false),
 			modelPlayerLineup(playerId3, &formation3, &pos3, true),
@@ -87,7 +87,7 @@ func TestHandleSubstituteLineupPlayers(t *testing.T) {
 			pos3       = "M"
 		)
 
-		x := []*model.PlayerStats{
+		x := []*app.PlayerStats{
 			modelPlayerLineup(playerId1, &formation1, &pos1, true),
 			modelPlayerLineup(playerId2, &formation2, &pos2, false),
 			modelPlayerLineup(playerId3, &formation3, &pos3, false),
@@ -108,16 +108,16 @@ func TestHandleSubstituteLineupPlayers(t *testing.T) {
 	})
 }
 
-func modelPlayerStats(goals *int, assists *int, onGoal *int) *model.PlayerStats {
+func modelPlayerStats(goals *int, assists *int, onGoal *int) *app.PlayerStats {
 	shots := 5
 	conceded := 0
-	return &model.PlayerStats{
+	return &app.PlayerStats{
 		PlayerID: 77,
-		PlayerShots: model.PlayerShots{
+		PlayerShots: app.PlayerShots{
 			Total:  &shots,
 			OnGoal: onGoal,
 		},
-		PlayerGoals: model.PlayerGoals{
+		PlayerGoals: app.PlayerGoals{
 			Scored:   goals,
 			Conceded: &conceded,
 		},
@@ -125,9 +125,9 @@ func modelPlayerStats(goals *int, assists *int, onGoal *int) *model.PlayerStats 
 	}
 }
 
-func modelPlayerLineup(playerId int, formation *int, position *string, sub bool) *model.PlayerStats {
-	return &model.PlayerStats{
-		PlayerID:          playerId,
+func modelPlayerLineup(playerId int, formation *int, position *string, sub bool) *app.PlayerStats {
+	return &app.PlayerStats{
+		PlayerID:          uint64(playerId),
 		Position:          position,
 		IsSubstitute:      sub,
 		FormationPosition: formation,

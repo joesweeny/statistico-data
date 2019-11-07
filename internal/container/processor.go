@@ -2,7 +2,6 @@ package container
 
 import (
 	"github.com/statistico/statistico-data/internal/app/process"
-	"github.com/statistico/statistico-data/internal/stats/player"
 )
 
 type Processor interface {
@@ -53,14 +52,14 @@ func (c Container) PlayerProcessor() *process.PlayerProcessor {
 	)
 }
 
-func (c Container) PlayerStatsProcessor() player_stats.Processor {
-	return player_stats.Processor{
-		PlayerRepository: &player_stats.PostgresPlayerStatsRepository{Connection: c.Database},
-		PlayerFactory:    player_stats.PlayerFactory{Clock: clock()},
-		Logger:           c.Logger,
-		FixtureRepo:      c.FixtureRepository(),
-		Client:           c.SportMonksClient,
-	}
+func (c Container) PlayerStatsProcessor() *process.PlayerStatsProcessor {
+	return process.NewPlayerStatsProcessor(
+		c.PlayerStatsRepository(),
+		c.FixtureRepository(),
+		c.PlayerStatsRequester(),
+		c.Clock,
+		c.NewLogger,
+	)
 }
 
 func (c Container) ResultProcessor() *process.ResultProcessor {

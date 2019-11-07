@@ -40,7 +40,7 @@ func (c Container) ResultService() *result.Service {
 
 func (c Container) PlayerStatsService() *player_stats.Service {
 	return &player_stats.Service{
-		PlayerRepository: &player_stats.PostgresPlayerStatsRepository{Connection: c.Database},
+		PlayerRepository: c.PlayerStatsRepository(),
 		FixtureRepo:      c.FixtureRepository(),
 		Logger:           c.Logger,
 	}

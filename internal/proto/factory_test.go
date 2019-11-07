@@ -2,7 +2,6 @@ package proto
 
 import (
 	"github.com/statistico/statistico-data/internal/app"
-	"github.com/statistico/statistico-data/internal/model"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -29,7 +28,7 @@ func TestPlayerStatsToProto(t *testing.T) {
 	})
 
 	t.Run("nullable fields are handled", func(t *testing.T) {
-		stats := &model.PlayerStats{
+		stats := &app.PlayerStats{
 			PlayerID: 77,
 		}
 
@@ -49,7 +48,7 @@ func TestPlayerStatsToLineupPlayerProto(t *testing.T) {
 	pos := "M"
 	form := 8
 
-	player := model.PlayerStats{
+	player := app.PlayerStats{
 		PlayerID:          105,
 		Position:          &pos,
 		IsSubstitute:      false,
@@ -113,16 +112,16 @@ func TestTeamStatsToProto(t *testing.T) {
 	})
 }
 
-func newPlayerStats(goals *int, assists *int, onGoal *int) *model.PlayerStats {
+func newPlayerStats(goals *int, assists *int, onGoal *int) *app.PlayerStats {
 	shots := 5
 	conceded := 0
-	return &model.PlayerStats{
+	return &app.PlayerStats{
 		PlayerID: 77,
-		PlayerShots: model.PlayerShots{
+		PlayerShots: app.PlayerShots{
 			Total:  &shots,
 			OnGoal: onGoal,
 		},
-		PlayerGoals: model.PlayerGoals{
+		PlayerGoals: app.PlayerGoals{
 			Scored:   goals,
 			Conceded: &conceded,
 		},
