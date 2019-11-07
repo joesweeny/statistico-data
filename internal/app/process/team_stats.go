@@ -110,7 +110,7 @@ func (t TeamStatsProcessor) persist(x *app.TeamStats) {
 	}
 
 	if err := t.teamStatsRepo.UpdateTeamStats(x); err != nil {
-		t.logger.Warningf("Error '%s' occurred when updating result struct: %+v\n,", err.Error(), *x)
+		t.logger.Warningf("Error '%s' occurred when updating team stats struct: %+v\n,", err.Error(), *x)
 	}
 
 	return
