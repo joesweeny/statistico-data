@@ -1,6 +1,7 @@
 package proto
 
 import (
+	"github.com/statistico/statistico-data/internal/app"
 	"github.com/statistico/statistico-data/internal/model"
 	"github.com/stretchr/testify/assert"
 	"testing"
@@ -129,7 +130,7 @@ func newPlayerStats(goals *int, assists *int, onGoal *int) *model.PlayerStats {
 	}
 }
 
-func newTeamStats() *model.TeamStats {
+func newTeamStats() *app.TeamStats {
 	total := 5
 	blocked := 2
 	corners := 15
@@ -137,15 +138,15 @@ func newTeamStats() *model.TeamStats {
 	dangerous := 30
 	goalKicks := 12
 
-	return &model.TeamStats{
+	return &app.TeamStats{
 		TeamID: 850,
-		TeamShots: model.TeamShots{
+		TeamShots: app.TeamShots{
 			Total:   &total,
 			Blocked: &blocked,
 		},
 		Corners:  &corners,
 		RedCards: &redCards,
-		TeamAttacks: model.TeamAttacks{
+		TeamAttacks: app.TeamAttacks{
 			Dangerous: &dangerous,
 		},
 		GoalKicks: &goalKicks,
