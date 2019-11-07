@@ -222,4 +222,3 @@ func newTeamStats(fixtureId, teamId uint64) *app.TeamStats {
 		UpdatedAt:   time.Unix(1546965200, 0),
 	}
 }
-
