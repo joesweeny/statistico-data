@@ -99,7 +99,7 @@ func (t TeamStatsProcessor) persistStats(ch <-chan *app.TeamStats, done chan boo
 }
 
 func (t TeamStatsProcessor) persist(x *app.TeamStats) {
-	_, err := t.teamStatsRepo.ByFixtureAndTeam(x.TeamID, x.FixtureID)
+	_, err := t.teamStatsRepo.ByFixtureAndTeam(x.FixtureID, x.TeamID)
 
 	if err != nil {
 		if err := t.teamStatsRepo.InsertTeamStats(x); err != nil {
