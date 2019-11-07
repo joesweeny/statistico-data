@@ -152,3 +152,7 @@ func rowToStats(r *sql.Row, fixtureID, teamID uint64) (*app.TeamStats, error) {
 
 	return &a, nil
 }
+
+func NewTeamStatsRepository(connection *sql.DB, clock clockwork.Clock) *TeamStatsRepository {
+	return &TeamStatsRepository{connection: connection, clock: clock}
+}
