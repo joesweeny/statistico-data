@@ -14,11 +14,8 @@ require (
 	github.com/statistico/sportmonks-go-client v0.0.0-20190808134647-c309060826ed
 	github.com/statistico/statistico-sportmonks-go-client v0.0.0-20191108123843-4d5db67327b1
 	github.com/stretchr/testify v1.4.0
-	golang.org/x/crypto v0.0.0-20191107222254-f4817d981bb6 // indirect
-	golang.org/x/net v0.0.0-20191108063844-7e6e90b9ea88
+	golang.org/x/net v0.0.0-20191108063844-7e6e90b9ea88 // indirect
 	golang.org/x/sys v0.0.0-20191105231009-c1f44814a5cd // indirect
-	golang.org/x/tools v0.0.0-20191107235519-f7ea15e60b12
-	google.golang.org/appengine v1.4.0 // indirect
 	google.golang.org/genproto v0.0.0-20190404172233-64821d5d2107 // indirect
 	google.golang.org/grpc v1.19.1
 	gopkg.in/yaml.v2 v2.2.5 // indirect
