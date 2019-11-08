@@ -16,6 +16,7 @@ require (
 	github.com/stretchr/testify v1.4.0
 	golang.org/x/net v0.0.0-20191108063844-7e6e90b9ea88 // indirect
 	golang.org/x/sys v0.0.0-20191105231009-c1f44814a5cd // indirect
+	google.golang.org/appengine v1.4.0 // indirect
 	google.golang.org/genproto v0.0.0-20190404172233-64821d5d2107 // indirect
 	google.golang.org/grpc v1.19.1
 	gopkg.in/yaml.v2 v2.2.5 // indirect
