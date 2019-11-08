@@ -79,9 +79,9 @@ func handleTeamShots(s *spClient.TeamShots) app.TeamShots {
 
 func handleTeamPasses(s *spClient.TeamPasses) app.TeamPasses {
 	return app.TeamPasses{
-		Total:      helpers.ParseNullableInt(s.Total),
-		Accuracy:   helpers.ParseNullableInt(s.Accurate),
-		Percentage: helpers.ParseNullableInt(s.Percentage),
+		Total:      helpers.ParseFlexInt(s.Total),
+		Accuracy:   helpers.ParseFlexInt(s.Accurate),
+		Percentage: helpers.ParseFlexInt(s.Percentage),
 	}
 }
 

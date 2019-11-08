@@ -49,20 +49,11 @@ func (p PlayerStatsRequester) sendStatsRequest(id uint64, ch chan<- *app.PlayerS
 	}
 
 	for _, stats := range res.Lineups() {
-		wg.Add(1)
-
-		go func() {
-			ch <- transformPlayerStats(&stats, false)
-			wg.Done()
-		}()
+		ch <- transformPlayerStats(&stats, false)
 	}
 
 	for _, stats := range res.Bench() {
-		wg.Add(1)
-		go func() {
-			ch <- transformPlayerStats(&stats, true)
-			wg.Done()
-		}()
+		ch <- transformPlayerStats(&stats, true)
 	}
 
 	wg.Done()
