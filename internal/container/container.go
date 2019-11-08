@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"github.com/jonboulle/clockwork"
 	"github.com/sirupsen/logrus"
-	"github.com/statistico/sportmonks-go-client"
 	"github.com/statistico/statistico-data/internal/config"
 	spClient "github.com/statistico/statistico-sportmonks-go-client"
 	"log"
@@ -19,8 +18,7 @@ type Container struct {
 	Database            *sql.DB
 	Logger              *log.Logger
 	NewLogger           *logrus.Logger
-	SportMonksClient    *sportmonks.Client
-	NewSportMonksClient *spClient.HTTPClient
+	SportMonksClient    *spClient.HTTPClient
 }
 
 func Bootstrap(config *config.Config) *Container {
@@ -32,8 +30,7 @@ func Bootstrap(config *config.Config) *Container {
 	c.Database = databaseConnection(config)
 	c.Logger = logger()
 	c.NewLogger = newLogger()
-	c.SportMonksClient = sportmonksClient(config)
-	c.NewSportMonksClient = newSportmonksClient(config)
+	c.SportMonksClient = sportMonksClient(config)
 
 	return &c
 }
@@ -58,19 +55,7 @@ func databaseConnection(config *config.Config) *sql.DB {
 	return conn
 }
 
-func sportmonksClient(config *config.Config) *sportmonks.Client {
-	s := config.Services.SportsMonks
-
-	client, err := sportmonks.NewClient(s.BaseUri, s.ApiKey, logger())
-
-	if err != nil {
-		panic(err)
-	}
-
-	return client
-}
-
-func newSportmonksClient(config *config.Config) *spClient.HTTPClient {
+func sportMonksClient(config *config.Config) *spClient.HTTPClient {
 	s := config.Services.SportsMonks
 
 	return spClient.NewHTTPClient(s.ApiKey)

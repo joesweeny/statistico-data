@@ -30,8 +30,6 @@ github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZb
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/sirupsen/logrus v1.4.2 h1:SPIRibHv4MatM3XXNO2BJeFLZwZ2LvZgfQ5+UNI2im4=
 github.com/sirupsen/logrus v1.4.2/go.mod h1:tLMulIdttU9McNUspp0xgXVQah82FyeX6MwdIuYE2rE=
-github.com/statistico/sportmonks-go-client v0.0.0-20190808134647-c309060826ed h1:nXns7XtwieUZZ2k/t7mZ8m1iGh3zQ6V3EWvJzx4eCDY=
-github.com/statistico/sportmonks-go-client v0.0.0-20190808134647-c309060826ed/go.mod h1:oUP9S1fUrG/GGjj0G3qOb1al8DW6yISNlsGmEGcAoMg=
 github.com/statistico/statistico-sportmonks-go-client v0.0.0-20191108123843-4d5db67327b1 h1:nvIaVddLppJ36o3rxdiG/rysRqTzDDWwDX/z2OgODBU=
 github.com/statistico/statistico-sportmonks-go-client v0.0.0-20191108123843-4d5db67327b1/go.mod h1:Cauw+83hBCOj/Ng8HLV9hiXEbfNCjGKpfA6icqwRxsQ=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
