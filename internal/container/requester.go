@@ -33,6 +33,10 @@ func (c Container) PlayerRequester() app.PlayerRequester {
 	return sportmonks.NewPlayerRequester(c.NewSportMonksClient, c.NewLogger)
 }
 
+func (c Container) PlayerStatsRequester() app.PlayerStatRequester {
+	return sportmonks.NewPlayerStatsRequester(c.NewSportMonksClient, c.NewLogger)
+}
+
 func (c Container) SeasonRequester() app.SeasonRequester {
 	return sportmonks.NewSeasonRequester(c.NewSportMonksClient, c.NewLogger)
 }

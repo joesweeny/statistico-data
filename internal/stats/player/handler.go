@@ -1,12 +1,12 @@
 package player_stats
 
 import (
-	"github.com/statistico/statistico-data/internal/model"
+	"github.com/statistico/statistico-data/internal/app"
 	"github.com/statistico/statistico-data/internal/proto"
 	pbPlayerStats "github.com/statistico/statistico-data/internal/proto/stats/player"
 )
 
-func HandlePlayerStats(p []*model.PlayerStats) []*pbPlayerStats.PlayerStats {
+func HandlePlayerStats(p []*app.PlayerStats) []*pbPlayerStats.PlayerStats {
 	var stats []*pbPlayerStats.PlayerStats
 
 	for _, player := range p {
@@ -17,7 +17,7 @@ func HandlePlayerStats(p []*model.PlayerStats) []*pbPlayerStats.PlayerStats {
 	return stats
 }
 
-func HandleStartingLineupPlayers(p []*model.PlayerStats) []*pbPlayerStats.LineupPlayer {
+func HandleStartingLineupPlayers(p []*app.PlayerStats) []*pbPlayerStats.LineupPlayer {
 	var lineup []*pbPlayerStats.LineupPlayer
 
 	for _, player := range p {
@@ -30,7 +30,7 @@ func HandleStartingLineupPlayers(p []*model.PlayerStats) []*pbPlayerStats.Lineup
 	return lineup
 }
 
-func HandleSubstituteLineupPlayers(p []*model.PlayerStats) []*pbPlayerStats.LineupPlayer {
+func HandleSubstituteLineupPlayers(p []*app.PlayerStats) []*pbPlayerStats.LineupPlayer {
 	var lineup []*pbPlayerStats.LineupPlayer
 
 	for _, player := range p {

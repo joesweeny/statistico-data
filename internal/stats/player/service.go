@@ -10,7 +10,7 @@ import (
 )
 
 type Service struct {
-	PlayerRepository PlayerRepository
+	PlayerRepository app.PlayerStatsRepository
 	FixtureRepo      app.FixtureRepository
 	Logger           *log.Logger
 }
@@ -25,7 +25,7 @@ func (s Service) GetPlayerStatsForFixture(c context.Context, r *pb.FixtureReques
 
 	res := pb.StatsResponse{}
 
-	home, err := s.PlayerRepository.ByFixtureAndTeam(uint64(fix.ID), uint64(fix.HomeTeamID))
+	home, err := s.PlayerRepository.ByFixtureAndTeam(fix.ID, fix.HomeTeamID)
 
 	if err != nil {
 		e := fmt.Errorf("error when retrieving player stats: FixtureID %d, Home Team ID %d", fix.ID, fix.HomeTeamID)

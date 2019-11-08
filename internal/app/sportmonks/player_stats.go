@@ -37,9 +37,8 @@ func (p PlayerStatsRequester) parseStats(ids []uint64, ch chan<- *app.PlayerStat
 
 func (p PlayerStatsRequester) sendStatsRequest(id uint64, ch chan<- *app.PlayerStats, wg *sync.WaitGroup) {
 	var filters map[string][]int
-	var includes []string
 
-	res, _ , err := p.client.FixtureByID(context.Background(), int(id), includes, filters)
+	res, _ , err := p.client.FixtureByID(context.Background(), int(id), []string{"lineup", "bench"}, filters)
 
 	if err != nil {
 		p.logger.Fatalf(
@@ -50,20 +49,11 @@ func (p PlayerStatsRequester) sendStatsRequest(id uint64, ch chan<- *app.PlayerS
 	}
 
 	for _, stats := range res.Lineups() {
-		wg.Add(1)
-
-		go func() {
-			ch <- transformPlayerStats(&stats, false)
-			wg.Done()
-		}()
+		ch <- transformPlayerStats(&stats, false)
 	}
 
 	for _, stats := range res.Bench() {
-		wg.Add(1)
-		go func() {
-			ch <- transformPlayerStats(&stats, true)
-			wg.Done()
-		}()
+		ch <- transformPlayerStats(&stats, true)
 	}
 
 	wg.Done()

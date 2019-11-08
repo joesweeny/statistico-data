@@ -3,7 +3,6 @@ package proto
 import (
 	"github.com/golang/protobuf/ptypes/wrappers"
 	"github.com/statistico/statistico-data/internal/app"
-	"github.com/statistico/statistico-data/internal/model"
 	pbCompetition "github.com/statistico/statistico-data/internal/proto/competition"
 	pbResult "github.com/statistico/statistico-data/internal/proto/result"
 	pbRound "github.com/statistico/statistico-data/internal/proto/round"
@@ -34,7 +33,7 @@ func CompetitionToProto(c *app.Competition) *pbCompetition.Competition {
 	return &x
 }
 
-func PlayerStatsToLineupPlayerProto(p *model.PlayerStats) *pbPlayerStats.LineupPlayer {
+func PlayerStatsToLineupPlayerProto(p *app.PlayerStats) *pbPlayerStats.LineupPlayer {
 	player := pbPlayerStats.LineupPlayer{
 		PlayerId:     uint64(p.PlayerID),
 		Position:     *p.Position,
@@ -50,9 +49,9 @@ func PlayerStatsToLineupPlayerProto(p *model.PlayerStats) *pbPlayerStats.LineupP
 	return &player
 }
 
-func PlayerStatsToProto(p *model.PlayerStats) *pbPlayerStats.PlayerStats {
+func PlayerStatsToProto(p *app.PlayerStats) *pbPlayerStats.PlayerStats {
 	stats := pbPlayerStats.PlayerStats{
-		PlayerId: uint64(p.PlayerID),
+		PlayerId: p.PlayerID,
 	}
 
 	shots := p.PlayerShots
