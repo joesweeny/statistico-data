@@ -1,6 +1,9 @@
 package helpers
 
-import "strconv"
+import (
+	sportmonks "github.com/statistico/statistico-sportmonks-go-client"
+	"strconv"
+)
 
 func NullableUint64(i *int) *uint64 {
 	var assist *uint64 = nil
@@ -16,7 +19,6 @@ func NullableUint64(i *int) *uint64 {
 
 func ParseNullableInt(i interface{}) *int {
 	if i == nil {
-		panic("Hello")
 		return nil
 	}
 
@@ -45,4 +47,14 @@ func ParseNullableInt(i interface{}) *int {
 	}
 
 	return nil
+}
+
+func ParseFlexInt(i *sportmonks.FlexInt) *int {
+	if i == nil {
+		return nil
+	}
+
+	val := int(*i)
+
+	return &val
 }

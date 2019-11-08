@@ -31,7 +31,7 @@ func (t TeamStatsRequester) parseStats(ids []uint64, ch chan<- *app.TeamStats) {
 
 		if err != nil {
 			t.logger.Fatalf(
-				"Error when calling client '%s' when making fixtures request to parse team stats for fixture %s",
+				"Error when calling client '%s' when making fixtures request to parse team stats for fixture %d",
 				err.Error(),
 				id,
 			)
@@ -68,12 +68,12 @@ func transformTeamStats(s *spClient.TeamStats) *app.TeamStats {
 
 func handleTeamShots(s *spClient.TeamShots) app.TeamShots {
 	return app.TeamShots{
-		Total:      helpers.ParseNullableInt(s.Total),
-		OnGoal:     helpers.ParseNullableInt(s.OnGoal),
-		OffGoal:    helpers.ParseNullableInt(s.OffGoal),
-		Blocked:    helpers.ParseNullableInt(s.Blocked),
-		InsideBox:  helpers.ParseNullableInt(s.InsideBox),
-		OutsideBox: helpers.ParseNullableInt(s.OutsideBox),
+		Total:      helpers.ParseFlexInt(s.Total),
+		OnGoal:     helpers.ParseFlexInt(s.OnGoal),
+		OffGoal:    helpers.ParseFlexInt(s.OffGoal),
+		Blocked:    helpers.ParseFlexInt(s.Blocked),
+		InsideBox:  helpers.ParseFlexInt(s.InsideBox),
+		OutsideBox: helpers.ParseFlexInt(s.OutsideBox),
 	}
 }
 
@@ -87,8 +87,8 @@ func handleTeamPasses(s *spClient.TeamPasses) app.TeamPasses {
 
 func handleTeamAttacks(s *spClient.TeamAttacks) app.TeamAttacks {
 	return app.TeamAttacks{
-		Total:     helpers.ParseNullableInt(s.Attacks),
-		Dangerous: helpers.ParseNullableInt(s.DangerousAttacks),
+		Total:     helpers.ParseFlexInt(s.Total),
+		Dangerous: helpers.ParseFlexInt(s.Dangerous),
 	}
 }
 
