@@ -8,6 +8,8 @@ import (
 	"github.com/statistico/statistico-data/internal/config"
 	spClient "github.com/statistico/statistico-sportmonks-go-client"
 	"log"
+	"net"
+	"net/http"
 	"os"
 	"time"
 )
@@ -58,7 +60,23 @@ func databaseConnection(config *config.Config) *sql.DB {
 func sportMonksClient(config *config.Config) *spClient.HTTPClient {
 	s := config.Services.SportsMonks
 
-	return spClient.NewHTTPClient(s.ApiKey)
+	c := spClient.NewDefaultHTTPClient(s.ApiKey)
+
+	trans := &http.Transport{
+		Dial: (&net.Dialer{
+			Timeout: 5 * time.Second,
+		}).Dial,
+		TLSHandshakeTimeout: 5 * time.Second,
+	}
+
+	client := &http.Client{
+		Timeout: time.Second * 10,
+		Transport: trans,
+	}
+
+	c.SetHTTPClient(client)
+
+	return c
 }
 
 func newLogger() *logrus.Logger {
