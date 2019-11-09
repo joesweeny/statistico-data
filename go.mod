@@ -13,11 +13,8 @@ require (
 	github.com/sirupsen/logrus v1.4.2
 	github.com/statistico/statistico-sportmonks-go-client v0.0.0-20191109182810-fcde8e383909
 	github.com/stretchr/testify v1.4.0
-	golang.org/x/crypto v0.0.0-20191108234033-bd318be0434a // indirect
 	golang.org/x/net v0.0.0-20191109021931-daa7c04131f5 // indirect
 	golang.org/x/sys v0.0.0-20191105231009-c1f44814a5cd // indirect
-	golang.org/x/tools v0.0.0-20191108193012-7d206e10da11 // indirect
-	google.golang.org/appengine v1.4.0 // indirect
 	google.golang.org/genproto v0.0.0-20190404172233-64821d5d2107 // indirect
 	google.golang.org/grpc v1.19.1
 	gopkg.in/yaml.v2 v2.2.5 // indirect
