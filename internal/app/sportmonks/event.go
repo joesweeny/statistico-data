@@ -45,7 +45,12 @@ func (e EventRequester) sendEventRequest(fixtureId uint64, g chan<- *app.GoalEve
 	res, _, err := e.client.FixtureByID(context.Background(), int(fixtureId), includes, filters)
 
 	if err != nil {
-		e.logger.Fatalf("Error when calling client '%s' when making fixture event request", err.Error())
+		e.logger.Warnf(
+			"Error when calling client '%s' when making fixture event request. Fixture ID %d",
+			err.Error(),
+			fixtureId,
+		)
+		w.Done()
 		return
 	}
 
