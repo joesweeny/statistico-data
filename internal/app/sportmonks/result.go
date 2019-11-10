@@ -42,8 +42,8 @@ func transformResult(s *spClient.Fixture) *app.Result {
 	return &app.Result{
 		FixtureID:          uint64(s.ID),
 		PitchCondition:     s.Pitch,
-		HomeFormation:      &s.Formations.LocalTeamFormation,
-		AwayFormation:      &s.Formations.VisitorTeamFormation,
+		HomeFormation:      s.Formations.LocalTeamFormation,
+		AwayFormation:      s.Formations.VisitorTeamFormation,
 		HomeScore:          &s.Scores.LocalTeamScore,
 		AwayScore:          &s.Scores.VisitorTeamScore,
 		HomePenScore:       s.Scores.LocalTeamPenScore,
