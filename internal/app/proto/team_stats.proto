@@ -2,7 +2,7 @@ syntax = "proto3";
 
 option go_package = "github.com/statistico/statistico-data/internal/app/proto";
 
-package team_stats;
+package proto;
 
 import "google/protobuf/wrappers.proto";
 

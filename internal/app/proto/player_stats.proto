@@ -7,7 +7,7 @@ package proto;
 import "google/protobuf/wrappers.proto";
 
 service PlayerStatsService {
-    rpc GetPlayerStatsForFixture(FixtureRequest) returns (StatsResponse) {}
+    rpc GetPlayerStatsForFixture(FixtureRequest) returns (PlayerStatsResponse) {}
     rpc GetLineUpForFixture(FixtureRequest) returns (LineupResponse) {}
 }
 
@@ -15,7 +15,7 @@ message FixtureRequest {
     uint64 fixture_id = 1;
 }
 
-message StatsResponse {
+message PlayerStatsResponse {
     repeated PlayerStats home_team = 1;
     repeated PlayerStats away_team = 2;
 }
