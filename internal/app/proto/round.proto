@@ -1,7 +1,5 @@
 syntax = "proto3";
 
-option go_package = "github.com/statistico/statistico-data/internal/app/proto";
-
 package proto;
 
 message Round {

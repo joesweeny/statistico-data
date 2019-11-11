@@ -1,0 +1,7 @@
+syntax = "proto3";
+
+package proto;
+
+message FixtureRequest {
+    uint64 fixture_id = 1;
+}

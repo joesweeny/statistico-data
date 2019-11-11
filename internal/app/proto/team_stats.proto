@@ -1,20 +1,15 @@
 syntax = "proto3";
 
-option go_package = "github.com/statistico/statistico-data/internal/app/proto";
-
 package proto;
 
 import "google/protobuf/wrappers.proto";
+import "internal/app/proto/requests.proto";
 
 service TeamStatsService {
-    rpc GetTeamStatsForFixture(FixtureRequest) returns (StatsResponse) {}
+    rpc GetTeamStatsForFixture(FixtureRequest) returns (TeamStatsResponse) {}
 }
 
-message FixtureRequest {
-    uint64 fixture_id = 1;
-}
-
-message StatsResponse {
+message TeamStatsResponse {
     TeamStats home_team = 1;
     TeamStats away_team = 2;
 }
