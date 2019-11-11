@@ -41,10 +41,13 @@ func (p PlayerStatsRequester) sendStatsRequest(id uint64, ch chan<- *app.PlayerS
 	res, _ , err := p.client.FixtureByID(context.Background(), int(id), []string{"lineup", "bench"}, filters)
 
 	if err != nil {
-		p.logger.Fatalf(
-			"Error when calling client '%s' when making fixtures request to parse team stats",
+		p.logger.Warnf(
+			"Error when calling client '%s' when making fixtures request to parse team stats. Fixture ID %d",
 			err.Error(),
+			id,
 		)
+
+		wg.Done()
 		return
 	}
 

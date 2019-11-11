@@ -40,7 +40,13 @@ func (f FixtureRequester) sendFixtureRequests(seasonID uint64, ch chan<- *app.Fi
 	res, _ , err := f.client.SeasonByID(context.Background(), int(seasonID), []string{"fixtures"})
 
 	if err != nil {
-		f.logger.Fatalf("Error when calling client '%s' when making fixtures request", err.Error())
+		f.logger.Warnf(
+			"Error when calling client '%s' when making fixtures request. Season ID %d",
+			err.Error(),
+			seasonID,
+		)
+
+		w.Done()
 		return
 	}
 
