@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"github.com/golang/protobuf/ptypes/wrappers"
 	"github.com/statistico/statistico-data/internal/app"
-	proto2 "github.com/statistico/statistico-data/internal/app/proto"
-	"github.com/statistico/statistico-data/internal/proto"
+	"github.com/statistico/statistico-data/internal/app/convert"
+	"github.com/statistico/statistico-data/internal/app/proto"
 	"log"
 )
 
@@ -18,7 +18,7 @@ type Handler struct {
 	Logger          *log.Logger
 }
 
-func (h Handler) HandleResult(f *app.Fixture, r *app.Result) (*proto2.Result, error) {
+func (h Handler) HandleResult(f *app.Fixture, r *app.Result) (*proto.Result, error) {
 	s, err := h.SeasonRepo.ByID(f.SeasonID)
 
 	if err != nil {
@@ -51,12 +51,12 @@ func (h Handler) HandleResult(f *app.Fixture, r *app.Result) (*proto2.Result, er
 		return nil, e
 	}
 
-	p := proto2.Result{
+	p := proto.Result{
 		Id:          int64(r.FixtureID),
-		Competition: proto.CompetitionToProto(c),
-		Season:      proto.SeasonToProto(s),
+		Competition: convert.CompetitionToProto(c),
+		Season:      convert.SeasonToProto(s),
 		DateTime:    f.Date.Unix(),
-		MatchData:   proto.ToMatchData(home, away, r),
+		MatchData:   convert.ToMatchData(home, away, r),
 	}
 
 	if f.RoundID != nil {
@@ -67,7 +67,7 @@ func (h Handler) HandleResult(f *app.Fixture, r *app.Result) (*proto2.Result, er
 			h.Logger.Println(e)
 			p.Round = nil
 		} else {
-			p.Round = proto.RoundToProto(rd)
+			p.Round = convert.RoundToProto(rd)
 		}
 	}
 
@@ -79,7 +79,7 @@ func (h Handler) HandleResult(f *app.Fixture, r *app.Result) (*proto2.Result, er
 			h.Logger.Println(e)
 			p.Venue = nil
 		} else {
-			p.Venue = proto.VenueToProto(v)
+			p.Venue = convert.VenueToProto(v)
 		}
 	}
 
