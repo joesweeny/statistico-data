@@ -4,15 +4,11 @@ import (
 	"github.com/golang/protobuf/ptypes/wrappers"
 	"github.com/statistico/statistico-data/internal/app"
 	"github.com/statistico/statistico-data/internal/app/proto"
-	pbRound "github.com/statistico/statistico-data/internal/proto/round"
-	pbSeason "github.com/statistico/statistico-data/internal/proto/season"
-	pbTeam "github.com/statistico/statistico-data/internal/proto/team"
-	pbVenue "github.com/statistico/statistico-data/internal/proto/venue"
 	"time"
 )
 
-func TeamToProto(t *app.Team) *pbTeam.Team {
-	var x pbTeam.Team
+func TeamToProto(t *app.Team) *proto.Team {
+	var x proto.Team
 	x.Id = int64(t.ID)
 	x.Name = t.Name
 
@@ -88,8 +84,8 @@ func PlayerStatsToProto(p *app.PlayerStats) *proto.PlayerStats {
 	return &stats
 }
 
-func RoundToProto(r *app.Round) *pbRound.Round {
-	return &pbRound.Round{
+func RoundToProto(r *app.Round) *proto.Round {
+	return &proto.Round{
 		Id:        int64(r.ID),
 		Name:      r.Name,
 		SeasonId:  int64(r.SeasonID),
@@ -98,8 +94,8 @@ func RoundToProto(r *app.Round) *pbRound.Round {
 	}
 }
 
-func SeasonToProto(s *app.Season) *pbSeason.Season {
-	var x pbSeason.Season
+func SeasonToProto(s *app.Season) *proto.Season {
+	var x proto.Season
 	x.Id = int64(s.ID)
 	x.Name = s.Name
 	x.IsCurrent = &wrappers.BoolValue{
@@ -261,14 +257,14 @@ func TeamStatsToProto(t *app.TeamStats) *proto.TeamStats {
 	return &stats
 }
 
-func VenueToProto(v *app.Venue) *pbVenue.Venue {
+func VenueToProto(v *app.Venue) *proto.Venue {
 	id := wrappers.Int64Value{
 		Value: int64(v.ID),
 	}
 	name := wrappers.StringValue{
 		Value: v.Name,
 	}
-	ven := pbVenue.Venue{}
+	ven := proto.Venue{}
 	ven.Id = &id
 	ven.Name = &name
 
