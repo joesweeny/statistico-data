@@ -1,4 +1,4 @@
-package fixture
+package grpc
 
 import (
 	"context"
@@ -6,19 +6,18 @@ import (
 	"fmt"
 	"github.com/statistico/statistico-data/internal/app"
 	"github.com/statistico/statistico-data/internal/app/proto"
+	"github.com/statistico/statistico-data/internal/fixture"
 	"log"
 	"time"
 )
 
-var ErrTimeParse = errors.New("unable to parse date provided in Request")
-
-type Service struct {
+type FixtureService struct {
 	FixtureRepo app.FixtureRepository
-	Handler
+	fixture.Handler
 	Logger *log.Logger
 }
 
-func (s *Service) ListFixtures(r *proto.DateRangeRequest, stream proto.FixtureService_ListFixturesServer) error {
+func (s *FixtureService) ListFixtures(r *proto.DateRangeRequest, stream proto.FixtureService_ListFixturesServer) error {
 	from, err := time.Parse(time.RFC3339, r.DateFrom)
 
 	if err != nil {
@@ -56,7 +55,7 @@ func (s *Service) ListFixtures(r *proto.DateRangeRequest, stream proto.FixtureSe
 	return nil
 }
 
-func (s *Service) FixtureByID(c context.Context, r *proto.FixtureRequest) (*proto.Fixture, error) {
+func (s *FixtureService) FixtureByID(c context.Context, r *proto.FixtureRequest) (*proto.Fixture, error) {
 	fix, err := s.FixtureRepo.ByID(uint64(r.FixtureId))
 
 	if err != nil {

@@ -1,10 +1,11 @@
-package result
+package grpc
 
 import (
 	"errors"
 	"fmt"
 	"github.com/statistico/statistico-data/internal/app"
 	"github.com/statistico/statistico-data/internal/app/proto"
+	"github.com/statistico/statistico-data/internal/result"
 	"log"
 	"time"
 )
@@ -13,14 +14,14 @@ const maxLimit = 10000
 
 var ErrTimeParse = errors.New("unable to parse date provided in Request")
 
-type Service struct {
+type ResultService struct {
 	FixtureRepo app.FixtureRepository
 	ResultRepo  app.ResultRepository
-	Handler
+	result.Handler
 	Logger *log.Logger
 }
 
-func (s Service) GetHistoricalResultsForFixture(r *proto.HistoricalResultRequest, stream proto.ResultService_GetHistoricalResultsForFixtureServer) error {
+func (s ResultService) GetHistoricalResultsForFixture(r *proto.HistoricalResultRequest, stream proto.ResultService_GetHistoricalResultsForFixtureServer) error {
 	date, err := time.Parse(time.RFC3339, r.DateBefore)
 
 	if err != nil {
@@ -37,7 +38,7 @@ func (s Service) GetHistoricalResultsForFixture(r *proto.HistoricalResultRequest
 	return s.sendResults(fixtures, stream)
 }
 
-func (s Service) GetResultsForTeam(r *proto.TeamRequest, stream proto.ResultService_GetResultsForTeamServer) error {
+func (s ResultService) GetResultsForTeam(r *proto.TeamRequest, stream proto.ResultService_GetResultsForTeamServer) error {
 	date, err := time.Parse(time.RFC3339, r.DateBefore)
 
 	if err != nil {
@@ -60,7 +61,7 @@ func (s Service) GetResultsForTeam(r *proto.TeamRequest, stream proto.ResultServ
 	return s.sendResults(fixtures, stream)
 }
 
-func (s Service) GetResultsForSeason(r *proto.SeasonRequest, stream proto.ResultService_GetResultsForSeasonServer) error {
+func (s ResultService) GetResultsForSeason(r *proto.SeasonRequest, stream proto.ResultService_GetResultsForSeasonServer) error {
 	date, err := time.Parse(time.RFC3339, r.DateBefore)
 
 	if err != nil {
@@ -77,7 +78,7 @@ func (s Service) GetResultsForSeason(r *proto.SeasonRequest, stream proto.Result
 	return s.sendResults(fixtures, stream)
 }
 
-func (s Service) sendResults(f []app.Fixture, stream proto.ResultService_GetResultsForTeamServer) error {
+func (s ResultService) sendResults(f []app.Fixture, stream proto.ResultService_GetResultsForTeamServer) error {
 	for _, fix := range f {
 		res, err := s.ResultRepo.ByFixtureID(uint64(fix.ID))
 

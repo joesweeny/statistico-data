@@ -1,30 +1,30 @@
-package team_stats
+package grpc
 
 import (
 	"context"
 	"errors"
 	"fmt"
 	"github.com/statistico/statistico-data/internal/app"
-	proto2 "github.com/statistico/statistico-data/internal/app/proto"
-	"github.com/statistico/statistico-data/internal/proto"
+	"github.com/statistico/statistico-data/internal/app/converter"
+	"github.com/statistico/statistico-data/internal/app/proto"
 	"log"
 )
 
-type Service struct {
+type TeamStatsService struct {
 	TeamRepository    app.TeamStatsRepository
 	FixtureRepository app.FixtureRepository
 	Logger            *log.Logger
 }
 
-func (s Service) GetTeamStatsForFixture(c context.Context, r *proto2.FixtureRequest) (*proto2.TeamStatsResponse, error) {
-	fix, err := s.FixtureRepository.ByID(r.FixtureId)
+func (s TeamStatsService) GetTeamStatsForFixture(c context.Context, r *proto.FixtureRequest) (*proto.TeamStatsResponse, error) {
+	fix, err := s.FixtureRepository.ByID(uint64(r.FixtureId))
 
 	if err != nil {
 		m := fmt.Sprintf("Fixture with ID %d does not exist", r.FixtureId)
 		return nil, errors.New(m)
 	}
 
-	res := proto2.TeamStatsResponse{}
+	res := proto.TeamStatsResponse{}
 
 	home, err := s.TeamRepository.ByFixtureAndTeam(uint64(fix.ID), uint64(fix.HomeTeamID))
 
@@ -34,7 +34,7 @@ func (s Service) GetTeamStatsForFixture(c context.Context, r *proto2.FixtureRequ
 		return nil, e
 	}
 
-	res.HomeTeam = proto.TeamStatsToProto(home)
+	res.HomeTeam = converter.TeamStatsToProto(home)
 
 	away, err := s.TeamRepository.ByFixtureAndTeam(uint64(fix.ID), uint64(fix.AwayTeamID))
 
@@ -44,7 +44,7 @@ func (s Service) GetTeamStatsForFixture(c context.Context, r *proto2.FixtureRequ
 		return nil, e
 	}
 
-	res.AwayTeam = proto.TeamStatsToProto(away)
+	res.AwayTeam = converter.TeamStatsToProto(away)
 
 	return &res, nil
 }

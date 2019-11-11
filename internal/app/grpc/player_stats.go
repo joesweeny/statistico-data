@@ -1,4 +1,4 @@
-package player_stats
+package grpc
 
 import (
 	"context"
@@ -6,16 +6,17 @@ import (
 	"fmt"
 	"github.com/statistico/statistico-data/internal/app"
 	"github.com/statistico/statistico-data/internal/app/proto"
+	"github.com/statistico/statistico-data/internal/stats/player"
 	"log"
 )
 
-type Service struct {
+type PlayerStatsService struct {
 	PlayerRepository app.PlayerStatsRepository
 	FixtureRepo      app.FixtureRepository
 	Logger           *log.Logger
 }
 
-func (s Service) GetPlayerStatsForFixture(c context.Context, r *proto.FixtureRequest) (*proto.PlayerStatsResponse, error) {
+func (s PlayerStatsService) GetPlayerStatsForFixture(c context.Context, r *proto.FixtureRequest) (*proto.PlayerStatsResponse, error) {
 	fix, err := s.FixtureRepo.ByID(r.FixtureId)
 
 	if err != nil {
@@ -33,7 +34,7 @@ func (s Service) GetPlayerStatsForFixture(c context.Context, r *proto.FixtureReq
 		return nil, e
 	}
 
-	res.HomeTeam = HandlePlayerStats(home)
+	res.HomeTeam = player_stats.HandlePlayerStats(home)
 
 	away, err := s.PlayerRepository.ByFixtureAndTeam(uint64(fix.ID), uint64(fix.AwayTeamID))
 
@@ -43,12 +44,12 @@ func (s Service) GetPlayerStatsForFixture(c context.Context, r *proto.FixtureReq
 		return nil, e
 	}
 
-	res.AwayTeam = HandlePlayerStats(away)
+	res.AwayTeam = player_stats.HandlePlayerStats(away)
 
 	return &res, nil
 }
 
-func (s Service) GetLineUpForFixture(c context.Context, r *proto.FixtureRequest) (*proto.LineupResponse, error) {
+func (s PlayerStatsService) GetLineUpForFixture(c context.Context, r *proto.FixtureRequest) (*proto.LineupResponse, error) {
 	fix, err := s.FixtureRepo.ByID(r.FixtureId)
 
 	if err != nil {
@@ -67,8 +68,8 @@ func (s Service) GetLineUpForFixture(c context.Context, r *proto.FixtureRequest)
 	}
 
 	homeLineup := proto.Lineup{
-		Start: HandleStartingLineupPlayers(home),
-		Bench: HandleSubstituteLineupPlayers(home),
+		Start: player_stats.HandleStartingLineupPlayers(home),
+		Bench: player_stats.HandleSubstituteLineupPlayers(home),
 	}
 
 	res.HomeTeam = &homeLineup
@@ -82,8 +83,8 @@ func (s Service) GetLineUpForFixture(c context.Context, r *proto.FixtureRequest)
 	}
 
 	awayLineup := proto.Lineup{
-		Start: HandleStartingLineupPlayers(away),
-		Bench: HandleSubstituteLineupPlayers(away),
+		Start: player_stats.HandleStartingLineupPlayers(away),
+		Bench: player_stats.HandleSubstituteLineupPlayers(away),
 	}
 
 	res.AwayTeam = &awayLineup
