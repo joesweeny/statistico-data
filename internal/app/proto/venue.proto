@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-option go_package = "github.com/statistico/statistico-data/internal/proto/venue";
+option go_package = "github.com/statistico/statistico-data/internal/app/proto";
 
-package venue;
+package proto;
 
 import "google/protobuf/wrappers.proto";
 

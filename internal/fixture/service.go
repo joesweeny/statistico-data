@@ -5,7 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/statistico/statistico-data/internal/app"
-	pb "github.com/statistico/statistico-data/internal/proto/fixture"
+	"github.com/statistico/statistico-data/internal/app/proto"
 	"log"
 	"time"
 )
@@ -18,7 +18,7 @@ type Service struct {
 	Logger *log.Logger
 }
 
-func (s *Service) ListFixtures(r *pb.DateRangeRequest, stream pb.FixtureService_ListFixturesServer) error {
+func (s *Service) ListFixtures(r *proto.DateRangeRequest, stream proto.FixtureService_ListFixturesServer) error {
 	from, err := time.Parse(time.RFC3339, r.DateFrom)
 
 	if err != nil {
@@ -56,7 +56,7 @@ func (s *Service) ListFixtures(r *pb.DateRangeRequest, stream pb.FixtureService_
 	return nil
 }
 
-func (s *Service) FixtureByID(c context.Context, r *pb.FixtureRequest) (*pb.Fixture, error) {
+func (s *Service) FixtureByID(c context.Context, r *proto.FixtureRequest) (*proto.Fixture, error) {
 	fix, err := s.FixtureRepo.ByID(uint64(r.FixtureId))
 
 	if err != nil {

@@ -1,24 +1,22 @@
-package proto
+package convert
 
 import (
 	"github.com/golang/protobuf/ptypes/wrappers"
 	"github.com/statistico/statistico-data/internal/app"
 	"github.com/statistico/statistico-data/internal/app/proto"
-	pbRound "github.com/statistico/statistico-data/internal/proto/round"
-	pbSeason "github.com/statistico/statistico-data/internal/proto/season"
-	pbTeam "github.com/statistico/statistico-data/internal/proto/team"
-	pbVenue "github.com/statistico/statistico-data/internal/proto/venue"
 	"time"
 )
 
-func TeamToProto(t *app.Team) *pbTeam.Team {
-	var x pbTeam.Team
+// Convert a domain Team struct into a proto Team struct
+func TeamToProto(t *app.Team) *proto.Team {
+	var x proto.Team
 	x.Id = int64(t.ID)
 	x.Name = t.Name
 
 	return &x
 }
 
+// Convert a domain Competition struct into a proto Competition struct
 func CompetitionToProto(c *app.Competition) *proto.Competition {
 	var x proto.Competition
 	x.Id = int64(c.ID)
@@ -30,6 +28,7 @@ func CompetitionToProto(c *app.Competition) *proto.Competition {
 	return &x
 }
 
+// Convert a domain PlayerStats struct into a proto LineupPlayer struct
 func PlayerStatsToLineupPlayerProto(p *app.PlayerStats) *proto.LineupPlayer {
 	player := proto.LineupPlayer{
 		PlayerId:     uint64(p.PlayerID),
@@ -46,6 +45,7 @@ func PlayerStatsToLineupPlayerProto(p *app.PlayerStats) *proto.LineupPlayer {
 	return &player
 }
 
+// Convert a domain PlayerStats struct into a proto PlayerStats struct
 func PlayerStatsToProto(p *app.PlayerStats) *proto.PlayerStats {
 	stats := proto.PlayerStats{
 		PlayerId: p.PlayerID,
@@ -88,8 +88,9 @@ func PlayerStatsToProto(p *app.PlayerStats) *proto.PlayerStats {
 	return &stats
 }
 
-func RoundToProto(r *app.Round) *pbRound.Round {
-	return &pbRound.Round{
+// Convert a domain Round struct into a proto Round struct
+func RoundToProto(r *app.Round) *proto.Round {
+	return &proto.Round{
 		Id:        int64(r.ID),
 		Name:      r.Name,
 		SeasonId:  int64(r.SeasonID),
@@ -98,8 +99,9 @@ func RoundToProto(r *app.Round) *pbRound.Round {
 	}
 }
 
-func SeasonToProto(s *app.Season) *pbSeason.Season {
-	var x pbSeason.Season
+// Convert a domain Season struct into a proto Season struct
+func SeasonToProto(s *app.Season) *proto.Season {
+	var x proto.Season
 	x.Id = int64(s.ID)
 	x.Name = s.Name
 	x.IsCurrent = &wrappers.BoolValue{
@@ -109,6 +111,7 @@ func SeasonToProto(s *app.Season) *pbSeason.Season {
 	return &x
 }
 
+// Convert a domain TeamStats struct into a proto TeamStats struct
 func TeamStatsToProto(t *app.TeamStats) *proto.TeamStats {
 	stats := proto.TeamStats{
 		TeamId: t.TeamID,
@@ -261,20 +264,22 @@ func TeamStatsToProto(t *app.TeamStats) *proto.TeamStats {
 	return &stats
 }
 
-func VenueToProto(v *app.Venue) *pbVenue.Venue {
+// Convert a domain Venue struct into a proto Venue struct
+func VenueToProto(v *app.Venue) *proto.Venue {
 	id := wrappers.Int64Value{
 		Value: int64(v.ID),
 	}
 	name := wrappers.StringValue{
 		Value: v.Name,
 	}
-	ven := pbVenue.Venue{}
+	ven := proto.Venue{}
 	ven.Id = &id
 	ven.Name = &name
 
 	return &ven
 }
 
+// Convert a domain Team and Result struct data into a proto MatchData struct
 func ToMatchData(home *app.Team, away *app.Team, res *app.Result) *proto.MatchData {
 	return &proto.MatchData{
 		HomeTeam: TeamToProto(home),
@@ -283,6 +288,7 @@ func ToMatchData(home *app.Team, away *app.Team, res *app.Result) *proto.MatchDa
 	}
 }
 
+// Convert a domain Result struct into a proto MatchStats struct
 func ToMatchStats(res *app.Result) *proto.MatchStats {
 	stats := proto.MatchStats{
 		HomeScore: &wrappers.Int32Value{
