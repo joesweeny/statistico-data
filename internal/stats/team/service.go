@@ -5,8 +5,8 @@ import (
 	"errors"
 	"fmt"
 	"github.com/statistico/statistico-data/internal/app"
+	proto2 "github.com/statistico/statistico-data/internal/app/proto"
 	"github.com/statistico/statistico-data/internal/proto"
-	pb "github.com/statistico/statistico-data/internal/proto/stats/team"
 	"log"
 )
 
@@ -16,7 +16,7 @@ type Service struct {
 	Logger            *log.Logger
 }
 
-func (s Service) GetTeamStatsForFixture(c context.Context, r *pb.FixtureRequest) (*pb.StatsResponse, error) {
+func (s Service) GetTeamStatsForFixture(c context.Context, r *proto2.FixtureRequest) (*proto2.TeamStatsResponse, error) {
 	fix, err := s.FixtureRepository.ByID(r.FixtureId)
 
 	if err != nil {
@@ -24,7 +24,7 @@ func (s Service) GetTeamStatsForFixture(c context.Context, r *pb.FixtureRequest)
 		return nil, errors.New(m)
 	}
 
-	res := pb.StatsResponse{}
+	res := proto2.TeamStatsResponse{}
 
 	home, err := s.TeamRepository.ByFixtureAndTeam(uint64(fix.ID), uint64(fix.HomeTeamID))
 

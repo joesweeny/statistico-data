@@ -5,7 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/statistico/statistico-data/internal/app"
-	pb "github.com/statistico/statistico-data/internal/proto/stats/player"
+	"github.com/statistico/statistico-data/internal/app/proto"
 	"log"
 )
 
@@ -15,7 +15,7 @@ type Service struct {
 	Logger           *log.Logger
 }
 
-func (s Service) GetPlayerStatsForFixture(c context.Context, r *pb.FixtureRequest) (*pb.StatsResponse, error) {
+func (s Service) GetPlayerStatsForFixture(c context.Context, r *proto.FixtureRequest) (*proto.PlayerStatsResponse, error) {
 	fix, err := s.FixtureRepo.ByID(r.FixtureId)
 
 	if err != nil {
@@ -23,7 +23,7 @@ func (s Service) GetPlayerStatsForFixture(c context.Context, r *pb.FixtureReques
 		return nil, errors.New(m)
 	}
 
-	res := pb.StatsResponse{}
+	res := proto.PlayerStatsResponse{}
 
 	home, err := s.PlayerRepository.ByFixtureAndTeam(fix.ID, fix.HomeTeamID)
 
@@ -48,7 +48,7 @@ func (s Service) GetPlayerStatsForFixture(c context.Context, r *pb.FixtureReques
 	return &res, nil
 }
 
-func (s Service) GetLineUpForFixture(c context.Context, r *pb.FixtureRequest) (*pb.LineupResponse, error) {
+func (s Service) GetLineUpForFixture(c context.Context, r *proto.FixtureRequest) (*proto.LineupResponse, error) {
 	fix, err := s.FixtureRepo.ByID(r.FixtureId)
 
 	if err != nil {
@@ -56,7 +56,7 @@ func (s Service) GetLineUpForFixture(c context.Context, r *pb.FixtureRequest) (*
 		return nil, errors.New(m)
 	}
 
-	res := pb.LineupResponse{}
+	res := proto.LineupResponse{}
 
 	home, err := s.PlayerRepository.ByFixtureAndTeam(uint64(fix.ID), uint64(fix.HomeTeamID))
 
@@ -66,7 +66,7 @@ func (s Service) GetLineUpForFixture(c context.Context, r *pb.FixtureRequest) (*
 		return nil, e
 	}
 
-	homeLineup := pb.Lineup{
+	homeLineup := proto.Lineup{
 		Start: HandleStartingLineupPlayers(home),
 		Bench: HandleSubstituteLineupPlayers(home),
 	}
@@ -81,7 +81,7 @@ func (s Service) GetLineUpForFixture(c context.Context, r *pb.FixtureRequest) (*
 		return nil, e
 	}
 
-	awayLineup := pb.Lineup{
+	awayLineup := proto.Lineup{
 		Start: HandleStartingLineupPlayers(away),
 		Bench: HandleSubstituteLineupPlayers(away),
 	}

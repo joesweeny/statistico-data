@@ -1,12 +1,9 @@
 package main
 
 import (
+	"github.com/statistico/statistico-data/internal/app/proto"
 	"github.com/statistico/statistico-data/internal/config"
 	"github.com/statistico/statistico-data/internal/container"
-	fix "github.com/statistico/statistico-data/internal/proto/fixture"
-	st "github.com/statistico/statistico-data/internal/proto/stats/player"
-	te "github.com/statistico/statistico-data/internal/proto/stats/team"
-	res "github.com/statistico/statistico-data/internal/proto/result"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 	"log"
@@ -24,10 +21,10 @@ func main() {
 
 	server := grpc.NewServer()
 
-	fix.RegisterFixtureServiceServer(server, app.FixtureService())
-	res.RegisterResultServiceServer(server, app.ResultService())
-	st.RegisterPlayerStatsServiceServer(server, app.PlayerStatsService())
-	te.RegisterTeamStatsServiceServer(server, app.TeamStatsService())
+	proto.RegisterFixtureServiceServer(server, app.FixtureService())
+	proto.RegisterResultServiceServer(server, app.ResultService())
+	proto.RegisterPlayerStatsServiceServer(server, app.PlayerStatsService())
+	proto.RegisterTeamStatsServiceServer(server, app.TeamStatsService())
 
 	reflection.Register(server)
 

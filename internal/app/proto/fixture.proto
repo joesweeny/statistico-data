@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package proto;
+
+import "google/protobuf/wrappers.proto";
+import "internal/app/proto/competition.proto";
+import "internal/app/proto/requests.proto";
+import "internal/app/proto/round.proto";
+import "internal/app/proto/season.proto";
+import "internal/app/proto/team.proto";
+import "internal/app/proto/venue.proto";
+
+service FixtureService {
+    rpc ListFixtures(DateRangeRequest) returns (stream Fixture) {}
+    rpc FixtureByID(FixtureRequest) returns (Fixture) {}
+}
+
+message DateRangeRequest {
+    // RFC3339 formatted string i.e. "2006-01-02T15:04:05Z07:00"
+    string date_from = 1;
+    // RFC3339 formatted string i.e "2006-01-02T15:04:05Z07:00"
+    string date_to = 2;
+}
+
+message Fixture {
+    int64 id = 1;
+    Competition competition = 2;
+    Season season = 3;
+    Round round = 4;
+    Team home_team = 5;
+    Team away_team = 6;
+    Venue venue = 7;
+    google.protobuf.Int64Value referee_id = 8;
+    int64 date_time = 9;
+}
