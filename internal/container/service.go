@@ -1,14 +1,13 @@
 package container
 
 import (
+	"github.com/statistico/statistico-data/internal/app/grpc"
 	"github.com/statistico/statistico-data/internal/fixture"
 	"github.com/statistico/statistico-data/internal/result"
-	"github.com/statistico/statistico-data/internal/stats/player"
-	"github.com/statistico/statistico-data/internal/stats/team"
 )
 
-func (c Container) FixtureService() *fixture.Service {
-	return &fixture.Service{
+func (c Container) FixtureService() *grpc.FixtureService {
+	return &grpc.FixtureService{
 		FixtureRepo: c.FixtureRepository(),
 		Handler: fixture.Handler{
 			CompetitionRepo: c.CompetitionRepository(),
@@ -22,8 +21,8 @@ func (c Container) FixtureService() *fixture.Service {
 	}
 }
 
-func (c Container) ResultService() *result.Service {
-	return &result.Service{
+func (c Container) ResultService() *grpc.ResultService {
+	return &grpc.ResultService{
 		FixtureRepo: c.FixtureRepository(),
 		ResultRepo:  c.ResultRepository(),
 		Handler: result.Handler{
@@ -38,16 +37,16 @@ func (c Container) ResultService() *result.Service {
 	}
 }
 
-func (c Container) PlayerStatsService() *player_stats.Service {
-	return &player_stats.Service{
+func (c Container) PlayerStatsService() *grpc.PlayerStatsService {
+	return &grpc.PlayerStatsService{
 		PlayerRepository: c.PlayerStatsRepository(),
 		FixtureRepo:      c.FixtureRepository(),
 		Logger:           c.Logger,
 	}
 }
 
-func (c Container) TeamStatsService() *team_stats.Service {
-	return &team_stats.Service{
+func (c Container) TeamStatsService() *grpc.TeamStatsService {
+	return &grpc.TeamStatsService{
 		TeamRepository:    c.TeamStatsRepository(),
 		FixtureRepository: c.FixtureRepository(),
 		Logger:            c.Logger,

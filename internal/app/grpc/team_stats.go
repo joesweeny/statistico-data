@@ -5,7 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/statistico/statistico-data/internal/app"
-	"github.com/statistico/statistico-data/internal/app/convert"
+	"github.com/statistico/statistico-data/internal/app/converter"
 	"github.com/statistico/statistico-data/internal/app/proto"
 	"log"
 )
@@ -34,7 +34,7 @@ func (s TeamStatsService) GetTeamStatsForFixture(c context.Context, r *proto.Fix
 		return nil, e
 	}
 
-	res.HomeTeam = convert.TeamStatsToProto(home)
+	res.HomeTeam = converter.TeamStatsToProto(home)
 
 	away, err := s.TeamRepository.ByFixtureAndTeam(uint64(fix.ID), uint64(fix.AwayTeamID))
 
@@ -44,7 +44,7 @@ func (s TeamStatsService) GetTeamStatsForFixture(c context.Context, r *proto.Fix
 		return nil, e
 	}
 
-	res.AwayTeam = convert.TeamStatsToProto(away)
+	res.AwayTeam = converter.TeamStatsToProto(away)
 
 	return &res, nil
 }

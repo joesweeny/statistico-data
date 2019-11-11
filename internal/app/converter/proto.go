@@ -1,4 +1,4 @@
-package convert
+package converter
 
 import (
 	"github.com/golang/protobuf/ptypes/wrappers"

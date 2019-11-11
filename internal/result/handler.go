@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/golang/protobuf/ptypes/wrappers"
 	"github.com/statistico/statistico-data/internal/app"
-	"github.com/statistico/statistico-data/internal/app/convert"
+	"github.com/statistico/statistico-data/internal/app/converter"
 	"github.com/statistico/statistico-data/internal/app/proto"
 	"log"
 )
@@ -53,10 +53,10 @@ func (h Handler) HandleResult(f *app.Fixture, r *app.Result) (*proto.Result, err
 
 	p := proto.Result{
 		Id:          int64(r.FixtureID),
-		Competition: convert.CompetitionToProto(c),
-		Season:      convert.SeasonToProto(s),
+		Competition: converter.CompetitionToProto(c),
+		Season:      converter.SeasonToProto(s),
 		DateTime:    f.Date.Unix(),
-		MatchData:   convert.ToMatchData(home, away, r),
+		MatchData:   converter.ToMatchData(home, away, r),
 	}
 
 	if f.RoundID != nil {
@@ -67,7 +67,7 @@ func (h Handler) HandleResult(f *app.Fixture, r *app.Result) (*proto.Result, err
 			h.Logger.Println(e)
 			p.Round = nil
 		} else {
-			p.Round = convert.RoundToProto(rd)
+			p.Round = converter.RoundToProto(rd)
 		}
 	}
 
@@ -79,7 +79,7 @@ func (h Handler) HandleResult(f *app.Fixture, r *app.Result) (*proto.Result, err
 			h.Logger.Println(e)
 			p.Venue = nil
 		} else {
-			p.Venue = convert.VenueToProto(v)
+			p.Venue = converter.VenueToProto(v)
 		}
 	}
 
