@@ -2,6 +2,7 @@ package handler
 
 import (
 	"errors"
+	"github.com/sirupsen/logrus/hooks/test"
 	"github.com/statistico/statistico-data/internal/app"
 	m "github.com/statistico/statistico-data/internal/app/mock"
 	"github.com/stretchr/testify/assert"
@@ -11,6 +12,7 @@ import (
 )
 
 func TestHandleFixture(t *testing.T) {
+	logger, _ := test.NewNullLogger()
 	teamRepo := new(m.TeamRepository)
 	compRepo := new(m.CompetitionRepository)
 	roundRepo := new(m.RoundRepository)
@@ -22,7 +24,7 @@ func TestHandleFixture(t *testing.T) {
 		RoundRepo:       roundRepo,
 		SeasonRepo:      seasonRepo,
 		VenueRepo:       venueRepo,
-		Logger:          log.New(ioutil.Discard, "Error: ", 0),
+		Logger:          logger,
 	}
 
 	t.Run("hydrates new proto fixture struct", func(t *testing.T) {

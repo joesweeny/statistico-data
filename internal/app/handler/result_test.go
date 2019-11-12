@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"github.com/sirupsen/logrus/hooks/test"
 	"github.com/statistico/statistico-data/internal/app"
 	m "github.com/statistico/statistico-data/internal/app/mock"
 	"github.com/stretchr/testify/assert"
@@ -9,6 +10,7 @@ import (
 )
 
 func TestHandleResult(t *testing.T) {
+	logger, _ := test.NewNullLogger()
 	teamRepo := new(m.TeamRepository)
 	compRepo := new(m.CompetitionRepository)
 	roundRepo := new(m.RoundRepository)
@@ -20,6 +22,7 @@ func TestHandleResult(t *testing.T) {
 		SeasonRepo:      seasonRepo,
 		TeamRepo:        teamRepo,
 		VenueRepo:       venueRepo,
+		Logger: logger,
 	}
 
 	t.Run("hydrates new proto result struct", func(t *testing.T) {
