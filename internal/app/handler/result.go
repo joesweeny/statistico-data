@@ -3,10 +3,10 @@ package handler
 import (
 	"fmt"
 	"github.com/golang/protobuf/ptypes/wrappers"
+	"github.com/sirupsen/logrus"
 	"github.com/statistico/statistico-data/internal/app"
 	"github.com/statistico/statistico-data/internal/app/converter"
 	"github.com/statistico/statistico-data/internal/app/proto"
-	"log"
 )
 
 type ResultHandler struct {
@@ -15,7 +15,7 @@ type ResultHandler struct {
 	SeasonRepo      app.SeasonRepository
 	TeamRepo        app.TeamRepository
 	VenueRepo       app.VenueRepository
-	Logger          *log.Logger
+	Logger *logrus.Logger
 }
 
 func (h ResultHandler) HandleResult(f *app.Fixture, r *app.Result) (*proto.Result, error) {

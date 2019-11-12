@@ -4,17 +4,17 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/sirupsen/logrus"
 	"github.com/statistico/statistico-data/internal/app"
 	"github.com/statistico/statistico-data/internal/app/handler"
 	"github.com/statistico/statistico-data/internal/app/proto"
-	"log"
 	"time"
 )
 
 type FixtureService struct {
 	FixtureRepo app.FixtureRepository
 	Handler handler.FixtureHandler
-	Logger *log.Logger
+	Logger *logrus.Logger
 }
 
 func (s *FixtureService) ListFixtures(r *proto.DateRangeRequest, stream proto.FixtureService_ListFixturesServer) error {

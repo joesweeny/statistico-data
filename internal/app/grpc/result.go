@@ -3,10 +3,10 @@ package grpc
 import (
 	"errors"
 	"fmt"
+	"github.com/sirupsen/logrus"
 	"github.com/statistico/statistico-data/internal/app"
 	"github.com/statistico/statistico-data/internal/app/handler"
 	"github.com/statistico/statistico-data/internal/app/proto"
-	"log"
 	"time"
 )
 
@@ -18,7 +18,7 @@ type ResultService struct {
 	FixtureRepo app.FixtureRepository
 	ResultRepo  app.ResultRepository
 	Handler handler.ResultHandler
-	Logger *log.Logger
+	Logger *logrus.Logger
 }
 
 func (s ResultService) GetHistoricalResultsForFixture(r *proto.HistoricalResultRequest, stream proto.ResultService_GetHistoricalResultsForFixtureServer) error {

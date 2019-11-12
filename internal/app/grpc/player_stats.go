@@ -4,16 +4,16 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/sirupsen/logrus"
 	"github.com/statistico/statistico-data/internal/app"
 	"github.com/statistico/statistico-data/internal/app/handler"
 	"github.com/statistico/statistico-data/internal/app/proto"
-	"log"
 )
 
 type PlayerStatsService struct {
 	PlayerRepository app.PlayerStatsRepository
 	FixtureRepo      app.FixtureRepository
-	Logger           *log.Logger
+	Logger *logrus.Logger
 }
 
 func (s PlayerStatsService) GetPlayerStatsForFixture(c context.Context, r *proto.FixtureRequest) (*proto.PlayerStatsResponse, error) {

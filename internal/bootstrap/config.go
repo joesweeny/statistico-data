@@ -1,13 +1,33 @@
-package config
+package bootstrap
 
-import "os"
+import (
+	"os"
+)
 
 type Config struct {
 	Database
 	Services
 }
 
-func GetConfig() *Config {
+type Database struct {
+	Driver   string
+	Host     string
+	Port     string
+	User     string
+	Password string
+	Name     string
+}
+
+type Services struct {
+	SportsMonks
+}
+
+type SportsMonks struct {
+	ApiKey  string
+}
+
+
+func BuildConfig() *Config {
 	config := Config{}
 
 	config.Database = Database{
@@ -19,7 +39,7 @@ func GetConfig() *Config {
 		Name:     os.Getenv("DB_NAME"),
 	}
 
-	config.Services.SportsMonks = SportsMonks{
+	config.SportsMonks = SportsMonks{
 		ApiKey:  os.Getenv("SPORTMONKS_API_KEY"),
 	}
 

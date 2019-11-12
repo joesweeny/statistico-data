@@ -2,15 +2,15 @@ package handler
 
 import (
 	"errors"
+	"github.com/sirupsen/logrus/hooks/test"
 	"github.com/statistico/statistico-data/internal/app"
 	m "github.com/statistico/statistico-data/internal/app/mock"
 	"github.com/stretchr/testify/assert"
-	"io/ioutil"
-	"log"
 	"testing"
 )
 
 func TestHandleFixture(t *testing.T) {
+	logger, _ := test.NewNullLogger()
 	teamRepo := new(m.TeamRepository)
 	compRepo := new(m.CompetitionRepository)
 	roundRepo := new(m.RoundRepository)
@@ -22,7 +22,7 @@ func TestHandleFixture(t *testing.T) {
 		RoundRepo:       roundRepo,
 		SeasonRepo:      seasonRepo,
 		VenueRepo:       venueRepo,
-		Logger:          log.New(ioutil.Discard, "Error: ", 0),
+		Logger:          logger,
 	}
 
 	t.Run("hydrates new proto fixture struct", func(t *testing.T) {
@@ -105,6 +105,7 @@ func TestHandleFixture(t *testing.T) {
 	})
 
 	t.Run("error is returned if season not found", func(t *testing.T) {
+		logger, _ := test.NewNullLogger()
 		teamRepo := new(m.TeamRepository)
 		compRepo := new(m.CompetitionRepository)
 		roundRepo := new(m.RoundRepository)
@@ -116,7 +117,7 @@ func TestHandleFixture(t *testing.T) {
 			RoundRepo:       roundRepo,
 			SeasonRepo:      seasonRepo,
 			VenueRepo:       venueRepo,
-			Logger:          log.New(ioutil.Discard, "Error: ", 0),
+			Logger:          logger,
 		}
 
 		ven := uint64(87)

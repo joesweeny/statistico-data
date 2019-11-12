@@ -1,4 +1,4 @@
-package container
+package bootstrap
 
 import (
 	"github.com/statistico/statistico-data/internal/app/process"
@@ -12,7 +12,7 @@ func (c Container) CompetitionProcessor() *process.CompetitionProcessor {
 	return process.NewCompetitionProcessor(
 		c.CompetitionRepository(),
 		c.CompetitionRequester(),
-		c.NewLogger,
+		c.Logger,
 	)
 }
 
@@ -20,7 +20,7 @@ func (c Container) CountryProcessor() *process.CountryProcessor {
 	return process.NewCountryProcessor(
 		c.CountryRepository(),
 		c.CountryRequester(),
-		c.NewLogger,
+		c.Logger,
 	)
 }
 
@@ -30,7 +30,7 @@ func (c Container) EventProcessor() *process.EventProcessor {
 		c.FixtureRepository(),
 		c.EventRequester(),
 		c.Clock,
-		c.NewLogger,
+		c.Logger,
 	)
 }
 
@@ -39,7 +39,7 @@ func (c Container) FixtureProcessor() *process.FixtureProcessor {
 		c.FixtureRepository(),
 		c.SeasonRepository(),
 		c.FixtureRequester(),
-		c.NewLogger,
+		c.Logger,
 	)
 }
 
@@ -48,7 +48,7 @@ func (c Container) PlayerProcessor() *process.PlayerProcessor {
 		c.PlayerRepository(),
 		c.SquadRepository(),
 		c.PlayerRequester(),
-		c.NewLogger,
+		c.Logger,
 	)
 }
 
@@ -58,7 +58,7 @@ func (c Container) PlayerStatsProcessor() *process.PlayerStatsProcessor {
 		c.FixtureRepository(),
 		c.PlayerStatsRequester(),
 		c.Clock,
-		c.NewLogger,
+		c.Logger,
 	)
 }
 
@@ -68,7 +68,7 @@ func (c Container) ResultProcessor() *process.ResultProcessor {
 		c.FixtureRepository(),
 		c.ResultRequester(),
 		c.Clock,
-		c.NewLogger,
+		c.Logger,
 	)
 }
 
@@ -77,7 +77,7 @@ func (c Container) RoundProcessor() *process.RoundProcessor {
 		c.RoundRepository(),
 		c.SeasonRepository(),
 		c.RoundRequester(),
-		c.NewLogger,
+		c.Logger,
 	)
 }
 
@@ -85,7 +85,7 @@ func (c Container) SeasonProcessor() *process.SeasonProcessor {
 	return process.NewSeasonProcessor(
 		c.SeasonRepository(),
 		c.SeasonRequester(),
-		c.NewLogger,
+		c.Logger,
 	)
 }
 
@@ -94,7 +94,7 @@ func (c Container) SquadProcessor() *process.SquadProcessor {
 		c.SquadRepository(),
 		c.SeasonRepository(),
 		c.SquadRequester(),
-		c.NewLogger,
+		c.Logger,
 	)
 }
 
@@ -103,7 +103,7 @@ func (c Container) TeamProcessor() *process.TeamProcessor {
 		c.TeamRepository(),
 		c.SeasonRepository(),
 		c.TeamRequester(),
-		c.NewLogger,
+		c.Logger,
 	)
 }
 
@@ -113,7 +113,7 @@ func (c Container) TeamStatsProcessor() *process.TeamStatsProcessor {
 		c.FixtureRepository(),
 		c.TeamStatsRequester(),
 		c.Clock,
-		c.NewLogger,
+		c.Logger,
 	)
 }
 
@@ -122,6 +122,6 @@ func (c Container) VenueProcessor() *process.VenueProcessor {
 		c.VenueRepository(),
 		c.SeasonRepository(),
 		c.VenueRequester(),
-		c.NewLogger,
+		c.Logger,
 	)
 }
