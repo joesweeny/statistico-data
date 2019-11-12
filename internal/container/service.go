@@ -2,14 +2,13 @@ package container
 
 import (
 	"github.com/statistico/statistico-data/internal/app/grpc"
-	"github.com/statistico/statistico-data/internal/fixture"
-	"github.com/statistico/statistico-data/internal/result"
+	"github.com/statistico/statistico-data/internal/app/handler"
 )
 
 func (c Container) FixtureService() *grpc.FixtureService {
 	return &grpc.FixtureService{
 		FixtureRepo: c.FixtureRepository(),
-		Handler: fixture.Handler{
+		Handler: handler.FixtureHandler{
 			CompetitionRepo: c.CompetitionRepository(),
 			RoundRepo:       c.RoundRepository(),
 			SeasonRepo:      c.SeasonRepository(),
@@ -25,7 +24,7 @@ func (c Container) ResultService() *grpc.ResultService {
 	return &grpc.ResultService{
 		FixtureRepo: c.FixtureRepository(),
 		ResultRepo:  c.ResultRepository(),
-		Handler: result.Handler{
+		Handler: handler.ResultHandler{
 			CompetitionRepo: c.CompetitionRepository(),
 			RoundRepo:       c.RoundRepository(),
 			SeasonRepo:      c.SeasonRepository(),

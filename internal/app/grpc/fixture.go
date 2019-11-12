@@ -5,15 +5,15 @@ import (
 	"errors"
 	"fmt"
 	"github.com/statistico/statistico-data/internal/app"
+	"github.com/statistico/statistico-data/internal/app/handler"
 	"github.com/statistico/statistico-data/internal/app/proto"
-	"github.com/statistico/statistico-data/internal/fixture"
 	"log"
 	"time"
 )
 
 type FixtureService struct {
 	FixtureRepo app.FixtureRepository
-	fixture.Handler
+	Handler handler.FixtureHandler
 	Logger *log.Logger
 }
 
@@ -39,7 +39,7 @@ func (s *FixtureService) ListFixtures(r *proto.DateRangeRequest, stream proto.Fi
 	}
 
 	for _, fix := range fixtures {
-		f, err := s.HandleFixture(&fix)
+		f, err := s.Handler.HandleFixture(&fix)
 
 		if err != nil {
 			s.Logger.Printf("Error hydrating Fixture. Error: %s", err.Error())
@@ -63,7 +63,7 @@ func (s *FixtureService) FixtureByID(c context.Context, r *proto.FixtureRequest)
 		return nil, errors.New(m)
 	}
 
-	f, err := s.HandleFixture(fix)
+	f, err := s.Handler.HandleFixture(fix)
 
 	if err != nil {
 		s.Logger.Printf("Error hydrating Fixture. Error: %s", err.Error())

@@ -1,4 +1,4 @@
-package result
+package handler
 
 import (
 	"fmt"
@@ -9,7 +9,7 @@ import (
 	"log"
 )
 
-type Handler struct {
+type ResultHandler struct {
 	CompetitionRepo app.CompetitionRepository
 	RoundRepo       app.RoundRepository
 	SeasonRepo      app.SeasonRepository
@@ -18,7 +18,7 @@ type Handler struct {
 	Logger          *log.Logger
 }
 
-func (h Handler) HandleResult(f *app.Fixture, r *app.Result) (*proto.Result, error) {
+func (h ResultHandler) HandleResult(f *app.Fixture, r *app.Result) (*proto.Result, error) {
 	s, err := h.SeasonRepo.ByID(f.SeasonID)
 
 	if err != nil {

@@ -4,8 +4,8 @@ import (
 	"errors"
 	"fmt"
 	"github.com/statistico/statistico-data/internal/app"
+	"github.com/statistico/statistico-data/internal/app/handler"
 	"github.com/statistico/statistico-data/internal/app/proto"
-	"github.com/statistico/statistico-data/internal/result"
 	"log"
 	"time"
 )
@@ -17,7 +17,7 @@ var ErrTimeParse = errors.New("unable to parse date provided in Request")
 type ResultService struct {
 	FixtureRepo app.FixtureRepository
 	ResultRepo  app.ResultRepository
-	result.Handler
+	Handler handler.ResultHandler
 	Logger *log.Logger
 }
 
@@ -86,7 +86,7 @@ func (s ResultService) sendResults(f []app.Fixture, stream proto.ResultService_G
 			return fmt.Errorf("fixture with ID %d does not exist", fix.ID)
 		}
 
-		x, err := s.HandleResult(&fix, res)
+		x, err := s.Handler.HandleResult(&fix, res)
 
 		if err != nil {
 			s.Logger.Printf("Error hydrating Result. Error: %s", err.Error())
