@@ -16,7 +16,7 @@ func main() {
 		log.Fatalf("Failed to listen: %v", err)
 	}
 
-	app := bootstrap.BuildContainer(bootstrap.GetConfig())
+	app := bootstrap.BuildContainer(bootstrap.BuildConfig())
 
 	server := grpc.NewServer()
 

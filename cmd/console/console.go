@@ -12,7 +12,7 @@ var command = flag.String("command", "", "Provide the command name to process")
 var option = flag.String("option", "", "Optional parameter to pass to command")
 
 func main() {
-	app := bootstrap.BuildContainer(bootstrap.GetConfig())
+	app := bootstrap.BuildContainer(bootstrap.BuildConfig())
 
 	flag.Parse()
 

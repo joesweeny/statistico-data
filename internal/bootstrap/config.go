@@ -27,7 +27,7 @@ type SportsMonks struct {
 }
 
 
-func GetConfig() *Config {
+func BuildConfig() *Config {
 	config := Config{}
 
 	config.Database = Database{
