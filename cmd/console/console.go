@@ -3,8 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/statistico/statistico-data/internal/config"
-	"github.com/statistico/statistico-data/internal/container"
+	"github.com/statistico/statistico-data/internal/bootstrap"
 	"os"
 	"time"
 )
@@ -13,11 +12,11 @@ var command = flag.String("command", "", "Provide the command name to process")
 var option = flag.String("option", "", "Optional parameter to pass to command")
 
 func main() {
-	app := container.Bootstrap(config.GetConfig())
+	app := bootstrap.BuildContainer(bootstrap.GetConfig())
 
 	flag.Parse()
 
-	var processor container.Processor
+	var processor bootstrap.Processor
 
 	switch *command {
 	case Competition:

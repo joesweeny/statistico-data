@@ -1,13 +1,11 @@
-package container
+package bootstrap
 
 import (
 	"database/sql"
 	"fmt"
 	"github.com/jonboulle/clockwork"
 	"github.com/sirupsen/logrus"
-	"github.com/statistico/statistico-data/internal/config"
 	spClient "github.com/statistico/statistico-sportmonks-go-client"
-	"log"
 	"net"
 	"net/http"
 	"os"
@@ -16,14 +14,13 @@ import (
 
 type Container struct {
 	Clock               clockwork.Clock
-	Config              *config.Config
+	Config              *Config
 	Database            *sql.DB
-	Logger              *log.Logger
-	NewLogger           *logrus.Logger
+	Logger           *logrus.Logger
 	SportMonksClient    *spClient.HTTPClient
 }
 
-func Bootstrap(config *config.Config) *Container {
+func BuildContainer(config *Config) *Container {
 	c := Container{
 		Config: config,
 	}
@@ -31,13 +28,12 @@ func Bootstrap(config *config.Config) *Container {
 	c.Clock = clock()
 	c.Database = databaseConnection(config)
 	c.Logger = logger()
-	c.NewLogger = newLogger()
 	c.SportMonksClient = sportMonksClient(config)
 
 	return &c
 }
 
-func databaseConnection(config *config.Config) *sql.DB {
+func databaseConnection(config *Config) *sql.DB {
 	db := config.Database
 
 	dsn := "host=%s port=%s user=%s " +
@@ -57,7 +53,7 @@ func databaseConnection(config *config.Config) *sql.DB {
 	return conn
 }
 
-func sportMonksClient(config *config.Config) *spClient.HTTPClient {
+func sportMonksClient(config *Config) *spClient.HTTPClient {
 	s := config.Services.SportsMonks
 
 	c := spClient.NewDefaultHTTPClient(s.ApiKey)
@@ -79,7 +75,7 @@ func sportMonksClient(config *config.Config) *spClient.HTTPClient {
 	return c
 }
 
-func newLogger() *logrus.Logger {
+func logger() *logrus.Logger {
 	logger := logrus.New()
 	logger.SetFormatter(&logrus.JSONFormatter{})
 	logger.SetOutput(os.Stdout)
@@ -88,8 +84,4 @@ func newLogger() *logrus.Logger {
 
 func clock() clockwork.Clock {
 	return clockwork.NewRealClock()
-}
-
-func logger() *log.Logger {
-	return log.New(os.Stdout, fmt.Sprintf("%s : Error: ", time.Now().Format(time.RFC3339)), 0)
 }

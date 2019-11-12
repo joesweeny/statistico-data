@@ -1,4 +1,4 @@
-package container
+package bootstrap
 
 import (
 	"github.com/statistico/statistico-data/internal/app/grpc"

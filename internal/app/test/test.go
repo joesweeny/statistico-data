@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"github.com/jonboulle/clockwork"
-	"github.com/statistico/statistico-data/internal/config"
+	"github.com/statistico/statistico-data/internal/bootstrap"
 	"testing"
 	"time"
 )
@@ -15,7 +15,7 @@ var (
 )
 
 func GetConnection(t *testing.T, table string) (*sql.DB, func()) {
-	db := config.GetConfig().Database
+	db := bootstrap.GetConfig().Database
 
 	dsn := "host=%s port=%s user=%s " + "password=%s dbname=%s sslmode=disable"
 

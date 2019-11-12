@@ -2,8 +2,7 @@ package main
 
 import (
 	"github.com/statistico/statistico-data/internal/app/proto"
-	"github.com/statistico/statistico-data/internal/config"
-	"github.com/statistico/statistico-data/internal/container"
+	"github.com/statistico/statistico-data/internal/bootstrap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 	"log"
@@ -17,7 +16,7 @@ func main() {
 		log.Fatalf("Failed to listen: %v", err)
 	}
 
-	app := container.Bootstrap(config.GetConfig())
+	app := bootstrap.BuildContainer(bootstrap.GetConfig())
 
 	server := grpc.NewServer()
 
