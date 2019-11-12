@@ -1,4 +1,4 @@
-package fixture
+package handler
 
 import (
 	"errors"
@@ -8,7 +8,6 @@ import (
 	"io/ioutil"
 	"log"
 	"testing"
-	"time"
 )
 
 func TestHandleFixture(t *testing.T) {
@@ -17,7 +16,7 @@ func TestHandleFixture(t *testing.T) {
 	roundRepo := new(m.RoundRepository)
 	seasonRepo := new(m.SeasonRepository)
 	venueRepo := new(m.VenueRepository)
-	handler := Handler{
+	handler := FixtureHandler{
 		TeamRepo:        teamRepo,
 		CompetitionRepo: compRepo,
 		RoundRepo:       roundRepo,
@@ -111,7 +110,7 @@ func TestHandleFixture(t *testing.T) {
 		roundRepo := new(m.RoundRepository)
 		seasonRepo := new(m.SeasonRepository)
 		venueRepo := new(m.VenueRepository)
-		handler := Handler{
+		handler := FixtureHandler{
 			TeamRepo:        teamRepo,
 			CompetitionRepo: compRepo,
 			RoundRepo:       roundRepo,
@@ -141,73 +140,4 @@ func TestHandleFixture(t *testing.T) {
 			t.Fatalf("Test failed, expected %s, got nil", errors.New("not found"))
 		}
 	})
-}
-
-func newFixture(id uint64) *app.Fixture {
-	var roundId = uint64(165789)
-
-	return &app.Fixture{
-		ID:         id,
-		SeasonID:   uint64(14567),
-		RoundID:    &roundId,
-		HomeTeamID: 451,
-		AwayTeamID: 924,
-		Date:       time.Unix(1548086929, 0),
-		CreatedAt:  time.Unix(1546965200, 0),
-		UpdatedAt:  time.Unix(1546965200, 0),
-	}
-}
-
-func newCompetition() *app.Competition {
-	return &app.Competition{
-		ID:        4,
-		Name:      "Premier League",
-		CountryID: 462,
-		IsCup:     false,
-		CreatedAt: time.Unix(1546965200, 0),
-		UpdatedAt: time.Unix(1546965200, 0),
-	}
-}
-
-func newSeason() *app.Season {
-	return &app.Season{
-		ID:            uint64(14567),
-		Name:          "2018-2019",
-		CompetitionID: uint64(45),
-		IsCurrent:     true,
-		CreatedAt:     time.Unix(1546965200, 0),
-		UpdatedAt:     time.Unix(1546965200, 0),
-	}
-}
-
-func newTeam(id int, name string) *app.Team {
-	return &app.Team{
-		ID:           uint64(id),
-		Name:         name,
-		VenueID:      uint64(560),
-		NationalTeam: false,
-		CreatedAt:    time.Unix(1546965200, 0),
-		UpdatedAt:    time.Unix(1546965200, 0),
-	}
-}
-
-func newVenue() *app.Venue {
-	return &app.Venue{
-		ID:        uint64(87),
-		Name:      "London Stadium",
-		CreatedAt: time.Unix(1548086929, 0),
-		UpdatedAt: time.Unix(1548086929, 0),
-	}
-}
-
-func newRound() *app.Round {
-	return &app.Round{
-		ID:        165789,
-		Name:      "18",
-		SeasonID:  14567,
-		StartDate: time.Unix(1548086929, 0),
-		EndDate:   time.Unix(1548086929, 0),
-		CreatedAt: time.Unix(1548086929, 0),
-		UpdatedAt: time.Unix(1548086929, 0),
-	}
 }

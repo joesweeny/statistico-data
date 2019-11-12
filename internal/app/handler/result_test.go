@@ -1,4 +1,4 @@
-package result
+package handler
 
 import (
 	"github.com/statistico/statistico-data/internal/app"
@@ -14,7 +14,7 @@ func TestHandleResult(t *testing.T) {
 	roundRepo := new(m.RoundRepository)
 	seasonRepo := new(m.SeasonRepository)
 	venueRepo := new(m.VenueRepository)
-	handler := Handler{
+	handler := ResultHandler{
 		CompetitionRepo: compRepo,
 		RoundRepo:       roundRepo,
 		SeasonRepo:      seasonRepo,
@@ -47,7 +47,7 @@ func TestHandleResult(t *testing.T) {
 		venueRepo.On("GetById", uint64(87)).Return(newVenue(), nil)
 		roundRepo.On("ByID", uint64(165789)).Return(newRound(), nil)
 
-		proto, err := handler.HandleResult(newFixture(), &res)
+		proto, err := handler.HandleResult(newFixture(99), &res)
 
 		if err != nil {
 			t.Fatalf("Test failed, expected nil, got %s", err.Error())
@@ -128,18 +128,18 @@ func newTeam(id int, name string) *app.Team {
 
 func newVenue() *app.Venue {
 	return &app.Venue{
-		ID:        87,
+		ID:        uint64(87),
 		Name:      "London Stadium",
 		CreatedAt: time.Unix(1548086929, 0),
 		UpdatedAt: time.Unix(1548086929, 0),
 	}
 }
 
-func newFixture() *app.Fixture {
+func newFixture(id uint64) *app.Fixture {
 	var roundId = uint64(165789)
 
 	return &app.Fixture{
-		ID:         92,
+		ID:         id,
 		SeasonID:   14567,
 		RoundID:    &roundId,
 		HomeTeamID: 451,

@@ -1,4 +1,4 @@
-package player_stats
+package handler
 
 import (
 	"github.com/statistico/statistico-data/internal/app"

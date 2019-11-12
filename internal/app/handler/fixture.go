@@ -1,15 +1,15 @@
-package fixture
+package handler
 
 import (
 	"fmt"
 	"github.com/golang/protobuf/ptypes/wrappers"
 	"github.com/statistico/statistico-data/internal/app"
-	proto2 "github.com/statistico/statistico-data/internal/app/proto"
-	"github.com/statistico/statistico-data/internal/proto"
+	"github.com/statistico/statistico-data/internal/app/converter"
+	"github.com/statistico/statistico-data/internal/app/proto"
 	"log"
 )
 
-type Handler struct {
+type FixtureHandler struct {
 	CompetitionRepo app.CompetitionRepository
 	RoundRepo       app.RoundRepository
 	SeasonRepo      app.SeasonRepository
@@ -18,7 +18,7 @@ type Handler struct {
 	Logger          *log.Logger
 }
 
-func (h Handler) HandleFixture(f *app.Fixture) (*proto2.Fixture, error) {
+func (h FixtureHandler) HandleFixture(f *app.Fixture) (*proto.Fixture, error) {
 	s, err := h.SeasonRepo.ByID(uint64(f.SeasonID))
 
 	if err != nil {
@@ -51,12 +51,12 @@ func (h Handler) HandleFixture(f *app.Fixture) (*proto2.Fixture, error) {
 		return nil, e
 	}
 
-	p := proto2.Fixture{
+	p := proto.Fixture{
 		Id:          int64(f.ID),
-		Competition: proto.CompetitionToProto(c),
-		Season:      proto.SeasonToProto(s),
-		HomeTeam:    proto.TeamToProto(home),
-		AwayTeam:    proto.TeamToProto(away),
+		Competition: converter.CompetitionToProto(c),
+		Season:      converter.SeasonToProto(s),
+		HomeTeam:    converter.TeamToProto(home),
+		AwayTeam:    converter.TeamToProto(away),
 		DateTime:    f.Date.Unix(),
 	}
 
@@ -68,7 +68,7 @@ func (h Handler) HandleFixture(f *app.Fixture) (*proto2.Fixture, error) {
 			h.Logger.Println(e.Error())
 			p.Round = nil
 		} else {
-			p.Round = proto.RoundToProto(rd)
+			p.Round = converter.RoundToProto(rd)
 		}
 	}
 
@@ -80,7 +80,7 @@ func (h Handler) HandleFixture(f *app.Fixture) (*proto2.Fixture, error) {
 			h.Logger.Println(e.Error())
 			p.Venue = nil
 		} else {
-			p.Venue = proto.VenueToProto(v)
+			p.Venue = converter.VenueToProto(v)
 		}
 	}
 

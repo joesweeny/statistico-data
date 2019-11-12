@@ -5,8 +5,8 @@ import (
 	"errors"
 	"fmt"
 	"github.com/statistico/statistico-data/internal/app"
+	"github.com/statistico/statistico-data/internal/app/handler"
 	"github.com/statistico/statistico-data/internal/app/proto"
-	"github.com/statistico/statistico-data/internal/stats/player"
 	"log"
 )
 
@@ -34,7 +34,7 @@ func (s PlayerStatsService) GetPlayerStatsForFixture(c context.Context, r *proto
 		return nil, e
 	}
 
-	res.HomeTeam = player_stats.HandlePlayerStats(home)
+	res.HomeTeam = handler.HandlePlayerStats(home)
 
 	away, err := s.PlayerRepository.ByFixtureAndTeam(uint64(fix.ID), uint64(fix.AwayTeamID))
 
@@ -44,7 +44,7 @@ func (s PlayerStatsService) GetPlayerStatsForFixture(c context.Context, r *proto
 		return nil, e
 	}
 
-	res.AwayTeam = player_stats.HandlePlayerStats(away)
+	res.AwayTeam = handler.HandlePlayerStats(away)
 
 	return &res, nil
 }
@@ -68,8 +68,8 @@ func (s PlayerStatsService) GetLineUpForFixture(c context.Context, r *proto.Fixt
 	}
 
 	homeLineup := proto.Lineup{
-		Start: player_stats.HandleStartingLineupPlayers(home),
-		Bench: player_stats.HandleSubstituteLineupPlayers(home),
+		Start: handler.HandleStartingLineupPlayers(home),
+		Bench: handler.HandleSubstituteLineupPlayers(home),
 	}
 
 	res.HomeTeam = &homeLineup
@@ -83,8 +83,8 @@ func (s PlayerStatsService) GetLineUpForFixture(c context.Context, r *proto.Fixt
 	}
 
 	awayLineup := proto.Lineup{
-		Start: player_stats.HandleStartingLineupPlayers(away),
-		Bench: player_stats.HandleSubstituteLineupPlayers(away),
+		Start: handler.HandleStartingLineupPlayers(away),
+		Bench: handler.HandleSubstituteLineupPlayers(away),
 	}
 
 	res.AwayTeam = &awayLineup
