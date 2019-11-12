@@ -15,7 +15,7 @@ var (
 )
 
 func GetConnection(t *testing.T, table string) (*sql.DB, func()) {
-	db := bootstrap.GetConfig().Database
+	db := bootstrap.BuildConfig().Database
 
 	dsn := "host=%s port=%s user=%s " + "password=%s dbname=%s sslmode=disable"
 
