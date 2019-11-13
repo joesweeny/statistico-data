@@ -1,6 +1,19 @@
 version: "3.5"
 services:
 
+  api:
+    image: joesweeny/statisticodata_api:$RELEASE
+    environment:
+      DB_DRIVER: $DB_DRIVER
+      DB_HOST: $DB_HOST
+      DB_NAME: $DB_NAME
+      DB_PASSWORD: $DB_PASSWORD
+      DB_PORT: $DB_PORT
+      DB_USER: $DB_USER
+    ports:
+      - "80:80"
+    tty: true
+
   console:
     image: joesweeny/statisticodata_console:$RELEASE
     environment:
