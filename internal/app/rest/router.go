@@ -9,7 +9,7 @@ func Router() *httprouter.Router {
 
 	router.GET("/", routePath)
 	router.GET("/healthcheck", healthCheck)
-	router.GET("/competition/:competition/season/:season/fixture", competitionFixtures)
+	router.GET("/season/:id/fixtures", seasonFixtures)
 
 	return router
 }

@@ -16,9 +16,8 @@ func healthCheck(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	_, _ = fmt.Fprint(w, "Healthcheck OK")
 }
 
-func competitionFixtures(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	comp := ps.ByName("competition")
-	sea := ps.ByName("season")
+func seasonFixtures(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	sea := ps.ByName("id")
 
 	query := r.URL.Query()
 
@@ -26,7 +25,7 @@ func competitionFixtures(w http.ResponseWriter, r *http.Request, ps httprouter.P
 	before := query.Get("date_before")
 
 	w.WriteHeader(http.StatusOK)
-	_, _ = fmt.Fprintf(w, "Competition ID %s. Season %s \n", comp, sea)
+	_, _ = fmt.Fprintf(w, "Season %s \n", sea)
 
 	if after != "" {
 		_, _ = fmt.Fprintf(w, "After date %s", after)

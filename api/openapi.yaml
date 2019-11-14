@@ -5,19 +5,12 @@ info:
 servers:
   - url: http://data.statisitco.io
 paths:
-  /competition/{competitionId}/season/{seasonId}/fixture:
+  /season/{seasonId}/fixture:
     get:
       tags:
         - Fixture
       description: Get fixtures for a competition
       parameters:
-        - name: competitionId
-          in: path
-          required: true
-          schema:
-            type: string
-            description: The ID of the competition resource
-            example: '281'
         - name: seasonId
           in: path
           required: true
