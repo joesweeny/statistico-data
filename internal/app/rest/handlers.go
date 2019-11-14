@@ -5,10 +5,9 @@ import (
 	"fmt"
 	"github.com/julienschmidt/httprouter"
 	"net/http"
+	"net/url"
 	"time"
 )
-
-var errTimeParse = errors.New("date provided in request is not a valid RFC3339 formatted date")
 
 func routePath(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	w.WriteHeader(http.StatusOK)
@@ -24,29 +23,44 @@ func seasonFixtures(w http.ResponseWriter, r *http.Request, ps httprouter.Params
 	id := ps.ByName("id")
 	query := r.URL.Query()
 
-	after := query.Get("date_after")
-	before := query.Get("date_before")
+	after, err := parseDateQuery(query, "date_after")
 
-	if after != "" {
-		_, err := time.Parse(time.RFC3339, after)
-
-		if err != nil {
-			jsendFailResponse(w, http.StatusUnprocessableEntity, errTimeParse)
-			return
-		}
+	if err == errTimeParse {
+		failResponse(w, http.StatusUnprocessableEntity, err)
+		return
 	}
 
-	if after != "" {
-		_, err := time.Parse(time.RFC3339, before)
+	before, err := parseDateQuery(query, "date_before")
 
-		if err != nil {
-			jsendFailResponse(w, http.StatusUnprocessableEntity, errTimeParse)
-			return
-		}
+	if err == errTimeParse {
+		failResponse(w, http.StatusUnprocessableEntity, err)
+		return
 	}
 
 	w.WriteHeader(http.StatusOK)
 	_, _ = fmt.Fprintf(w, "Season %s \n", id)
-	_, _ = fmt.Fprintf(w, "After date %s", after)
-	_, _ = fmt.Fprintf(w, "Before date %s", before)
+
+	if after != nil {
+		_, _ = fmt.Fprintf(w, "After date %s", after)
+	}
+
+	if before != nil {
+		_, _ = fmt.Fprintf(w, "Before date %s", before)
+	}
+}
+
+func parseDateQuery(query url.Values, key string) (*time.Time, error) {
+	val := query.Get(key)
+
+	if val == "" {
+		return nil, nil
+	}
+
+	t, err := time.Parse(time.RFC3339, val)
+
+	if err != nil {
+		return nil, errTimeParse
+	}
+
+	return &t, nil
 }

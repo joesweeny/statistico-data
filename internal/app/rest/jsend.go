@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-type jsend struct {
+type response struct {
 	Message string `json:"message"`
 	Data interface{} `json:"data"`
 }
@@ -22,8 +22,8 @@ func jsonResponse(w http.ResponseWriter, status int, payload interface{}) {
 	_, _ = w.Write(response)
 }
 
-func jsendSuccessResponse(w http.ResponseWriter, payload interface{}) {
-	response := jsend{
+func successResponse(w http.ResponseWriter, payload interface{}) {
+	response := response{
 		Message: "success",
 		Data:    payload,
 	}
@@ -31,8 +31,8 @@ func jsendSuccessResponse(w http.ResponseWriter, payload interface{}) {
 	jsonResponse(w, 200, response)
 }
 
-func jsendFailResponse(w http.ResponseWriter, status int, error error) {
-	response := jsend{
+func failResponse(w http.ResponseWriter, status int, error error) {
+	response := response{
 		Message: "fail",
 		Data:    []errorMessage{
 			{
@@ -45,8 +45,8 @@ func jsendFailResponse(w http.ResponseWriter, status int, error error) {
 	jsonResponse(w, status, response)
 }
 
-func jsendErrorResponse(w http.ResponseWriter, status int, error error) {
-	response := jsend{
+func errorResponse(w http.ResponseWriter, status int, error error) {
+	response := response{
 		Message: "error",
 		Data:    []errorMessage{
 			{
