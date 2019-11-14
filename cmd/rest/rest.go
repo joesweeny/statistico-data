@@ -11,7 +11,6 @@ import (
 func main() {
 	container := bootstrap.BuildContainer(bootstrap.BuildConfig())
 	router := httprouter.New()
-
 	router.GET("/", rest.RoutePath)
 	router.GET("/healthcheck", rest.HealthCheck)
 	router.GET("/season/:id/fixtures", container.FixtureHandler().SeasonFixtures)
