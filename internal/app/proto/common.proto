@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+package proto;
+
+message Date {
+    int64 utc = 1;
+    string rfc = 2;
+}

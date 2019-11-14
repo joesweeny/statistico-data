@@ -9,9 +9,7 @@ func (c Container) FixtureService() *grpc.FixtureService {
 	return &grpc.FixtureService{
 		FixtureRepo: c.FixtureRepository(),
 		Handler: handler.FixtureHandler{
-			CompetitionRepo: c.CompetitionRepository(),
 			RoundRepo:       c.RoundRepository(),
-			SeasonRepo:      c.SeasonRepository(),
 			TeamRepo:        c.TeamRepository(),
 			VenueRepo:       c.VenueRepository(),
 			Logger:          c.Logger,

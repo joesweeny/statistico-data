@@ -17,7 +17,7 @@ type FixtureService struct {
 	Logger *logrus.Logger
 }
 
-func (s *FixtureService) ListFixtures(r *proto.DateRangeRequest, stream proto.FixtureService_ListFixturesServer) error {
+func (s *FixtureService) ListSeasonFixtures(r *proto.SeasonFixtureRequest, stream proto.FixtureService_ListSeasonFixturesServer) error {
 	from, err := time.Parse(time.RFC3339, r.DateFrom)
 
 	if err != nil {
@@ -30,7 +30,7 @@ func (s *FixtureService) ListFixtures(r *proto.DateRangeRequest, stream proto.Fi
 		return ErrTimeParse
 	}
 
-	fixtures, err := s.FixtureRepo.Between(from, to)
+	fixtures, err := s.FixtureRepo.BySeasonIDBetween(r.SeasonId, from, to)
 
 	if err != nil {
 		s.Logger.Printf("Error retrieving Fixture(s). Error: %s", err.Error())

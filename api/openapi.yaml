@@ -23,13 +23,13 @@ paths:
           required: false
           description: Only include fixture resources of fixture data before date provided
           schema:
-            $ref: '#/components/schemas/DateTime'
+            $ref: '#/components/schemas/DateRFC3339'
         - name: date_after
           in: query
           required: false
           description: Only include fixture resources of fixture data after date provided
           schema:
-            $ref: '#/components/schemas/DateTime'
+            $ref: '#/components/schemas/DateRFC3339'
       responses:
         200:
           description: A list of fixture resources
@@ -63,10 +63,23 @@ components:
           type: string
           example: "English Premier League"
 
-    DateTime:
+    Date:
+      type: object
+      properties:
+        utc:
+          $ref: '#/components/schemas/DateUTC'
+        rfc:
+          $ref: '#/components/schemas/DateRFC3339'
+
+    DateRFC3339:
       type: string
-      description: "An RFC-3399 valid datetime"
+      description: "An RFC-3339 valid datetime"
       example: '2018-01-24T20:21:44+00:00'
+
+    DateUTC:
+      type: integer
+      description: "UTC representation of date/time"
+      example: 1573733379
 
     Error:
       type: object
@@ -97,12 +110,20 @@ components:
           $ref: '#/components/schemas/Team'
         venue:
           $ref: '#/components/schemas/Venue'
-        competition:
-          $ref: '#/components/schemas/Competition'
-        season:
-          $ref: '#/components/schemas/Season'
+        round:
+          $ref: '#/components/schemas/Venue'
         date_time:
-          $ref: '#/components/schemas/DateTime'
+          $ref: '#/components/schemas/Date'
+
+    Round:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 6715
+        name:
+          type: string
+          example: "5"
 
     Season:
       type: object
