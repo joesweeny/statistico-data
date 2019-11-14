@@ -144,7 +144,7 @@ func (r *FixtureRepository) BySeasonIDBefore(id uint64, before time.Time) ([]app
 	return rowsToFixtureSlice(rows)
 }
 
-func (r *FixtureRepository) BySeasonIDBetween(id uint64, after, before time.Time) ([]app.Fixture, error) {
+func (r *FixtureRepository) BySeasonIDBetween(id uint64, after, before *time.Time) ([]app.Fixture, error) {
 	query := `SELECT * FROM sportmonks_fixture WHERE season_id = $1 and date >= $2 and date <= $3 ORDER BY date ASC, id ASC`
 
 	rows, err := r.connection.Query(query, id, after.Unix(), before.Unix())

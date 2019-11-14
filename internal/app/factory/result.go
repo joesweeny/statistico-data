@@ -1,18 +1,35 @@
-package builder
+package factory
 
 import (
 	"github.com/statistico/statistico-data/internal/app"
 	"github.com/statistico/statistico-data/internal/app/converter"
 	"github.com/statistico/statistico-data/internal/app/fetch"
 	"github.com/statistico/statistico-data/internal/app/proto"
-	"time"
 )
 
-type FixtureBuilder struct {
+type ResultBuilder struct {
 	fetcher fetch.EntityFetcher
 }
 
-func (b FixtureBuilder) BuildProtoFixture(f *app.Fixture) (*proto.Fixture, error) {
+func (b ResultBuilder) BuildProtoResult(f *app.Fixture) (*proto.Result, error) {
+	r, err := b.fetcher.ResultByID(f.ID)
+
+	if err != nil {
+		return nil, err
+	}
+
+	s, err := b.fetcher.SeasonByID(f.SeasonID)
+
+	if err != nil {
+		return nil, err
+	}
+
+	c, err := b.fetcher.CompetitionByID(s.CompetitionID)
+
+	if err != nil {
+		return nil, err
+	}
+
 	home, err := b.fetcher.TeamByID(f.HomeTeamID)
 
 	if err != nil {
@@ -25,16 +42,13 @@ func (b FixtureBuilder) BuildProtoFixture(f *app.Fixture) (*proto.Fixture, error
 		return nil, err
 	}
 
-	p := proto.Fixture{
+	p := proto.Result{
 		Id:          int64(f.ID),
-		HomeTeam:    converter.TeamToProto(home),
-		AwayTeam:    converter.TeamToProto(away),
-		DateTime:    &proto.Date{
-			Utc:    f.Date.Unix(),
-			Rfc:    f.Date.Format(time.RFC3339),
-		},
+		Competition: converter.CompetitionToProto(c),
+		Season:      converter.SeasonToProto(s),
+		DateTime:    f.Date.Unix(),
+		MatchData:   converter.ToMatchData(home, away, r),
 	}
-
 	if f.VenueID != nil {
 		v, err := b.fetcher.VenueByID(*f.VenueID)
 

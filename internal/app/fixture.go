@@ -29,7 +29,7 @@ type FixtureRepository interface {
 	ByTeamID(id uint64, limit int32, before time.Time) ([]Fixture, error)
 	BySeasonID(id uint64) ([]Fixture, error)
 	BySeasonIDBefore(id uint64, before time.Time) ([]Fixture, error)
-	BySeasonIDBetween(id uint64, after, before time.Time) ([]Fixture, error)
+	BySeasonIDBetween(id uint64, after, before *time.Time) ([]Fixture, error)
 	ByHomeAndAwayTeam(homeTeamId, awayTeamId uint64, limit uint32, before time.Time) ([]Fixture, error)
 }
 
