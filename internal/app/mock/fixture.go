@@ -56,6 +56,11 @@ func (m FixtureRepository) BySeasonIDBefore(id uint64, before time.Time) ([]app.
 	return args.Get(0).([]app.Fixture), args.Error(1)
 }
 
+func (m FixtureRepository) BySeasonIDBetween(id uint64, after, before time.Time) ([]app.Fixture, error) {
+	args := m.Called(id, after, before)
+	return args.Get(0).([]app.Fixture), args.Error(1)
+}
+
 func (m FixtureRepository) ByHomeAndAwayTeam(homeTeamId, awayTeamId uint64, limit uint32, before time.Time) ([]app.Fixture, error) {
 	args := m.Called(homeTeamId, awayTeamId, limit, before)
 	return args.Get(0).([]app.Fixture), args.Error(1)

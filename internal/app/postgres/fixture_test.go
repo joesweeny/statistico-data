@@ -508,6 +508,61 @@ func TestFixtureRepository_BySeasonIDBefore(t *testing.T) {
 	})
 }
 
+func TestFixtureRepository_BySeasonIDBetween(t *testing.T) {
+	conn, cleanUp := test.GetConnection(t, "sportmonks_fixture")
+	repo := postgres.NewFixtureRepository(conn, test.Clock)
+
+	t.Run("returns slice of fixture struct matching parameters provided", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+
+		insertFixtures(t, repo)
+
+		fix, err := repo.BySeasonIDBetween(6012, time.Unix(1550066310, 0), time.Unix(1550066316, 0))
+
+		if err != nil {
+			t.Fatalf("Test failed, expected nil, got %s", err.Error())
+		}
+
+		all, err := repo.IDs()
+
+		if err != nil {
+			t.Fatalf("Test failed, expected nil, got %s", err.Error())
+		}
+
+		assert.Equal(t, 9, len(all))
+		assert.Equal(t, 2, len(fix))
+
+		for i := 0; i <= 1; i++ {
+			f := fix[i]
+			assert.Equal(t, uint64(i + 5), f.ID)
+			assert.Equal(t, uint64(6012), f.SeasonID)
+		}
+	})
+
+	t.Run("empty result set returned if no results match parameters", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+
+		insertFixtures(t, repo)
+
+		fix, err := repo.BySeasonID(10000)
+
+		if err != nil {
+			t.Fatalf("Test failed, expected nil, got %s", err.Error())
+		}
+
+		all, err := repo.IDs()
+
+		if err != nil {
+			t.Fatalf("Test failed, expected nil, got %s", err.Error())
+		}
+
+		assert.Equal(t, 9, len(all))
+		assert.Equal(t, 0, len(fix))
+	})
+}
+
 func TestFixtureRepository_ByHomeAndAwayTeam(t *testing.T) {
 	conn, cleanUp := test.GetConnection(t, "sportmonks_fixture")
 	repo := postgres.NewFixtureRepository(conn, test.Clock)

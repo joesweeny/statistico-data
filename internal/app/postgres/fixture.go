@@ -144,6 +144,18 @@ func (r *FixtureRepository) BySeasonIDBefore(id uint64, before time.Time) ([]app
 	return rowsToFixtureSlice(rows)
 }
 
+func (r *FixtureRepository) BySeasonIDBetween(id uint64, after, before time.Time) ([]app.Fixture, error) {
+	query := `SELECT * FROM sportmonks_fixture WHERE season_id = $1 and date >= $2 and date <= $3 ORDER BY date ASC, id ASC`
+
+	rows, err := r.connection.Query(query, id, after.Unix(), before.Unix())
+
+	if err != nil {
+		return []app.Fixture{}, err
+	}
+
+	return rowsToFixtureSlice(rows)
+}
+
 func (r *FixtureRepository) ByHomeAndAwayTeam(homeTeamId, awayTeamId uint64, limit uint32, before time.Time) ([]app.Fixture, error) {
 	query := `SELECT * FROM sportmonks_fixture WHERE home_team_id = $1 and away_team_id = $2 and date < $3
 	ORDER BY date DESC LIMIT $4`
