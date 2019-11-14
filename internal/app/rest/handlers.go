@@ -1,7 +1,6 @@
 package rest
 
 import (
-	"errors"
 	"fmt"
 	"github.com/julienschmidt/httprouter"
 	"net/http"
