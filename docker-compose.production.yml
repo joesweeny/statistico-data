@@ -1,8 +1,8 @@
 version: "3.5"
 services:
 
-  api:
-    image: joesweeny/statisticodata_api:$RELEASE
+  pull:
+    image: joesweeny/statisticodata_pull:$RELEASE
     environment:
       DB_DRIVER: $DB_DRIVER
       DB_HOST: $DB_HOST
