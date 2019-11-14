@@ -5,6 +5,7 @@ import (
 	"github.com/statistico/statistico-data/internal/app/converter"
 	"github.com/statistico/statistico-data/internal/app/fetch"
 	"github.com/statistico/statistico-data/internal/app/proto"
+	"time"
 )
 
 type FixtureBuilder struct {
@@ -12,18 +13,6 @@ type FixtureBuilder struct {
 }
 
 func (b FixtureBuilder) BuildProtoFixture(f *app.Fixture) (*proto.Fixture, error) {
-	s, err := b.fetcher.SeasonByID(f.SeasonID)
-
-	if err != nil {
-		return nil, err
-	}
-
-	c, err := b.fetcher.CompetitionByID(s.CompetitionID)
-
-	if err != nil {
-		return nil, err
-	}
-
 	home, err := b.fetcher.TeamByID(f.HomeTeamID)
 
 	if err != nil {
@@ -38,11 +27,12 @@ func (b FixtureBuilder) BuildProtoFixture(f *app.Fixture) (*proto.Fixture, error
 
 	p := proto.Fixture{
 		Id:          int64(f.ID),
-		Competition: converter.CompetitionToProto(c),
-		Season:      converter.SeasonToProto(s),
 		HomeTeam:    converter.TeamToProto(home),
 		AwayTeam:    converter.TeamToProto(away),
-		DateTime:    f.Date.Unix(),
+		DateTime:    &proto.Date{
+			Utc:    f.Date.Unix(),
+			Rfc:    f.Date.Format(time.RFC3339),
+		},
 	}
 
 	if f.VenueID != nil {
