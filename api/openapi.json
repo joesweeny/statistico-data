@@ -1,0 +1,219 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Statistico Data API",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://data.statisitco.io"
+    }
+  ],
+  "paths": {
+    "/season/{seasonId}/fixtures": {
+      "get": {
+        "tags": [
+          "Fixture"
+        ],
+        "description": "Get fixtures for a competition",
+        "parameters": [
+          {
+            "name": "seasonId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "The ID of the season resource",
+              "example": "5"
+            }
+          },
+          {
+            "name": "date_before",
+            "in": "query",
+            "required": false,
+            "description": "Only include fixture resources of fixture data before date provided",
+            "schema": {
+              "$ref": "#/components/schemas/DateTime"
+            }
+          },
+          {
+            "name": "date_after",
+            "in": "query",
+            "required": false,
+            "description": "Only include fixture resources of fixture data after date provided",
+            "schema": {
+              "$ref": "#/components/schemas/DateTime"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of fixture resources",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "fixtures": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/Fixture"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/schemas/StandardResponse"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Competition": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 15671
+          },
+          "name": {
+            "type": "string",
+            "example": "English Premier League"
+          }
+        }
+      },
+      "DateTime": {
+        "type": "string",
+        "description": "An RFC-3399 valid datetime",
+        "example": "2018-01-24T20:21:44+00:00"
+      },
+      "Error": {
+        "type": "object",
+        "required": [
+          "message",
+          "code"
+        ],
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Something went wrong",
+            "description": "A human-readable description of the error"
+          },
+          "code": {
+            "type": "integer",
+            "example": 1,
+            "description": "A code to identify the error. \"1\" is used when no specific error code has been defined for this error\n"
+          }
+        }
+      },
+      "Fixture": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 16679
+          },
+          "home_team": {
+            "$ref": "#/components/schemas/Team"
+          },
+          "away_team": {
+            "$ref": "#/components/schemas/Team"
+          },
+          "venue": {
+            "$ref": "#/components/schemas/Venue"
+          },
+          "competition": {
+            "$ref": "#/components/schemas/Competition"
+          },
+          "season": {
+            "$ref": "#/components/schemas/Season"
+          },
+          "date_time": {
+            "$ref": "#/components/schemas/DateTime"
+          }
+        }
+      },
+      "Season": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 6715
+          },
+          "name": {
+            "type": "string",
+            "example": "2018/2019"
+          }
+        }
+      },
+      "StandardResponse": {
+        "type": "object",
+        "required": [
+          "status",
+          "data"
+        ],
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "fail",
+            "enum": [
+              "error",
+              "fail"
+            ]
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "errors": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "Team": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "name": {
+            "type": "string",
+            "example": "West Ham United"
+          }
+        }
+      },
+      "Venue": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "name": {
+            "type": "string",
+            "example": "London Stadium"
+          }
+        }
+      }
+    }
+  }
+}
