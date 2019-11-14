@@ -5,7 +5,7 @@ info:
 servers:
   - url: http://data.statisitco.io
 paths:
-  /season/{seasonId}/fixture:
+  /season/{seasonId}/fixtures:
     get:
       tags:
         - Fixture

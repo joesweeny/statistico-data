@@ -10,7 +10,7 @@
     }
   ],
   "paths": {
-    "/season/{seasonId}/fixture": {
+    "/season/{seasonId}/fixtures": {
       "get": {
         "tags": [
           "Fixture"
