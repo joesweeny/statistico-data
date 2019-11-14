@@ -9,6 +9,23 @@ services:
     ports:
       - 5432:5432
 
+  rest:
+    build:
+      dockerfile: docker/rest/Dockerfile
+      context: .
+    environment:
+      DB_DRIVER: postgres
+      DB_HOST: postgres
+      DB_NAME: statshub
+      DB_PASSWORD: password
+      DB_USER: dev
+      DB_PORT: 5432
+    ports:
+      - "8080:80"
+    tty: true
+    links:
+      - postgres
+
   console:
     build:
       dockerfile: ./docker/console/Dockerfile

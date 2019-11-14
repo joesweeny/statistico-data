@@ -4,8 +4,8 @@ go 1.12
 
 require (
 	github.com/golang/protobuf v1.3.2
-	github.com/gorilla/mux v1.7.1
 	github.com/jonboulle/clockwork v0.1.0
+	github.com/julienschmidt/httprouter v1.3.0
 	github.com/konsorten/go-windows-terminal-sequences v1.0.2 // indirect
 	github.com/kr/pretty v0.1.0 // indirect
 	github.com/lib/pq v1.0.0
