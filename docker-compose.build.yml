@@ -9,9 +9,9 @@ services:
     ports:
       - 5432:5432
 
-  api:
+  rest:
     build:
-      dockerfile: ./docker/api/Dockerfile
+      dockerfile: docker/rest/Dockerfile
       context: .
     environment:
       DB_DRIVER: postgres

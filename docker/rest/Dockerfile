@@ -6,12 +6,12 @@ WORKDIR /app
 COPY . .
 RUN go mod download
 
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo ./cmd/api
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo ./cmd/rest
 
 # Step 2
 FROM alpine
 RUN apk --no-cache add ca-certificates
 WORKDIR /opt
-COPY --from=builder /app/api .
+COPY --from=builder /app/rest .
 EXPOSE 80
-CMD ["./api"]
+CMD ["./rest"]
