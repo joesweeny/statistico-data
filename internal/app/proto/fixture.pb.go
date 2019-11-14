@@ -7,7 +7,6 @@ import (
 	context "context"
 	fmt "fmt"
 	proto "github.com/golang/protobuf/proto"
-	wrappers "github.com/golang/protobuf/ptypes/wrappers"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -25,75 +24,23 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 
-type DateRangeRequest struct {
-	// RFC3339 formatted string i.e. "2006-01-02T15:04:05Z07:00"
-	DateFrom string `protobuf:"bytes,1,opt,name=date_from,json=dateFrom,proto3" json:"date_from,omitempty"`
-	// RFC3339 formatted string i.e "2006-01-02T15:04:05Z07:00"
-	DateTo               string   `protobuf:"bytes,2,opt,name=date_to,json=dateTo,proto3" json:"date_to,omitempty"`
+type Fixture struct {
+	Id                   int64    `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	HomeTeam             *Team    `protobuf:"bytes,5,opt,name=home_team,json=homeTeam,proto3" json:"home_team,omitempty"`
+	AwayTeam             *Team    `protobuf:"bytes,6,opt,name=away_team,json=awayTeam,proto3" json:"away_team,omitempty"`
+	Round                *Round   `protobuf:"bytes,4,opt,name=round,proto3" json:"round,omitempty"`
+	Venue                *Venue   `protobuf:"bytes,7,opt,name=venue,proto3" json:"venue,omitempty"`
+	DateTime             *Date    `protobuf:"bytes,9,opt,name=date_time,json=dateTime,proto3" json:"date_time,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
-}
-
-func (m *DateRangeRequest) Reset()         { *m = DateRangeRequest{} }
-func (m *DateRangeRequest) String() string { return proto.CompactTextString(m) }
-func (*DateRangeRequest) ProtoMessage()    {}
-func (*DateRangeRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8336772ad2f813d9, []int{0}
-}
-
-func (m *DateRangeRequest) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_DateRangeRequest.Unmarshal(m, b)
-}
-func (m *DateRangeRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_DateRangeRequest.Marshal(b, m, deterministic)
-}
-func (m *DateRangeRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DateRangeRequest.Merge(m, src)
-}
-func (m *DateRangeRequest) XXX_Size() int {
-	return xxx_messageInfo_DateRangeRequest.Size(m)
-}
-func (m *DateRangeRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_DateRangeRequest.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_DateRangeRequest proto.InternalMessageInfo
-
-func (m *DateRangeRequest) GetDateFrom() string {
-	if m != nil {
-		return m.DateFrom
-	}
-	return ""
-}
-
-func (m *DateRangeRequest) GetDateTo() string {
-	if m != nil {
-		return m.DateTo
-	}
-	return ""
-}
-
-type Fixture struct {
-	Id                   int64                `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	Competition          *Competition         `protobuf:"bytes,2,opt,name=competition,proto3" json:"competition,omitempty"`
-	Season               *Season              `protobuf:"bytes,3,opt,name=season,proto3" json:"season,omitempty"`
-	Round                *Round               `protobuf:"bytes,4,opt,name=round,proto3" json:"round,omitempty"`
-	HomeTeam             *Team                `protobuf:"bytes,5,opt,name=home_team,json=homeTeam,proto3" json:"home_team,omitempty"`
-	AwayTeam             *Team                `protobuf:"bytes,6,opt,name=away_team,json=awayTeam,proto3" json:"away_team,omitempty"`
-	Venue                *Venue               `protobuf:"bytes,7,opt,name=venue,proto3" json:"venue,omitempty"`
-	RefereeId            *wrappers.Int64Value `protobuf:"bytes,8,opt,name=referee_id,json=refereeId,proto3" json:"referee_id,omitempty"`
-	DateTime             int64                `protobuf:"varint,9,opt,name=date_time,json=dateTime,proto3" json:"date_time,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}             `json:"-"`
-	XXX_unrecognized     []byte               `json:"-"`
-	XXX_sizecache        int32                `json:"-"`
 }
 
 func (m *Fixture) Reset()         { *m = Fixture{} }
 func (m *Fixture) String() string { return proto.CompactTextString(m) }
 func (*Fixture) ProtoMessage()    {}
 func (*Fixture) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8336772ad2f813d9, []int{1}
+	return fileDescriptor_8336772ad2f813d9, []int{0}
 }
 
 func (m *Fixture) XXX_Unmarshal(b []byte) error {
@@ -121,27 +68,6 @@ func (m *Fixture) GetId() int64 {
 	return 0
 }
 
-func (m *Fixture) GetCompetition() *Competition {
-	if m != nil {
-		return m.Competition
-	}
-	return nil
-}
-
-func (m *Fixture) GetSeason() *Season {
-	if m != nil {
-		return m.Season
-	}
-	return nil
-}
-
-func (m *Fixture) GetRound() *Round {
-	if m != nil {
-		return m.Round
-	}
-	return nil
-}
-
 func (m *Fixture) GetHomeTeam() *Team {
 	if m != nil {
 		return m.HomeTeam
@@ -156,6 +82,13 @@ func (m *Fixture) GetAwayTeam() *Team {
 	return nil
 }
 
+func (m *Fixture) GetRound() *Round {
+	if m != nil {
+		return m.Round
+	}
+	return nil
+}
+
 func (m *Fixture) GetVenue() *Venue {
 	if m != nil {
 		return m.Venue
@@ -163,56 +96,40 @@ func (m *Fixture) GetVenue() *Venue {
 	return nil
 }
 
-func (m *Fixture) GetRefereeId() *wrappers.Int64Value {
+func (m *Fixture) GetDateTime() *Date {
 	if m != nil {
-		return m.RefereeId
+		return m.DateTime
 	}
 	return nil
 }
 
-func (m *Fixture) GetDateTime() int64 {
-	if m != nil {
-		return m.DateTime
-	}
-	return 0
-}
-
 func init() {
-	proto.RegisterType((*DateRangeRequest)(nil), "proto.DateRangeRequest")
 	proto.RegisterType((*Fixture)(nil), "proto.Fixture")
 }
 
 func init() { proto.RegisterFile("internal/app/proto/fixture.proto", fileDescriptor_8336772ad2f813d9) }
 
 var fileDescriptor_8336772ad2f813d9 = []byte{
-	// 431 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x7c, 0x92, 0xcf, 0x6e, 0xd4, 0x30,
-	0x10, 0xc6, 0xd9, 0x2d, 0xfb, 0x27, 0x93, 0xb2, 0x42, 0x96, 0x50, 0xad, 0xad, 0x28, 0x25, 0x02,
-	0xa9, 0xa7, 0x04, 0x95, 0xaa, 0x07, 0xb8, 0x41, 0x55, 0xb1, 0x12, 0x27, 0x77, 0xd5, 0xeb, 0xca,
-	0x6d, 0x26, 0x8b, 0xa5, 0x75, 0x1c, 0x1c, 0xa7, 0xa5, 0x0f, 0xc0, 0xd3, 0xf2, 0x12, 0xc8, 0x63,
-	0xb7, 0x74, 0x51, 0xe0, 0x94, 0xf8, 0xfb, 0x7e, 0x63, 0x8f, 0xbf, 0x31, 0x1c, 0xaa, 0xda, 0xa1,
-	0xad, 0xe5, 0xa6, 0x90, 0x4d, 0x53, 0x34, 0xd6, 0x38, 0x53, 0x54, 0xea, 0x87, 0xeb, 0x2c, 0xe6,
-	0xb4, 0x62, 0x23, 0xfa, 0xcc, 0x0f, 0xd6, 0xc6, 0xac, 0x37, 0x18, 0x90, 0xab, 0xae, 0x2a, 0x6e,
-	0xad, 0x6c, 0x1a, 0xb4, 0x6d, 0xc0, 0xe6, 0x6f, 0x7a, 0x36, 0xba, 0x36, 0xba, 0x41, 0xa7, 0x9c,
-	0x32, 0x75, 0xa4, 0x5e, 0xf7, 0x50, 0x16, 0xbf, 0x77, 0xd8, 0xba, 0xfb, 0x8d, 0x0e, 0xfa, 0x10,
-	0xd3, 0xd5, 0x65, 0xf4, 0x5f, 0xf5, 0xf8, 0x2d, 0xca, 0xf6, 0xe1, 0x8c, 0x97, 0x3d, 0x80, 0x43,
-	0xa9, 0xff, 0xb3, 0xff, 0x0d, 0xd6, 0x5d, 0xbc, 0x6f, 0xf6, 0x05, 0x9e, 0x9f, 0x49, 0x87, 0x42,
-	0xd6, 0x6b, 0x14, 0xa1, 0x35, 0xb6, 0x0f, 0x49, 0x29, 0x1d, 0xae, 0x2a, 0x6b, 0x34, 0x1f, 0x1c,
-	0x0e, 0x8e, 0x12, 0x31, 0xf5, 0xc2, 0xb9, 0x35, 0x9a, 0xed, 0xc1, 0x84, 0x4c, 0x67, 0xf8, 0x90,
-	0xac, 0xb1, 0x5f, 0x2e, 0x4d, 0xf6, 0x6b, 0x08, 0x93, 0xf3, 0x90, 0x25, 0x9b, 0xc1, 0x50, 0x95,
-	0x54, 0xba, 0x23, 0x86, 0xaa, 0x64, 0x27, 0x90, 0x3e, 0x4a, 0x87, 0x0a, 0xd3, 0x63, 0x16, 0x5a,
-	0xc8, 0x3f, 0xff, 0x71, 0xc4, 0x63, 0x8c, 0xbd, 0x85, 0x71, 0xb8, 0x2a, 0xdf, 0xa1, 0x82, 0x67,
-	0xb1, 0xe0, 0x82, 0x44, 0x11, 0x4d, 0x96, 0xc1, 0x88, 0x12, 0xe3, 0x4f, 0x89, 0xda, 0x8d, 0x94,
-	0xf0, 0x9a, 0x08, 0x16, 0x3b, 0x82, 0xe4, 0x9b, 0xd1, 0xb8, 0xf2, 0xc9, 0xf0, 0x11, 0x71, 0x69,
-	0xe4, 0x96, 0x28, 0xb5, 0x98, 0x7a, 0xd7, 0xff, 0x79, 0x52, 0xde, 0xca, 0xbb, 0x40, 0x8e, 0x7b,
-	0x48, 0xef, 0x12, 0x99, 0xc1, 0x88, 0x92, 0xe4, 0x93, 0xad, 0x73, 0x2f, 0xbd, 0x26, 0x82, 0xc5,
-	0x3e, 0x00, 0x58, 0xac, 0xd0, 0x22, 0xae, 0x54, 0xc9, 0xa7, 0x04, 0xee, 0xe7, 0xe1, 0x71, 0xe5,
-	0xf7, 0x8f, 0x2b, 0x5f, 0xd4, 0xee, 0xf4, 0xe4, 0x52, 0x6e, 0x3a, 0x14, 0x49, 0xc4, 0x17, 0xe5,
-	0xc3, 0x18, 0x9c, 0xd2, 0xc8, 0x13, 0xca, 0x92, 0xc6, 0xb0, 0x54, 0x1a, 0x8f, 0x7f, 0x0e, 0x60,
-	0x16, 0xd3, 0xbe, 0x40, 0x7b, 0xa3, 0xae, 0x91, 0x7d, 0x84, 0xdd, 0xaf, 0xaa, 0x75, 0x51, 0x6d,
-	0xd9, 0x5e, 0x6c, 0xe8, 0xef, 0xf9, 0xce, 0x67, 0xd1, 0x88, 0x64, 0xf6, 0xe4, 0xdd, 0x80, 0x9d,
-	0x42, 0x1a, 0x97, 0x9f, 0xee, 0x16, 0x67, 0xec, 0xc5, 0x36, 0xf2, 0xcf, 0xca, 0xab, 0x31, 0x09,
-	0xef, 0x7f, 0x07, 0x00, 0x00, 0xff, 0xff, 0xc0, 0x3f, 0x58, 0xeb, 0x5a, 0x03, 0x00, 0x00,
+	// 297 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x7c, 0x91, 0xdd, 0x4a, 0xc3, 0x30,
+	0x18, 0x86, 0xcd, 0xb4, 0xfb, 0x49, 0xa5, 0x07, 0x01, 0xa1, 0x54, 0xd4, 0xda, 0xa3, 0x1e, 0xad,
+	0x32, 0xc1, 0x0b, 0x90, 0x29, 0x08, 0x1e, 0x65, 0xc3, 0xd3, 0x11, 0xd7, 0x4f, 0x0c, 0x98, 0xa4,
+	0xb6, 0xe9, 0x74, 0x57, 0xe1, 0x25, 0x7a, 0x2b, 0x92, 0x9f, 0x93, 0x42, 0xdc, 0x51, 0x9b, 0xf7,
+	0x79, 0xbe, 0x7e, 0x6f, 0x09, 0xce, 0xb9, 0xd4, 0xd0, 0x4a, 0xf6, 0x51, 0xb1, 0xa6, 0xa9, 0x9a,
+	0x56, 0x69, 0x55, 0xbd, 0xf1, 0x6f, 0xdd, 0xb7, 0x30, 0xb7, 0x27, 0x12, 0xd9, 0x47, 0x76, 0x15,
+	0x10, 0xb7, 0x4a, 0x08, 0x25, 0x9d, 0x97, 0x5d, 0x07, 0x84, 0x16, 0x3e, 0x7b, 0xe8, 0x74, 0xe7,
+	0x95, 0xcb, 0x90, 0xa2, 0x7a, 0x59, 0x7b, 0x7e, 0x11, 0xe0, 0x1a, 0x98, 0x38, 0x30, 0xbe, 0x03,
+	0xd9, 0xfb, 0xa6, 0xc5, 0x2f, 0xc2, 0x93, 0x47, 0xd7, 0x9d, 0x24, 0x78, 0xc4, 0xeb, 0x14, 0xe5,
+	0xa8, 0x3c, 0xa6, 0x23, 0x5e, 0x93, 0x12, 0xcf, 0xde, 0x95, 0x80, 0x8d, 0xf9, 0x5c, 0x1a, 0xe5,
+	0xa8, 0x8c, 0x17, 0xb1, 0x1b, 0x9b, 0xaf, 0x81, 0x09, 0x3a, 0x35, 0xd4, 0xbc, 0x19, 0x93, 0x7d,
+	0xb1, 0xbd, 0x33, 0xc7, 0x01, 0xd3, 0x50, 0x6b, 0x16, 0x38, 0xb2, 0xed, 0xd3, 0x13, 0x6b, 0x9d,
+	0x7a, 0x8b, 0x9a, 0x8c, 0x3a, 0x64, 0x1c, 0x5b, 0x31, 0x9d, 0x0c, 0x9c, 0x17, 0x93, 0x51, 0x87,
+	0xcc, 0xc6, 0x9a, 0x69, 0xd8, 0x68, 0x2e, 0x20, 0x9d, 0x0d, 0x36, 0x2e, 0x99, 0x06, 0x3a, 0x35,
+	0x74, 0xcd, 0x05, 0x2c, 0x7e, 0x10, 0x4e, 0xfc, 0x1f, 0xae, 0xa0, 0xdd, 0xf1, 0x2d, 0x90, 0x07,
+	0x4c, 0x9e, 0x79, 0xa7, 0x57, 0xc0, 0x3a, 0x25, 0x3d, 0xeb, 0xc8, 0xb9, 0x9f, 0x1f, 0xc4, 0xd4,
+	0xdd, 0x46, 0x96, 0x78, 0xe8, 0xe3, 0xe2, 0xe8, 0x06, 0x91, 0x3b, 0x1c, 0xfb, 0xe3, 0xfd, 0xfe,
+	0x69, 0x49, 0xce, 0x86, 0xca, 0xbf, 0x93, 0xaf, 0x63, 0x1b, 0xdc, 0xfe, 0x05, 0x00, 0x00, 0xff,
+	0xff, 0x92, 0x92, 0xe1, 0xf4, 0x48, 0x02, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -227,7 +144,7 @@ const _ = grpc.SupportPackageIsVersion4
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type FixtureServiceClient interface {
-	ListFixtures(ctx context.Context, in *DateRangeRequest, opts ...grpc.CallOption) (FixtureService_ListFixturesClient, error)
+	ListSeasonFixtures(ctx context.Context, in *SeasonFixtureRequest, opts ...grpc.CallOption) (FixtureService_ListSeasonFixturesClient, error)
 	FixtureByID(ctx context.Context, in *FixtureRequest, opts ...grpc.CallOption) (*Fixture, error)
 }
 
@@ -239,12 +156,12 @@ func NewFixtureServiceClient(cc *grpc.ClientConn) FixtureServiceClient {
 	return &fixtureServiceClient{cc}
 }
 
-func (c *fixtureServiceClient) ListFixtures(ctx context.Context, in *DateRangeRequest, opts ...grpc.CallOption) (FixtureService_ListFixturesClient, error) {
-	stream, err := c.cc.NewStream(ctx, &_FixtureService_serviceDesc.Streams[0], "/proto.FixtureService/ListFixtures", opts...)
+func (c *fixtureServiceClient) ListSeasonFixtures(ctx context.Context, in *SeasonFixtureRequest, opts ...grpc.CallOption) (FixtureService_ListSeasonFixturesClient, error) {
+	stream, err := c.cc.NewStream(ctx, &_FixtureService_serviceDesc.Streams[0], "/proto.FixtureService/ListSeasonFixtures", opts...)
 	if err != nil {
 		return nil, err
 	}
-	x := &fixtureServiceListFixturesClient{stream}
+	x := &fixtureServiceListSeasonFixturesClient{stream}
 	if err := x.ClientStream.SendMsg(in); err != nil {
 		return nil, err
 	}
@@ -254,16 +171,16 @@ func (c *fixtureServiceClient) ListFixtures(ctx context.Context, in *DateRangeRe
 	return x, nil
 }
 
-type FixtureService_ListFixturesClient interface {
+type FixtureService_ListSeasonFixturesClient interface {
 	Recv() (*Fixture, error)
 	grpc.ClientStream
 }
 
-type fixtureServiceListFixturesClient struct {
+type fixtureServiceListSeasonFixturesClient struct {
 	grpc.ClientStream
 }
 
-func (x *fixtureServiceListFixturesClient) Recv() (*Fixture, error) {
+func (x *fixtureServiceListSeasonFixturesClient) Recv() (*Fixture, error) {
 	m := new(Fixture)
 	if err := x.ClientStream.RecvMsg(m); err != nil {
 		return nil, err
@@ -282,7 +199,7 @@ func (c *fixtureServiceClient) FixtureByID(ctx context.Context, in *FixtureReque
 
 // FixtureServiceServer is the server API for FixtureService service.
 type FixtureServiceServer interface {
-	ListFixtures(*DateRangeRequest, FixtureService_ListFixturesServer) error
+	ListSeasonFixtures(*SeasonFixtureRequest, FixtureService_ListSeasonFixturesServer) error
 	FixtureByID(context.Context, *FixtureRequest) (*Fixture, error)
 }
 
@@ -290,8 +207,8 @@ type FixtureServiceServer interface {
 type UnimplementedFixtureServiceServer struct {
 }
 
-func (*UnimplementedFixtureServiceServer) ListFixtures(req *DateRangeRequest, srv FixtureService_ListFixturesServer) error {
-	return status.Errorf(codes.Unimplemented, "method ListFixtures not implemented")
+func (*UnimplementedFixtureServiceServer) ListSeasonFixtures(req *SeasonFixtureRequest, srv FixtureService_ListSeasonFixturesServer) error {
+	return status.Errorf(codes.Unimplemented, "method ListSeasonFixtures not implemented")
 }
 func (*UnimplementedFixtureServiceServer) FixtureByID(ctx context.Context, req *FixtureRequest) (*Fixture, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FixtureByID not implemented")
@@ -301,24 +218,24 @@ func RegisterFixtureServiceServer(s *grpc.Server, srv FixtureServiceServer) {
 	s.RegisterService(&_FixtureService_serviceDesc, srv)
 }
 
-func _FixtureService_ListFixtures_Handler(srv interface{}, stream grpc.ServerStream) error {
-	m := new(DateRangeRequest)
+func _FixtureService_ListSeasonFixtures_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(SeasonFixtureRequest)
 	if err := stream.RecvMsg(m); err != nil {
 		return err
 	}
-	return srv.(FixtureServiceServer).ListFixtures(m, &fixtureServiceListFixturesServer{stream})
+	return srv.(FixtureServiceServer).ListSeasonFixtures(m, &fixtureServiceListSeasonFixturesServer{stream})
 }
 
-type FixtureService_ListFixturesServer interface {
+type FixtureService_ListSeasonFixturesServer interface {
 	Send(*Fixture) error
 	grpc.ServerStream
 }
 
-type fixtureServiceListFixturesServer struct {
+type fixtureServiceListSeasonFixturesServer struct {
 	grpc.ServerStream
 }
 
-func (x *fixtureServiceListFixturesServer) Send(m *Fixture) error {
+func (x *fixtureServiceListSeasonFixturesServer) Send(m *Fixture) error {
 	return x.ServerStream.SendMsg(m)
 }
 
@@ -351,8 +268,8 @@ var _FixtureService_serviceDesc = grpc.ServiceDesc{
 	},
 	Streams: []grpc.StreamDesc{
 		{
-			StreamName:    "ListFixtures",
-			Handler:       _FixtureService_ListFixtures_Handler,
+			StreamName:    "ListSeasonFixtures",
+			Handler:       _FixtureService_ListSeasonFixtures_Handler,
 			ServerStreams: true,
 		},
 	},

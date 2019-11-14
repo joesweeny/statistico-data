@@ -2,39 +2,21 @@ package handler
 
 import (
 	"fmt"
-	"github.com/golang/protobuf/ptypes/wrappers"
 	"github.com/sirupsen/logrus"
 	"github.com/statistico/statistico-data/internal/app"
 	"github.com/statistico/statistico-data/internal/app/converter"
 	"github.com/statistico/statistico-data/internal/app/proto"
+	"time"
 )
 
 type FixtureHandler struct {
-	CompetitionRepo app.CompetitionRepository
 	RoundRepo       app.RoundRepository
-	SeasonRepo      app.SeasonRepository
 	TeamRepo        app.TeamRepository
 	VenueRepo       app.VenueRepository
 	Logger *logrus.Logger
 }
 
 func (h FixtureHandler) HandleFixture(f *app.Fixture) (*proto.Fixture, error) {
-	s, err := h.SeasonRepo.ByID(uint64(f.SeasonID))
-
-	if err != nil {
-		e := fmt.Errorf("error when retrieving Fixture: ID %d, Season ID %d", f.ID, f.SeasonID)
-		h.Logger.Println(e)
-		return nil, e
-	}
-
-	c, err := h.CompetitionRepo.ByID(s.CompetitionID)
-
-	if err != nil {
-		e := fmt.Errorf("error when retrieving Fixture: ID %d, Competition ID %d", f.ID, s.CompetitionID)
-		h.Logger.Println(e.Error())
-		return nil, e
-	}
-
 	home, err := h.TeamRepo.ByID(uint64(f.HomeTeamID))
 
 	if err != nil {
@@ -53,11 +35,12 @@ func (h FixtureHandler) HandleFixture(f *app.Fixture) (*proto.Fixture, error) {
 
 	p := proto.Fixture{
 		Id:          int64(f.ID),
-		Competition: converter.CompetitionToProto(c),
-		Season:      converter.SeasonToProto(s),
 		HomeTeam:    converter.TeamToProto(home),
 		AwayTeam:    converter.TeamToProto(away),
-		DateTime:    f.Date.Unix(),
+		DateTime:    &proto.Date{
+			Utc:    f.Date.Unix(),
+			Rfc:    f.Date.Format(time.RFC3339),
+		},
 	}
 
 	if f.RoundID != nil {
@@ -82,12 +65,6 @@ func (h FixtureHandler) HandleFixture(f *app.Fixture) (*proto.Fixture, error) {
 		} else {
 			p.Venue = converter.VenueToProto(v)
 		}
-	}
-
-	if f.RefereeID != nil {
-		ref := wrappers.Int64Value{}
-		ref.Value = int64(*f.RefereeID)
-		p.RefereeId = &ref
 	}
 
 	return &p, nil
