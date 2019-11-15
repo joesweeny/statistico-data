@@ -59,13 +59,13 @@ func parseFixtureQuery(r *http.Request, ps httprouter.Params) (app.FixtureReposi
 		return query, errBadRequest
 	}
 
-	after, err := parseDateQuery(r.URL.Query(), "date_from")
+	from, err := parseDateQuery(r.URL.Query(), "date_from")
 
 	if err == errTimeParse {
 		return query, err
 	}
 
-	before, err := parseDateQuery(r.URL.Query(), "date_to")
+	to, err := parseDateQuery(r.URL.Query(), "date_to")
 
 	if err == errTimeParse {
 		return query, err
@@ -73,8 +73,8 @@ func parseFixtureQuery(r *http.Request, ps httprouter.Params) (app.FixtureReposi
 
 	seasonID := uint64(id)
 	query.SeasonID = &seasonID
-	query.DateFrom = after
-	query.DateTo = before
+	query.DateFrom = from
+	query.DateTo = to
 
 	return query, nil
 }
