@@ -17,14 +17,14 @@ func convertAppTeam(t *app.Team) Team {
 // Convert a domain Round struct into a rest Round struct
 func convertAppRound(r *app.Round) Round {
 	var x Round
-	x.ID =        r.ID
-	x.Name =      r.Name
-	x.SeasonID =  r.SeasonID
+	x.ID = r.ID
+	x.Name = r.Name
+	x.SeasonID = r.SeasonID
 	x.StartDate = Date{
 		UTC: uint64(r.StartDate.Unix()),
 		RFC: r.StartDate.Format(time.RFC3339),
 	}
-	x.EndDate =   Date{
+	x.EndDate = Date{
 		UTC: uint64(r.EndDate.Unix()),
 		RFC: r.EndDate.Format(time.RFC3339),
 	}

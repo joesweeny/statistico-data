@@ -8,10 +8,10 @@ import (
 )
 
 type FixtureFactory struct {
-	roundRepo       app.RoundRepository
-	teamRepo        app.TeamRepository
-	venueRepo       app.VenueRepository
-	logger 			*logrus.Logger
+	roundRepo app.RoundRepository
+	teamRepo  app.TeamRepository
+	venueRepo app.VenueRepository
+	logger    *logrus.Logger
 }
 
 func (b FixtureFactory) BuildFixture(f *app.Fixture) (*proto.Fixture, error) {
@@ -31,7 +31,7 @@ func (b FixtureFactory) BuildFixture(f *app.Fixture) (*proto.Fixture, error) {
 		Id:       int64(f.ID),
 		HomeTeam: teamToProto(home),
 		AwayTeam: teamToProto(away),
-		DateTime:    &proto.Date{
+		DateTime: &proto.Date{
 			Utc: f.Date.Unix(),
 			Rfc: f.Date.Format(time.RFC3339),
 		},

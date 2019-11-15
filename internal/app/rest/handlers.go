@@ -15,4 +15,3 @@ func HealthCheck(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	w.WriteHeader(http.StatusOK)
 	_, _ = fmt.Fprint(w, "Healthcheck OK")
 }
-

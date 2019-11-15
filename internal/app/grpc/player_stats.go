@@ -11,9 +11,9 @@ import (
 )
 
 type PlayerStatsService struct {
-	fixtureRepo      app.FixtureRepository
-	factory          *factory.PlayerStatsFactory
-	logger 			*logrus.Logger
+	fixtureRepo app.FixtureRepository
+	factory     *factory.PlayerStatsFactory
+	logger      *logrus.Logger
 }
 
 func (s PlayerStatsService) GetPlayerStatsForFixture(c context.Context, r *proto.FixtureRequest) (*proto.PlayerStatsResponse, error) {
@@ -39,8 +39,8 @@ func (s PlayerStatsService) GetPlayerStatsForFixture(c context.Context, r *proto
 	}
 
 	res := proto.PlayerStatsResponse{
-		HomeTeam:             home,
-		AwayTeam:             away,
+		HomeTeam: home,
+		AwayTeam: away,
 	}
 
 	return &res, nil
@@ -69,8 +69,8 @@ func (s PlayerStatsService) GetLineUpForFixture(c context.Context, r *proto.Fixt
 	}
 
 	res := proto.LineupResponse{
-		HomeTeam:             home,
-		AwayTeam:             away,
+		HomeTeam: home,
+		AwayTeam: away,
 	}
 
 	return &res, nil

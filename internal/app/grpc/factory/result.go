@@ -7,10 +7,10 @@ import (
 )
 
 type ResultFactory struct {
-	resultRepo 		app.ResultRepository
-	teamRepo        app.TeamRepository
-	venueRepo       app.VenueRepository
-	logger 			*logrus.Logger
+	resultRepo app.ResultRepository
+	teamRepo   app.TeamRepository
+	venueRepo  app.VenueRepository
+	logger     *logrus.Logger
 }
 
 func (r ResultFactory) BuildResult(f *app.Fixture) (*proto.Result, error) {

@@ -6,13 +6,13 @@ import (
 
 // Fixture domain entity.
 type Fixture struct {
-	ID         uint64      `json:"id"`
-	SeasonID   uint64       `json:"season_id"`
-	RoundID    *uint64      `json:"round_id"`
-	VenueID    *uint64      `json:"venue_id"`
-	HomeTeamID uint64       `json:"home_team_id"`
-	AwayTeamID uint64       `json:"away_team_id"`
-	RefereeID  *uint64      `json:"referee_id"`
+	ID         uint64    `json:"id"`
+	SeasonID   uint64    `json:"season_id"`
+	RoundID    *uint64   `json:"round_id"`
+	VenueID    *uint64   `json:"venue_id"`
+	HomeTeamID uint64    `json:"home_team_id"`
+	AwayTeamID uint64    `json:"away_team_id"`
+	RefereeID  *uint64   `json:"referee_id"`
 	Date       time.Time `json:"date"`
 	CreatedAt  time.Time `json:"created_at"`
 	UpdatedAt  time.Time `json:"updated_at"`
@@ -29,12 +29,12 @@ type FixtureRepository interface {
 }
 
 type FixtureRepositoryQuery struct {
-	SeasonID *uint64
+	SeasonID   *uint64
 	HomeTeamID *uint64
 	AwayTeamID *uint64
-	DateFrom *time.Time
-	DateTo *time.Time
-	Limit *uint64
+	DateFrom   *time.Time
+	DateTo     *time.Time
+	Limit      *uint64
 }
 
 // FixtureRequester provides an interface allowing this application to request data from an external

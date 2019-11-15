@@ -7,8 +7,8 @@ import (
 )
 
 type PlayerStatsFactory struct {
-	repo 			app.PlayerStatsRepository
-	logger 			*logrus.Logger
+	repo   app.PlayerStatsRepository
+	logger *logrus.Logger
 }
 
 func (p PlayerStatsFactory) BuildPlayerStats(f *app.Fixture, teamID uint64) ([]*proto.PlayerStats, error) {

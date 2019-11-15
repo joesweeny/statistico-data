@@ -13,8 +13,8 @@ import (
 
 type FixtureService struct {
 	fixtureRepo app.FixtureRepository
-	factory *factory.FixtureFactory
-	logger *logrus.Logger
+	factory     *factory.FixtureFactory
+	logger      *logrus.Logger
 }
 
 func (s *FixtureService) ListSeasonFixtures(r *proto.SeasonFixtureRequest, stream proto.FixtureService_ListSeasonFixturesServer) error {
@@ -31,8 +31,8 @@ func (s *FixtureService) ListSeasonFixtures(r *proto.SeasonFixtureRequest, strea
 	}
 
 	query := app.FixtureRepositoryQuery{
-		DateTo: &to,
-		DateFrom:  &from,
+		DateTo:   &to,
+		DateFrom: &from,
 	}
 
 	fixtures, err := s.fixtureRepo.Get(query)

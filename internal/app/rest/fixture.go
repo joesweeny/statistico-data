@@ -12,7 +12,7 @@ import (
 
 type FixtureHandler struct {
 	fixtureRepo app.FixtureRepository
-	factory *FixtureFactory
+	factory     *FixtureFactory
 }
 
 func (f FixtureHandler) SeasonFixtures(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
@@ -73,9 +73,9 @@ func parseFixtureQuery(r *http.Request, ps httprouter.Params) (app.FixtureReposi
 	}
 
 	seasonID := uint64(id)
-	query.SeasonID =  &seasonID
-	query.DateFrom =   after
-	query.DateTo =     before
+	query.SeasonID = &seasonID
+	query.DateFrom = after
+	query.DateTo = before
 
 	return query, nil
 }

@@ -104,8 +104,8 @@ func TestEventProcessor_Process(t *testing.T) {
 
 		eventRepo.On("GoalEventByID", uint64(10)).Return(goalOne, nil)
 		eventRepo.On("GoalEventByID", uint64(20)).Return(goalTwo, nil)
-		eventRepo.AssertNotCalled(t,"InsertGoalEvent", goalOne)
-		eventRepo.AssertNotCalled(t,"InsertGoalEvent", goalTwo)
+		eventRepo.AssertNotCalled(t, "InsertGoalEvent", goalOne)
+		eventRepo.AssertNotCalled(t, "InsertGoalEvent", goalTwo)
 
 		eventRepo.On("SubstitutionEventByID", uint64(55)).Return(subOne, nil)
 		eventRepo.On("SubstitutionEventByID", uint64(2)).Return(subTwo, nil)
@@ -214,7 +214,7 @@ func TestEventProcessor_Process(t *testing.T) {
 
 		seasonID := uint64(12)
 
-		query := app.FixtureRepositoryQuery{SeasonID:&seasonID}
+		query := app.FixtureRepositoryQuery{SeasonID: &seasonID}
 
 		fixtureRepo.On("Get", query).Return(fix, nil)
 		requester.On("EventsByFixtureIDs", []uint64{12}).Return(goalCh, subCh)
@@ -274,15 +274,15 @@ func TestEventProcessor_Process(t *testing.T) {
 		fix = append(fix, *newFixture(uint64(12)))
 
 		seasonID := uint64(12)
-		query := app.FixtureRepositoryQuery{SeasonID:&seasonID}
+		query := app.FixtureRepositoryQuery{SeasonID: &seasonID}
 
 		fixtureRepo.On("Get", query).Return(fix, nil)
 		requester.On("EventsByFixtureIDs", []uint64{12}).Return(goalCh, subCh)
 
 		eventRepo.On("GoalEventByID", uint64(10)).Return(goalOne, nil)
 		eventRepo.On("GoalEventByID", uint64(20)).Return(goalTwo, nil)
-		eventRepo.AssertNotCalled(t,"InsertGoalEvent", goalOne)
-		eventRepo.AssertNotCalled(t,"InsertGoalEvent", goalTwo)
+		eventRepo.AssertNotCalled(t, "InsertGoalEvent", goalOne)
+		eventRepo.AssertNotCalled(t, "InsertGoalEvent", goalTwo)
 
 		eventRepo.On("SubstitutionEventByID", uint64(55)).Return(subOne, nil)
 		eventRepo.On("SubstitutionEventByID", uint64(2)).Return(subTwo, nil)
@@ -334,7 +334,7 @@ func TestEventProcessor_Process(t *testing.T) {
 		fix = append(fix, *newFixture(uint64(12)))
 
 		seasonID := uint64(12)
-		query := app.FixtureRepositoryQuery{SeasonID:&seasonID}
+		query := app.FixtureRepositoryQuery{SeasonID: &seasonID}
 
 		fixtureRepo.On("Get", query).Return(fix, nil)
 		requester.On("EventsByFixtureIDs", []uint64{12}).Return(goalCh, subCh)
@@ -396,7 +396,7 @@ func TestEventProcessor_Process(t *testing.T) {
 		from := time.Date(y, m, d, 0, 0, 0, 0, now.Location())
 		to := time.Date(y, m, d, 23, 59, 59, 59, now.Location())
 
-		query := app.FixtureRepositoryQuery{DateFrom:&from, DateTo:&to}
+		query := app.FixtureRepositoryQuery{DateFrom: &from, DateTo: &to}
 
 		fixtureRepo.On("GetIDs", query).Return([]uint64{12}, nil)
 		requester.On("EventsByFixtureIDs", []uint64{12}).Return(goalCh, subCh)
@@ -457,15 +457,15 @@ func TestEventProcessor_Process(t *testing.T) {
 		from := time.Date(y, m, d, 0, 0, 0, 0, now.Location())
 		to := time.Date(y, m, d, 23, 59, 59, 59, now.Location())
 
-		query := app.FixtureRepositoryQuery{DateFrom:&from, DateTo:&to}
+		query := app.FixtureRepositoryQuery{DateFrom: &from, DateTo: &to}
 
 		fixtureRepo.On("GetIDs", query).Return([]uint64{12}, nil)
 		requester.On("EventsByFixtureIDs", []uint64{12}).Return(goalCh, subCh)
 
 		eventRepo.On("GoalEventByID", uint64(10)).Return(goalOne, nil)
 		eventRepo.On("GoalEventByID", uint64(20)).Return(goalTwo, nil)
-		eventRepo.AssertNotCalled(t,"InsertGoalEvent", goalOne)
-		eventRepo.AssertNotCalled(t,"InsertGoalEvent", goalTwo)
+		eventRepo.AssertNotCalled(t, "InsertGoalEvent", goalOne)
+		eventRepo.AssertNotCalled(t, "InsertGoalEvent", goalTwo)
 
 		eventRepo.On("SubstitutionEventByID", uint64(55)).Return(subOne, nil)
 		eventRepo.On("SubstitutionEventByID", uint64(2)).Return(subTwo, nil)
@@ -518,7 +518,7 @@ func TestEventProcessor_Process(t *testing.T) {
 		from := time.Date(y, m, d, 0, 0, 0, 0, now.Location())
 		to := time.Date(y, m, d, 23, 59, 59, 59, now.Location())
 
-		query := app.FixtureRepositoryQuery{DateFrom:&from, DateTo:&to}
+		query := app.FixtureRepositoryQuery{DateFrom: &from, DateTo: &to}
 
 		fixtureRepo.On("GetIDs", query).Return([]uint64{12}, nil)
 		requester.On("EventsByFixtureIDs", []uint64{12}).Return(goalCh, subCh)

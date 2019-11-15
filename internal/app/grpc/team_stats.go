@@ -11,8 +11,8 @@ import (
 
 type TeamStatsService struct {
 	fixtureRepository app.FixtureRepository
-	factory *factory.TeamStatsFactory
-	logger *logrus.Logger
+	factory           *factory.TeamStatsFactory
+	logger            *logrus.Logger
 }
 
 func (s TeamStatsService) GetTeamStatsForFixture(c context.Context, r *proto.FixtureRequest) (*proto.TeamStatsResponse, error) {

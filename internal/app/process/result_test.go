@@ -175,7 +175,7 @@ func TestResultProcessor_Process(t *testing.T) {
 		fix := []app.Fixture{*newFixture(34)}
 
 		seasonID := uint64(34)
-		query := app.FixtureRepositoryQuery{SeasonID:&seasonID}
+		query := app.FixtureRepositoryQuery{SeasonID: &seasonID}
 
 		fixtureRepo.On("Get", query).Return(fix, nil)
 		requester.On("ResultsByFixtureIDs", []uint64{34}).Return(ch)
@@ -214,7 +214,7 @@ func TestResultProcessor_Process(t *testing.T) {
 		fix := []app.Fixture{*newFixture(34)}
 
 		seasonID := uint64(34)
-		query := app.FixtureRepositoryQuery{SeasonID:&seasonID}
+		query := app.FixtureRepositoryQuery{SeasonID: &seasonID}
 
 		fixtureRepo.On("Get", query).Return(fix, nil)
 		requester.On("ResultsByFixtureIDs", []uint64{34}).Return(ch)
@@ -253,7 +253,7 @@ func TestResultProcessor_Process(t *testing.T) {
 		fix := []app.Fixture{*newFixture(34)}
 
 		seasonID := uint64(34)
-		query := app.FixtureRepositoryQuery{SeasonID:&seasonID}
+		query := app.FixtureRepositoryQuery{SeasonID: &seasonID}
 
 		fixtureRepo.On("Get", query).Return(fix, nil)
 		requester.On("ResultsByFixtureIDs", []uint64{34}).Return(ch)
@@ -293,7 +293,7 @@ func TestResultProcessor_Process(t *testing.T) {
 		fix := []app.Fixture{*newFixture(34)}
 
 		seasonID := uint64(34)
-		query := app.FixtureRepositoryQuery{SeasonID:&seasonID}
+		query := app.FixtureRepositoryQuery{SeasonID: &seasonID}
 
 		fixtureRepo.On("Get", query).Return(fix, nil)
 		requester.On("ResultsByFixtureIDs", []uint64{34}).Return(ch)
@@ -335,7 +335,7 @@ func TestResultProcessor_Process(t *testing.T) {
 		from := time.Date(y, m, d, 0, 0, 0, 0, now.Location())
 		to := time.Date(y, m, d, 23, 59, 59, 59, now.Location())
 
-		query := app.FixtureRepositoryQuery{DateFrom:&from, DateTo:&to}
+		query := app.FixtureRepositoryQuery{DateFrom: &from, DateTo: &to}
 
 		fixtureRepo.On("GetIDs", query).Return([]uint64{34}, nil)
 		requester.On("ResultsByFixtureIDs", []uint64{34}).Return(ch)
@@ -376,7 +376,7 @@ func TestResultProcessor_Process(t *testing.T) {
 		from := time.Date(y, m, d, 0, 0, 0, 0, now.Location())
 		to := time.Date(y, m, d, 23, 59, 59, 59, now.Location())
 
-		query := app.FixtureRepositoryQuery{DateFrom:&from, DateTo:&to}
+		query := app.FixtureRepositoryQuery{DateFrom: &from, DateTo: &to}
 
 		fixtureRepo.On("GetIDs", query).Return([]uint64{34}, nil)
 		requester.On("ResultsByFixtureIDs", []uint64{34}).Return(ch)
@@ -417,7 +417,7 @@ func TestResultProcessor_Process(t *testing.T) {
 		from := time.Date(y, m, d, 0, 0, 0, 0, now.Location())
 		to := time.Date(y, m, d, 23, 59, 59, 59, now.Location())
 
-		query := app.FixtureRepositoryQuery{DateFrom:&from, DateTo:&to}
+		query := app.FixtureRepositoryQuery{DateFrom: &from, DateTo: &to}
 
 		fixtureRepo.On("GetIDs", query).Return([]uint64{34}, nil)
 		requester.On("ResultsByFixtureIDs", []uint64{34}).Return(ch)
@@ -459,7 +459,7 @@ func TestResultProcessor_Process(t *testing.T) {
 		from := time.Date(y, m, d, 0, 0, 0, 0, now.Location())
 		to := time.Date(y, m, d, 23, 59, 59, 59, now.Location())
 
-		query := app.FixtureRepositoryQuery{DateFrom:&from, DateTo:&to}
+		query := app.FixtureRepositoryQuery{DateFrom: &from, DateTo: &to}
 
 		fixtureRepo.On("GetIDs", query).Return([]uint64{34}, nil)
 		requester.On("ResultsByFixtureIDs", []uint64{34}).Return(ch)

@@ -13,11 +13,11 @@ import (
 )
 
 type Container struct {
-	Clock               clockwork.Clock
-	Config              *Config
-	Database            *sql.DB
+	Clock            clockwork.Clock
+	Config           *Config
+	Database         *sql.DB
 	Logger           *logrus.Logger
-	SportMonksClient    *spClient.HTTPClient
+	SportMonksClient *spClient.HTTPClient
 }
 
 func BuildContainer(config *Config) *Container {
@@ -66,7 +66,7 @@ func sportMonksClient(config *Config) *spClient.HTTPClient {
 	}
 
 	client := &http.Client{
-		Timeout: time.Second * 30,
+		Timeout:   time.Second * 30,
 		Transport: trans,
 	}
 

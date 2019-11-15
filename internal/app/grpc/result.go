@@ -16,8 +16,8 @@ var ErrTimeParse = errors.New("unable to parse date provided in Request")
 
 type ResultService struct {
 	fixtureRepo app.FixtureRepository
-	factory *factory.ResultFactory
-	logger *logrus.Logger
+	factory     *factory.ResultFactory
+	logger      *logrus.Logger
 }
 
 func (s ResultService) GetHistoricalResultsForFixture(r *proto.HistoricalResultRequest, stream proto.ResultService_GetHistoricalResultsForFixtureServer) error {
@@ -32,7 +32,7 @@ func (s ResultService) GetHistoricalResultsForFixture(r *proto.HistoricalResultR
 	query := app.FixtureRepositoryQuery{
 		HomeTeamID: &r.HomeTeamId,
 		AwayTeamID: &r.AwayTeamId,
-		DateTo: &date,
+		DateTo:     &date,
 		Limit:      &limit,
 	}
 
@@ -79,8 +79,8 @@ func (s ResultService) GetResultsForSeason(r *proto.SeasonRequest, stream proto.
 	id := uint64(r.SeasonId)
 
 	query := app.FixtureRepositoryQuery{
-		SeasonID:   &id,
-		DateTo: &date,
+		SeasonID: &id,
+		DateTo:   &date,
 	}
 
 	fixtures, err := s.fixtureRepo.Get(query)

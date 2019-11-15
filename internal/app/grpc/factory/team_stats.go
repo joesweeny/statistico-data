@@ -7,8 +7,8 @@ import (
 )
 
 type TeamStatsFactory struct {
-	repo app.TeamStatsRepository
-	logger 			*logrus.Logger
+	repo   app.TeamStatsRepository
+	logger *logrus.Logger
 }
 
 func (t TeamStatsFactory) BuildTeamStats(f *app.Fixture, teamID uint64) (*proto.TeamStats, error) {

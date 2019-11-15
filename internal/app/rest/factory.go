@@ -6,9 +6,9 @@ import (
 )
 
 type FixtureFactory struct {
-	roundRepo       app.RoundRepository
-	teamRepo        app.TeamRepository
-	venueRepo       app.VenueRepository
+	roundRepo app.RoundRepository
+	teamRepo  app.TeamRepository
+	venueRepo app.VenueRepository
 }
 
 func (b FixtureFactory) BuildFixture(f *app.Fixture) (*Fixture, error) {
@@ -28,7 +28,7 @@ func (b FixtureFactory) BuildFixture(f *app.Fixture) (*Fixture, error) {
 		ID:       f.ID,
 		HomeTeam: convertAppTeam(home),
 		AwayTeam: convertAppTeam(away),
-		Date:    Date{
+		Date: Date{
 			UTC: uint64(f.Date.Unix()),
 			RFC: f.Date.Format(time.RFC3339),
 		},
