@@ -14,11 +14,11 @@ const resultBySeasonId = "result:by-season-id"
 const resultToday = "result:today"
 
 type ResultProcessor struct {
-	resultRepo app.ResultRepository
+	resultRepo  app.ResultRepository
 	fixtureRepo app.FixtureRepository
-	requester app.ResultRequester
-	clock clockwork.Clock
-	logger     *logrus.Logger
+	requester   app.ResultRequester
+	clock       clockwork.Clock
+	logger      *logrus.Logger
 }
 
 func (r ResultProcessor) Process(command string, option string, done chan bool) {
@@ -53,7 +53,7 @@ func (r ResultProcessor) processByID(done chan bool, id uint64) {
 }
 
 func (r ResultProcessor) processSeason(done chan bool, seasonID uint64) {
-	query := app.FixtureRepositoryQuery{SeasonID:&seasonID}
+	query := app.FixtureRepositoryQuery{SeasonID: &seasonID}
 
 	fix, err := r.fixtureRepo.Get(query)
 
@@ -81,8 +81,8 @@ func (r ResultProcessor) processTodayResults(done chan bool) {
 	to := time.Date(y, m, d, 23, 59, 59, 59, now.Location())
 
 	query := app.FixtureRepositoryQuery{
-		DateTo: &to,
-		DateFrom:  &from,
+		DateTo:   &to,
+		DateFrom: &from,
 	}
 
 	ids, err := r.fixtureRepo.GetIDs(query)

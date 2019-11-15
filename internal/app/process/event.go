@@ -16,11 +16,11 @@ const eventsToday = "events:today"
 // EventProcessor fetches data from external data source using the EventRequester
 // before persisting to the storage engine using the EventRepository.
 type EventProcessor struct {
-	eventRepo app.EventRepository
+	eventRepo   app.EventRepository
 	fixtureRepo app.FixtureRepository
-	requester app.EventRequester
-	clock clockwork.Clock
-	logger     *logrus.Logger
+	requester   app.EventRequester
+	clock       clockwork.Clock
+	logger      *logrus.Logger
 }
 
 func (e EventProcessor) Process(command string, option string, done chan bool) {
@@ -55,7 +55,7 @@ func (e EventProcessor) processEventsByFixtureID(id uint64, done chan bool) {
 }
 
 func (e EventProcessor) processEventsBySeasonID(id uint64, done chan bool) {
-	query := app.FixtureRepositoryQuery{SeasonID:&id}
+	query := app.FixtureRepositoryQuery{SeasonID: &id}
 
 	fix, err := e.fixtureRepo.Get(query)
 
@@ -83,8 +83,8 @@ func (e EventProcessor) processTodayEvents(done chan bool) {
 	to := time.Date(y, m, d, 23, 59, 59, 59, now.Location())
 
 	query := app.FixtureRepositoryQuery{
-		DateTo: &to,
-		DateFrom:  &from,
+		DateTo:   &to,
+		DateFrom: &from,
 	}
 
 	ids, err := e.fixtureRepo.GetIDs(query)

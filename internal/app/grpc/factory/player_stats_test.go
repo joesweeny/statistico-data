@@ -1,4 +1,4 @@
-package handler
+package factory
 
 import (
 	"github.com/statistico/statistico-data/internal/app"
@@ -20,7 +20,7 @@ func TestHandlePlayerStats(t *testing.T) {
 			modelPlayerStats(&goals, &assists, &onGoal),
 		}
 
-		stats := HandlePlayerStats(x)
+		stats := handlePlayerStats(x)
 
 		assert.Equal(t, 3, len(stats))
 	})
@@ -52,7 +52,7 @@ func TestHandleStartingLineupPlayers(t *testing.T) {
 			modelPlayerLineup(playerId3, &formation3, &pos3, true),
 		}
 
-		lineup := HandleStartingLineupPlayers(x)
+		lineup := handleStartingLineupPlayers(x)
 
 		a := assert.New(t)
 
@@ -93,7 +93,7 @@ func TestHandleSubstituteLineupPlayers(t *testing.T) {
 			modelPlayerLineup(playerId3, &formation3, &pos3, false),
 		}
 
-		lineup := HandleSubstituteLineupPlayers(x)
+		lineup := handleSubstituteLineupPlayers(x)
 
 		a := assert.New(t)
 

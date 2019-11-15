@@ -23,9 +23,8 @@ type Services struct {
 }
 
 type SportsMonks struct {
-	ApiKey  string
+	ApiKey string
 }
-
 
 func BuildConfig() *Config {
 	config := Config{}
@@ -40,7 +39,7 @@ func BuildConfig() *Config {
 	}
 
 	config.SportsMonks = SportsMonks{
-		ApiKey:  os.Getenv("SPORTMONKS_API_KEY"),
+		ApiKey: os.Getenv("SPORTMONKS_API_KEY"),
 	}
 
 	return &config

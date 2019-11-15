@@ -27,7 +27,7 @@ func (t TeamStatsRequester) parseStats(ids []uint64, ch chan<- *app.TeamStats) {
 	var filters map[string][]int
 
 	for _, id := range ids {
-		res, _ , err := t.client.FixtureByID(context.Background(), int(id), []string{"stats"}, filters)
+		res, _, err := t.client.FixtureByID(context.Background(), int(id), []string{"stats"}, filters)
 
 		if err != nil {
 			t.logger.Warnf(

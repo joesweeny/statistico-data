@@ -1,8 +1,7 @@
-package converter_test
+package factory
 
 import (
 	"github.com/statistico/statistico-data/internal/app"
-	"github.com/statistico/statistico-data/internal/app/converter"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -17,7 +16,7 @@ func TestPlayerStatsToProto(t *testing.T) {
 
 		stats := newPlayerStats(&goals, &assists, &onGoal)
 
-		proto := converter.PlayerStatsToProto(stats)
+		proto := playerStatsToProto(stats)
 
 		a := assert.New(t)
 		a.Equal(uint64(77), proto.PlayerId)
@@ -33,7 +32,7 @@ func TestPlayerStatsToProto(t *testing.T) {
 			PlayerID: 77,
 		}
 
-		proto := converter.PlayerStatsToProto(stats)
+		proto := playerStatsToProto(stats)
 
 		a := assert.New(t)
 		a.Equal(uint64(77), proto.PlayerId)
@@ -57,7 +56,7 @@ func TestPlayerStatsToLineupPlayerProto(t *testing.T) {
 	}
 
 	t.Run("a new LineupPlayer proto struct is hydrated", func(t *testing.T) {
-		pl := converter.PlayerStatsToLineupPlayerProto(&player)
+		pl := playerStatsToLineupPlayerProto(&player)
 
 		a := assert.New(t)
 		a.Equal(uint64(105), pl.PlayerId)
@@ -69,7 +68,7 @@ func TestPlayerStatsToLineupPlayerProto(t *testing.T) {
 	t.Run("nullable fields are handled", func(t *testing.T) {
 		player.FormationPosition = nil
 
-		pl := converter.PlayerStatsToLineupPlayerProto(&player)
+		pl := playerStatsToLineupPlayerProto(&player)
 
 		a := assert.New(t)
 		a.Equal(uint64(105), pl.PlayerId)
@@ -83,7 +82,7 @@ func TestTeamStatsToProto(t *testing.T) {
 	t.Run("returns a proto team stats struct", func(t *testing.T) {
 		m := newTeamStats()
 
-		proto := converter.TeamStatsToProto(m)
+		proto := teamStatsToProto(m)
 
 		a := assert.New(t)
 		a.Equal(uint64(850), proto.TeamId)

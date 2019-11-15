@@ -157,7 +157,6 @@ func TestFixtureRepository_Update(t *testing.T) {
 	})
 }
 
-
 func TestFixtureRepository_GetIDs(t *testing.T) {
 	conn, cleanUp := test.GetConnection(t, "sportmonks_fixture")
 	repo := postgres.NewFixtureRepository(conn, test.Clock)
@@ -193,7 +192,7 @@ func TestFixtureRepository_GetIDs(t *testing.T) {
 		after := time.Unix(1548086910, 0)
 		before := time.Unix(1548086950, 0)
 
-		query := app.FixtureRepositoryQuery{DateTo:&before, DateFrom:&after}
+		query := app.FixtureRepositoryQuery{DateTo: &before, DateFrom: &after}
 
 		ids, err := repo.GetIDs(query)
 
@@ -298,7 +297,7 @@ func TestFixtureRepository_Get(t *testing.T) {
 
 		season := uint64(6012)
 
-		query := app.FixtureRepositoryQuery{SeasonID:&season}
+		query := app.FixtureRepositoryQuery{SeasonID: &season}
 
 		fix, err := repo.Get(query)
 
@@ -331,7 +330,7 @@ func TestFixtureRepository_Get(t *testing.T) {
 		season := uint64(6012)
 		before := time.Unix(1550066319, 0)
 
-		query := app.FixtureRepositoryQuery{SeasonID:&season, DateTo:&before}
+		query := app.FixtureRepositoryQuery{SeasonID: &season, DateTo: &before}
 
 		fix, err := repo.Get(query)
 
@@ -365,7 +364,7 @@ func TestFixtureRepository_Get(t *testing.T) {
 
 		before := time.Unix(1550066312, 0)
 
-		query := app.FixtureRepositoryQuery{DateTo:&before}
+		query := app.FixtureRepositoryQuery{DateTo: &before}
 
 		fix, err := repo.Get(query)
 
@@ -391,7 +390,7 @@ func TestFixtureRepository_Get(t *testing.T) {
 
 		after := time.Unix(1550066316, 0)
 
-		query := app.FixtureRepositoryQuery{DateFrom:&after}
+		query := app.FixtureRepositoryQuery{DateFrom: &after}
 
 		fix, err := repo.Get(query)
 
@@ -418,7 +417,7 @@ func TestFixtureRepository_Get(t *testing.T) {
 		home := uint64(66)
 		away := uint64(924)
 
-		query := app.FixtureRepositoryQuery{HomeTeamID:&home, AwayTeamID:&away}
+		query := app.FixtureRepositoryQuery{HomeTeamID: &home, AwayTeamID: &away}
 
 		fix, err := repo.Get(query)
 
@@ -444,7 +443,7 @@ func TestFixtureRepository_Get(t *testing.T) {
 
 		season := uint64(999999999)
 
-		query := app.FixtureRepositoryQuery{SeasonID:&season}
+		query := app.FixtureRepositoryQuery{SeasonID: &season}
 
 		fix, err := repo.Get(query)
 

@@ -3,7 +3,7 @@ syntax = "proto3";
 package proto;
 
 import "google/protobuf/wrappers.proto";
-import "internal/app/proto/requests.proto";
+import "internal/app/grpc/proto/requests.proto";
 
 service PlayerStatsService {
     rpc GetPlayerStatsForFixture(FixtureRequest) returns (PlayerStatsResponse) {}

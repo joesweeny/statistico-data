@@ -6,7 +6,7 @@ import (
 
 // Result domain entity.
 type Result struct {
-	FixtureID          uint64       `json:"fixture_id"`
+	FixtureID          uint64    `json:"fixture_id"`
 	PitchCondition     *string   `json:"pitch_condition"`
 	HomeFormation      *string   `json:"home_formation"`
 	AwayFormation      *string   `json:"away_formation"`

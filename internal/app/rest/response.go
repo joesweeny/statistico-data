@@ -6,14 +6,15 @@ import (
 )
 
 type response struct {
-	Message string `json:"message"`
-	Data interface{} `json:"data"`
+	Message string      `json:"message"`
+	Data    interface{} `json:"data"`
 }
 
 type errorMessage struct {
 	Message string `json:"message"`
-	Code    int `json:"code"`
+	Code    int    `json:"code"`
 }
+
 func jsonResponse(w http.ResponseWriter, status int, payload interface{}) {
 	response, _ := json.Marshal(payload)
 
@@ -22,19 +23,19 @@ func jsonResponse(w http.ResponseWriter, status int, payload interface{}) {
 	_, _ = w.Write(response)
 }
 
-func successResponse(w http.ResponseWriter, payload interface{}) {
+func successResponse(w http.ResponseWriter, status int, payload interface{}) {
 	response := response{
 		Message: "success",
 		Data:    payload,
 	}
 
-	jsonResponse(w, 200, response)
+	jsonResponse(w, status, response)
 }
 
 func failResponse(w http.ResponseWriter, status int, error error) {
 	response := response{
 		Message: "fail",
-		Data:    []errorMessage{
+		Data: []errorMessage{
 			{
 				Message: error.Error(),
 				Code:    1,
@@ -48,7 +49,7 @@ func failResponse(w http.ResponseWriter, status int, error error) {
 func errorResponse(w http.ResponseWriter, status int, error error) {
 	response := response{
 		Message: "error",
-		Data:    []errorMessage{
+		Data: []errorMessage{
 			{
 				Message: error.Error(),
 				Code:    1,

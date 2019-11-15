@@ -12,9 +12,9 @@ const fixtureCurrentSeason = "fixture:current-season"
 // before persisting to the storage engine using the FixtureRepository
 type FixtureProcessor struct {
 	fixtureRepo app.FixtureRepository
-	seasonRepo app.SeasonRepository
-	requester app.FixtureRequester
-	logger     *logrus.Logger
+	seasonRepo  app.SeasonRepository
+	requester   app.FixtureRequester
+	logger      *logrus.Logger
 }
 
 func (f FixtureProcessor) Process(command string, option string, done chan bool) {

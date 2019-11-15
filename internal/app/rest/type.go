@@ -6,17 +6,20 @@ type Date struct {
 }
 
 type Fixture struct {
-	ID         uint64 `json:"id"`
-	HomeTeamID Team   `json:"home_team"`
-	AwayTeamID Team   `json:"away_team"`
-	RoundID    Round  `json:"round"`
-	VenueID    Venue  `json:"venue"`
-	Date       Date   `json:"date"`
+	ID       uint64 `json:"id"`
+	HomeTeam Team   `json:"home_team"`
+	AwayTeam Team   `json:"away_team"`
+	Round    Round  `json:"round"`
+	Venue    Venue  `json:"venue"`
+	Date     Date   `json:"date"`
 }
 
 type Round struct {
-	ID   uint64 `json:"id"`
-	Name string `json:"name"`
+	ID        uint64 `json:"id"`
+	Name      string `json:"name"`
+	SeasonID  uint64 `json:"season_id"`
+	StartDate Date   `json:"start_date"`
+	EndDate   Date   `json:"end_date"`
 }
 
 type Team struct {

@@ -15,10 +15,10 @@ const playerStatsToday = "player-stats:today"
 
 type PlayerStatsProcessor struct {
 	playerStatsRepo app.PlayerStatsRepository
-	fixtureRepo app.FixtureRepository
-	requester app.PlayerStatRequester
-	clock clockwork.Clock
-	logger     *logrus.Logger
+	fixtureRepo     app.FixtureRepository
+	requester       app.PlayerStatRequester
+	clock           clockwork.Clock
+	logger          *logrus.Logger
 }
 
 func (p PlayerStatsProcessor) Process(command string, option string, done chan bool) {
@@ -53,7 +53,7 @@ func (p PlayerStatsProcessor) processByID(done chan bool, id uint64) {
 }
 
 func (p PlayerStatsProcessor) processSeason(done chan bool, seasonID uint64) {
-	query := app.FixtureRepositoryQuery{SeasonID:&seasonID}
+	query := app.FixtureRepositoryQuery{SeasonID: &seasonID}
 
 	fix, err := p.fixtureRepo.Get(query)
 
@@ -81,8 +81,8 @@ func (p PlayerStatsProcessor) processToday(done chan bool) {
 	to := time.Date(y, m, d, 23, 59, 59, 59, now.Location())
 
 	query := app.FixtureRepositoryQuery{
-		DateTo: &to,
-		DateFrom:  &from,
+		DateTo:   &to,
+		DateFrom: &from,
 	}
 
 	ids, err := p.fixtureRepo.GetIDs(query)

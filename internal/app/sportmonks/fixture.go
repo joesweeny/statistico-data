@@ -37,7 +37,7 @@ func (f FixtureRequester) parseFixtures(seasonIDs []uint64, ch chan<- *app.Fixtu
 }
 
 func (f FixtureRequester) sendFixtureRequests(seasonID uint64, ch chan<- *app.Fixture, w *sync.WaitGroup) {
-	res, _ , err := f.client.SeasonByID(context.Background(), int(seasonID), []string{"fixtures"})
+	res, _, err := f.client.SeasonByID(context.Background(), int(seasonID), []string{"fixtures"})
 
 	if err != nil {
 		f.logger.Warnf(
