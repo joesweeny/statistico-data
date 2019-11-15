@@ -6,88 +6,76 @@ import (
 	"fmt"
 	"github.com/sirupsen/logrus"
 	"github.com/statistico/statistico-data/internal/app"
+	"github.com/statistico/statistico-data/internal/app/grpc/factory"
 	"github.com/statistico/statistico-data/internal/app/grpc/proto"
-	"github.com/statistico/statistico-data/internal/app/handler"
 )
 
 type PlayerStatsService struct {
-	PlayerRepository app.PlayerStatsRepository
-	FixtureRepo      app.FixtureRepository
-	Logger *logrus.Logger
+	fixtureRepo      app.FixtureRepository
+	factory          *factory.PlayerStatsFactory
+	logger 			*logrus.Logger
 }
 
 func (s PlayerStatsService) GetPlayerStatsForFixture(c context.Context, r *proto.FixtureRequest) (*proto.PlayerStatsResponse, error) {
-	fix, err := s.FixtureRepo.ByID(r.FixtureId)
+	fix, err := s.fixtureRepo.ByID(r.FixtureId)
 
 	if err != nil {
 		m := fmt.Sprintf("Fixture with ID %d does not exist", r.FixtureId)
 		return nil, errors.New(m)
 	}
 
-	res := proto.PlayerStatsResponse{}
-
-	home, err := s.PlayerRepository.ByFixtureAndTeam(fix.ID, fix.HomeTeamID)
+	home, err := s.factory.BuildPlayerStats(fix, fix.HomeTeamID)
 
 	if err != nil {
-		e := fmt.Errorf("error when retrieving player stats: FixtureID %d, Home Team ID %d", fix.ID, fix.HomeTeamID)
-		s.Logger.Println(e)
-		return nil, e
+		s.logger.Warnf("Error hydrating proto player stats: %s", err.Error())
+		return nil, err
 	}
 
-	res.HomeTeam = handler.HandlePlayerStats(home)
-
-	away, err := s.PlayerRepository.ByFixtureAndTeam(uint64(fix.ID), uint64(fix.AwayTeamID))
+	away, err := s.factory.BuildPlayerStats(fix, fix.AwayTeamID)
 
 	if err != nil {
-		e := fmt.Errorf("error when retrieving player stats: FixtureID %d, Away Team ID %d", fix.ID, fix.HomeTeamID)
-		s.Logger.Println(e)
-		return nil, e
+		s.logger.Warnf("Error hydrating proto player stats: %s", err.Error())
+		return nil, err
 	}
 
-	res.AwayTeam = handler.HandlePlayerStats(away)
+	res := proto.PlayerStatsResponse{
+		HomeTeam:             home,
+		AwayTeam:             away,
+	}
 
 	return &res, nil
 }
 
 func (s PlayerStatsService) GetLineUpForFixture(c context.Context, r *proto.FixtureRequest) (*proto.LineupResponse, error) {
-	fix, err := s.FixtureRepo.ByID(r.FixtureId)
+	fix, err := s.fixtureRepo.ByID(r.FixtureId)
 
 	if err != nil {
 		m := fmt.Sprintf("Fixture with ID %d does not exist", r.FixtureId)
 		return nil, errors.New(m)
 	}
 
-	res := proto.LineupResponse{}
-
-	home, err := s.PlayerRepository.ByFixtureAndTeam(uint64(fix.ID), uint64(fix.HomeTeamID))
+	home, err := s.factory.BuildLineup(fix, fix.HomeTeamID)
 
 	if err != nil {
-		e := fmt.Errorf("error when retrieving player stats: FixtureID %d, Home Team ID %d", fix.ID, fix.HomeTeamID)
-		s.Logger.Println(e)
-		return nil, e
+		s.logger.Warnf("Error hydrating proto lineup: %s", err.Error())
+		return nil, err
 	}
 
-	homeLineup := proto.Lineup{
-		Start: handler.HandleStartingLineupPlayers(home),
-		Bench: handler.HandleSubstituteLineupPlayers(home),
-	}
-
-	res.HomeTeam = &homeLineup
-
-	away, err := s.PlayerRepository.ByFixtureAndTeam(uint64(fix.ID), uint64(fix.AwayTeamID))
+	away, err := s.factory.BuildLineup(fix, fix.AwayTeamID)
 
 	if err != nil {
-		e := fmt.Errorf("error when retrieving player stats: FixtureID %d, Away Team ID %d", fix.ID, fix.AwayTeamID)
-		s.Logger.Println(e)
-		return nil, e
+		s.logger.Warnf("Error hydrating proto lineup: %s", err.Error())
+		return nil, err
 	}
 
-	awayLineup := proto.Lineup{
-		Start: handler.HandleStartingLineupPlayers(away),
-		Bench: handler.HandleSubstituteLineupPlayers(away),
+	res := proto.LineupResponse{
+		HomeTeam:             home,
+		AwayTeam:             away,
 	}
-
-	res.AwayTeam = &awayLineup
 
 	return &res, nil
+}
+
+func NewPlayerStatsService(r app.FixtureRepository, f *factory.PlayerStatsFactory, log *logrus.Logger) *PlayerStatsService {
+	return &PlayerStatsService{fixtureRepo: r, factory: f, logger: log}
 }

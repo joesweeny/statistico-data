@@ -1,4 +1,4 @@
-package grpc
+package factory
 
 import (
 	"github.com/golang/protobuf/ptypes/wrappers"
@@ -31,7 +31,7 @@ func CompetitionToProto(c *app.Competition) *proto.Competition {
 // Convert a domain PlayerStats struct into a proto LineupPlayer struct
 func PlayerStatsToLineupPlayerProto(p *app.PlayerStats) *proto.LineupPlayer {
 	player := proto.LineupPlayer{
-		PlayerId:     uint64(p.PlayerID),
+		PlayerId:     p.PlayerID,
 		Position:     *p.Position,
 		IsSubstitute: p.IsSubstitute,
 	}
@@ -384,4 +384,41 @@ func ToMatchStats(res *app.Result) *proto.MatchStats {
 	}
 
 	return &stats
+}
+
+func HandlePlayerStats(p []*app.PlayerStats) []*proto.PlayerStats {
+	var stats []*proto.PlayerStats
+
+	for _, player := range p {
+		s := PlayerStatsToProto(player)
+		stats = append(stats, s)
+	}
+
+	return stats
+}
+
+func HandleStartingLineupPlayers(p []*app.PlayerStats) []*proto.LineupPlayer {
+	var lineup []*proto.LineupPlayer
+
+	for _, player := range p {
+		if !player.IsSubstitute {
+			l := PlayerStatsToLineupPlayerProto(player)
+			lineup = append(lineup, l)
+		}
+	}
+
+	return lineup
+}
+
+func HandleSubstituteLineupPlayers(p []*app.PlayerStats) []*proto.LineupPlayer {
+	var lineup []*proto.LineupPlayer
+
+	for _, player := range p {
+		if player.IsSubstitute {
+			l := PlayerStatsToLineupPlayerProto(player)
+			lineup = append(lineup, l)
+		}
+	}
+
+	return lineup
 }

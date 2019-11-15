@@ -1,4 +1,4 @@
-package handler
+package factory
 
 import (
 	"github.com/statistico/statistico-data/internal/app"

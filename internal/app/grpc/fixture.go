@@ -6,13 +6,14 @@ import (
 	"fmt"
 	"github.com/sirupsen/logrus"
 	"github.com/statistico/statistico-data/internal/app"
+	"github.com/statistico/statistico-data/internal/app/grpc/factory"
 	"github.com/statistico/statistico-data/internal/app/grpc/proto"
 	"time"
 )
 
 type FixtureService struct {
 	fixtureRepo app.FixtureRepository
-	factory *FixtureFactory
+	factory *factory.FixtureFactory
 	logger *logrus.Logger
 }
 
@@ -77,6 +78,6 @@ func (s *FixtureService) FixtureByID(c context.Context, r *proto.FixtureRequest)
 	return f, nil
 }
 
-func NewFixtureService(r app.FixtureRepository, f *FixtureFactory, log *logrus.Logger) *FixtureService {
+func NewFixtureService(r app.FixtureRepository, f *factory.FixtureFactory, log *logrus.Logger) *FixtureService {
 	return &FixtureService{fixtureRepo: r, factory: f, logger: log}
 }

@@ -1,8 +1,7 @@
-package grpc_test
+package factory_test
 
 import (
 	"github.com/statistico/statistico-data/internal/app"
-	"github.com/statistico/statistico-data/internal/app/grpc"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -17,7 +16,7 @@ func TestPlayerStatsToProto(t *testing.T) {
 
 		stats := newPlayerStats(&goals, &assists, &onGoal)
 
-		proto := grpc.PlayerStatsToProto(stats)
+		proto := PlayerStatsToProto(stats)
 
 		a := assert.New(t)
 		a.Equal(uint64(77), proto.PlayerId)
@@ -33,7 +32,7 @@ func TestPlayerStatsToProto(t *testing.T) {
 			PlayerID: 77,
 		}
 
-		proto := grpc.PlayerStatsToProto(stats)
+		proto := PlayerStatsToProto(stats)
 
 		a := assert.New(t)
 		a.Equal(uint64(77), proto.PlayerId)
@@ -57,7 +56,7 @@ func TestPlayerStatsToLineupPlayerProto(t *testing.T) {
 	}
 
 	t.Run("a new LineupPlayer proto struct is hydrated", func(t *testing.T) {
-		pl := grpc.PlayerStatsToLineupPlayerProto(&player)
+		pl := PlayerStatsToLineupPlayerProto(&player)
 
 		a := assert.New(t)
 		a.Equal(uint64(105), pl.PlayerId)
@@ -69,7 +68,7 @@ func TestPlayerStatsToLineupPlayerProto(t *testing.T) {
 	t.Run("nullable fields are handled", func(t *testing.T) {
 		player.FormationPosition = nil
 
-		pl := grpc.PlayerStatsToLineupPlayerProto(&player)
+		pl := PlayerStatsToLineupPlayerProto(&player)
 
 		a := assert.New(t)
 		a.Equal(uint64(105), pl.PlayerId)
@@ -83,7 +82,7 @@ func TestTeamStatsToProto(t *testing.T) {
 	t.Run("returns a proto team stats struct", func(t *testing.T) {
 		m := newTeamStats()
 
-		proto := grpc.TeamStatsToProto(m)
+		proto := TeamStatsToProto(m)
 
 		a := assert.New(t)
 		a.Equal(uint64(850), proto.TeamId)
