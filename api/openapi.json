@@ -75,7 +75,14 @@
             }
           },
           "default": {
-            "$ref": "#/components/schemas/StandardResponse"
+            "description": "Default non 200 response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StandardResponse"
+                }
+              }
+            }
           }
         }
       }
@@ -83,19 +90,6 @@
   },
   "components": {
     "schemas": {
-      "Competition": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "example": 15671
-          },
-          "name": {
-            "type": "string",
-            "example": "English Premier League"
-          }
-        }
-      },
       "Date": {
         "type": "object",
         "properties": {
@@ -153,7 +147,7 @@
             "$ref": "#/components/schemas/Venue"
           },
           "round": {
-            "$ref": "#/components/schemas/Venue"
+            "$ref": "#/components/schemas/Round"
           },
           "date_time": {
             "$ref": "#/components/schemas/Date"
@@ -170,19 +164,16 @@
           "name": {
             "type": "string",
             "example": "5"
-          }
-        }
-      },
-      "Season": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "example": 6715
           },
-          "name": {
-            "type": "string",
-            "example": "2018/2019"
+          "season_id": {
+            "type": "integer",
+            "example": 452
+          },
+          "start_date": {
+            "$ref": "#/components/schemas/Date"
+          },
+          "end_date": {
+            "$ref": "#/components/schemas/Date"
           }
         }
       },
