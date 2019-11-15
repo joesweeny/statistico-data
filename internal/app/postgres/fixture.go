@@ -3,6 +3,7 @@ package postgres
 import (
 	"database/sql"
 	"fmt"
+	sq "github.com/Masterminds/squirrel"
 	"github.com/jonboulle/clockwork"
 	"github.com/statistico/statistico-data/internal/app"
 	"time"
@@ -69,44 +70,6 @@ func (r *FixtureRepository) ByID(id uint64) (*app.Fixture, error) {
 	return rowToFixture(row, id)
 }
 
-func (r *FixtureRepository) IDs() ([]uint64, error) {
-	t := time.Now()
-	then := t.AddDate(0, 0, -1)
-	query := `SELECT id FROM sportmonks_fixture where date < $1 ORDER BY id ASC`
-
-	rows, err := r.connection.Query(query, then.Unix())
-
-	if err != nil {
-		return []uint64{}, err
-	}
-
-	return rowsToIntSlice(rows)
-}
-
-func (r *FixtureRepository) IDsBetween(from, to time.Time) ([]uint64, error) {
-	query := `SELECT id FROM sportmonks_fixture where date BETWEEN $1 AND $2 ORDER BY id ASC`
-
-	rows, err := r.connection.Query(query, from.Unix(), to.Unix())
-
-	if err != nil {
-		return []uint64{}, err
-	}
-
-	return rowsToIntSlice(rows)
-}
-
-func (r *FixtureRepository) Between(from, to time.Time) ([]app.Fixture, error) {
-	query := `SELECT * FROM sportmonks_fixture where date BETWEEN $1 AND $2 ORDER BY id ASC`
-
-	rows, err := r.connection.Query(query, from.Unix(), to.Unix())
-
-	if err != nil {
-		return []app.Fixture{}, err
-	}
-
-	return rowsToFixtureSlice(rows)
-}
-
 func (r *FixtureRepository) ByTeamID(id uint64, limit int32, before time.Time) ([]app.Fixture, error) {
 	query := `SELECT * FROM sportmonks_fixture WHERE date < $2 AND (home_team_id = $1 OR away_team_id = $1)
 	ORDER BY date DESC LIMIT $3`
@@ -120,22 +83,12 @@ func (r *FixtureRepository) ByTeamID(id uint64, limit int32, before time.Time) (
 	return rowsToFixtureSlice(rows)
 }
 
-func (r *FixtureRepository) BySeasonID(id uint64) ([]app.Fixture, error) {
-	query := `SELECT * FROM sportmonks_fixture WHERE season_id = $1 ORDER BY date ASC, id ASC`
+func (r *FixtureRepository) Get(q app.FixtureRepositoryQuery) ([]app.Fixture, error) {
+	builder := r.queryBuilder()
 
-	rows, err := r.connection.Query(query, id)
+	query := builder.Select("*").From("sportmonks_fixture")
 
-	if err != nil {
-		return []app.Fixture{}, err
-	}
-
-	return rowsToFixtureSlice(rows)
-}
-
-func (r *FixtureRepository) BySeasonIDBefore(id uint64, before time.Time) ([]app.Fixture, error) {
-	query := `SELECT * FROM sportmonks_fixture WHERE season_id = $1 and date < $2 ORDER BY date ASC, id ASC`
-
-	rows, err := r.connection.Query(query, id, before.Unix())
+	rows, err := buildQuery(query, q).Query()
 
 	if err != nil {
 		return []app.Fixture{}, err
@@ -144,29 +97,46 @@ func (r *FixtureRepository) BySeasonIDBefore(id uint64, before time.Time) ([]app
 	return rowsToFixtureSlice(rows)
 }
 
-func (r *FixtureRepository) BySeasonIDBetween(id uint64, after, before time.Time) ([]app.Fixture, error) {
-	query := `SELECT * FROM sportmonks_fixture WHERE season_id = $1 and date >= $2 and date <= $3 ORDER BY date ASC, id ASC`
+func (r *FixtureRepository) GetIDs(q app.FixtureRepositoryQuery) ([]uint64, error) {
+	builder := r.queryBuilder()
 
-	rows, err := r.connection.Query(query, id, after.Unix(), before.Unix())
+	query := builder.Select("id").From("sportmonks_fixture")
+
+	rows, err := buildQuery(query, q).Query()
 
 	if err != nil {
-		return []app.Fixture{}, err
+		return []uint64{}, err
 	}
 
-	return rowsToFixtureSlice(rows)
+	return rowsToIntSlice(rows)
 }
 
-func (r *FixtureRepository) ByHomeAndAwayTeam(homeTeamId, awayTeamId uint64, limit uint32, before time.Time) ([]app.Fixture, error) {
-	query := `SELECT * FROM sportmonks_fixture WHERE home_team_id = $1 and away_team_id = $2 and date < $3
-	ORDER BY date DESC LIMIT $4`
-
-	rows, err := r.connection.Query(query, homeTeamId, awayTeamId, before.Unix(), limit)
-
-	if err != nil {
-		return []app.Fixture{}, err
+func buildQuery(b sq.SelectBuilder, q app.FixtureRepositoryQuery) sq.SelectBuilder {
+	if q.SeasonID != nil {
+		b = b.Where(sq.Eq{"season_id": q.SeasonID})
 	}
 
-	return rowsToFixtureSlice(rows)
+	if q.HomeTeamID != nil {
+		b = b.Where(sq.Eq{"home_team_id": q.HomeTeamID})
+	}
+
+	if q.AwayTeamID != nil {
+		b = b.Where(sq.Eq{"away_team_id": q.AwayTeamID})
+	}
+
+	if q.DateFrom != nil {
+		b = b.Where(sq.GtOrEq{"date": q.DateFrom.Unix()})
+	}
+
+	if q.DateTo != nil {
+		b = b.Where(sq.LtOrEq{"date": q.DateTo.Unix()})
+	}
+
+	if q.Limit != nil {
+		b = b.Limit(*q.Limit)
+	}
+
+	return b
 }
 
 func rowsToIntSlice(rows *sql.Rows) ([]uint64, error) {
@@ -256,4 +226,8 @@ func rowToFixture(r *sql.Row, id uint64) (*app.Fixture, error) {
 
 func NewFixtureRepository(connection *sql.DB, clock clockwork.Clock) *FixtureRepository {
 	return &FixtureRepository{connection: connection, clock: clock}
+}
+
+func (r *FixtureRepository) queryBuilder() sq.StatementBuilderType {
+	return sq.StatementBuilder.PlaceholderFormat(sq.Dollar).RunWith(r.connection)
 }

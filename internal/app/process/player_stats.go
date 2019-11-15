@@ -53,7 +53,9 @@ func (p PlayerStatsProcessor) processByID(done chan bool, id uint64) {
 }
 
 func (p PlayerStatsProcessor) processSeason(done chan bool, seasonID uint64) {
-	fix, err := p.fixtureRepo.BySeasonID(seasonID)
+	query := app.FixtureRepositoryQuery{SeasonID:&seasonID}
+
+	fix, err := p.fixtureRepo.Get(query)
 
 	if err != nil {
 		p.logger.Fatalf("Error when retrieving fixtures for Season ID: %d, %s", seasonID, err.Error())
@@ -78,7 +80,12 @@ func (p PlayerStatsProcessor) processToday(done chan bool) {
 	from := time.Date(y, m, d, 0, 0, 0, 0, now.Location())
 	to := time.Date(y, m, d, 23, 59, 59, 59, now.Location())
 
-	ids, err := p.fixtureRepo.IDsBetween(from, to)
+	query := app.FixtureRepositoryQuery{
+		DateTo: &to,
+		DateFrom:  &from,
+	}
+
+	ids, err := p.fixtureRepo.GetIDs(query)
 
 	if err != nil {
 		p.logger.Fatalf("Error when retrieving fixture ids in player stats processor: %s", err.Error())

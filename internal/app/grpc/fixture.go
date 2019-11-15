@@ -30,7 +30,12 @@ func (s *FixtureService) ListSeasonFixtures(r *proto.SeasonFixtureRequest, strea
 		return ErrTimeParse
 	}
 
-	fixtures, err := s.FixtureRepo.BySeasonIDBetween(r.SeasonId, from, to)
+	query := app.FixtureRepositoryQuery{
+		DateTo: &to,
+		DateFrom:  &from,
+	}
+
+	fixtures, err := s.FixtureRepo.Get(query)
 
 	if err != nil {
 		s.Logger.Printf("Error retrieving Fixture(s). Error: %s", err.Error())

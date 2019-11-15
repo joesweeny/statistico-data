@@ -26,44 +26,19 @@ func (m FixtureRepository) ByID(id uint64) (*app.Fixture, error) {
 	return c, args.Error(1)
 }
 
-func (m FixtureRepository) IDs() ([]uint64, error) {
-	args := m.Called()
-	return args.Get(0).([]uint64), args.Error(1)
-}
-
-func (m FixtureRepository) IDsBetween(from, to time.Time) ([]uint64, error) {
-	args := m.Called(from, to)
-	return args.Get(0).([]uint64), args.Error(1)
-}
-
-func (m FixtureRepository) Between(from, to time.Time) ([]app.Fixture, error) {
-	args := m.Called(from, to)
-	return args.Get(0).([]app.Fixture), args.Error(1)
-}
-
 func (m FixtureRepository) ByTeamID(id uint64, limit int32, before time.Time) ([]app.Fixture, error) {
 	args := m.Called(id, limit, before)
 	return args.Get(0).([]app.Fixture), args.Error(1)
 }
 
-func (m FixtureRepository) BySeasonID(id uint64) ([]app.Fixture, error) {
-	args := m.Called(id)
+func (m FixtureRepository) Get(q app.FixtureRepositoryQuery) ([]app.Fixture, error) {
+	args := m.Called(q)
 	return args.Get(0).([]app.Fixture), args.Error(1)
 }
 
-func (m FixtureRepository) BySeasonIDBefore(id uint64, before time.Time) ([]app.Fixture, error) {
-	args := m.Called(id)
-	return args.Get(0).([]app.Fixture), args.Error(1)
-}
-
-func (m FixtureRepository) BySeasonIDBetween(id uint64, after, before time.Time) ([]app.Fixture, error) {
-	args := m.Called(id, after, before)
-	return args.Get(0).([]app.Fixture), args.Error(1)
-}
-
-func (m FixtureRepository) ByHomeAndAwayTeam(homeTeamId, awayTeamId uint64, limit uint32, before time.Time) ([]app.Fixture, error) {
-	args := m.Called(homeTeamId, awayTeamId, limit, before)
-	return args.Get(0).([]app.Fixture), args.Error(1)
+func (m FixtureRepository) GetIDs(q app.FixtureRepositoryQuery) ([]uint64, error) {
+	args := m.Called(q)
+	return args.Get(0).([]uint64), args.Error(1)
 }
 
 type FixtureRequester struct {
