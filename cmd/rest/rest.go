@@ -12,7 +12,6 @@ func main() {
 
 	router.GET("/", rest.RoutePath)
 	router.GET("/healthcheck", rest.HealthCheck)
-	router.GET("/season/:id/fixtures", seasonFixtures)
 
 	log.Fatal(http.ListenAndServe(":80", router))
 }
