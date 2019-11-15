@@ -34,7 +34,7 @@ func (f FixtureHandler) SeasonFixtures(w http.ResponseWriter, r *http.Request, p
 		return
 	}
 
-	var response []*Fixture
+	response := fixtureResponse{Fixtures: []Fixture{}}
 
 	for _, fix := range fixtures {
 		f, err := f.factory.BuildFixture(&fix)
@@ -44,7 +44,7 @@ func (f FixtureHandler) SeasonFixtures(w http.ResponseWriter, r *http.Request, p
 			return
 		}
 
-		response = append(response, f)
+		response.Fixtures = append(response.Fixtures, *f)
 	}
 
 	successResponse(w, http.StatusOK, response)
