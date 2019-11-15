@@ -136,7 +136,7 @@ func buildQuery(b sq.SelectBuilder, q app.FixtureRepositoryQuery) sq.SelectBuild
 		b = b.Limit(*q.Limit)
 	}
 
-	b.OrderBy("date")
+	b.OrderBy("date ASC")
 
 	return b
 }

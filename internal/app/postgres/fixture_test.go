@@ -388,10 +388,11 @@ func TestFixtureRepository_Get(t *testing.T) {
 
 		insertFixtures(t, repo)
 
-		from := time.Unix(1550066312, 0)
+		season := uint64(6012)
+		from := time.Unix(1550066313, 0)
 		to := time.Unix(1550066316, 0)
 
-		query := app.FixtureRepositoryQuery{DateTo: &to, DateFrom: &from}
+		query := app.FixtureRepositoryQuery{DateTo: &to, DateFrom: &from, SeasonID: &season}
 
 		fix, err := repo.Get(query)
 
@@ -406,7 +407,7 @@ func TestFixtureRepository_Get(t *testing.T) {
 		}
 
 		assert.Equal(t, 9, len(all))
-		assert.Equal(t, 3, len(fix))
+		assert.Equal(t, 2, len(fix))
 	})
 
 	t.Run("returns slice of fixture struct restricted by after date", func(t *testing.T) {
