@@ -1,7 +1,6 @@
 package rest
 
 import (
-	"fmt"
 	"github.com/julienschmidt/httprouter"
 	"github.com/statistico/statistico-data/internal/app"
 	"net/http"
@@ -31,7 +30,7 @@ func (f FixtureHandler) SeasonFixtures(w http.ResponseWriter, r *http.Request, p
 	fixtures, err := f.fixtureRepo.Get(query)
 
 	if err != nil {
-		errorResponse(w, http.StatusInternalServerError, fmt.Errorf("internal server error"))
+		errorResponse(w, http.StatusInternalServerError, internalServerError)
 		return
 	}
 
@@ -41,7 +40,7 @@ func (f FixtureHandler) SeasonFixtures(w http.ResponseWriter, r *http.Request, p
 		f, err := f.factory.BuildFixture(&fix)
 
 		if err != nil {
-			errorResponse(w, http.StatusInternalServerError, fmt.Errorf("internal server error"))
+			errorResponse(w, http.StatusInternalServerError, internalServerError)
 			return
 		}
 
