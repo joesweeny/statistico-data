@@ -59,3 +59,7 @@ func errorResponse(w http.ResponseWriter, status int, error error) {
 
 	jsonResponse(w, status, response)
 }
+
+type fixtureResponse struct {
+	Fixtures []Fixture `json:"fixtures"`
+}

@@ -382,6 +382,34 @@ func TestFixtureRepository_Get(t *testing.T) {
 		assert.Equal(t, 5, len(fix))
 	})
 
+	t.Run("returns slice of fixture struct restricted by before and after dates", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+
+		insertFixtures(t, repo)
+
+		season := uint64(6012)
+		from := time.Unix(1550066313, 0)
+		to := time.Unix(1550066316, 0)
+
+		query := app.FixtureRepositoryQuery{DateTo: &to, DateFrom: &from, SeasonID: &season}
+
+		fix, err := repo.Get(query)
+
+		if err != nil {
+			t.Fatalf("Test failed, expected nil, got %s", err.Error())
+		}
+
+		all, err := repo.Get(app.FixtureRepositoryQuery{})
+
+		if err != nil {
+			t.Fatalf("Test failed, expected nil, got %s", err.Error())
+		}
+
+		assert.Equal(t, 9, len(all))
+		assert.Equal(t, 2, len(fix))
+	})
+
 	t.Run("returns slice of fixture struct restricted by after date", func(t *testing.T) {
 		t.Helper()
 		defer cleanUp()

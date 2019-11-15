@@ -34,7 +34,7 @@ func (f FixtureHandler) SeasonFixtures(w http.ResponseWriter, r *http.Request, p
 		return
 	}
 
-	var response []*Fixture
+	response := fixtureResponse{Fixtures: []Fixture{}}
 
 	for _, fix := range fixtures {
 		f, err := f.factory.BuildFixture(&fix)
@@ -44,7 +44,7 @@ func (f FixtureHandler) SeasonFixtures(w http.ResponseWriter, r *http.Request, p
 			return
 		}
 
-		response = append(response, f)
+		response.Fixtures = append(response.Fixtures, *f)
 	}
 
 	successResponse(w, http.StatusOK, response)
@@ -59,13 +59,13 @@ func parseFixtureQuery(r *http.Request, ps httprouter.Params) (app.FixtureReposi
 		return query, errBadRequest
 	}
 
-	after, err := parseDateQuery(r.URL.Query(), "date_from")
+	from, err := parseDateQuery(r.URL.Query(), "date_from")
 
 	if err == errTimeParse {
 		return query, err
 	}
 
-	before, err := parseDateQuery(r.URL.Query(), "date_to")
+	to, err := parseDateQuery(r.URL.Query(), "date_to")
 
 	if err == errTimeParse {
 		return query, err
@@ -73,8 +73,8 @@ func parseFixtureQuery(r *http.Request, ps httprouter.Params) (app.FixtureReposi
 
 	seasonID := uint64(id)
 	query.SeasonID = &seasonID
-	query.DateFrom = after
-	query.DateTo = before
+	query.DateFrom = from
+	query.DateTo = to
 
 	return query, nil
 }
