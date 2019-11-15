@@ -9,12 +9,13 @@ import (
 	"strconv"
 	"time"
 )
+
 type FixtureHandler struct {
 	fixtureRepo app.FixtureRepository
-	factory FixtureFactory
+	factory *FixtureFactory
 }
 
-func (f FixtureHandler) seasonFixtures(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+func (f FixtureHandler) SeasonFixtures(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	query, err := parseFixtureQuery(r, ps)
 
 	if err == errBadRequest {
@@ -93,3 +94,6 @@ func parseDateQuery(query url.Values, key string) (*time.Time, error) {
 	return &t, nil
 }
 
+func NewFixtureHandler(r app.FixtureRepository, f *FixtureFactory) *FixtureHandler {
+	return &FixtureHandler{fixtureRepo: r, factory: f}
+}
