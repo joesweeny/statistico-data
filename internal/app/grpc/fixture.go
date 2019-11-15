@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"github.com/sirupsen/logrus"
 	"github.com/statistico/statistico-data/internal/app"
-	"github.com/statistico/statistico-data/internal/app/proto"
+	"github.com/statistico/statistico-data/internal/app/grpc/proto"
 	"time"
 )
 

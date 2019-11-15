@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"github.com/sirupsen/logrus"
 	"github.com/statistico/statistico-data/internal/app"
+	"github.com/statistico/statistico-data/internal/app/grpc/proto"
 	"github.com/statistico/statistico-data/internal/app/handler"
-	"github.com/statistico/statistico-data/internal/app/proto"
 )
 
 type PlayerStatsService struct {

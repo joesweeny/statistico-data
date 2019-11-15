@@ -3,7 +3,7 @@ package grpc
 import (
 	"github.com/golang/protobuf/ptypes/wrappers"
 	"github.com/statistico/statistico-data/internal/app"
-	"github.com/statistico/statistico-data/internal/app/proto"
+	"github.com/statistico/statistico-data/internal/app/grpc/proto"
 	"time"
 )
 

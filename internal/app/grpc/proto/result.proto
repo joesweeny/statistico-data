@@ -3,11 +3,11 @@ syntax = "proto3";
 package proto;
 
 import "google/protobuf/wrappers.proto";
-import "internal/app/proto/competition.proto";
-import "internal/app/proto/round.proto";
-import "internal/app/proto/season.proto";
-import "internal/app/proto/team.proto";
-import "internal/app/proto/venue.proto";
+import "internal/app/grpc/proto/competition.proto";
+import "internal/app/grpc/proto/round.proto";
+import "internal/app/grpc/proto/season.proto";
+import "internal/app/grpc/proto/team.proto";
+import "internal/app/grpc/proto/venue.proto";
 
 service ResultService {
     rpc GetHistoricalResultsForFixture(HistoricalResultRequest) returns (stream Result) {}

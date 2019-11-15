@@ -2,11 +2,11 @@ syntax = "proto3";
 
 package proto;
 
-import "internal/app/proto/common.proto";
-import "internal/app/proto/requests.proto";
-import "internal/app/proto/round.proto";
-import "internal/app/proto/team.proto";
-import "internal/app/proto/venue.proto";
+import "internal/app/grpc/proto/common.proto";
+import "internal/app/grpc/proto/requests.proto";
+import "internal/app/grpc/proto/round.proto";
+import "internal/app/grpc/proto/team.proto";
+import "internal/app/grpc/proto/venue.proto";
 
 service FixtureService {
     rpc ListSeasonFixtures(SeasonFixtureRequest) returns (stream Fixture) {}

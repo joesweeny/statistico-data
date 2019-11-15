@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/statistico/statistico-data/internal/app/proto"
+	"github.com/statistico/statistico-data/internal/app/grpc/proto"
 	"github.com/statistico/statistico-data/internal/bootstrap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
