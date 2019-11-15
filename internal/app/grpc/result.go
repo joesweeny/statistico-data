@@ -28,7 +28,16 @@ func (s ResultService) GetHistoricalResultsForFixture(r *proto.HistoricalResultR
 		return ErrTimeParse
 	}
 
-	fixtures, err := s.FixtureRepo.ByHomeAndAwayTeam(r.HomeTeamId, r.AwayTeamId, r.Limit, date)
+	limit := uint64(r.Limit)
+
+	query := app.FixtureRepositoryQuery{
+		HomeTeamID: &r.HomeTeamId,
+		AwayTeamID: &r.AwayTeamId,
+		DateTo: &date,
+		Limit:      &limit,
+	}
+
+	fixtures, err := s.FixtureRepo.Get(query)
 
 	if err != nil {
 		s.Logger.Printf("Error retrieving Fixture(s) in Result Service. Error: %s", err.Error())
@@ -68,7 +77,14 @@ func (s ResultService) GetResultsForSeason(r *proto.SeasonRequest, stream proto.
 		return ErrTimeParse
 	}
 
-	fixtures, err := s.FixtureRepo.BySeasonIDBefore(uint64(r.SeasonId), date)
+	id := uint64(r.SeasonId)
+
+	query := app.FixtureRepositoryQuery{
+		SeasonID:   &id,
+		DateTo: &date,
+	}
+
+	fixtures, err := s.FixtureRepo.Get(query)
 
 	if err != nil {
 		s.Logger.Printf("Error retrieving Fixture(s) in Result Service. Error: %s", err.Error())

@@ -174,7 +174,10 @@ func TestResultProcessor_Process(t *testing.T) {
 
 		fix := []app.Fixture{*newFixture(34)}
 
-		fixtureRepo.On("BySeasonID", uint64(34)).Return(fix, nil)
+		seasonID := uint64(34)
+		query := app.FixtureRepositoryQuery{SeasonID:&seasonID}
+
+		fixtureRepo.On("Get", query).Return(fix, nil)
 		requester.On("ResultsByFixtureIDs", []uint64{34}).Return(ch)
 		resultRepo.On("ByFixtureID", uint64(34)).Return(&app.Result{}, errors.New("not found"))
 		resultRepo.On("Insert", res).Return(nil)
@@ -210,7 +213,10 @@ func TestResultProcessor_Process(t *testing.T) {
 
 		fix := []app.Fixture{*newFixture(34)}
 
-		fixtureRepo.On("BySeasonID", uint64(34)).Return(fix, nil)
+		seasonID := uint64(34)
+		query := app.FixtureRepositoryQuery{SeasonID:&seasonID}
+
+		fixtureRepo.On("Get", query).Return(fix, nil)
 		requester.On("ResultsByFixtureIDs", []uint64{34}).Return(ch)
 		resultRepo.On("ByFixtureID", uint64(34)).Return(res, nil)
 		resultRepo.On("Update", res).Return(nil)
@@ -246,7 +252,10 @@ func TestResultProcessor_Process(t *testing.T) {
 
 		fix := []app.Fixture{*newFixture(34)}
 
-		fixtureRepo.On("BySeasonID", uint64(34)).Return(fix, nil)
+		seasonID := uint64(34)
+		query := app.FixtureRepositoryQuery{SeasonID:&seasonID}
+
+		fixtureRepo.On("Get", query).Return(fix, nil)
 		requester.On("ResultsByFixtureIDs", []uint64{34}).Return(ch)
 		resultRepo.On("ByFixtureID", uint64(34)).Return(&app.Result{}, errors.New("not found"))
 		resultRepo.On("Insert", res).Return(errors.New("error occurred"))
@@ -283,7 +292,10 @@ func TestResultProcessor_Process(t *testing.T) {
 
 		fix := []app.Fixture{*newFixture(34)}
 
-		fixtureRepo.On("BySeasonID", uint64(34)).Return(fix, nil)
+		seasonID := uint64(34)
+		query := app.FixtureRepositoryQuery{SeasonID:&seasonID}
+
+		fixtureRepo.On("Get", query).Return(fix, nil)
 		requester.On("ResultsByFixtureIDs", []uint64{34}).Return(ch)
 		resultRepo.On("ByFixtureID", uint64(34)).Return(res, nil)
 		resultRepo.On("Update", res).Return(errors.New("error occurred"))
@@ -323,7 +335,9 @@ func TestResultProcessor_Process(t *testing.T) {
 		from := time.Date(y, m, d, 0, 0, 0, 0, now.Location())
 		to := time.Date(y, m, d, 23, 59, 59, 59, now.Location())
 
-		fixtureRepo.On("IDsBetween", from, to).Return([]uint64{34}, nil)
+		query := app.FixtureRepositoryQuery{DateFrom:&from, DateTo:&to}
+
+		fixtureRepo.On("GetIDs", query).Return([]uint64{34}, nil)
 		requester.On("ResultsByFixtureIDs", []uint64{34}).Return(ch)
 		resultRepo.On("ByFixtureID", uint64(34)).Return(&app.Result{}, errors.New("not found"))
 		resultRepo.On("Insert", res).Return(nil)
@@ -362,7 +376,9 @@ func TestResultProcessor_Process(t *testing.T) {
 		from := time.Date(y, m, d, 0, 0, 0, 0, now.Location())
 		to := time.Date(y, m, d, 23, 59, 59, 59, now.Location())
 
-		fixtureRepo.On("IDsBetween", from, to).Return([]uint64{34}, nil)
+		query := app.FixtureRepositoryQuery{DateFrom:&from, DateTo:&to}
+
+		fixtureRepo.On("GetIDs", query).Return([]uint64{34}, nil)
 		requester.On("ResultsByFixtureIDs", []uint64{34}).Return(ch)
 		resultRepo.On("ByFixtureID", uint64(34)).Return(res, nil)
 		resultRepo.On("Update", res).Return(nil)
@@ -401,7 +417,9 @@ func TestResultProcessor_Process(t *testing.T) {
 		from := time.Date(y, m, d, 0, 0, 0, 0, now.Location())
 		to := time.Date(y, m, d, 23, 59, 59, 59, now.Location())
 
-		fixtureRepo.On("IDsBetween", from, to).Return([]uint64{34}, nil)
+		query := app.FixtureRepositoryQuery{DateFrom:&from, DateTo:&to}
+
+		fixtureRepo.On("GetIDs", query).Return([]uint64{34}, nil)
 		requester.On("ResultsByFixtureIDs", []uint64{34}).Return(ch)
 		resultRepo.On("ByFixtureID", uint64(34)).Return(&app.Result{}, errors.New("not found"))
 		resultRepo.On("Insert", res).Return(errors.New("error occurred"))
@@ -441,7 +459,9 @@ func TestResultProcessor_Process(t *testing.T) {
 		from := time.Date(y, m, d, 0, 0, 0, 0, now.Location())
 		to := time.Date(y, m, d, 23, 59, 59, 59, now.Location())
 
-		fixtureRepo.On("IDsBetween", from, to).Return([]uint64{34}, nil)
+		query := app.FixtureRepositoryQuery{DateFrom:&from, DateTo:&to}
+
+		fixtureRepo.On("GetIDs", query).Return([]uint64{34}, nil)
 		requester.On("ResultsByFixtureIDs", []uint64{34}).Return(ch)
 		resultRepo.On("ByFixtureID", uint64(34)).Return(res, nil)
 		resultRepo.On("Update", res).Return(errors.New("error occurred"))

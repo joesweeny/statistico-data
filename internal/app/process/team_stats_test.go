@@ -196,7 +196,10 @@ func TestTeamStatsProcessor_Process(t *testing.T) {
 
 		ch := teamStatsChannel(stats)
 
-		fixtureRepo.On("BySeasonID", uint64(20)).Return(fix, nil)
+		seasonID := uint64(20)
+		query := app.FixtureRepositoryQuery{SeasonID:&seasonID}
+
+		fixtureRepo.On("Get", query).Return(fix, nil)
 		requester.On("TeamStatsByFixtureIDs", []uint64{45}).Return(ch)
 		teamStatsRepo.On("ByFixtureAndTeam", uint64(45), uint64(99)).Return(&app.TeamStats{}, errors.New("not found"))
 		teamStatsRepo.On("ByFixtureAndTeam", uint64(45), uint64(2)).Return(&app.TeamStats{}, errors.New("not found"))
@@ -237,7 +240,10 @@ func TestTeamStatsProcessor_Process(t *testing.T) {
 
 		ch := teamStatsChannel(stats)
 
-		fixtureRepo.On("BySeasonID", uint64(20)).Return(fix, nil)
+		seasonID := uint64(20)
+		query := app.FixtureRepositoryQuery{SeasonID:&seasonID}
+
+		fixtureRepo.On("Get", query).Return(fix, nil)
 		requester.On("TeamStatsByFixtureIDs", []uint64{45}).Return(ch)
 		teamStatsRepo.On("ByFixtureAndTeam", uint64(45), uint64(99)).Return(home, nil)
 		teamStatsRepo.On("ByFixtureAndTeam", uint64(45), uint64(2)).Return(away, nil)
@@ -278,7 +284,10 @@ func TestTeamStatsProcessor_Process(t *testing.T) {
 
 		ch := teamStatsChannel(stats)
 
-		fixtureRepo.On("BySeasonID", uint64(20)).Return(fix, nil)
+		seasonID := uint64(20)
+		query := app.FixtureRepositoryQuery{SeasonID:&seasonID}
+
+		fixtureRepo.On("Get", query).Return(fix, nil)
 		requester.On("TeamStatsByFixtureIDs", []uint64{45}).Return(ch)
 		teamStatsRepo.On("ByFixtureAndTeam", uint64(45), uint64(99)).Return(&app.TeamStats{}, errors.New("not found"))
 		teamStatsRepo.On("ByFixtureAndTeam", uint64(45), uint64(2)).Return(&app.TeamStats{}, errors.New("not found"))
@@ -320,7 +329,10 @@ func TestTeamStatsProcessor_Process(t *testing.T) {
 
 		ch := teamStatsChannel(stats)
 
-		fixtureRepo.On("BySeasonID", uint64(20)).Return(fix, nil)
+		seasonID := uint64(20)
+		query := app.FixtureRepositoryQuery{SeasonID:&seasonID}
+
+		fixtureRepo.On("Get", query).Return(fix, nil)
 		requester.On("TeamStatsByFixtureIDs", []uint64{45}).Return(ch)
 		teamStatsRepo.On("ByFixtureAndTeam", uint64(45), uint64(99)).Return(home, nil)
 		teamStatsRepo.On("ByFixtureAndTeam", uint64(45), uint64(2)).Return(away, nil)
@@ -365,7 +377,9 @@ func TestTeamStatsProcessor_Process(t *testing.T) {
 		from := time.Date(y, m, d, 0, 0, 0, 0, now.Location())
 		to := time.Date(y, m, d, 23, 59, 59, 59, now.Location())
 
-		fixtureRepo.On("IDsBetween", from, to).Return([]uint64{34}, nil)
+		query := app.FixtureRepositoryQuery{DateFrom:&from, DateTo:&to}
+
+		fixtureRepo.On("GetIDs", query).Return([]uint64{34}, nil)
 		requester.On("TeamStatsByFixtureIDs", []uint64{34}).Return(ch)
 		teamStatsRepo.On("ByFixtureAndTeam", uint64(45), uint64(99)).Return(&app.TeamStats{}, errors.New("not found"))
 		teamStatsRepo.On("ByFixtureAndTeam", uint64(45), uint64(2)).Return(&app.TeamStats{}, errors.New("not found"))
@@ -409,7 +423,9 @@ func TestTeamStatsProcessor_Process(t *testing.T) {
 		from := time.Date(y, m, d, 0, 0, 0, 0, now.Location())
 		to := time.Date(y, m, d, 23, 59, 59, 59, now.Location())
 
-		fixtureRepo.On("IDsBetween", from, to).Return([]uint64{34}, nil)
+		query := app.FixtureRepositoryQuery{DateFrom:&from, DateTo:&to}
+
+		fixtureRepo.On("GetIDs", query).Return([]uint64{34}, nil)
 		requester.On("TeamStatsByFixtureIDs", []uint64{34}).Return(ch)
 		teamStatsRepo.On("ByFixtureAndTeam", uint64(45), uint64(99)).Return(home, nil)
 		teamStatsRepo.On("ByFixtureAndTeam", uint64(45), uint64(2)).Return(away, nil)
@@ -453,7 +469,9 @@ func TestTeamStatsProcessor_Process(t *testing.T) {
 		from := time.Date(y, m, d, 0, 0, 0, 0, now.Location())
 		to := time.Date(y, m, d, 23, 59, 59, 59, now.Location())
 
-		fixtureRepo.On("IDsBetween", from, to).Return([]uint64{34}, nil)
+		query := app.FixtureRepositoryQuery{DateFrom:&from, DateTo:&to}
+
+		fixtureRepo.On("GetIDs", query).Return([]uint64{34}, nil)
 		requester.On("TeamStatsByFixtureIDs", []uint64{34}).Return(ch)
 		teamStatsRepo.On("ByFixtureAndTeam", uint64(45), uint64(99)).Return(&app.TeamStats{}, errors.New("not found"))
 		teamStatsRepo.On("ByFixtureAndTeam", uint64(45), uint64(2)).Return(&app.TeamStats{}, errors.New("not found"))
@@ -498,7 +516,9 @@ func TestTeamStatsProcessor_Process(t *testing.T) {
 		from := time.Date(y, m, d, 0, 0, 0, 0, now.Location())
 		to := time.Date(y, m, d, 23, 59, 59, 59, now.Location())
 
-		fixtureRepo.On("IDsBetween", from, to).Return([]uint64{34}, nil)
+		query := app.FixtureRepositoryQuery{DateFrom:&from, DateTo:&to}
+
+		fixtureRepo.On("GetIDs", query).Return([]uint64{34}, nil)
 		requester.On("TeamStatsByFixtureIDs", []uint64{34}).Return(ch)
 		teamStatsRepo.On("ByFixtureAndTeam", uint64(45), uint64(99)).Return(home, nil)
 		teamStatsRepo.On("ByFixtureAndTeam", uint64(45), uint64(2)).Return(away, nil)

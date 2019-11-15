@@ -212,7 +212,11 @@ func TestEventProcessor_Process(t *testing.T) {
 
 		fix = append(fix, *newFixture(uint64(12)))
 
-		fixtureRepo.On("BySeasonID", uint64(12)).Return(fix, nil)
+		seasonID := uint64(12)
+
+		query := app.FixtureRepositoryQuery{SeasonID:&seasonID}
+
+		fixtureRepo.On("Get", query).Return(fix, nil)
 		requester.On("EventsByFixtureIDs", []uint64{12}).Return(goalCh, subCh)
 
 		eventRepo.On("GoalEventByID", uint64(10)).Return(&app.GoalEvent{}, errors.New("not found"))
@@ -269,7 +273,10 @@ func TestEventProcessor_Process(t *testing.T) {
 		var fix []app.Fixture
 		fix = append(fix, *newFixture(uint64(12)))
 
-		fixtureRepo.On("BySeasonID", uint64(12)).Return(fix, nil)
+		seasonID := uint64(12)
+		query := app.FixtureRepositoryQuery{SeasonID:&seasonID}
+
+		fixtureRepo.On("Get", query).Return(fix, nil)
 		requester.On("EventsByFixtureIDs", []uint64{12}).Return(goalCh, subCh)
 
 		eventRepo.On("GoalEventByID", uint64(10)).Return(goalOne, nil)
@@ -326,7 +333,10 @@ func TestEventProcessor_Process(t *testing.T) {
 		var fix []app.Fixture
 		fix = append(fix, *newFixture(uint64(12)))
 
-		fixtureRepo.On("BySeasonID", uint64(12)).Return(fix, nil)
+		seasonID := uint64(12)
+		query := app.FixtureRepositoryQuery{SeasonID:&seasonID}
+
+		fixtureRepo.On("Get", query).Return(fix, nil)
 		requester.On("EventsByFixtureIDs", []uint64{12}).Return(goalCh, subCh)
 
 		eventRepo.On("GoalEventByID", uint64(10)).Return(&app.GoalEvent{}, errors.New("not found"))
@@ -386,7 +396,9 @@ func TestEventProcessor_Process(t *testing.T) {
 		from := time.Date(y, m, d, 0, 0, 0, 0, now.Location())
 		to := time.Date(y, m, d, 23, 59, 59, 59, now.Location())
 
-		fixtureRepo.On("IDsBetween", from, to).Return([]uint64{12}, nil)
+		query := app.FixtureRepositoryQuery{DateFrom:&from, DateTo:&to}
+
+		fixtureRepo.On("GetIDs", query).Return([]uint64{12}, nil)
 		requester.On("EventsByFixtureIDs", []uint64{12}).Return(goalCh, subCh)
 
 		eventRepo.On("GoalEventByID", uint64(10)).Return(&app.GoalEvent{}, errors.New("not found"))
@@ -445,7 +457,9 @@ func TestEventProcessor_Process(t *testing.T) {
 		from := time.Date(y, m, d, 0, 0, 0, 0, now.Location())
 		to := time.Date(y, m, d, 23, 59, 59, 59, now.Location())
 
-		fixtureRepo.On("IDsBetween", from, to).Return([]uint64{12}, nil)
+		query := app.FixtureRepositoryQuery{DateFrom:&from, DateTo:&to}
+
+		fixtureRepo.On("GetIDs", query).Return([]uint64{12}, nil)
 		requester.On("EventsByFixtureIDs", []uint64{12}).Return(goalCh, subCh)
 
 		eventRepo.On("GoalEventByID", uint64(10)).Return(goalOne, nil)
@@ -504,7 +518,9 @@ func TestEventProcessor_Process(t *testing.T) {
 		from := time.Date(y, m, d, 0, 0, 0, 0, now.Location())
 		to := time.Date(y, m, d, 23, 59, 59, 59, now.Location())
 
-		fixtureRepo.On("IDsBetween", from, to).Return([]uint64{12}, nil)
+		query := app.FixtureRepositoryQuery{DateFrom:&from, DateTo:&to}
+
+		fixtureRepo.On("GetIDs", query).Return([]uint64{12}, nil)
 		requester.On("EventsByFixtureIDs", []uint64{12}).Return(goalCh, subCh)
 
 		eventRepo.On("GoalEventByID", uint64(10)).Return(&app.GoalEvent{}, errors.New("not found"))

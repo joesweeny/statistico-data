@@ -23,14 +23,18 @@ type FixtureRepository interface {
 	Insert(f *Fixture) error
 	Update(f *Fixture) error
 	ByID(id uint64) (*Fixture, error)
-	IDs() ([]uint64, error)
-	IDsBetween(from, to time.Time) ([]uint64, error)
-	Between(from, to time.Time) ([]Fixture, error)
 	ByTeamID(id uint64, limit int32, before time.Time) ([]Fixture, error)
-	BySeasonID(id uint64) ([]Fixture, error)
-	BySeasonIDBefore(id uint64, before time.Time) ([]Fixture, error)
-	BySeasonIDBetween(id uint64, after, before time.Time) ([]Fixture, error)
-	ByHomeAndAwayTeam(homeTeamId, awayTeamId uint64, limit uint32, before time.Time) ([]Fixture, error)
+	Get(q FixtureRepositoryQuery) ([]Fixture, error)
+	GetIDs(q FixtureRepositoryQuery) ([]uint64, error)
+}
+
+type FixtureRepositoryQuery struct {
+	SeasonID *uint64
+	HomeTeamID *uint64
+	AwayTeamID *uint64
+	DateFrom *time.Time
+	DateTo *time.Time
+	Limit *uint64
 }
 
 // FixtureRequester provides an interface allowing this application to request data from an external

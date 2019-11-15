@@ -53,7 +53,9 @@ func (t TeamStatsProcessor) processByID(done chan bool, id uint64) {
 }
 
 func (t TeamStatsProcessor) processSeason(done chan bool, seasonID uint64) {
-	fix, err := t.fixtureRepo.BySeasonID(seasonID)
+	query := app.FixtureRepositoryQuery{SeasonID:&seasonID}
+
+	fix, err := t.fixtureRepo.Get(query)
 
 	if err != nil {
 		t.logger.Fatalf("Error when retrieving fixtures for Season ID: %d, %s", seasonID, err.Error())
@@ -78,7 +80,12 @@ func (t TeamStatsProcessor) processToday(done chan bool) {
 	from := time.Date(y, m, d, 0, 0, 0, 0, now.Location())
 	to := time.Date(y, m, d, 23, 59, 59, 59, now.Location())
 
-	ids, err := t.fixtureRepo.IDsBetween(from, to)
+	query := app.FixtureRepositoryQuery{
+		DateTo: &to,
+		DateFrom:  &from,
+	}
+
+	ids, err := t.fixtureRepo.GetIDs(query)
 
 	if err != nil {
 		t.logger.Fatalf("Error when retrieving fixture ids in event processor: %s", err.Error())

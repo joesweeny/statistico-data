@@ -3,6 +3,7 @@ module github.com/statistico/statistico-data
 go 1.12
 
 require (
+	github.com/Masterminds/squirrel v1.1.0
 	github.com/golang/protobuf v1.3.2
 	github.com/jonboulle/clockwork v0.1.0
 	github.com/julienschmidt/httprouter v1.3.0
