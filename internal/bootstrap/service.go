@@ -6,16 +6,7 @@ import (
 )
 
 func (c Container) FixtureService() *grpc.FixtureService {
-	return &grpc.FixtureService{
-		FixtureRepo: c.FixtureRepository(),
-		Handler: handler.FixtureHandler{
-			RoundRepo:       c.RoundRepository(),
-			TeamRepo:        c.TeamRepository(),
-			VenueRepo:       c.VenueRepository(),
-			Logger:          c.Logger,
-		},
-		Logger: c.Logger,
-	}
+	return grpc.NewFixtureService(c.FixtureRepository(), c.ProtoFixtureFactory(), c.Logger)
 }
 
 func (c Container) ResultService() *grpc.ResultService {

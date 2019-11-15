@@ -20,10 +20,12 @@ func (f FixtureHandler) SeasonFixtures(w http.ResponseWriter, r *http.Request, p
 
 	if err == errBadRequest {
 		failResponse(w, http.StatusBadRequest, err)
+		return
 	}
 
 	if err == errTimeParse {
 		failResponse(w, http.StatusUnprocessableEntity, err)
+		return
 	}
 
 	fixtures, err := f.fixtureRepo.Get(query)
@@ -58,13 +60,13 @@ func parseFixtureQuery(r *http.Request, ps httprouter.Params) (app.FixtureReposi
 		return query, errBadRequest
 	}
 
-	after, err := parseDateQuery(r.URL.Query(), "date_after")
+	after, err := parseDateQuery(r.URL.Query(), "date_from")
 
 	if err == errTimeParse {
 		return query, err
 	}
 
-	before, err := parseDateQuery(r.URL.Query(), "date_before")
+	before, err := parseDateQuery(r.URL.Query(), "date_to")
 
 	if err == errTimeParse {
 		return query, err

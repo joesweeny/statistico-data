@@ -1,4 +1,4 @@
-package converter
+package grpc
 
 import (
 	"github.com/golang/protobuf/ptypes/wrappers"

@@ -6,15 +6,14 @@ import (
 	"fmt"
 	"github.com/sirupsen/logrus"
 	"github.com/statistico/statistico-data/internal/app"
-	"github.com/statistico/statistico-data/internal/app/handler"
 	"github.com/statistico/statistico-data/internal/app/proto"
 	"time"
 )
 
 type FixtureService struct {
-	FixtureRepo app.FixtureRepository
-	Handler handler.FixtureHandler
-	Logger *logrus.Logger
+	fixtureRepo app.FixtureRepository
+	factory *FixtureFactory
+	logger *logrus.Logger
 }
 
 func (s *FixtureService) ListSeasonFixtures(r *proto.SeasonFixtureRequest, stream proto.FixtureService_ListSeasonFixturesServer) error {
@@ -35,24 +34,24 @@ func (s *FixtureService) ListSeasonFixtures(r *proto.SeasonFixtureRequest, strea
 		DateFrom:  &from,
 	}
 
-	fixtures, err := s.FixtureRepo.Get(query)
+	fixtures, err := s.fixtureRepo.Get(query)
 
 	if err != nil {
-		s.Logger.Printf("Error retrieving Fixture(s). Error: %s", err.Error())
+		s.logger.Printf("Error retrieving Fixture(s). Error: %s", err.Error())
 		m := fmt.Sprint("Server Error: Unable to fulfil Request")
 		return errors.New(m)
 	}
 
 	for _, fix := range fixtures {
-		f, err := s.Handler.HandleFixture(&fix)
+		f, err := s.factory.BuildFixture(&fix)
 
 		if err != nil {
-			s.Logger.Printf("Error hydrating Fixture. Error: %s", err.Error())
+			s.logger.Printf("Error hydrating Fixture. Error: %s", err.Error())
 			continue
 		}
 
 		if err := stream.Send(f); err != nil {
-			s.Logger.Printf("Error streaming Fixture back to client. Error: %s", err.Error())
+			s.logger.Printf("Error streaming Fixture back to client. Error: %s", err.Error())
 			continue
 		}
 	}
@@ -61,19 +60,23 @@ func (s *FixtureService) ListSeasonFixtures(r *proto.SeasonFixtureRequest, strea
 }
 
 func (s *FixtureService) FixtureByID(c context.Context, r *proto.FixtureRequest) (*proto.Fixture, error) {
-	fix, err := s.FixtureRepo.ByID(uint64(r.FixtureId))
+	fix, err := s.fixtureRepo.ByID(uint64(r.FixtureId))
 
 	if err != nil {
 		m := fmt.Sprintf("Fixture with ID %d does not exist", r.FixtureId)
 		return nil, errors.New(m)
 	}
 
-	f, err := s.Handler.HandleFixture(fix)
+	f, err := s.factory.BuildFixture(fix)
 
 	if err != nil {
-		s.Logger.Printf("Error hydrating Fixture. Error: %s", err.Error())
+		s.logger.Printf("Error hydrating Fixture. Error: %s", err.Error())
 		return nil, err
 	}
 
 	return f, nil
+}
+
+func NewFixtureService(r app.FixtureRepository, f *FixtureFactory, log *logrus.Logger) *FixtureService {
+	return &FixtureService{fixtureRepo: r, factory: f, logger: log}
 }
