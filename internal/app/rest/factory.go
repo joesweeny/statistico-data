@@ -25,9 +25,9 @@ func (b FixtureFactory) BuildFixture(f *app.Fixture) (*Fixture, error) {
 	}
 
 	p := Fixture{
-		ID:          f.ID,
-		HomeTeam:    convertAppTeam(home),
-		AwayTeam:    convertAppTeam(away),
+		ID:       f.ID,
+		HomeTeam: convertAppTeam(home),
+		AwayTeam: convertAppTeam(away),
 		Date:    Date{
 			UTC: uint64(f.Date.Unix()),
 			RFC: f.Date.Format(time.RFC3339),

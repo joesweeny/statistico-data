@@ -18,7 +18,7 @@ func (p PlayerStatsFactory) BuildPlayerStats(f *app.Fixture, teamID uint64) ([]*
 		return nil, p.returnLoggedError(f.ID, err)
 	}
 
-	return HandlePlayerStats(pl), nil
+	return handlePlayerStats(pl), nil
 }
 
 func (p PlayerStatsFactory) BuildLineup(f *app.Fixture, teamID uint64) (*proto.Lineup, error) {
@@ -29,8 +29,8 @@ func (p PlayerStatsFactory) BuildLineup(f *app.Fixture, teamID uint64) (*proto.L
 	}
 
 	lineup := proto.Lineup{
-		Start: HandleStartingLineupPlayers(pl),
-		Bench: HandleSubstituteLineupPlayers(pl),
+		Start: handleStartingLineupPlayers(pl),
+		Bench: handleSubstituteLineupPlayers(pl),
 	}
 
 	return &lineup, nil

@@ -8,7 +8,7 @@ import (
 )
 
 // Convert a domain Team struct into a proto Team struct
-func TeamToProto(t *app.Team) *proto.Team {
+func teamToProto(t *app.Team) *proto.Team {
 	var x proto.Team
 	x.Id = int64(t.ID)
 	x.Name = t.Name
@@ -17,7 +17,7 @@ func TeamToProto(t *app.Team) *proto.Team {
 }
 
 // Convert a domain Competition struct into a proto Competition struct
-func CompetitionToProto(c *app.Competition) *proto.Competition {
+func competitionToProto(c *app.Competition) *proto.Competition {
 	var x proto.Competition
 	x.Id = int64(c.ID)
 	x.Name = c.Name
@@ -29,7 +29,7 @@ func CompetitionToProto(c *app.Competition) *proto.Competition {
 }
 
 // Convert a domain PlayerStats struct into a proto LineupPlayer struct
-func PlayerStatsToLineupPlayerProto(p *app.PlayerStats) *proto.LineupPlayer {
+func playerStatsToLineupPlayerProto(p *app.PlayerStats) *proto.LineupPlayer {
 	player := proto.LineupPlayer{
 		PlayerId:     p.PlayerID,
 		Position:     *p.Position,
@@ -46,7 +46,7 @@ func PlayerStatsToLineupPlayerProto(p *app.PlayerStats) *proto.LineupPlayer {
 }
 
 // Convert a domain PlayerStats struct into a proto PlayerStats struct
-func PlayerStatsToProto(p *app.PlayerStats) *proto.PlayerStats {
+func playerStatsToProto(p *app.PlayerStats) *proto.PlayerStats {
 	stats := proto.PlayerStats{
 		PlayerId: p.PlayerID,
 	}
@@ -89,7 +89,7 @@ func PlayerStatsToProto(p *app.PlayerStats) *proto.PlayerStats {
 }
 
 // Convert a domain Round struct into a proto Round struct
-func RoundToProto(r *app.Round) *proto.Round {
+func roundToProto(r *app.Round) *proto.Round {
 	return &proto.Round{
 		Id:        int64(r.ID),
 		Name:      r.Name,
@@ -100,7 +100,7 @@ func RoundToProto(r *app.Round) *proto.Round {
 }
 
 // Convert a domain Season struct into a proto Season struct
-func SeasonToProto(s *app.Season) *proto.Season {
+func seasonToProto(s *app.Season) *proto.Season {
 	var x proto.Season
 	x.Id = int64(s.ID)
 	x.Name = s.Name
@@ -112,7 +112,7 @@ func SeasonToProto(s *app.Season) *proto.Season {
 }
 
 // Convert a domain TeamStats struct into a proto TeamStats struct
-func TeamStatsToProto(t *app.TeamStats) *proto.TeamStats {
+func teamStatsToProto(t *app.TeamStats) *proto.TeamStats {
 	stats := proto.TeamStats{
 		TeamId: t.TeamID,
 	}
@@ -265,7 +265,7 @@ func TeamStatsToProto(t *app.TeamStats) *proto.TeamStats {
 }
 
 // Convert a domain Venue struct into a proto Venue struct
-func VenueToProto(v *app.Venue) *proto.Venue {
+func venueToProto(v *app.Venue) *proto.Venue {
 	id := wrappers.Int64Value{
 		Value: int64(v.ID),
 	}
@@ -280,16 +280,16 @@ func VenueToProto(v *app.Venue) *proto.Venue {
 }
 
 // Convert a domain Team and Result struct data into a proto MatchData struct
-func ToMatchData(home *app.Team, away *app.Team, res *app.Result) *proto.MatchData {
+func toMatchData(home *app.Team, away *app.Team, res *app.Result) *proto.MatchData {
 	return &proto.MatchData{
-		HomeTeam: TeamToProto(home),
-		AwayTeam: TeamToProto(away),
-		Stats:    ToMatchStats(res),
+		HomeTeam: teamToProto(home),
+		AwayTeam: teamToProto(away),
+		Stats:    toMatchStats(res),
 	}
 }
 
 // Convert a domain Result struct into a proto MatchStats struct
-func ToMatchStats(res *app.Result) *proto.MatchStats {
+func toMatchStats(res *app.Result) *proto.MatchStats {
 	stats := proto.MatchStats{
 		HomeScore: &wrappers.Int32Value{
 			Value: int32(*res.HomeScore),
@@ -386,23 +386,23 @@ func ToMatchStats(res *app.Result) *proto.MatchStats {
 	return &stats
 }
 
-func HandlePlayerStats(p []*app.PlayerStats) []*proto.PlayerStats {
+func handlePlayerStats(p []*app.PlayerStats) []*proto.PlayerStats {
 	var stats []*proto.PlayerStats
 
 	for _, player := range p {
-		s := PlayerStatsToProto(player)
+		s := playerStatsToProto(player)
 		stats = append(stats, s)
 	}
 
 	return stats
 }
 
-func HandleStartingLineupPlayers(p []*app.PlayerStats) []*proto.LineupPlayer {
+func handleStartingLineupPlayers(p []*app.PlayerStats) []*proto.LineupPlayer {
 	var lineup []*proto.LineupPlayer
 
 	for _, player := range p {
 		if !player.IsSubstitute {
-			l := PlayerStatsToLineupPlayerProto(player)
+			l := playerStatsToLineupPlayerProto(player)
 			lineup = append(lineup, l)
 		}
 	}
@@ -410,12 +410,12 @@ func HandleStartingLineupPlayers(p []*app.PlayerStats) []*proto.LineupPlayer {
 	return lineup
 }
 
-func HandleSubstituteLineupPlayers(p []*app.PlayerStats) []*proto.LineupPlayer {
+func handleSubstituteLineupPlayers(p []*app.PlayerStats) []*proto.LineupPlayer {
 	var lineup []*proto.LineupPlayer
 
 	for _, player := range p {
 		if player.IsSubstitute {
-			l := PlayerStatsToLineupPlayerProto(player)
+			l := playerStatsToLineupPlayerProto(player)
 			lineup = append(lineup, l)
 		}
 	}

@@ -18,7 +18,7 @@ func (t TeamStatsFactory) BuildTeamStats(f *app.Fixture, teamID uint64) (*proto.
 		return nil, t.returnLoggedError(f.ID, err)
 	}
 
-	return TeamStatsToProto(team), nil
+	return teamStatsToProto(team), nil
 }
 
 func (t TeamStatsFactory) returnLoggedError(id uint64, err error) error {

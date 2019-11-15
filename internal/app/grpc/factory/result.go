@@ -36,14 +36,14 @@ func (r ResultFactory) BuildResult(f *app.Fixture) (*proto.Result, error) {
 	p := proto.Result{
 		Id:        int64(x.FixtureID),
 		DateTime:  f.Date.Unix(),
-		MatchData: ToMatchData(home, away, x),
+		MatchData: toMatchData(home, away, x),
 	}
 
 	if f.VenueID != nil {
 		v, err := r.venueRepo.GetById(*f.VenueID)
 
 		if err == nil {
-			p.Venue = VenueToProto(v)
+			p.Venue = venueToProto(v)
 		}
 	}
 

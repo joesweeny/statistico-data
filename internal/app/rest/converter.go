@@ -1,6 +1,5 @@
 package rest
 
-
 import (
 	"github.com/statistico/statistico-data/internal/app"
 	"time"

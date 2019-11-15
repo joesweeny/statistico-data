@@ -29,8 +29,8 @@ func (b FixtureFactory) BuildFixture(f *app.Fixture) (*proto.Fixture, error) {
 
 	p := proto.Fixture{
 		Id:       int64(f.ID),
-		HomeTeam: TeamToProto(home),
-		AwayTeam: TeamToProto(away),
+		HomeTeam: teamToProto(home),
+		AwayTeam: teamToProto(away),
 		DateTime:    &proto.Date{
 			Utc: f.Date.Unix(),
 			Rfc: f.Date.Format(time.RFC3339),
@@ -41,7 +41,7 @@ func (b FixtureFactory) BuildFixture(f *app.Fixture) (*proto.Fixture, error) {
 		v, err := b.venueRepo.GetById(*f.VenueID)
 
 		if err == nil {
-			p.Venue = VenueToProto(v)
+			p.Venue = venueToProto(v)
 		}
 	}
 
@@ -49,7 +49,7 @@ func (b FixtureFactory) BuildFixture(f *app.Fixture) (*proto.Fixture, error) {
 		r, err := b.roundRepo.ByID(*f.RoundID)
 
 		if err == nil {
-			p.Round = RoundToProto(r)
+			p.Round = roundToProto(r)
 		}
 	}
 
