@@ -57,7 +57,7 @@ func (b FixtureFactory) BuildFixture(f *app.Fixture) (*proto.Fixture, error) {
 }
 
 func (b FixtureFactory) returnLoggedError(id uint64, err error) error {
-	b.logger.Warnf("error when hydrating proto fixture: fixture %d. error %s", id, err.Error())
+	b.logger.Warnf("error hydrating proto fixture: fixture %d. error %s", id, err.Error())
 	return err
 }
 

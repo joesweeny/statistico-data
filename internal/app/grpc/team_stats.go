@@ -26,14 +26,14 @@ func (s TeamStatsService) GetTeamStatsForFixture(c context.Context, r *proto.Fix
 
 	if err != nil {
 		s.logger.Warnf("Error hydrating proto team stats: %s", err.Error())
-		return nil, err
+		return nil, internalServerError
 	}
 
 	away, err := s.factory.BuildTeamStats(fix, fix.AwayTeamID)
 
 	if err != nil {
 		s.logger.Warnf("Error hydrating proto team stats: %s", err.Error())
-		return nil, err
+		return nil, internalServerError
 	}
 
 	res := proto.TeamStatsResponse{

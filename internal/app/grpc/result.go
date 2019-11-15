@@ -2,7 +2,6 @@ package grpc
 
 import (
 	"errors"
-	"fmt"
 	"github.com/sirupsen/logrus"
 	"github.com/statistico/statistico-data/internal/app"
 	"github.com/statistico/statistico-data/internal/app/grpc/factory"
@@ -39,8 +38,8 @@ func (s ResultService) GetHistoricalResultsForFixture(r *proto.HistoricalResultR
 	fixtures, err := s.fixtureRepo.Get(query)
 
 	if err != nil {
-		s.logger.Printf("Error retrieving Fixture(s) in Result Service. Error: %s", err.Error())
-		return fmt.Errorf("server error: Unable to fulfil Request")
+		s.logger.Warnf("Error retrieving Fixture(s) in Result Service. Error: %s", err.Error())
+		return internalServerError
 	}
 
 	return s.sendResults(fixtures, stream)
@@ -62,8 +61,8 @@ func (s ResultService) GetResultsForTeam(r *proto.TeamRequest, stream proto.Resu
 	fixtures, err := s.fixtureRepo.ByTeamID(uint64(r.TeamId), limit, date)
 
 	if err != nil {
-		s.logger.Printf("Error retrieving Fixture(s) in Result Service. Error: %s", err.Error())
-		return fmt.Errorf("server error: Unable to fulfil Request")
+		s.logger.Warnf("Error retrieving Fixture(s) in Result Service. Error: %s", err.Error())
+		return internalServerError
 	}
 
 	return s.sendResults(fixtures, stream)
@@ -86,8 +85,8 @@ func (s ResultService) GetResultsForSeason(r *proto.SeasonRequest, stream proto.
 	fixtures, err := s.fixtureRepo.Get(query)
 
 	if err != nil {
-		s.logger.Printf("Error retrieving Fixture(s) in Result Service. Error: %s", err.Error())
-		return fmt.Errorf("server error: Unable to fulfil Request")
+		s.logger.Warnf("Error retrieving Fixture(s) in Result Service. Error: %s", err.Error())
+		return internalServerError
 	}
 
 	return s.sendResults(fixtures, stream)

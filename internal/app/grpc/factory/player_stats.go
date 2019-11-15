@@ -37,7 +37,7 @@ func (p PlayerStatsFactory) BuildLineup(f *app.Fixture, teamID uint64) (*proto.L
 }
 
 func (p PlayerStatsFactory) returnLoggedError(id uint64, err error) error {
-	p.logger.Warnf("error when hydrating proto player stats: fixture %d. error %s", id, err.Error())
+	p.logger.Warnf("error hydrating proto player stats: fixture %d. error %s", id, err.Error())
 	return err
 }
 

@@ -2,7 +2,6 @@ package grpc
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"github.com/sirupsen/logrus"
 	"github.com/statistico/statistico-data/internal/app"
@@ -20,22 +19,21 @@ func (s PlayerStatsService) GetPlayerStatsForFixture(c context.Context, r *proto
 	fix, err := s.fixtureRepo.ByID(r.FixtureId)
 
 	if err != nil {
-		m := fmt.Sprintf("Fixture with ID %d does not exist", r.FixtureId)
-		return nil, errors.New(m)
+		return nil, fmt.Errorf("fixture with ID %d does not exist", r.FixtureId)
 	}
 
 	home, err := s.factory.BuildPlayerStats(fix, fix.HomeTeamID)
 
 	if err != nil {
 		s.logger.Warnf("Error hydrating proto player stats: %s", err.Error())
-		return nil, err
+		return nil, internalServerError
 	}
 
 	away, err := s.factory.BuildPlayerStats(fix, fix.AwayTeamID)
 
 	if err != nil {
 		s.logger.Warnf("Error hydrating proto player stats: %s", err.Error())
-		return nil, err
+		return nil, internalServerError
 	}
 
 	res := proto.PlayerStatsResponse{
@@ -50,22 +48,21 @@ func (s PlayerStatsService) GetLineUpForFixture(c context.Context, r *proto.Fixt
 	fix, err := s.fixtureRepo.ByID(r.FixtureId)
 
 	if err != nil {
-		m := fmt.Sprintf("Fixture with ID %d does not exist", r.FixtureId)
-		return nil, errors.New(m)
+		return nil, fmt.Errorf("fixture with ID %d does not exist", r.FixtureId)
 	}
 
 	home, err := s.factory.BuildLineup(fix, fix.HomeTeamID)
 
 	if err != nil {
 		s.logger.Warnf("Error hydrating proto lineup: %s", err.Error())
-		return nil, err
+		return nil, internalServerError
 	}
 
 	away, err := s.factory.BuildLineup(fix, fix.AwayTeamID)
 
 	if err != nil {
 		s.logger.Warnf("Error hydrating proto lineup: %s", err.Error())
-		return nil, err
+		return nil, internalServerError
 	}
 
 	res := proto.LineupResponse{

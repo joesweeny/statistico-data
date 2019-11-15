@@ -2,7 +2,6 @@ package grpc
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"github.com/sirupsen/logrus"
 	"github.com/statistico/statistico-data/internal/app"
@@ -38,21 +37,20 @@ func (s *FixtureService) ListSeasonFixtures(r *proto.SeasonFixtureRequest, strea
 	fixtures, err := s.fixtureRepo.Get(query)
 
 	if err != nil {
-		s.logger.Printf("Error retrieving Fixture(s). Error: %s", err.Error())
-		m := fmt.Sprint("Server Error: Unable to fulfil Request")
-		return errors.New(m)
+		s.logger.Warnf("Error retrieving Fixture(s). Error: %s", err.Error())
+		return internalServerError
 	}
 
 	for _, fix := range fixtures {
 		f, err := s.factory.BuildFixture(&fix)
 
 		if err != nil {
-			s.logger.Printf("Error hydrating Fixture. Error: %s", err.Error())
+			s.logger.Warnf("Error hydrating Fixture. Error: %s", err.Error())
 			continue
 		}
 
 		if err := stream.Send(f); err != nil {
-			s.logger.Printf("Error streaming Fixture back to client. Error: %s", err.Error())
+			s.logger.Warnf("Error streaming Fixture back to client. Error: %s", err.Error())
 			continue
 		}
 	}
@@ -64,14 +62,13 @@ func (s *FixtureService) FixtureByID(c context.Context, r *proto.FixtureRequest)
 	fix, err := s.fixtureRepo.ByID(uint64(r.FixtureId))
 
 	if err != nil {
-		m := fmt.Sprintf("Fixture with ID %d does not exist", r.FixtureId)
-		return nil, errors.New(m)
+		return nil, fmt.Errorf("fixture with ID %d does not exist", r.FixtureId)
 	}
 
 	f, err := s.factory.BuildFixture(fix)
 
 	if err != nil {
-		s.logger.Printf("Error hydrating Fixture. Error: %s", err.Error())
+		s.logger.Warnf("Error hydrating Fixture: %s", err.Error())
 		return nil, err
 	}
 
