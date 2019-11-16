@@ -49,11 +49,10 @@
             "name": "sort",
             "in": "query",
             "required": false,
-            "description": "Only include fixture resources of fixture data after date provided",
+            "description": "The sort direction of the results by date",
             "schema": {
               "type": "string",
-              "enum": ["date_asc", "date_desc"],
-              "description": "The sort direction of the results by date"
+              "enum": ["date_asc", "date_desc"]
             }
           }
         ],
