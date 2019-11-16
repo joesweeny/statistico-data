@@ -488,6 +488,112 @@ func TestFixtureRepository_Get(t *testing.T) {
 		assert.Equal(t, 9, len(all))
 		assert.Equal(t, 0, len(fix))
 	})
+
+	t.Run("returns fixture struct ordered by date asc", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+
+		fixtures := []app.Fixture{
+			{
+				ID: uint64(1),
+				SeasonID:   uint64(14567),
+				HomeTeamID: 451,
+				AwayTeamID: 924,
+				Date:       time.Unix(1548086929, 0),
+			},
+			{
+				ID: uint64(2),
+				SeasonID:   uint64(14567),
+				HomeTeamID: 451,
+				AwayTeamID: 924,
+				Date:       time.Unix(1548086920, 0),
+			},
+			{
+				ID: uint64(3),
+				SeasonID:   uint64(14567),
+				HomeTeamID: 451,
+				AwayTeamID: 924,
+				Date:       time.Unix(1548086925, 0),
+			},
+		}
+
+		for _, fix := range fixtures {
+			if err := repo.Insert(&fix); err != nil {
+				t.Errorf("Error when inserting record into the database: %s", err.Error())
+			}
+		}
+
+		sort := "date_asc"
+
+		query := app.FixtureRepositoryQuery{SortBy: &sort}
+
+		fix, err := repo.Get(query)
+
+		if err != nil {
+			t.Fatalf("Test failed, expected nil, got %s", err.Error())
+		}
+
+		a := assert.New(t)
+		a.Equal(uint64(2), fix[0].ID)
+		a.Equal(int64(1548086920), fix[0].Date.Unix())
+		a.Equal(uint64(3), fix[1].ID)
+		a.Equal(int64(1548086925), fix[1].Date.Unix())
+		a.Equal(uint64(1), fix[2].ID)
+		a.Equal(int64(1548086929), fix[2].Date.Unix())
+	})
+
+	t.Run("returns fixture struct ordered by date desc", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+
+		fixtures := []app.Fixture{
+			{
+				ID: uint64(1),
+				SeasonID:   uint64(14567),
+				HomeTeamID: 451,
+				AwayTeamID: 924,
+				Date:       time.Unix(1548086929, 0),
+			},
+			{
+				ID: uint64(2),
+				SeasonID:   uint64(14567),
+				HomeTeamID: 451,
+				AwayTeamID: 924,
+				Date:       time.Unix(1548086920, 0),
+			},
+			{
+				ID: uint64(3),
+				SeasonID:   uint64(14567),
+				HomeTeamID: 451,
+				AwayTeamID: 924,
+				Date:       time.Unix(1548086925, 0),
+			},
+		}
+
+		for _, fix := range fixtures {
+			if err := repo.Insert(&fix); err != nil {
+				t.Errorf("Error when inserting record into the database: %s", err.Error())
+			}
+		}
+
+		sort := "date_desc"
+
+		query := app.FixtureRepositoryQuery{SortBy: &sort}
+
+		fix, err := repo.Get(query)
+
+		if err != nil {
+			t.Fatalf("Test failed, expected nil, got %s", err.Error())
+		}
+
+		a := assert.New(t)
+		a.Equal(uint64(2), fix[2].ID)
+		a.Equal(int64(1548086920), fix[2].Date.Unix())
+		a.Equal(uint64(3), fix[1].ID)
+		a.Equal(int64(1548086925), fix[1].Date.Unix())
+		a.Equal(uint64(1), fix[0].ID)
+		a.Equal(int64(1548086929), fix[0].Date.Unix())
+	})
 }
 
 func newFixture(id uint64) *app.Fixture {
