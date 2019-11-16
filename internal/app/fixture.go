@@ -35,7 +35,7 @@ type FixtureRepositoryQuery struct {
 	DateFrom   *time.Time
 	DateTo     *time.Time
 	Limit      *uint64
-	SortBy       *string
+	SortBy     *string
 }
 
 // FixtureRequester provides an interface allowing this application to request data from an external

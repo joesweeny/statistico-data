@@ -74,7 +74,7 @@ func parseFixtureQuery(r *http.Request, ps httprouter.Params) (app.FixtureReposi
 	var sort string
 
 	if r.URL.Query().Get("sort") != "" {
-		sort =  r.URL.Query().Get("sort")
+		sort = r.URL.Query().Get("sort")
 	}
 
 	seasonID := uint64(id)

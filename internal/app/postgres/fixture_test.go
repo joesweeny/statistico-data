@@ -495,21 +495,21 @@ func TestFixtureRepository_Get(t *testing.T) {
 
 		fixtures := []app.Fixture{
 			{
-				ID: uint64(1),
+				ID:         uint64(1),
 				SeasonID:   uint64(14567),
 				HomeTeamID: 451,
 				AwayTeamID: 924,
 				Date:       time.Unix(1548086929, 0),
 			},
 			{
-				ID: uint64(2),
+				ID:         uint64(2),
 				SeasonID:   uint64(14567),
 				HomeTeamID: 451,
 				AwayTeamID: 924,
 				Date:       time.Unix(1548086920, 0),
 			},
 			{
-				ID: uint64(3),
+				ID:         uint64(3),
 				SeasonID:   uint64(14567),
 				HomeTeamID: 451,
 				AwayTeamID: 924,
@@ -548,21 +548,21 @@ func TestFixtureRepository_Get(t *testing.T) {
 
 		fixtures := []app.Fixture{
 			{
-				ID: uint64(1),
+				ID:         uint64(1),
 				SeasonID:   uint64(14567),
 				HomeTeamID: 451,
 				AwayTeamID: 924,
 				Date:       time.Unix(1548086929, 0),
 			},
 			{
-				ID: uint64(2),
+				ID:         uint64(2),
 				SeasonID:   uint64(14567),
 				HomeTeamID: 451,
 				AwayTeamID: 924,
 				Date:       time.Unix(1548086920, 0),
 			},
 			{
-				ID: uint64(3),
+				ID:         uint64(3),
 				SeasonID:   uint64(14567),
 				HomeTeamID: 451,
 				AwayTeamID: 924,
