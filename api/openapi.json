@@ -49,7 +49,7 @@
             "name": "sort",
             "in": "query",
             "required": false,
-            "description": "The sort direction of the results by date",
+            "description": "The sort direction of the fixtures by date",
             "schema": {
               "type": "string",
               "enum": ["date_asc", "date_desc"]
