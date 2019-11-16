@@ -32,6 +32,7 @@ paths:
             $ref: '#/components/schemas/DateRFC3339'
         - name: sort
           in: query
+          required: false
           description: "The sort direction of the results by date"
           schema:
             type: string
