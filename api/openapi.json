@@ -44,6 +44,16 @@
             "schema": {
               "$ref": "#/components/schemas/DateRFC3339"
             }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "description": "The sort direction of the fixtures by date",
+            "schema": {
+              "type": "string",
+              "enum": ["date_asc", "date_desc"]
+            }
           }
         ],
         "responses": {
