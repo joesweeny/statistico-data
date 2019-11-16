@@ -5,7 +5,7 @@ info:
 servers:
   - url: http://data.statisitco.io
 paths:
-  /season/{seasonId}/fixtures:
+  "/season/{seasonId}/fixtures":
     get:
       tags:
         - Fixture
@@ -23,15 +23,25 @@ paths:
           required: false
           description: Only include fixture resources of fixture data before date provided
           schema:
-            $ref: '#/components/schemas/DateRFC3339'
+            "$ref": "#/components/schemas/DateRFC3339"
         - name: date_after
           in: query
           required: false
           description: Only include fixture resources of fixture data after date provided
           schema:
-            $ref: '#/components/schemas/DateRFC3339'
+            "$ref": "#/components/schemas/DateRFC3339"
+        - name: sort
+          in: query
+          required: false
+          description: Only include fixture resources of fixture data after date provided
+          schema:
+            type: string
+            enum:
+              - date_asc
+              - date_desc
+            description: The sort direction of the results by date
       responses:
-        200:
+        '200':
           description: A list of fixture resources
           content:
             application/json:
@@ -40,41 +50,37 @@ paths:
                 properties:
                   status:
                     type: string
-                    example: 'success'
+                    example: success
                   data:
                     type: object
                     properties:
                       fixtures:
                         type: array
                         items:
-                          $ref: '#/components/schemas/Fixture'
+                          "$ref": "#/components/schemas/Fixture"
         default:
           description: Default non 200 response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/StandardResponse'
-
+                "$ref": "#/components/schemas/StandardResponse"
 components:
   schemas:
     Date:
       type: object
       properties:
         utc:
-          $ref: '#/components/schemas/DateUTC'
+          "$ref": "#/components/schemas/DateUTC"
         rfc:
-          $ref: '#/components/schemas/DateRFC3339'
-
+          "$ref": "#/components/schemas/DateRFC3339"
     DateRFC3339:
       type: string
-      description: "An RFC-3339 valid datetime"
+      description: An RFC-3339 valid datetime
       example: '2018-01-24T20:21:44+00:00'
-
     DateUTC:
       type: integer
-      description: "UTC representation of date/time"
+      description: UTC representation of date/time
       example: 1573733379
-
     Error:
       type: object
       required:
@@ -88,10 +94,10 @@ components:
         code:
           type: integer
           example: 1
-          description: >
-            A code to identify the error. "1" is used when no specific error
-            code has been defined for this error
+          description: 'A code to identify the error. "1" is used when no specific
+            error code has been defined for this error
 
+'
     Fixture:
       type: object
       properties:
@@ -99,16 +105,15 @@ components:
           type: integer
           example: 16679
         home_team:
-          $ref: '#/components/schemas/Team'
+          "$ref": "#/components/schemas/Team"
         away_team:
-          $ref: '#/components/schemas/Team'
+          "$ref": "#/components/schemas/Team"
         venue:
-          $ref: '#/components/schemas/Venue'
+          "$ref": "#/components/schemas/Venue"
         round:
-          $ref: '#/components/schemas/Round'
+          "$ref": "#/components/schemas/Round"
         date_time:
-          $ref: '#/components/schemas/Date'
-
+          "$ref": "#/components/schemas/Date"
     Round:
       type: object
       properties:
@@ -117,15 +122,14 @@ components:
           example: 6715
         name:
           type: string
-          example: "5"
+          example: '5'
         season_id:
           type: integer
           example: 452
         start_date:
-          $ref: '#/components/schemas/Date'
+          "$ref": "#/components/schemas/Date"
         end_date:
-          $ref: '#/components/schemas/Date'
-
+          "$ref": "#/components/schemas/Date"
     StandardResponse:
       type: object
       required:
@@ -144,8 +148,7 @@ components:
             errors:
               type: array
               items:
-                $ref: '#/components/schemas/Error'
-
+                "$ref": "#/components/schemas/Error"
     Team:
       type: object
       properties:
@@ -154,8 +157,7 @@ components:
           example: 1
         name:
           type: string
-          example: "West Ham United"
-
+          example: West Ham United
     Venue:
       type: object
       properties:
@@ -164,4 +166,4 @@ components:
           example: 1
         name:
           type: string
-          example: "London Stadium"
+          example: London Stadium

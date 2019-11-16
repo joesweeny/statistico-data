@@ -44,6 +44,17 @@
             "schema": {
               "$ref": "#/components/schemas/DateRFC3339"
             }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "description": "Only include fixture resources of fixture data after date provided",
+            "schema": {
+              "type": "string",
+              "enum": ["date_asc", "date_desc"],
+              "description": "The sort direction of the results by date"
+            }
           }
         ],
         "responses": {
