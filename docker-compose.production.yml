@@ -59,3 +59,7 @@ services:
       DB_PASSWORD: $DB_PASSWORD
       DB_USER: $DB_USER
     command: ["./bin/migrate"]
+
+networks:
+  statistico-data-network:
+    driver: bridge
