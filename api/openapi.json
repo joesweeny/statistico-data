@@ -6,7 +6,7 @@
   },
   "servers": [
     {
-      "url": "http://data.statisitco.io"
+      "url": "https://data.statisitco.io"
     }
   ],
   "paths": {
@@ -15,7 +15,7 @@
         "tags": [
           "Fixture"
         ],
-        "description": "Get fixtures for a competition",
+        "description": "Get fixtures for a season",
         "parameters": [
           {
             "name": "seasonId",
