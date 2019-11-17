@@ -3,13 +3,13 @@ info:
   title: Statistico Data API
   version: 1.0.0
 servers:
-  - url: http://data.statisitco.io
+  - url: https://data.statisitco.io
 paths:
   /season/{seasonId}/fixtures:
     get:
       tags:
         - Fixture
-      description: Get fixtures for a competition
+      description: Get fixtures for a season
       parameters:
         - name: seasonId
           in: path

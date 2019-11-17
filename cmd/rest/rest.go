@@ -14,6 +14,7 @@ func main() {
 	router := httprouter.New()
 	router.GET("/", rest.RoutePath)
 	router.GET("/healthcheck", rest.HealthCheck)
+	router.GET("/openapi.json", rest.RenderApiDocs)
 	router.GET("/season/:id/fixtures", container.RestFixtureHandler().SeasonFixtures)
 
 	log.Fatal(http.ListenAndServe(":80", router))

@@ -13,5 +13,6 @@ FROM alpine
 RUN apk --no-cache add ca-certificates
 WORKDIR /opt
 COPY --from=builder /app/rest .
+COPY ./api ./opt/api
 EXPOSE 80
 CMD ["./rest"]
