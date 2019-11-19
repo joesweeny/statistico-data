@@ -17,3 +17,6 @@ This service provides three applications:
 
 More detailed information can be found in the [/docs/applications](https://github.com/statistico/statistico-data/docs/applications)
 directory
+
+## Servers
+Production: [https://data.statistico.io](https://data.statistico.io)
