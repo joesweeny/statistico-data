@@ -20,6 +20,10 @@ func (c Container) FixtureRepository() *postgres.FixtureRepository {
 	return postgres.NewFixtureRepository(c.Database, c.Clock)
 }
 
+func (c Container) FixtureTeamXGRepository() *postgres.FixtureTeamXGRepository {
+	return postgres.NewFixtureTeamXGRepository(c.Database, c.Clock)
+}
+
 func (c Container) PlayerRepository() *postgres.PlayerRepository {
 	return postgres.NewPlayerRepository(c.Database, c.Clock)
 }
