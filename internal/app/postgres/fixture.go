@@ -86,7 +86,7 @@ func (r *FixtureRepository) ByTeamID(id uint64, limit int32, before time.Time) (
 func (r *FixtureRepository) Get(q app.FixtureRepositoryQuery) ([]app.Fixture, error) {
 	builder := r.queryBuilder()
 
-	query := builder.Select("*").From("sportmonks_fixture")
+	query := builder.Select("sportmonks_fixture.*").From("sportmonks_fixture")
 
 	rows, err := buildQuery(query, q).Query()
 
@@ -122,6 +122,16 @@ func buildQuery(b sq.SelectBuilder, q app.FixtureRepositoryQuery) sq.SelectBuild
 
 	if q.AwayTeamID != nil {
 		b = b.Where(sq.Eq{"away_team_id": q.AwayTeamID})
+	}
+
+	if q.HomeTeamNameLike != nil {
+		b = b.Join("sportmonks_team ON sportmonks_team.id = sportmonks_fixture.home_team_id")
+		b = b.Where(sq.Like{"sportmonks_team.name": *q.HomeTeamNameLike + "%"})
+	}
+
+	if q.AwayTeamNameLike != nil {
+		b = b.Join("sportmonks_team ON sportmonks_team.id = sportmonks_fixture.away_team_id")
+		b = b.Where(sq.Like{"sportmonks_team.name": *q.AwayTeamNameLike + "%"})
 	}
 
 	if q.DateFrom != nil {
