@@ -29,13 +29,15 @@ type FixtureRepository interface {
 }
 
 type FixtureRepositoryQuery struct {
-	SeasonID   *uint64
-	HomeTeamID *uint64
-	AwayTeamID *uint64
-	DateFrom   *time.Time
-	DateTo     *time.Time
-	Limit      *uint64
-	SortBy     *string
+	SeasonID         *uint64
+	HomeTeamID       *uint64
+	AwayTeamID       *uint64
+	HomeTeamNameLike *string
+	AwayTeamNameLike *string
+	DateFrom         *time.Time
+	DateTo           *time.Time
+	Limit            *uint64
+	SortBy           *string
 }
 
 // FixtureRequester provides an interface allowing this application to request data from an external
