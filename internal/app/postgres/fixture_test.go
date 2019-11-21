@@ -537,7 +537,6 @@ func TestFixtureRepository_Get(t *testing.T) {
 		a.Equal(uint64(2), fix[0].ID)
 		a.Equal(int64(1548086920), fix[0].Date.Unix())
 		a.Equal(uint64(3), fix[1].ID)
-		a.Equal(uint64(3), fix[1].ID)
 		a.Equal(int64(1548086925), fix[1].Date.Unix())
 		a.Equal(uint64(1), fix[2].ID)
 		a.Equal(int64(1548086929), fix[2].Date.Unix())
