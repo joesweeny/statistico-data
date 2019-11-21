@@ -20,10 +20,15 @@ type Database struct {
 
 type Services struct {
 	SportsMonks
+	Understat
 }
 
 type SportsMonks struct {
 	ApiKey string
+}
+
+type Understat struct {
+	BaseURL string
 }
 
 func BuildConfig() *Config {
@@ -41,6 +46,8 @@ func BuildConfig() *Config {
 	config.SportsMonks = SportsMonks{
 		ApiKey: os.Getenv("SPORTMONKS_API_KEY"),
 	}
+
+	config.Understat = Understat{BaseURL:"https://understat.com"}
 
 	return &config
 }

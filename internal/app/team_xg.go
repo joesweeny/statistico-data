@@ -18,10 +18,3 @@ type FixtureTeamXGRepository interface {
 	ByID(id uint64) (*FixtureTeamXG, error)
 	ByFixtureID(id uint64) (*FixtureTeamXG, error)
 }
-
-// FixtureTeamXGRequester provides an interface allowing this application to request data from an external
-// data provider. The requester implementation is responsible for creating the channel, filtering struct data into
-// the channel before closing the channel once successful execution is complete.
-type FixtureTeamXGRequester interface {
-	FixtureTeamXGByLeagueAndSeason(league, season string) <-chan *FixtureTeamXG
-}

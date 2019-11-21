@@ -3,6 +3,7 @@ package bootstrap
 import (
 	"github.com/statistico/statistico-data/internal/app"
 	"github.com/statistico/statistico-data/internal/app/sportmonks"
+	"github.com/statistico/statistico-data/internal/app/understat"
 )
 
 func (c Container) CompetitionRequester() app.CompetitionRequester {
@@ -19,6 +20,10 @@ func (c Container) EventRequester() app.EventRequester {
 
 func (c Container) FixtureRequester() app.FixtureRequester {
 	return sportmonks.NewFixtureRequester(c.SportMonksClient, c.Logger)
+}
+
+func (c Container) FixtureTeamXGRequester() *understat.FixtureTeamXGRequester {
+	return understat.NewFixtureTeamXGRequester(c.UnderstatParser, c.Logger)
 }
 
 func (c Container) RoundRequester() app.RoundRequester {
