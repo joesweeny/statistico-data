@@ -537,6 +537,7 @@ func TestFixtureRepository_Get(t *testing.T) {
 		a.Equal(uint64(2), fix[0].ID)
 		a.Equal(int64(1548086920), fix[0].Date.Unix())
 		a.Equal(uint64(3), fix[1].ID)
+		a.Equal(uint64(3), fix[1].ID)
 		a.Equal(int64(1548086925), fix[1].Date.Unix())
 		a.Equal(uint64(1), fix[2].ID)
 		a.Equal(int64(1548086929), fix[2].Date.Unix())
@@ -593,6 +594,149 @@ func TestFixtureRepository_Get(t *testing.T) {
 		a.Equal(int64(1548086925), fix[1].Date.Unix())
 		a.Equal(uint64(1), fix[0].ID)
 		a.Equal(int64(1548086929), fix[0].Date.Unix())
+	})
+
+	t.Run("returns fixture struct slice where home team name like", func(t *testing.T) {
+		conn, clean := test.GetConnection(t, "sportmonks_team")
+		teamRepo := postgres.NewTeamRepository(conn, test.Clock)
+
+		t.Helper()
+		defer clean()
+		defer cleanUp()
+
+		insertFixtures(t, repo)
+
+		teams := []app.Team{
+			{
+				ID:           451,
+				Name:         "West Ham United",
+				VenueID:      560,
+				CountryID:    uint64(462),
+				NationalTeam: false,
+			},
+			{
+				ID:           22,
+				Name:         "Chelsea",
+				VenueID:      560,
+				CountryID:    uint64(462),
+				NationalTeam: false,
+			},
+		}
+
+		for _, team := range teams {
+			if err := teamRepo.Insert(&team); err != nil {
+				t.Errorf("Error when inserting record into the database: %s", err.Error())
+			}
+		}
+
+		home := "West"
+
+		query := app.FixtureRepositoryQuery{HomeTeamNameLike: &home}
+
+		fix, err := repo.Get(query)
+
+		if err != nil {
+			t.Fatalf("Test failed, expected nil, got %s", err.Error())
+		}
+
+		a := assert.New(t)
+		a.Equal(4, len(fix))
+	})
+
+	t.Run("returns fixture struct slice where away team name like", func(t *testing.T) {
+		conn, clean := test.GetConnection(t, "sportmonks_team")
+		teamRepo := postgres.NewTeamRepository(conn, test.Clock)
+
+		t.Helper()
+		defer clean()
+		defer cleanUp()
+
+		insertFixtures(t, repo)
+
+		teams := []app.Team{
+			{
+				ID:           451,
+				Name:         "West Ham United",
+				VenueID:      560,
+				CountryID:    uint64(462),
+				NationalTeam: false,
+			},
+			{
+				ID:           924,
+				Name:         "Chelsea",
+				VenueID:      560,
+				CountryID:    uint64(462),
+				NationalTeam: false,
+			},
+		}
+
+		for _, team := range teams {
+			if err := teamRepo.Insert(&team); err != nil {
+				t.Errorf("Error when inserting record into the database: %s", err.Error())
+			}
+		}
+
+		away := "Chel"
+
+		query := app.FixtureRepositoryQuery{AwayTeamNameLike: &away}
+
+		fix, err := repo.Get(query)
+
+		if err != nil {
+			t.Fatalf("Test failed, expected nil, got %s", err.Error())
+		}
+
+		a := assert.New(t)
+		a.Equal(8, len(fix))
+	})
+
+	t.Run("returns fixture struct slice where away team name like and date between", func(t *testing.T) {
+		conn, clean := test.GetConnection(t, "sportmonks_team")
+		teamRepo := postgres.NewTeamRepository(conn, test.Clock)
+
+		t.Helper()
+		defer clean()
+		defer cleanUp()
+
+		insertFixtures(t, repo)
+
+		teams := []app.Team{
+			{
+				ID:           451,
+				Name:         "West Ham United",
+				VenueID:      560,
+				CountryID:    uint64(462),
+				NationalTeam: false,
+			},
+			{
+				ID:           924,
+				Name:         "Chelsea",
+				VenueID:      560,
+				CountryID:    uint64(462),
+				NationalTeam: false,
+			},
+		}
+
+		for _, team := range teams {
+			if err := teamRepo.Insert(&team); err != nil {
+				t.Errorf("Error when inserting record into the database: %s", err.Error())
+			}
+		}
+
+		away := "Chel"
+		from := time.Unix(1550066310, 0)
+		to := time.Unix(1550066317, 0)
+
+		query := app.FixtureRepositoryQuery{AwayTeamNameLike: &away, DateFrom: &from, DateTo: &to}
+
+		fix, err := repo.Get(query)
+
+		if err != nil {
+			t.Fatalf("Test failed, expected nil, got %s", err.Error())
+		}
+
+		a := assert.New(t)
+		a.Equal(3, len(fix))
 	})
 }
 
