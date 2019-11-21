@@ -11,7 +11,7 @@ type FixtureTeamXGRequester struct {
 }
 
 func (f FixtureTeamXGRequester) FixtureTeamXGByLeagueAndSeason(league, season string) <-chan *parser.Fixture {
-	ch := make(chan *parser.Fixture, 100)
+	ch := make(chan *parser.Fixture, 380)
 
 	go f.parseFixtures(league, season, ch)
 
@@ -21,9 +21,10 @@ func (f FixtureTeamXGRequester) FixtureTeamXGByLeagueAndSeason(league, season st
 func (f FixtureTeamXGRequester) parseFixtures(league, season string, ch chan<- *parser.Fixture) {
 	defer close(ch)
 
-	fixtures, err := f.parser.GetLeagueFixtures(league, season)
+	fixtures, err := f.parser.LeagueFixtures(league, season)
 
 	if err != nil {
+		panic(err)
 		f.logger.Fatalf("Error parse fixture team xg from understat '%s'", err.Error())
 		return
 	}
