@@ -6,6 +6,7 @@ import (
 	"github.com/jonboulle/clockwork"
 	"github.com/sirupsen/logrus"
 	spClient "github.com/statistico/statistico-sportmonks-go-client"
+	understat "github.com/statistico/statistico-understat-parser"
 	"net"
 	"net/http"
 	"os"
@@ -18,6 +19,7 @@ type Container struct {
 	Database         *sql.DB
 	Logger           *logrus.Logger
 	SportMonksClient *spClient.HTTPClient
+	UnderstatParser  *understat.Parser
 }
 
 func BuildContainer(config *Config) *Container {
@@ -29,6 +31,7 @@ func BuildContainer(config *Config) *Container {
 	c.Database = databaseConnection(config)
 	c.Logger = logger()
 	c.SportMonksClient = sportMonksClient(config)
+	c.UnderstatParser = understatParser(config)
 
 	return &c
 }
@@ -73,6 +76,10 @@ func sportMonksClient(config *Config) *spClient.HTTPClient {
 	c.SetHTTPClient(client)
 
 	return c
+}
+
+func understatParser(config *Config) *understat.Parser {
+	return &understat.Parser{BaseURL:config.Understat.BaseURL}
 }
 
 func logger() *logrus.Logger {
