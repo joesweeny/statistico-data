@@ -31,6 +31,8 @@ func main() {
 	case Fixture, FixtureCurrentSeason:
 		processor = app.FixtureProcessor()
 		break
+	case FixtureXG, FixtureXGCurrentSeason:
+		processor = app.FixtureTeamXGProcessor()
 	case Player:
 		processor = app.PlayerProcessor()
 		break

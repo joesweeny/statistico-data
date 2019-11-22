@@ -43,6 +43,15 @@ func (c Container) FixtureProcessor() *process.FixtureProcessor {
 	)
 }
 
+func (c Container) FixtureTeamXGProcessor() *process.FixtureTeamXGProcessor {
+	return process.NewFixtureTeamXGProcessor(
+		c.FixtureTeamXGRepository(),
+		c.FixtureRepository(),
+		c.UnderstatParser,
+		c.Logger,
+	)
+}
+
 func (c Container) PlayerProcessor() *process.PlayerProcessor {
 	return process.NewPlayerProcessor(
 		c.PlayerRepository(),
