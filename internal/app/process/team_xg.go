@@ -36,6 +36,10 @@ var historicSeasons =  map[string][]string {
 	},
 }
 
+var teamMapper = map[string]string {
+	"Bournemouth": "AFC Bournemouth",
+}
+
 type FixtureTeamXGProcessor struct {
 	xGRepo app.FixtureTeamXGRepository
 	fixtureRepo app.FixtureRepository
@@ -106,8 +110,8 @@ func (f FixtureTeamXGProcessor) createNew(u understat.Fixture) {
 		return
 	}
 
-	home, err1 := parseFloat(*u.XG.Home)
-	away, err2 := parseFloat(*u.XG.Away)
+	home, err1 := parseFloat(u.XG.Home)
+	away, err2 := parseFloat(u.XG.Away)
 
 	if err1 != nil || err2 != nil {
 		f.logger.Warnf("unable to parse float when processing fixture id %d", fixture.ID)
@@ -117,8 +121,8 @@ func (f FixtureTeamXGProcessor) createNew(u understat.Fixture) {
 	xg := &app.FixtureTeamXG{
 		ID:        uint64(id),
 		FixtureID: fixture.ID,
-		Home:      &home,
-		Away:      &away,
+		Home:      home,
+		Away:      away,
 	}
 
 	if err := f.xGRepo.Insert(xg); err != nil {
@@ -127,16 +131,16 @@ func (f FixtureTeamXGProcessor) createNew(u understat.Fixture) {
 }
 
 func (f FixtureTeamXGProcessor) updateExisting(xg *app.FixtureTeamXG, u understat.Fixture) {
-	home, err1 := parseFloat(*u.XG.Home)
-	away, err2 := parseFloat(*u.XG.Away)
+	home, err1 := parseFloat(u.XG.Home)
+	away, err2 := parseFloat(u.XG.Away)
 
 	if err1 != nil || err2 != nil {
 		f.logger.Warnf("unable to parse float when processing fixture id %d", xg.FixtureID)
 		return
 	}
 
-	xg.Home = &home
-	xg.Away = &away
+	xg.Home = home
+	xg.Away = away
 
 	if err := f.xGRepo.Update(xg); err != nil {
 		f.logger.Warnf("error update fixture team xg %d, fixture id %d", xg.ID, xg.FixtureID)
@@ -144,8 +148,8 @@ func (f FixtureTeamXGProcessor) updateExisting(xg *app.FixtureTeamXG, u understa
 }
 
 func (f FixtureTeamXGProcessor) parseFixture(u understat.Fixture) (*app.Fixture, error) {
-	home := u.Home.Title[0:4]
-	away := u.Away.Title[0:4]
+	home := parseTeam(u.Home.Title)
+	away := parseTeam(u.Away.Title)
 
 	from, err1 := parseDateTime(u.DateTime, -2*time.Hour)
 	to, err2 := parseDateTime(u.DateTime, 2*time.Hour)
@@ -170,14 +174,20 @@ func (f FixtureTeamXGProcessor) parseFixture(u understat.Fixture) (*app.Fixture,
 	return &fixs[0], nil
 }
 
-func parseFloat(str string) (float32, error) {
-	float, err := strconv.ParseFloat(str, 32)
-
-	if err != nil {
-		return 0, err
+func parseFloat(str *string) (*float32, error) {
+	if str == nil {
+		return nil, nil
 	}
 
-	return float32(float), nil
+	float, err := strconv.ParseFloat(*str, 32)
+
+	if err != nil {
+		return nil, err
+	}
+
+	f := float32(float)
+
+	return &f, nil
 }
 
 func parseDateTime(d string, duration time.Duration) (*time.Time, error) {
@@ -192,6 +202,16 @@ func parseDateTime(d string, duration time.Duration) (*time.Time, error) {
 	date = date.Add(duration)
 
 	return &date, nil
+}
+
+func parseTeam(team string) string {
+	value, ok := teamMapper[team]
+
+	if ok {
+		team = value
+	}
+
+	return team[0:4]
 }
 
 func NewFixtureTeamXGProcessor(r app.FixtureTeamXGRepository, f app.FixtureRepository, p *understat.Parser, l *logrus.Logger) *FixtureTeamXGProcessor {
