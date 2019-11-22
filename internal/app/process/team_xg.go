@@ -122,7 +122,7 @@ func (f FixtureTeamXGProcessor) createNew(u understat.Fixture) {
 	}
 
 	if err := f.xGRepo.Insert(xg); err != nil {
-		f.logger.Warnf("error inserting fixture team xg %d, fixture id %d", u.ID, xg.FixtureID)
+		f.logger.Warnf("error inserting fixture team xg %s, fixture id %d", u.ID, xg.FixtureID)
 	}
 }
 
