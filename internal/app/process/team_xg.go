@@ -144,8 +144,8 @@ func (f FixtureTeamXGProcessor) updateExisting(xg *app.FixtureTeamXG, u understa
 }
 
 func (f FixtureTeamXGProcessor) parseFixture(u understat.Fixture) (*app.Fixture, error) {
-	home := u.Home.Title[0:5]
-	away := u.Away.Title[0:5]
+	home := u.Home.Title[0:4]
+	away := u.Away.Title[0:4]
 
 	from, err1 := parseDateTime(u.DateTime, -2*time.Hour)
 	to, err2 := parseDateTime(u.DateTime, 2*time.Hour)

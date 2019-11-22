@@ -125,13 +125,15 @@ func buildQuery(b sq.SelectBuilder, q app.FixtureRepositoryQuery) sq.SelectBuild
 	}
 
 	if q.HomeTeamNameLike != nil {
-		b = b.Join("sportmonks_team ON sportmonks_team.id = sportmonks_fixture.home_team_id")
-		b = b.Where(sq.Like{"sportmonks_team.name": *q.HomeTeamNameLike + "%"})
+		nested := sq.Select("*").From("sportmonks_team").Where(sq.Like{"sportmonks_team.name": *q.HomeTeamNameLike + "%"})
+
+		b = b.JoinClause(nested.Prefix("JOIN (").Suffix(") t1 ON sportmonks_fixture.home_team_id = t1.id"))
 	}
 
 	if q.AwayTeamNameLike != nil {
-		b = b.Join("sportmonks_team ON sportmonks_team.id = sportmonks_fixture.away_team_id")
-		b = b.Where(sq.Like{"sportmonks_team.name": *q.AwayTeamNameLike + "%"})
+		nested := sq.Select("*").From("sportmonks_team").Where(sq.Like{"sportmonks_team.name": *q.AwayTeamNameLike + "%"})
+
+		b = b.JoinClause(nested.Prefix("JOIN (").Suffix(") t2 ON sportmonks_fixture.away_team_id = t2.id"))
 	}
 
 	if q.DateFrom != nil {
