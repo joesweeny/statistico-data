@@ -4,6 +4,7 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/statistico/statistico-data/internal/app"
 	"github.com/statistico/statistico-data/internal/app/grpc/proto"
+	"time"
 )
 
 type ResultFactory struct {
@@ -44,7 +45,10 @@ func (r ResultFactory) BuildResult(f *app.Fixture) (*proto.Result, error) {
 	p := proto.Result{
 		Id:        int64(x.FixtureID),
 		Season:    seasonToProto(season),
-		DateTime:  f.Date.Unix(),
+		DateTime:  &proto.Date{
+			Utc: f.Date.Unix(),
+			Rfc: f.Date.Format(time.RFC3339),
+		},
 		MatchData: toMatchData(home, away, x),
 	}
 
