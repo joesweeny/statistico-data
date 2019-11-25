@@ -6,7 +6,13 @@ import (
 )
 
 func (c Container) ProtoFixtureFactory() *factory.FixtureFactory {
-	return factory.NewFixtureFactory(c.RoundRepository(), c.TeamRepository(), c.VenueRepository(), c.Logger)
+	return factory.NewFixtureFactory(
+		c.RoundRepository(),
+		c.SeasonRepository(),
+		c.TeamRepository(),
+		c.VenueRepository(),
+		c.Logger,
+	)
 }
 
 func (c Container) ProtoPlayerStatsFactory() *factory.PlayerStatsFactory {

@@ -73,7 +73,7 @@ func NewFixtureFactory(
 	r app.RoundRepository,
 	s app.SeasonRepository,
 	t app.TeamRepository,
-	v app.VenueRepository, 
+	v app.VenueRepository,
 	log *logrus.Logger,
 ) *FixtureFactory {
 	return &FixtureFactory{roundRepo: r, seasonRepo: s, teamRepo: t, venueRepo: v, logger: log}
