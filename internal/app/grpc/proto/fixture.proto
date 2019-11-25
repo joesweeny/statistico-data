@@ -5,6 +5,7 @@ package proto;
 import "internal/app/grpc/proto/common.proto";
 import "internal/app/grpc/proto/requests.proto";
 import "internal/app/grpc/proto/round.proto";
+import "internal/app/grpc/proto/season.proto";
 import "internal/app/grpc/proto/team.proto";
 import "internal/app/grpc/proto/venue.proto";
 
@@ -15,9 +16,10 @@ service FixtureService {
 
 message Fixture {
     int64 id = 1;
-    Team home_team = 5;
-    Team away_team = 6;
-    Round round = 4;
-    Venue venue = 7;
-    Date date_time = 9;
+    Season season = 2;
+    Team home_team = 3;
+    Team away_team = 4;
+    Round round = 5;
+    Venue venue = 6;
+    Date date_time = 7;
 }
