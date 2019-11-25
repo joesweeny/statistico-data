@@ -3,6 +3,7 @@ syntax = "proto3";
 package proto;
 
 import "google/protobuf/wrappers.proto";
+import "internal/app/grpc/proto/requests.proto";
 import "internal/app/grpc/proto/round.proto";
 import "internal/app/grpc/proto/season.proto";
 import "internal/app/grpc/proto/team.proto";
@@ -12,37 +13,6 @@ service ResultService {
     rpc GetHistoricalResultsForFixture(HistoricalResultRequest) returns (stream Result) {}
     rpc GetResultsForSeason(SeasonRequest) returns (stream Result) {}
     rpc GetResultsForTeam(TeamRequest) returns (stream Result) {}
-}
-
-message TeamRequest {
-    // The Team ID that the Result set relates to
-    int64 team_id = 1;
-    // The number of results to return. If limit is not set the whole Result set for the Team
-    // will be returned
-    google.protobuf.Int32Value limit = 2;
-    // A filter to return Results before a specific date
-    // RFC3339 formatted string i.e "2006-01-02T15:04:05Z07:00"
-    string date_before = 3;
-}
-
-message SeasonRequest {
-    // The Season ID that the Result set relates to
-    int64 season_id = 1;
-    // A filter to return Results before a specific date
-    // RFC3339 formatted string i.e "2006-01-02T15:04:05Z07:00"
-    string date_before = 2;
-}
-
-message HistoricalResultRequest {
-    // The Home Team ID that the Result set relates to
-    uint64 home_team_id = 1;
-    // The Away Team ID that the Result set relates to
-    uint64 away_team_id = 2;
-    // The number of results to return
-    uint32 limit = 3;
-    // A filter to return Results before a specific date
-    // RFC3339 formatted string i.e "2006-01-02T15:04:05Z07:00"
-    string date_before = 4;
 }
 
 message Result {
