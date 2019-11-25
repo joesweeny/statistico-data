@@ -3,6 +3,7 @@ syntax = "proto3";
 package proto;
 
 import "google/protobuf/wrappers.proto";
+import "internal/app/grpc/proto/common.proto";
 import "internal/app/grpc/proto/requests.proto";
 import "internal/app/grpc/proto/round.proto";
 import "internal/app/grpc/proto/season.proto";
@@ -17,11 +18,12 @@ service ResultService {
 
 message Result {
     int64 id = 1;
-    Season season = 2;
-    Round round = 3;
-    Venue venue = 4;
-    int64 date_time = 5;
-    MatchData match_data = 6;
+    Season season = 3;
+    Round round = 4;
+    Venue venue = 5;
+    google.protobuf.Int64Value referee_id = 6;
+    Date date_time = 7;
+    MatchData match_data = 8;
 }
 
 message MatchData {
