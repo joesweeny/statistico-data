@@ -7,6 +7,7 @@ import (
 
 func (c Container) ProtoFixtureFactory() *factory.FixtureFactory {
 	return factory.NewFixtureFactory(
+		c.CompetitionRepository(),
 		c.RoundRepository(),
 		c.SeasonRepository(),
 		c.TeamRepository(),

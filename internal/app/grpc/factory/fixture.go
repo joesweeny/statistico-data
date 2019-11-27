@@ -8,6 +8,7 @@ import (
 )
 
 type FixtureFactory struct {
+	competitionRepo app.CompetitionRepository
 	roundRepo app.RoundRepository
 	seasonRepo app.SeasonRepository
 	teamRepo  app.TeamRepository
@@ -34,10 +35,17 @@ func (b FixtureFactory) BuildFixture(f *app.Fixture) (*proto.Fixture, error) {
 		return nil, b.returnLoggedError(f.ID, err)
 	}
 
+	comp, err := b.competitionRepo.ByID(season.CompetitionID)
+
+	if err != nil {
+		return nil, b.returnLoggedError(f.ID, err)
+	}
+
 	p := proto.Fixture{
 		Id:       int64(f.ID),
 		HomeTeam: teamToProto(home),
 		AwayTeam: teamToProto(away),
+		Competition: competitionToProto(comp),
 		Season:   seasonToProto(season),
 		DateTime: &proto.Date{
 			Utc: f.Date.Unix(),
@@ -70,11 +78,12 @@ func (b FixtureFactory) returnLoggedError(id uint64, err error) error {
 }
 
 func NewFixtureFactory(
+	c app.CompetitionRepository,
 	r app.RoundRepository,
 	s app.SeasonRepository,
 	t app.TeamRepository,
 	v app.VenueRepository,
 	log *logrus.Logger,
 ) *FixtureFactory {
-	return &FixtureFactory{roundRepo: r, seasonRepo: s, teamRepo: t, venueRepo: v, logger: log}
+	return &FixtureFactory{competitionRepo: c, roundRepo: r, seasonRepo: s, teamRepo: t, venueRepo: v, logger: log}
 }
