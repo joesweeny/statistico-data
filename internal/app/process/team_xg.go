@@ -6,33 +6,23 @@ import (
 	"github.com/statistico/statistico-data/internal/app"
 	understat "github.com/statistico/statistico-understat-parser"
 	"strconv"
-	"time"
 )
 
 const fixtureXG = "fixture-xg"
 const fixtureXGCurrentSeason = "fixture-xg:current-season"
 
-var currentSeason = map[string][]string {
-	"2019": {
-		"EPL",
+var currentSeason = map[string]map[int]string {
+	"EPL": {
+		16036: "2019",
 	},
 }
 
-var historicSeasons =  map[string][]string {
-	"2018": {
-		"EPL",
-	},
-	"2017": {
-		"EPL",
-	},
-	"2016": {
-		"EPL",
-	},
-	"2015": {
-		"EPL",
-	},
-	"2014": {
-		"EPL",
+var historicSeasons =  map[string]map[int]string {
+	"EPL": {
+		12962: "2018",
+		6397: "2017",
+		13: "2016",
+		10: "2015",
 	},
 }
 
@@ -59,24 +49,24 @@ func (f FixtureTeamXGProcessor) Process(command string, option string, done chan
 	}
 }
 
-func (f FixtureTeamXGProcessor) processFixtures(done chan bool, seasons map[string][]string) {
+func (f FixtureTeamXGProcessor) processFixtures(done chan bool, seasons map[string]map[int]string) {
 	for k, v := range seasons {
-		for _, league := range v {
-			fix, err := f.parser.LeagueFixtures(league, k)
+		for id, year := range v {
+			fix, err := f.parser.LeagueFixtures(k, year)
 
 			if err != nil {
-				f.logger.Warnf("error fetching league xg data. League %s, Season %s", league, k)
+				f.logger.Warnf("error fetching league xg data. League %s, Season %s", k, year)
 				continue
 			}
 
-			f.parseFixtures(fix)
+			f.parseFixtures(fix, uint64(id))
 		}
 	}
 
 	done <- true
 }
 
-func (f FixtureTeamXGProcessor) parseFixtures(fixtures []understat.Fixture) {
+func (f FixtureTeamXGProcessor) parseFixtures(fixtures []understat.Fixture, seasonID uint64) {
 	for _, fix := range fixtures {
 		id, err := strconv.Atoi(fix.ID)
 
@@ -91,12 +81,12 @@ func (f FixtureTeamXGProcessor) parseFixtures(fixtures []understat.Fixture) {
 			continue
 		}
 
-		f.createNew(fix)
+		f.createNew(fix, seasonID)
 	}
 }
 
-func (f FixtureTeamXGProcessor) createNew(u understat.Fixture) {
-	fixture, err := f.parseFixture(u)
+func (f FixtureTeamXGProcessor) createNew(u understat.Fixture, seasonID uint64) {
+	fixture, err := f.parseFixture(u, seasonID)
 
 	if err != nil {
 		f.logger.Warnf("error creating new fixture team xg struct. %s", err.Error())
@@ -147,22 +137,14 @@ func (f FixtureTeamXGProcessor) updateExisting(xg *app.FixtureTeamXG, u understa
 	}
 }
 
-func (f FixtureTeamXGProcessor) parseFixture(u understat.Fixture) (*app.Fixture, error) {
+func (f FixtureTeamXGProcessor) parseFixture(u understat.Fixture, seasonID uint64) (*app.Fixture, error) {
 	home := parseTeam(u.Home.Title)
 	away := parseTeam(u.Away.Title)
-
-	from, err1 := parseDateTime(u.DateTime, -2*time.Hour)
-	to, err2 := parseDateTime(u.DateTime, 2*time.Hour)
-
-	if err1 != nil || err2 != nil {
-		return nil, fmt.Errorf("unable to parse date when processing understat id %s", u.ID)
-	}
 
 	query := app.FixtureRepositoryQuery{
 		HomeTeamNameLike: &home,
 		AwayTeamNameLike: &away,
-		DateFrom: from,
-		DateTo: to,
+		SeasonID: &seasonID,
 	}
 
 	fixs, err := f.fixtureRepo.Get(query)
@@ -190,20 +172,6 @@ func parseFloat(str *string) (*float32, error) {
 	return &f, nil
 }
 
-func parseDateTime(d string, duration time.Duration) (*time.Time, error) {
-	layout := "2006-01-02 15:04:05"
-
-	date, err := time.Parse(layout, d)
-
-	if err != nil {
-		return nil, err
-	}
-
-	date = date.Add(duration)
-
-	return &date, nil
-}
-
 func parseTeam(team string) string {
 	value, ok := teamMapper[team]
 
@@ -214,6 +182,11 @@ func parseTeam(team string) string {
 	return team[0:4]
 }
 
-func NewFixtureTeamXGProcessor(r app.FixtureTeamXGRepository, f app.FixtureRepository, p *understat.Parser, l *logrus.Logger) *FixtureTeamXGProcessor {
+func NewFixtureTeamXGProcessor(
+	r app.FixtureTeamXGRepository,
+	f app.FixtureRepository,
+	p *understat.Parser,
+	l *logrus.Logger,
+) *FixtureTeamXGProcessor {
 	return &FixtureTeamXGProcessor{xGRepo: r, fixtureRepo: f, parser: p, logger: l}
 }
