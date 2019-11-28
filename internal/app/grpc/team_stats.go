@@ -3,6 +3,7 @@ package grpc
 import (
 	"context"
 	"fmt"
+	"github.com/golang/protobuf/ptypes/wrappers"
 	"github.com/sirupsen/logrus"
 	"github.com/statistico/statistico-data/internal/app"
 	"github.com/statistico/statistico-data/internal/app/grpc/factory"
@@ -11,6 +12,7 @@ import (
 
 type TeamStatsService struct {
 	fixtureRepository app.FixtureRepository
+	xGRepo            app.FixtureTeamXGRepository
 	factory           *factory.TeamStatsFactory
 	logger            *logrus.Logger
 }
@@ -36,14 +38,40 @@ func (s TeamStatsService) GetTeamStatsForFixture(c context.Context, r *proto.Fix
 		return nil, internalServerError
 	}
 
+	xg, err := s.xGRepo.ByFixtureID(r.FixtureId)
+
+	if err != nil {
+		s.logger.Warnf("Error hydrating proto team stats: %s", err.Error())
+		return nil, internalServerError
+	}
+
 	res := proto.TeamStatsResponse{
 		HomeTeam: home,
 		AwayTeam: away,
+		TeamXg: &proto.TeamXG{
+			Home: parseXgRating(xg.Home),
+			Away: parseXgRating(xg.Away),
+		},
 	}
 
 	return &res, nil
 }
 
-func NewTeamStatsService(r app.FixtureRepository, f *factory.TeamStatsFactory, log *logrus.Logger) *TeamStatsService {
-	return &TeamStatsService{fixtureRepository: r, factory: f, logger: log}
+func NewTeamStatsService(
+	r app.FixtureRepository,
+	x app.FixtureTeamXGRepository,
+	f *factory.TeamStatsFactory,
+	log *logrus.Logger,
+) *TeamStatsService {
+	return &TeamStatsService{fixtureRepository: r, xGRepo: x, factory: f, logger: log}
+}
+
+func parseXgRating(xg *float32) *wrappers.UInt32Value {
+	if xg != nil {
+		return &wrappers.UInt32Value{
+			Value: uint32(*xg),
+		}
+	}
+
+	return nil
 }

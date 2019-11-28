@@ -17,5 +17,10 @@ func (c Container) PlayerStatsService() *grpc.PlayerStatsService {
 }
 
 func (c Container) TeamStatsService() *grpc.TeamStatsService {
-	return grpc.NewTeamStatsService(c.FixtureRepository(), c.ProtoTeamStatsFactory(), c.Logger)
+	return grpc.NewTeamStatsService(
+		c.FixtureRepository(),
+		c.FixtureTeamXGRepository(),
+		c.ProtoTeamStatsFactory(),
+		c.Logger,
+	)
 }
