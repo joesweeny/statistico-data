@@ -43,6 +43,6 @@ message TeamStats {
 }
 
 message TeamXG {
-    google.protobuf.UInt32Value home = 1;
-    google.protobuf.UInt32Value away = 2;
+    google.protobuf.FloatValue home = 1;
+    google.protobuf.FloatValue away = 2;
 }
