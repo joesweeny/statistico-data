@@ -18,7 +18,7 @@ type TeamStatsService struct {
 }
 
 func (s TeamStatsService) GetTeamStatsForFixture(c context.Context, r *proto.FixtureRequest) (*proto.TeamStatsResponse, error) {
-	fix, err := s.fixtureRepository.ByID(uint64(r.FixtureId))
+	fix, err := s.fixtureRepository.ByID(r.FixtureId)
 
 	if err != nil {
 		return nil, fmt.Errorf("fixture with ID %d does not exist", r.FixtureId)
