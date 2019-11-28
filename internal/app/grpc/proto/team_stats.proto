@@ -39,4 +39,6 @@ message TeamStats {
     google.protobuf.UInt32Value goal_attempts = 22;
     google.protobuf.UInt32Value free_kicks = 23;
     google.protobuf.UInt32Value throw_ins = 24;
+    google.protobuf.UInt32Value home_xg = 25;
+    google.protobuf.UInt32Value away_xg = 26;
 }
