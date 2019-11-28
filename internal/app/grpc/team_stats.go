@@ -66,10 +66,10 @@ func NewTeamStatsService(
 	return &TeamStatsService{fixtureRepository: r, xGRepo: x, factory: f, logger: log}
 }
 
-func parseXgRating(xg *float32) *wrappers.UInt32Value {
+func parseXgRating(xg *float32) *wrappers.FloatValue {
 	if xg != nil {
-		return &wrappers.UInt32Value{
-			Value: uint32(*xg),
+		return &wrappers.FloatValue{
+			Value: *xg,
 		}
 	}
 
