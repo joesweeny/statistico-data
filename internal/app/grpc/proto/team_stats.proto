@@ -12,6 +12,7 @@ service TeamStatsService {
 message TeamStatsResponse {
     TeamStats home_team = 1;
     TeamStats away_team = 2;
+    TeamXG    team_xg   = 3;
 }
 
 message TeamStats {
@@ -39,4 +40,9 @@ message TeamStats {
     google.protobuf.UInt32Value goal_attempts = 22;
     google.protobuf.UInt32Value free_kicks = 23;
     google.protobuf.UInt32Value throw_ins = 24;
+}
+
+message TeamXG {
+    google.protobuf.UInt32Value home = 1;
+    google.protobuf.UInt32Value away = 2;
 }

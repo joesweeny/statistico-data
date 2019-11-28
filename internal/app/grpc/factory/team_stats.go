@@ -22,7 +22,7 @@ func (t TeamStatsFactory) BuildTeamStats(f *app.Fixture, teamID uint64) (*proto.
 }
 
 func (t TeamStatsFactory) returnLoggedError(id uint64, err error) error {
-	t.logger.Warnf("error hydrating proto player stats: fixture %d. error %s", id, err.Error())
+	t.logger.Warnf("error hydrating proto team stats: fixture %d. error %s", id, err.Error())
 	return err
 }
 
