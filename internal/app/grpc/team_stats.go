@@ -38,7 +38,7 @@ func (s TeamStatsService) GetTeamStatsForFixture(c context.Context, r *proto.Fix
 		return nil, internalServerError
 	}
 
-	xg, err := s.xGRepo.ByFixtureID(r.FixtureId)
+	xg, err := s.xGRepo.ByFixtureID(fix.ID)
 
 	if err != nil {
 		s.logger.Warnf("Error hydrating proto team stats: %s", err.Error())
