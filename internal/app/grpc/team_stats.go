@@ -42,12 +42,16 @@ func (s TeamStatsService) GetTeamStatsForFixture(c context.Context, r *proto.Fix
 
 	if err != nil {
 		s.logger.Warnf("Error hydrating proto team stats: %s", err.Error())
+		return nil, internalServerError
 	}
 
 	res := proto.TeamStatsResponse{
 		HomeTeam: home,
 		AwayTeam: away,
-		TeamXg: parseTeamXg(xg),
+		TeamXg: &proto.TeamXG{
+			Home: parseXgRating(xg.Home),
+			Away: parseXgRating(xg.Away),
+		},
 	}
 
 	return &res, nil
@@ -70,17 +74,4 @@ func parseXgRating(xg *float32) *wrappers.FloatValue {
 	}
 
 	return nil
-}
-
-func parseTeamXg(xg *app.FixtureTeamXG) *proto.TeamXG {
-	var x *proto.TeamXG
-
-	if xg == nil {
-		return x
-	}
-
-	x.Home = parseXgRating(xg.Home)
-	x.Away = parseXgRating(xg.Away)
-
-	return x
 }
