@@ -40,9 +40,9 @@ func (r *FixtureTeamXGRepository) Update(f *app.FixtureTeamXG) error {
 		return fmt.Errorf("fixture team XG with ID %d does not exist", f.ID)
 	}
 
-	query = `UPDATE understat_fixture_team_xg set home = $1, away = $2, updated_at = $3`
+	query = `UPDATE understat_fixture_team_xg set home = $2, away = $3, updated_at = $4 where id = $1`
 
-	_, err := r.connection.Exec(query, f.Home, f.Away, r.clock.Now().Unix())
+	_, err := r.connection.Exec(query, f.ID, f.Home, f.Away, r.clock.Now().Unix())
 
 	return err
 }

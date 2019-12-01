@@ -58,6 +58,7 @@ func TestFixtureTeamXGRepository_Update(t *testing.T) {
 		defer cleanUp()
 
 		f := newFixtureTeamXG(25, 143)
+		newFixtureTeamXG(42, 150)
 
 		if err := repo.Insert(f); err != nil {
 			t.Errorf("Error when inserting record into the database: %s", err.Error())
@@ -70,13 +71,13 @@ func TestFixtureTeamXGRepository_Update(t *testing.T) {
 		f.Away = &away
 
 		if err := repo.Update(f); err != nil {
-			t.Errorf("Error updating record to the database: %s", err.Error())
+			t.Fatalf("Error updating record to the database: %s", err.Error())
 		}
 
 		fetched, err := repo.ByID(f.ID)
 
 		if err != nil {
-			t.Errorf("Error retrieving record from the database: %s", err.Error())
+			t.Fatalf("Error retrieving record from the database: %s", err.Error())
 		}
 
 		a := assert.New(t)
