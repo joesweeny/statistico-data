@@ -179,7 +179,7 @@ func parseTeam(team string) string {
 		team = value
 	}
 
-	return team[0:4]
+	return team
 }
 
 func NewFixtureTeamXGProcessor(
