@@ -1,17 +1,16 @@
 package grpc
 
 import (
-	"errors"
 	"github.com/sirupsen/logrus"
 	"github.com/statistico/statistico-data/internal/app"
 	"github.com/statistico/statistico-data/internal/app/grpc/factory"
 	"github.com/statistico/statistico-data/internal/app/grpc/proto"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 	"time"
 )
 
 const maxLimit = 10000
-
-var ErrTimeParse = errors.New("unable to parse date provided in Request")
 
 type ResultService struct {
 	fixtureRepo app.FixtureRepository
@@ -23,7 +22,7 @@ func (s ResultService) GetHistoricalResultsForFixture(r *proto.HistoricalResultR
 	date, err := time.Parse(time.RFC3339, r.DateBefore)
 
 	if err != nil {
-		return ErrTimeParse
+		return status.Error(codes.InvalidArgument, "Date provided is not a valid RFC3339 date")
 	}
 
 	limit := uint64(r.Limit)
@@ -39,7 +38,7 @@ func (s ResultService) GetHistoricalResultsForFixture(r *proto.HistoricalResultR
 
 	if err != nil {
 		s.logger.Warnf("Error retrieving Fixture(s) in Result Service. Error: %s", err.Error())
-		return internalServerError
+		return status.Error(codes.Internal, "Internal server error")
 	}
 
 	return s.sendResults(fixtures, stream)
@@ -49,7 +48,7 @@ func (s ResultService) GetResultsForTeam(r *proto.TeamRequest, stream proto.Resu
 	date, err := time.Parse(time.RFC3339, r.DateBefore)
 
 	if err != nil {
-		return ErrTimeParse
+		return status.Error(codes.InvalidArgument, "Date provided is not a valid RFC3339 date")
 	}
 
 	limit := r.Limit.GetValue()
@@ -62,7 +61,7 @@ func (s ResultService) GetResultsForTeam(r *proto.TeamRequest, stream proto.Resu
 
 	if err != nil {
 		s.logger.Warnf("Error retrieving Fixture(s) in Result Service. Error: %s", err.Error())
-		return internalServerError
+		return status.Error(codes.Internal, "Internal server error")
 	}
 
 	return s.sendResults(fixtures, stream)
@@ -72,7 +71,7 @@ func (s ResultService) GetResultsForSeason(r *proto.SeasonRequest, stream proto.
 	date, err := time.Parse(time.RFC3339, r.DateBefore)
 
 	if err != nil {
-		return ErrTimeParse
+		return status.Error(codes.InvalidArgument, "Date provided is not a valid RFC3339 date")
 	}
 
 	id := uint64(r.SeasonId)
@@ -86,7 +85,7 @@ func (s ResultService) GetResultsForSeason(r *proto.SeasonRequest, stream proto.
 
 	if err != nil {
 		s.logger.Warnf("Error retrieving Fixture(s) in Result Service. Error: %s", err.Error())
-		return internalServerError
+		return status.Error(codes.Internal, "Internal server error")
 	}
 
 	return s.sendResults(fixtures, stream)
@@ -98,12 +97,12 @@ func (s ResultService) sendResults(f []app.Fixture, stream proto.ResultService_G
 
 		if err != nil {
 			s.logger.Warnf("Error hydrating Result. Error: %s", err.Error())
-			return err
+			return status.Error(codes.Internal, "Internal server error")
 		}
 
 		if err := stream.Send(x); err != nil {
 			s.logger.Warnf("Error streaming Result back to client. Error: %s", err.Error())
-			continue
+			return status.Error(codes.Internal, "Internal server error")
 		}
 	}
 
