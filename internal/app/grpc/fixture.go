@@ -7,6 +7,8 @@ import (
 	"github.com/statistico/statistico-data/internal/app"
 	"github.com/statistico/statistico-data/internal/app/grpc/factory"
 	"github.com/statistico/statistico-data/internal/app/grpc/proto"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 	"time"
 )
 
@@ -20,13 +22,13 @@ func (s *FixtureService) ListSeasonFixtures(r *proto.SeasonFixtureRequest, strea
 	from, err := time.Parse(time.RFC3339, r.DateFrom)
 
 	if err != nil {
-		return ErrTimeParse
+		return status.Error(codes.InvalidArgument, "Date provided is not a valid RFC3339 date")
 	}
 
 	to, err := time.Parse(time.RFC3339, r.DateTo)
 
 	if err != nil {
-		return ErrTimeParse
+		return status.Error(codes.InvalidArgument, "Date provided is not a valid RFC3339 date")
 	}
 
 	query := app.FixtureRepositoryQuery{
@@ -38,7 +40,7 @@ func (s *FixtureService) ListSeasonFixtures(r *proto.SeasonFixtureRequest, strea
 
 	if err != nil {
 		s.logger.Warnf("Error retrieving Fixture(s). Error: %s", err.Error())
-		return internalServerError
+		return status.Error(codes.Internal, "Internal server error")
 	}
 
 	for _, fix := range fixtures {
@@ -62,14 +64,14 @@ func (s *FixtureService) FixtureByID(c context.Context, r *proto.FixtureRequest)
 	fix, err := s.fixtureRepo.ByID(uint64(r.FixtureId))
 
 	if err != nil {
-		return nil, fmt.Errorf("fixture with ID %d does not exist", r.FixtureId)
+		return nil, status.Error(codes.NotFound, fmt.Sprintf("fixture with ID %d does not exist", r.FixtureId))
 	}
 
 	f, err := s.factory.BuildFixture(fix)
 
 	if err != nil {
 		s.logger.Warnf("Error hydrating Fixture: %s", err.Error())
-		return nil, err
+		return nil, status.Error(codes.DataLoss, "Internal server error")
 	}
 
 	return f, nil

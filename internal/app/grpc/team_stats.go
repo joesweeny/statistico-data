@@ -8,6 +8,8 @@ import (
 	"github.com/statistico/statistico-data/internal/app"
 	"github.com/statistico/statistico-data/internal/app/grpc/factory"
 	"github.com/statistico/statistico-data/internal/app/grpc/proto"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 type TeamStatsService struct {
@@ -21,28 +23,37 @@ func (s TeamStatsService) GetTeamStatsForFixture(c context.Context, r *proto.Fix
 	fix, err := s.fixtureRepository.ByID(r.FixtureId)
 
 	if err != nil {
-		return nil, fmt.Errorf("fixture with ID %d does not exist", r.FixtureId)
+		return nil, status.Error(codes.NotFound, fmt.Sprintf("fixture with ID %d does not exist", r.FixtureId))
 	}
 
 	home, err := s.factory.BuildTeamStats(fix, fix.HomeTeamID)
 
 	if err != nil {
 		s.logger.Warnf("Error hydrating proto team stats: %s", err.Error())
-		return nil, internalServerError
+		return nil, status.Error(
+			codes.NotFound,
+			fmt.Sprintf("home team stats do not exist for fixture %d", r.FixtureId),
+		)
 	}
 
 	away, err := s.factory.BuildTeamStats(fix, fix.AwayTeamID)
 
 	if err != nil {
 		s.logger.Warnf("Error hydrating proto team stats: %s", err.Error())
-		return nil, internalServerError
+		return nil, status.Error(
+			codes.NotFound,
+			fmt.Sprintf("away team stats do not exist for fixture %d", r.FixtureId),
+		)
 	}
 
 	xg, err := s.xGRepo.ByFixtureID(fix.ID)
 
 	if err != nil {
 		s.logger.Warnf("Error hydrating proto team stats: %s", err.Error())
-		return nil, internalServerError
+		return nil, status.Error(
+			codes.NotFound,
+			fmt.Sprintf("xG stats do not exist for fixture %d", r.FixtureId),
+		)
 	}
 
 	res := proto.TeamStatsResponse{
