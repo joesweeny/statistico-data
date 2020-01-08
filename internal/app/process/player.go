@@ -53,6 +53,10 @@ func (p PlayerProcessor) parseSquads(s []app.Squad, ch chan<- *app.Player, done 
 				if _, err := p.playerRepo.ByID(id); err != nil {
 					pl, err := p.requester.PlayerByID(id)
 
+					if err != nil {
+						p.logger.Warnf("Failure when parsing squad data", err.Error())
+					}
+
 					if err == nil {
 						ch <- pl
 					}
