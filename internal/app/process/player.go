@@ -48,27 +48,25 @@ func (p PlayerProcessor) parseSquads(s []app.Squad, ch chan<- *app.Player, done 
 			close(ch)
 		}
 
-		go func(sq app.Squad, counter *int) {
-			for _, id := range sq.PlayerIDs {
-				if _, err := p.playerRepo.ByID(id); err != nil {
-					p.logger.Warnf("Failure when fetching squad player data: %s", err.Error())
+		for _, id := range sq.PlayerIDs {
+			if _, err := p.playerRepo.ByID(id); err != nil {
+				p.logger.Warnf("Failure when fetching squad player data: %s", err.Error())
 
-					pl, err := p.requester.PlayerByID(id)
+				pl, err := p.requester.PlayerByID(id)
 
-					if err != nil {
-						p.logger.Warnf("Failure when fetching sportmonks player data: %s", err.Error())
-					}
-
-					if err == nil {
-						ch <- pl
-					}
-
-					*counter++
+				if err != nil {
+					p.logger.Warnf("Failure when fetching sportmonks player data: %s", err.Error())
 				}
-			}
 
-			wg.Done()
-		}(sq, c)
+				if err == nil {
+					ch <- pl
+				}
+
+				*c++
+			}
+		}
+
+		wg.Done()
 	}
 
 	wg.Wait()
