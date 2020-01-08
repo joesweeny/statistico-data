@@ -51,10 +51,12 @@ func (p PlayerProcessor) parseSquads(s []app.Squad, ch chan<- *app.Player, done 
 		go func(sq app.Squad, counter *int) {
 			for _, id := range sq.PlayerIDs {
 				if _, err := p.playerRepo.ByID(id); err != nil {
+					p.logger.Warnf("Failure when fetching squad player data", err.Error())
+
 					pl, err := p.requester.PlayerByID(id)
 
 					if err != nil {
-						p.logger.Warnf("Failure when parsing squad data", err.Error())
+						p.logger.Warnf("Failure when fetching sportmonks player data", err.Error())
 					}
 
 					if err == nil {
