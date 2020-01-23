@@ -4,9 +4,11 @@ import (
 	"github.com/statistico/statistico-data/internal/app/grpc/proto"
 	"github.com/statistico/statistico-data/internal/bootstrap"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/keepalive"
 	"google.golang.org/grpc/reflection"
 	"log"
 	"net"
+	"time"
 )
 
 func main() {
@@ -18,7 +20,8 @@ func main() {
 
 	app := bootstrap.BuildContainer(bootstrap.BuildConfig())
 
-	server := grpc.NewServer()
+	opts := grpc.KeepaliveParams(keepalive.ServerParameters{MaxConnectionIdle:5*time.Minute})
+	server := grpc.NewServer(opts)
 
 	proto.RegisterFixtureServiceServer(server, app.FixtureService())
 	proto.RegisterResultServiceServer(server, app.ResultService())
