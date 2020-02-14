@@ -14,17 +14,15 @@ workflows:
   build-test:
     jobs:
       - build-and-test
-      - release-images:
-
   deploy:
     jobs:
       - release-images
         context: aws
-          requires:
-            - build-and-test
-          filters:
-            branches:
-              only: master-test
+        requires:
+          - build-and-test
+        filters:
+          branches:
+            only: master-test
 
 jobs:
   build-and-test:
