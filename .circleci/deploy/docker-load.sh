@@ -2,4 +2,4 @@
 
 set -e
 
-docker load -i docker-cache/statisticodata_rest.tar
+docker load -i /tmp/workspace/docker-cache/statisticodata_rest.tar
