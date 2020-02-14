@@ -18,9 +18,6 @@ workflows:
     jobs:
       - release-images:
           context: aws
-          requires:
-            - build
-            - test
           filters:
             branches:
               only: master-test
