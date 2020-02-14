@@ -26,60 +26,60 @@ services:
     links:
       - postgres
 
-  console:
-    build:
-      dockerfile: ./docker/console/Dockerfile
-      context: .
-    environment:
-      DB_DRIVER: postgres
-      DB_HOST: postgres
-      DB_NAME: statshub
-      DB_PASSWORD: password
-      DB_USER: dev
-      DB_PORT: 5432
-    tty: true
-    links:
-      - postgres
-
-  grpc:
-    build:
-      dockerfile: ./docker/grpc/Dockerfile
-      context: .
-    environment:
-      DB_DRIVER: postgres
-      DB_HOST: postgres
-      DB_NAME: statshub
-      DB_PASSWORD: password
-      DB_USER: dev
-      DB_PORT: 5432
-    ports:
-      - "50051:50051"
-    tty: true
-    links:
-      - postgres
-
-  cron:
-    build:
-      dockerfile: ./docker/cron/Dockerfile
-      context: .
-    tty: true
-    links:
-      - postgres
-
-  migrate:
-    build:
-      dockerfile: ./docker/migrate/Dockerfile
-      context: .
-    environment:
-      DB_HOST: postgres
-      DB_USER: dev
-      DB_PASSWORD: password
-      DB_NAME: statshub
-    links:
-      - postgres
-    depends_on:
-      - postgres
-    command: ["./bin/migrate"]
+#  console:
+#    build:
+#      dockerfile: ./docker/console/Dockerfile
+#      context: .
+#    environment:
+#      DB_DRIVER: postgres
+#      DB_HOST: postgres
+#      DB_NAME: statshub
+#      DB_PASSWORD: password
+#      DB_USER: dev
+#      DB_PORT: 5432
+#    tty: true
+#    links:
+#      - postgres
+#
+#  grpc:
+#    build:
+#      dockerfile: ./docker/grpc/Dockerfile
+#      context: .
+#    environment:
+#      DB_DRIVER: postgres
+#      DB_HOST: postgres
+#      DB_NAME: statshub
+#      DB_PASSWORD: password
+#      DB_USER: dev
+#      DB_PORT: 5432
+#    ports:
+#      - "50051:50051"
+#    tty: true
+#    links:
+#      - postgres
+#
+#  cron:
+#    build:
+#      dockerfile: ./docker/cron/Dockerfile
+#      context: .
+#    tty: true
+#    links:
+#      - postgres
+#
+#  migrate:
+#    build:
+#      dockerfile: ./docker/migrate/Dockerfile
+#      context: .
+#    environment:
+#      DB_HOST: postgres
+#      DB_USER: dev
+#      DB_PASSWORD: password
+#      DB_NAME: statshub
+#    links:
+#      - postgres
+#    depends_on:
+#      - postgres
+#    command: ["./bin/migrate"]
 
   test:
     build:

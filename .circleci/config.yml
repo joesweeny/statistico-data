@@ -2,6 +2,30 @@ version: 2.1
 orbs:
   aws-cli: circleci/aws-cli@0.1.20
 
+references:
+  workspace_root: &workspace_root
+    /tmp/workspace
+  attach_workspace: &attach_workspace
+    attach_workspace:
+      at: *workspace_root
+
+workflows:
+  version: 2
+  build-test:
+    jobs:
+      - build-and-test
+      - release-images:
+
+  deploy:
+    jobs:
+      - release-images
+        context: aws
+          requires:
+            - build-and-test
+          filters:
+            branches:
+              only: master-test
+
 jobs:
   build-and-test:
     working_directory: ~/go/src/github.com/statistico/statistico-data
@@ -9,6 +33,7 @@ jobs:
     environment:
       GOPATH: /home/circleci/go
     steps:
+      - *attach_workspace
       - checkout
       - run:
           name: Build Release Image
@@ -18,26 +43,25 @@ jobs:
           name: Test Release Image
           command: |
             docker-compose -f docker-compose.build.yml run test gotestsum -f short-verbose
+      - run:
+          name: Archive Built Images
+          command: |
+            chmod +x ./.circleci/deploy/docker-save.sh && ./.circleci/deploy/docker-save.sh
+      - persist_to_workspace:
+          root: *workspace_root
+          paths:
+            - docker-cache
 
   release-images:
     executor: aws-cli/default
     steps:
       - checkout
+      - *attach_workspace
       - setup_remote_docker
       - aws-cli/setup
       - run:
           name: Push images to ECR
           command: |
+            chmod +x ./.circleci/deploy/docker-load.sh && ./.circleci/deploy/docker-load.sh
             chmod +x ./.circleci/deploy/docker-push.sh && ./.circleci/deploy/docker-push.sh
 
-workflows:
-  build-test-deploy:
-    jobs:
-      - build-and-test
-      - release-images:
-          context: aws
-          requires:
-            - build-and-test
-          filters:
-            branches:
-              only: master-test
