@@ -34,19 +34,17 @@ jobs:
             chmod +x ./.circleci/deploy/docker-push.sh && ./.circleci/deploy/docker-push.sh
 
 workflows:
-  build-and-test:
+  build-test-deploy:
     jobs:
       - build
       - test:
           requires:
             - build
-  deploy:
-    jobs:
       - push-images:
-          context: aws
           requires:
             - build
             - test
           filters:
             branches:
               only: master-test
+          
