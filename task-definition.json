@@ -1,0 +1,18 @@
+{
+  "family": "statistico-data",
+  "containerDefinitions": [
+    {
+      "name": "rest",
+      "image": "216629550457.dkr.ecr.eu-west-2.amazonaws.com/statistico-data/rest:latest",
+      "cpu": 128,
+      "memoryReservation": 128,
+      "portMappings": [
+        {
+          "containerPort": 80,
+          "protocol": "tcp"
+        }
+      ],
+      "essential": true
+    }
+  ]
+}

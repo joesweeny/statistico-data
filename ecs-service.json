@@ -1,0 +1,14 @@
+{
+  "cluster": "statistico-production",
+  "serviceName": "statistico-data",
+  "taskDefinition": "statistico-data",
+  "loadBalancers": [
+    {
+      "targetGroupArn": "arn:aws:elasticloadbalancing:eu-west-2:216629550457:targetgroup/statistico-test-nginx-group/00df1d3cfda93b02",
+      "containerName": "nginx-test",
+      "containerPort": 80
+    }
+  ],
+  "desiredCount": 1,
+  "role": "ecsServiceRole"
+}
