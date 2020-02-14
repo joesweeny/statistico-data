@@ -33,6 +33,7 @@ workflows:
     jobs:
       - build-and-test
       - push-images:
+          context: aws
           requires:
             - build-and-test
           filters:
