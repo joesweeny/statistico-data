@@ -19,10 +19,11 @@ jobs:
           command: |
             docker-compose -f docker-compose.build.yml run test gotestsum -f short-verbose
 
-  push-images:
+  release-images:
     executor: aws-cli/default
     steps:
       - checkout
+      - setup_remote_docker
       - aws-cli/setup
       - run:
           name: Push images to ECR
@@ -33,7 +34,7 @@ workflows:
   build-test-deploy:
     jobs:
       - build-and-test
-      - push-images:
+      - release-images:
           context: aws
           requires:
             - build-and-test
