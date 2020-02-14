@@ -16,9 +16,9 @@ jobs:
             docker-compose -f docker-compose.build.yml up -d --build
   test:
     working_directory: ~/go/src/github.com/statistico/statistico-data
-      machine: true
-      environment:
-        GOPATH: /home/circleci/go
+    machine: true
+    environment:
+      GOPATH: /home/circleci/go
     steps:
       - run:
           name: Test Release Image
