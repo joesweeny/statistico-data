@@ -45,7 +45,8 @@ workflows:
       - push-images:
           context: aws
           requires:
-            - build-and-test
+            - build
+            - test
           filters:
             branches:
               only: master-test
