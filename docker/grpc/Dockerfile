@@ -14,5 +14,5 @@ RUN apk --no-cache add ca-certificates
 WORKDIR /opt
 COPY --from=builder /app/grpc .
 EXPOSE 50051
-ENTRYPOINT ["./grpc", "--port 5001"]
+ENTRYPOINT ["./grpc", "--port 50051"]
 CMD ["./grpc"]
