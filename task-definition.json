@@ -1,15 +1,46 @@
 {
   "family": "statistico-data",
+  "executionRoleArn": "arn:aws:iam::216629550457:role/ecsTaskExecutionRole",
   "containerDefinitions": [
     {
       "name": "rest",
-      "image": "216629550457.dkr.ecr.eu-west-2.amazonaws.com/statistico-data/rest:latest",
+      "image": "216629550457.dkr.ecr.eu-west-2.amazonaws.com/statistico-data/rest:a3171c66376e478baad935a20f9a03c969d453c6",
       "cpu": 128,
       "memoryReservation": 128,
       "portMappings": [
         {
           "containerPort": 80,
           "protocol": "tcp"
+        }
+      ],
+      "secrets": [
+        {
+          "name": "DB_DRIVER",
+          "valueFrom": "arn:aws:ssm:eu-west-2:216629550457:parameter/statistico-data-DB_DRIVER"
+        },
+        {
+          "name": "DB_HOST",
+          "valueFrom": "arn:aws:ssm:eu-west-2:216629550457:parameter/statistico-data-DB_HOST"
+        },
+        {
+          "name": "DB_NAME",
+          "valueFrom": "arn:aws:ssm:eu-west-2:216629550457:parameter/statistico-data-DB_NAME"
+        },
+        {
+          "name": "DB_PASSWORD",
+          "valueFrom": "arn:aws:ssm:eu-west-2:216629550457:parameter/statistico-data-DB_PASSWORD"
+        },
+        {
+          "name": "DB_PORT",
+          "valueFrom": "arn:aws:ssm:eu-west-2:216629550457:parameter/statistico-data-DB_PORT"
+        },
+        {
+          "name": "DB_USER",
+          "valueFrom": "arn:aws:ssm:eu-west-2:216629550457:parameter/statistico-data-DB_USER"
+        },
+        {
+          "name": "SPORTMONKS_API_KEY",
+          "valueFrom": "arn:aws:ssm:eu-west-2:216629550457:parameter/statistico-data-SPORTMONKS_API_KEY"
         }
       ],
       "essential": true

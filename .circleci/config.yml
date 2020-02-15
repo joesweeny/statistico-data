@@ -1,6 +1,7 @@
 version: 2.1
 orbs:
   aws-cli: circleci/aws-cli@0.1.20
+  aws-ecs: circleci/aws-ecs@1.1.0
 
 references:
   workspace_root: &workspace_root
@@ -18,6 +19,14 @@ workflows:
           context: aws
           requires:
             - build-and-test
+          filters:
+            branches:
+              only: master-test
+      - deploy-to-production:
+          context: aws
+          requires:
+            - build-and-test
+            - release-images
           filters:
             branches:
               only: master-test
@@ -40,7 +49,7 @@ jobs:
           command: |
             docker-compose -f docker-compose.build.yml run test gotestsum -f short-verbose
       - run:
-          name: Archive Built Images
+          name: Cache Built Images
           command: |
             chmod +x ./.circleci/deploy/docker-save.sh && ./.circleci/deploy/docker-save.sh
       - persist_to_workspace:
@@ -60,4 +69,11 @@ jobs:
           command: |
             chmod +x ./.circleci/deploy/docker-load.sh && ./.circleci/deploy/docker-load.sh
             chmod +x ./.circleci/deploy/docker-push.sh && ./.circleci/deploy/docker-push.sh
+
+  deploy-to-production:
+    steps:
+      - aws-ecs/deploy-service-update:
+          family: 'statistico-data'
+          cluster-name: 'statistico-production'
+          container-image-name-updates: 'tag=${CIRCLE_SHA1}'
 
