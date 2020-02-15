@@ -74,8 +74,8 @@ jobs:
     docker:
       - image: 'circleci/python:3.7.1'
     steps:
+      - aws-cli/setup
       - aws-ecs/deploy-service-update:
           family: 'statistico-data'
           cluster-name: 'statistico-production'
           container-image-name-updates: 'tag=${CIRCLE_SHA1}'
-
