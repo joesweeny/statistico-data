@@ -4,11 +4,15 @@
   "taskDefinition": "statistico-data",
   "loadBalancers": [
     {
-      "targetGroupArn": "arn:aws:elasticloadbalancing:eu-west-2:216629550457:targetgroup/statistico-data/ba04b067aea17fa3",
+      "targetGroupArn": "arn:aws:elasticloadbalancing:eu-west-2:216629550457:targetgroup/statistico-http/9c26d65f71c644e8",
       "containerName": "rest",
       "containerPort": 80
+    },
+    {
+      "targetGroupArn": "arn:aws:elasticloadbalancing:eu-west-2:216629550457:targetgroup/statistico-grpc/f2232fc5c49a5d24",
+      "containerName": "grpc",
+      "containerPort": 50051
     }
   ],
-  "desiredCount": 1,
-  "role": "ecsServiceRole"
+  "desiredCount": 1
 }
