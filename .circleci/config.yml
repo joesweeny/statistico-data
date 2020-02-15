@@ -71,6 +71,8 @@ jobs:
             chmod +x ./.circleci/deploy/docker-push.sh && ./.circleci/deploy/docker-push.sh
 
   deploy-to-production:
+    docker:
+      - image: 'circleci/python:3.7.1'
     steps:
       - aws-ecs/deploy-service-update:
           family: 'statistico-data'
