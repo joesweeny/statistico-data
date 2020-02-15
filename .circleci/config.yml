@@ -78,4 +78,4 @@ jobs:
       - aws-ecs/update-service:
           family: 'statistico-data'
           cluster-name: 'statistico-production'
-          container-image-name-updates: 'container=rest,tag=${CIRCLE_SHA1}'
+          container-image-name-updates: 'container=console,container=grpc,tag=${CIRCLE_SHA1},tag=${CIRCLE_SHA1},container=rest,tag=${CIRCLE_SHA1},container=cron,tag=${CIRCLE_SHA1}'
