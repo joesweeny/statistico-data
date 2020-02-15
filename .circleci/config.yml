@@ -79,7 +79,7 @@ jobs:
           family: 'statistico-data'
           cluster-name: 'statistico-production'
           container-image-name-updates: >
-            container=console,image-and-tag=${AWS_ECR_ACCOUNT_URL}/statistico-data/console:${CIRCLE_SHA1},
-            container=cron,image-and-tag=${AWS_ECR_ACCOUNT_URL}/statistico-data/cron:${CIRCLE_SHA1},
-            container=grpc,image-and-tag=${AWS_ECR_ACCOUNT_URL}/statistico-data/grpc:${CIRCLE_SHA1},
-            container=rest,image-and-tag=${AWS_ECR_ACCOUNT_URL}/statistico-data/rest:${CIRCLE_SHA1},
+            container=console,image-and-tag=${AWS_ECR_ACCOUNT_URL}/console:${CIRCLE_SHA1},
+            container=cron,image-and-tag=${AWS_ECR_ACCOUNT_URL}/cron:${CIRCLE_SHA1},
+            container=grpc,image-and-tag=${AWS_ECR_ACCOUNT_URL}/grpc:${CIRCLE_SHA1},
+            container=rest,image-and-tag=${AWS_ECR_ACCOUNT_URL}/rest:${CIRCLE_SHA1},
