@@ -3,12 +3,12 @@
   "executionRoleArn": "arn:aws:iam::216629550457:role/ecsTaskExecutionRole",
   "containerDefinitions": [
     {
-      "name": "grpc",
-      "image": "216629550457.dkr.ecr.eu-west-2.amazonaws.com/statistico-data/grpc:latest",
+      "name": "rest",
+      "image": "216629550457.dkr.ecr.eu-west-2.amazonaws.com/statistico-data/rest:latest",
       "memoryReservation": 128,
       "portMappings": [
         {
-          "containerPort": 50051,
+          "containerPort": 80,
           "protocol": "tcp"
         }
       ],
@@ -43,6 +43,40 @@
         }
       ],
       "essential": true
+    },
+    {
+      "name": "migrate",
+      "image": "216629550457.dkr.ecr.eu-west-2.amazonaws.com/statistico-data/migrate:latest",
+      "memoryReservation": 128,
+      "secrets": [
+        {
+          "name": "DB_DRIVER",
+          "valueFrom": "arn:aws:ssm:eu-west-2:216629550457:parameter/statistico-data-DB_DRIVER"
+        },
+        {
+          "name": "DB_HOST",
+          "valueFrom": "arn:aws:ssm:eu-west-2:216629550457:parameter/statistico-data-DB_HOST"
+        },
+        {
+          "name": "DB_NAME",
+          "valueFrom": "arn:aws:ssm:eu-west-2:216629550457:parameter/statistico-data-DB_NAME"
+        },
+        {
+          "name": "DB_PASSWORD",
+          "valueFrom": "arn:aws:ssm:eu-west-2:216629550457:parameter/statistico-data-DB_PASSWORD"
+        },
+        {
+          "name": "DB_PORT",
+          "valueFrom": "arn:aws:ssm:eu-west-2:216629550457:parameter/statistico-data-DB_PORT"
+        },
+        {
+          "name": "DB_USER",
+          "valueFrom": "arn:aws:ssm:eu-west-2:216629550457:parameter/statistico-data-DB_USER"
+        }
+      ],
+      "command": [
+        "./bin/migrate"
+      ]
     }
   ]
 }
