@@ -1,0 +1,13 @@
+{
+  "cluster": "statistico-production",
+  "serviceName": "statistico-data-grpc",
+  "taskDefinition": "statistico-data-grpc",
+  "loadBalancers": [
+    {
+      "targetGroupArn": "arn:aws:elasticloadbalancing:eu-west-2:216629550457:targetgroup/statistico-grpc/f2232fc5c49a5d24",
+      "containerName": "grpc",
+      "containerPort": 50051
+    }
+  ],
+  "desiredCount": 1
+}
