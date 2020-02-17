@@ -1,7 +1,7 @@
 {
   "cluster": "statistico-production",
-  "serviceName": "statistico-data",
-  "taskDefinition": "statistico-data",
+  "serviceName": "statistico-data-rest",
+  "taskDefinition": "statistico-data-rest",
   "loadBalancers": [
     {
       "targetGroupArn": "arn:aws:elasticloadbalancing:eu-west-2:216629550457:targetgroup/statistico-data/913ad1f9bf7fe10d",

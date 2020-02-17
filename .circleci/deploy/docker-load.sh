@@ -2,6 +2,4 @@
 
 set -e
 
-docker load -i /tmp/workspace/docker-cache/statisticodata_grpc.tar
-docker load -i /tmp/workspace/docker-cache/statisticodata_migrate.tar
-docker load -i /tmp/workspace/docker-cache/statisticodata_rest.tar
+docker load -i /tmp/workspace/docker-cache/statisticodata_console.tar

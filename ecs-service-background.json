@@ -1,0 +1,6 @@
+{
+  "cluster": "statistico-production",
+  "serviceName": "statistico-data-background",
+  "taskDefinition": "statistico-data-background",
+  "desiredCount": 1
+}
