@@ -5,7 +5,7 @@
   "containerDefinitions": [
     {
       "name": "grpc",
-      "image": "216629550457.dkr.ecr.eu-west-2.amazonaws.com/statistico-data/statistico-data:latest",
+      "image": "216629550457.dkr.ecr.eu-west-2.amazonaws.com/statistico-data:latest",
       "memoryReservation": 128,
       "portMappings": [
         {
