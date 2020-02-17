@@ -9,9 +9,9 @@ services:
     ports:
       - 5432:5432
 
-  rest:
+  console: &console
     build:
-      dockerfile: docker/rest/Dockerfile
+      dockerfile: ./docker/Dockerfile
       context: .
     environment:
       DB_DRIVER: postgres
@@ -20,66 +20,29 @@ services:
       DB_PASSWORD: password
       DB_USER: dev
       DB_PORT: 5432
-    ports:
-      - "8080:80"
-    tty: true
-    links:
-      - postgres
-
-  console:
-    build:
-      dockerfile: ./docker/console/Dockerfile
-      context: .
-    environment:
-      DB_DRIVER: postgres
-      DB_HOST: postgres
-      DB_NAME: statshub
-      DB_PASSWORD: password
-      DB_USER: dev
-      DB_PORT: 5432
-    tty: true
-    links:
-      - postgres
-
-  grpc:
-    build:
-      dockerfile: ./docker/grpc/Dockerfile
-      context: .
-    environment:
-      DB_DRIVER: postgres
-      DB_HOST: postgres
-      DB_NAME: statshub
-      DB_PASSWORD: password
-      DB_USER: dev
-      DB_PORT: 5432
-    ports:
-      - "50051:50051"
     tty: true
     links:
       - postgres
 
   cron:
-    build:
-      dockerfile: ./docker/cron/Dockerfile
-      context: .
-    tty: true
-    links:
-      - postgres
+    <<: *console
+    command: ["crond", "-f", "-d", "8"]
 
   migrate:
-    build:
-      dockerfile: ./docker/migrate/Dockerfile
-      context: .
-    environment:
-      DB_HOST: postgres
-      DB_USER: dev
-      DB_PASSWORD: password
-      DB_NAME: statshub
-    links:
-      - postgres
-    depends_on:
-      - postgres
+    <<: *console
     command: ["./bin/migrate"]
+
+  rest:
+    <<: *console
+    ports:
+      - "8080:80"
+    command: ["./rest"]
+
+  grpc:
+    <<: *console
+    ports:
+      - "50051:50051"
+    command: ["./grpc", "--port 50051"]
 
   test:
     build:

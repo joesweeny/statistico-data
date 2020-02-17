@@ -2,20 +2,7 @@
 
 set -e
 
-docker login -u ${DOCKER_HUB_USERNAME} -p ${DOCKER_HUB_PASSWORD}
-docker images
+aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION | bash
 
-docker tag "statisticodata_console" "joesweeny/statisticodata_console:$CIRCLE_SHA1"
-docker push "joesweeny/statisticodata_console:$CIRCLE_SHA1"
-
-docker tag "statisticodata_migrate" "joesweeny/statisticodata_migrate:$CIRCLE_SHA1"
-docker push "joesweeny/statisticodata_migrate:$CIRCLE_SHA1"
-
-docker tag "statisticodata_cron" "joesweeny/statisticodata_cron:$CIRCLE_SHA1"
-docker push "joesweeny/statisticodata_cron:$CIRCLE_SHA1"
-
-docker tag "statisticodata_grpc" "joesweeny/statisticodata_grpc:$CIRCLE_SHA1"
-docker push "joesweeny/statisticodata_grpc:$CIRCLE_SHA1"
-
-docker tag "statisticodata_rest" "joesweeny/statisticodata_rest:$CIRCLE_SHA1"
-docker push "joesweeny/statisticodata_rest:$CIRCLE_SHA1"
+docker tag "statisticodata_console" "216629550457.dkr.ecr.eu-west-2.amazonaws.com/statistico-data:$CIRCLE_SHA1"
+docker push "216629550457.dkr.ecr.eu-west-2.amazonaws.com/statistico-data:$CIRCLE_SHA1"
