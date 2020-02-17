@@ -70,18 +70,19 @@
           "valueFrom": "arn:aws:ssm:eu-west-2:216629550457:parameter/statistico-data-SPORTMONKS_API_KEY"
         }
       ],
-      "essential": true,
       "command": [
         "crond",
         "-f",
         "-d",
-        "8"
+        "8",
+        "| service rsyslog restart"
       ]
     },
     {
       "name": "console",
       "image": "216629550457.dkr.ecr.eu-west-2.amazonaws.com/statistico-data/statistico-data:latest",
       "memoryReservation": 128,
+      "pseudoTerminal": true,
       "secrets": [
         {
           "name": "DB_DRIVER",
@@ -107,7 +108,8 @@
           "name": "DB_USER",
           "valueFrom": "arn:aws:ssm:eu-west-2:216629550457:parameter/statistico-data-DB_USER"
         }
-      ]
+      ],
+      "essential": true
     }
   ]
 }

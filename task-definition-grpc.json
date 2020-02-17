@@ -39,7 +39,11 @@
           "valueFrom": "arn:aws:ssm:eu-west-2:216629550457:parameter/statistico-data-DB_USER"
         }
       ],
-      "essential": true
+      "essential": true,
+      "command": [
+        "./grpc",
+        "--port 50051"
+      ]
     }
   ]
 }
