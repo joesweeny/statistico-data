@@ -2,12 +2,20 @@
   "cluster": "statistico-production",
   "serviceName": "statistico-data-grpc",
   "taskDefinition": "statistico-data-grpc",
-  "loadBalancers": [
+  "serviceRegistries": [
     {
-      "targetGroupArn": "arn:aws:elasticloadbalancing:eu-west-2:216629550457:targetgroup/statistico-grpc/f2232fc5c49a5d24",
-      "containerName": "grpc",
-      "containerPort": 50051
+      "registryArn": "arn:aws:servicediscovery:eu-west-2:216629550457:service/srv-37pc76ui3tgtdm6w"
     }
   ],
+  "networkConfiguration": {
+    "awsvpcConfiguration": {
+      "securityGroups": ["sg-020d076761c2e536d"],
+      "subnets": [
+        "subnet-024b783d97ce89908",
+        "subnet-027b646faea75cfb2",
+        "subnet-0316c6dbba2fdf41a"
+      ]
+    }
+  },
   "desiredCount": 1
 }

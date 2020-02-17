@@ -4,7 +4,7 @@
   "taskDefinition": "statistico-data",
   "loadBalancers": [
     {
-      "targetGroupArn": "arn:aws:elasticloadbalancing:eu-west-2:216629550457:targetgroup/statistico-http/9c26d65f71c644e8",
+      "targetGroupArn": "arn:aws:elasticloadbalancing:eu-west-2:216629550457:targetgroup/statistico-data/913ad1f9bf7fe10d",
       "containerName": "rest",
       "containerPort": 80
     }

@@ -26,20 +26,20 @@ services:
     links:
       - postgres
 
-#  console:
-#    build:
-#      dockerfile: ./docker/console/Dockerfile
-#      context: .
-#    environment:
-#      DB_DRIVER: postgres
-#      DB_HOST: postgres
-#      DB_NAME: statshub
-#      DB_PASSWORD: password
-#      DB_USER: dev
-#      DB_PORT: 5432
-#    tty: true
-#    links:
-#      - postgres
+  console:
+    build:
+      dockerfile: ./docker/console/Dockerfile
+      context: .
+    environment:
+      DB_DRIVER: postgres
+      DB_HOST: postgres
+      DB_NAME: statshub
+      DB_PASSWORD: password
+      DB_USER: dev
+      DB_PORT: 5432
+    tty: true
+    links:
+      - postgres
 
   grpc:
     build:
@@ -58,13 +58,13 @@ services:
     links:
       - postgres
 
-#  cron:
-#    build:
-#      dockerfile: ./docker/cron/Dockerfile
-#      context: .
-#    tty: true
-#    links:
-#      - postgres
+  cron:
+    build:
+      dockerfile: ./docker/cron/Dockerfile
+      context: .
+    tty: true
+    links:
+      - postgres
 
   migrate:
     build:

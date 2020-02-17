@@ -1,5 +1,6 @@
 {
   "family": "statistico-data-grpc",
+  "networkMode": "awsvpc",
   "executionRoleArn": "arn:aws:iam::216629550457:role/ecsTaskExecutionRole",
   "containerDefinitions": [
     {
