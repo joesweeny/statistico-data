@@ -32,6 +32,7 @@
           "valueFrom": "arn:aws:ssm:eu-west-2:216629550457:parameter/statistico-data-DB_USER"
         }
       ],
+      "essential": false,
       "command": [
         "./bin/migrate"
       ]
@@ -70,6 +71,7 @@
           "valueFrom": "arn:aws:ssm:eu-west-2:216629550457:parameter/statistico-data-SPORTMONKS_API_KEY"
         }
       ],
+      "essential": false,
       "command": [
         "crond",
         "-f",
@@ -108,7 +110,8 @@
           "name": "DB_USER",
           "valueFrom": "arn:aws:ssm:eu-west-2:216629550457:parameter/statistico-data-DB_USER"
         }
-      ]
+      ],
+      "essential": true
     }
   ]
 }
