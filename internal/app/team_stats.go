@@ -39,7 +39,7 @@ type TeamShots struct {
 type TeamPasses struct {
 	Total      *int `json:"total"`
 	Accuracy   *int `json:"accuracy"`
-	Percentage *int `json:"percentage"`
+	Percentage *float32 `json:"percentage"`
 }
 
 // TeamAttacks domain sub entity.

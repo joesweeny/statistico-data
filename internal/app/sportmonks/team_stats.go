@@ -81,7 +81,7 @@ func handleTeamPasses(s *spClient.TeamPasses) app.TeamPasses {
 	return app.TeamPasses{
 		Total:      helpers.ParseFlexInt(s.Total),
 		Accuracy:   helpers.ParseFlexInt(s.Accurate),
-		Percentage: helpers.ParseFlexInt(s.Percentage),
+		Percentage: s.Percentage,
 	}
 }
 
