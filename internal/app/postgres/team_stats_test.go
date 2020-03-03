@@ -121,7 +121,7 @@ func TestTeamStatsRepository_UpdateTeamStats(t *testing.T) {
 		var shotOutside = 2
 		var passTotal = 156
 		var passAcc = 78
-		var passPer = float32(98)
+		var passPer = float32(98.45)
 		var attTotal = 50
 		var attDan = 50
 		var fouls = 56
@@ -180,7 +180,7 @@ func TestTeamStatsRepository_UpdateTeamStats(t *testing.T) {
 		a.Equal(2, *m.TeamShots.OutsideBox)
 		a.Equal(156, *m.TeamPasses.Total)
 		a.Equal(78, *m.TeamPasses.Accuracy)
-		a.Equal(float32(98), *m.TeamPasses.Percentage)
+		a.Equal(float32(98.45), *m.TeamPasses.Percentage)
 		a.Equal(50, *m.TeamAttacks.Total)
 		a.Equal(50, *m.TeamAttacks.Dangerous)
 		a.Equal(56, *m.Fouls)
