@@ -48,7 +48,7 @@ func TestTeamStatsRequester_TeamStatsByFixtureIDs(t *testing.T) {
 		a.Nil(home.TeamShots.Blocked)
 		a.Equal(313, *home.TeamPasses.Total)
 		a.Equal(230, *home.TeamPasses.Accuracy)
-		a.Equal(0, *home.TeamPasses.Percentage)
+		a.Equal(float32(42.5), *home.TeamPasses.Percentage)
 		a.Equal(104, *home.TeamAttacks.Total)
 		a.Equal(52, *home.TeamAttacks.Dangerous)
 		a.Equal(13, *home.Fouls)
@@ -74,7 +74,7 @@ func TestTeamStatsRequester_TeamStatsByFixtureIDs(t *testing.T) {
 		a.Nil(away.TeamShots.Blocked)
 		a.Equal(588, *away.TeamPasses.Total)
 		a.Equal(519, *away.TeamPasses.Accuracy)
-		a.Equal(0, *away.TeamPasses.Percentage)
+		a.Equal(float32(0), *away.TeamPasses.Percentage)
 		a.Equal(148, *away.TeamAttacks.Total)
 		a.Equal(73, *away.TeamAttacks.Dangerous)
 		a.Equal(12, *away.Fouls)
@@ -205,7 +205,7 @@ var fixtureTeamStatsResponse = `{
 					"passes": {
 						"total": 313,
 						"accurate": 230,
-						"percentage": 0
+						"percentage": 42.5
 					},
 					"attacks": {
 						"attacks": 104,
