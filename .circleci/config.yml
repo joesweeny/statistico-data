@@ -84,7 +84,7 @@ jobs:
           family: 'statistico-data-grpc'
           cluster-name: 'statistico-production'
           container-image-name-updates: >
-            container=statistico-data-grpc,image-and-tag=${AWS_ECR_ACCOUNT_URL}/statistico-data:${CIRCLE_SHA1}
+            container=grpc,image-and-tag=${AWS_ECR_ACCOUNT_URL}/statistico-data:${CIRCLE_SHA1}
       - aws-ecs/update-service:
           family: 'statistico-data-background'
           cluster-name: 'statistico-production'
