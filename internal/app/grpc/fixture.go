@@ -64,6 +64,7 @@ func (s *FixtureService) FixtureByID(c context.Context, r *proto.FixtureRequest)
 	fix, err := s.fixtureRepo.ByID(uint64(r.FixtureId))
 
 	if err != nil {
+		s.logger.Warnf("Error fetching fixture in gRPC fixture service: %s", err.Error())
 		return nil, status.Error(codes.NotFound, fmt.Sprintf("fixture with ID %d does not exist", r.FixtureId))
 	}
 
