@@ -22,14 +22,14 @@ workflows:
           filters:
             branches:
               only: master
-#      - deploy-to-production:
-#          context: aws
-#          requires:
-#            - build-and-test
-#            - release-images
-#          filters:
-#            branches:
-#              only: master
+      - deploy-to-production:
+          context: aws
+          requires:
+            - build-and-test
+            - release-images
+          filters:
+            branches:
+              only: master
 
 jobs:
   build-and-test:
