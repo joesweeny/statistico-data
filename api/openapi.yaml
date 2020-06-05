@@ -87,10 +87,9 @@ paths:
                       $ref: '#/components/schemas/DateRFC3339'
                     to:
                       $ref: '#/components/schemas/DateRFC3339'
-                filters:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/FixtureSearchFilter'
+                statFilter:
+                  $ref: '#/components/schemas/FixtureStatFilter'
+                  nullable: true
       responses:
         200:
           description: A list of fixture resources matching filters
@@ -170,7 +169,7 @@ components:
         date_time:
           $ref: '#/components/schemas/Date'
 
-    FixtureSearchFilter:
+    FixtureStatFilter:
       type: object
       properties:
         type:
@@ -184,8 +183,8 @@ components:
             - corners_combined
             - points_for
             - points_against
-            - possesion_for
-            - possesion_against
+            - possession_for
+            - possession_against
             - yellow_cards_for
             - yellow_cards_against
             - red_cards_for
