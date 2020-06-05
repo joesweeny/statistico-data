@@ -28,7 +28,16 @@ type FixtureRepository interface {
 	GetIDs(q FixtureRepositoryQuery) ([]uint64, error)
 }
 
+// FixtureRequester provides an interface allowing this application to request data from an external
+// data provider. The requester implementation is responsible for creating the channel, filtering struct data into
+// the channel before closing the channel once successful execution is complete.
+type FixtureRequester interface {
+	FixturesBySeasonIDs(ids []uint64) <-chan *Fixture
+}
+
 type FixtureRepositoryQuery struct {
+	LeagueIds        []uint64
+	Filters          []FixtureStatFilter
 	SeasonID         *uint64
 	HomeTeamID       *uint64
 	AwayTeamID       *uint64
@@ -40,9 +49,12 @@ type FixtureRepositoryQuery struct {
 	SortBy           *string
 }
 
-// FixtureRequester provides an interface allowing this application to request data from an external
-// data provider. The requester implementation is responsible for creating the channel, filtering struct data into
-// the channel before closing the channel once successful execution is complete.
-type FixtureRequester interface {
-	FixturesBySeasonIDs(ids []uint64) <-chan *Fixture
+type FixtureStatFilter struct {
+	Type    string  `json:"type"`
+	Team    string  `json:"team"`
+	Metric  string  `json:"metric"`
+	Measure string  `json:"measure"`
+	Value   float32 `json:"value"`
+	Venue   string  `json:"venue"`
+	Games   uint8   `json:"game"`
 }
