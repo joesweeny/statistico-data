@@ -68,7 +68,7 @@ paths:
     post:
       tags:
         - Fixture
-      description: Search for fixtures based on statistical filters
+      description: Search for fixtures based on filters
       requestBody:
         content:
           application/json:
