@@ -32,12 +32,6 @@ services:
     <<: *console
     command: ["./bin/migrate"]
 
-  rest:
-    <<: *console
-    ports:
-      - "8080:80"
-    command: ["./rest"]
-
   grpc:
     <<: *console
     ports:

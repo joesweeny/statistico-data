@@ -9,13 +9,11 @@ RUN go get gotest.tools/gotestsum && go get -u github.com/pressly/goose/cmd/goos
 
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo ./cmd/console
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo ./cmd/grpc
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo ./cmd/rest
 
 # Step 2
 FROM alpine
 RUN apk --no-cache add ca-certificates
 WORKDIR /opt
-COPY ./api ./opt/api
 COPY ./bin ./bin
 COPY ./database ./database
 COPY ./docker/crontab /etc/crontabs/root
@@ -23,6 +21,5 @@ COPY ./docker/wait-for-it.sh .
 COPY --from=builder /go/bin/goose /usr/local/bin
 COPY --from=builder /app/console .
 COPY --from=builder /app/grpc .
-COPY --from=builder /app/rest .
 
 CMD ["/bin/sh"]
