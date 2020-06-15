@@ -14,7 +14,6 @@ RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo ./cmd/grpc
 FROM alpine
 RUN apk --no-cache add ca-certificates
 WORKDIR /opt
-COPY ./api ./opt/api
 COPY ./bin ./bin
 COPY ./database ./database
 COPY ./docker/crontab /etc/crontabs/root
