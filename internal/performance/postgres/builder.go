@@ -6,7 +6,7 @@ import (
 	"github.com/statistico/statistico-data/internal/performance"
 )
 
-func BuildQuery(b sq.SelectBuilder, f *performance.StatFilter) sq.SelectBuilder {
+func buildTeamsQuery(s sq.StatementBuilderType, f *performance.StatFilter) sq.SelectBuilder {
 	venue := f.Venue
 	action := f.Action
 	metric := f.Metric
@@ -16,6 +16,7 @@ func BuildQuery(b sq.SelectBuilder, f *performance.StatFilter) sq.SelectBuilder 
 	stat := f.Stat
 	seasons := f.Seasons
 
+	b := s.Select("team_id, team_name")
 	b = b.FromSelect(buildSubSelect(stat, venue, action, seasons), "ranked")
 	b = b.Where(sq.LtOrEq{"rank": games})
 	b = parseWhereHavingClause(b, games, value, measure, stat, metric)

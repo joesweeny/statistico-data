@@ -10,12 +10,8 @@ type StatReader struct {
 	connection *sql.DB
 }
 
-func (s *StatReader) GetTeams(f *performance.StatFilter) ([]*performance.Team, error) {
-	builder := s.queryBuilder()
-
-	query := builder.Select("team_id, team_name")
-
-	rows, err := BuildQuery(query, f).Query()
+func (s *StatReader) TeamsMatchingFilter(f *performance.StatFilter) ([]*performance.Team, error) {
+	rows, err := buildTeamsQuery(s.queryBuilder(), f).Query()
 
 	if err != nil {
 		return nil, nil

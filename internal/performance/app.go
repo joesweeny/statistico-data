@@ -17,5 +17,5 @@ type Team struct {
 }
 
 type StatReader interface {
-	GetTeams(s *StatFilter) ([]*Team, error)
+	TeamsMatchingFilter(s *StatFilter) ([]*Team, error)
 }

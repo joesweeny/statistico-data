@@ -1,14 +1,13 @@
-package postgres_test
+package postgres
 
 import (
 	sq "github.com/Masterminds/squirrel"
 	"github.com/statistico/statistico-data/internal/performance"
-	"github.com/statistico/statistico-data/internal/performance/postgres"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
-func TestBuildQuery(t *testing.T) {
+func TestBuildTeamsQuery(t *testing.T) {
 	t.Run("builds query for goals scored for home venue greater than total", func(t *testing.T) {
 		t.Helper()
 
@@ -108,9 +107,8 @@ func TestBuildQuery(t *testing.T) {
 
 func assertCorrectSql(t *testing.T, filter *performance.StatFilter, expected string) {
 	builder := sq.StatementBuilder.PlaceholderFormat(sq.Dollar)
-	b := builder.Select("team_id", "team_name")
 
-	query := postgres.BuildQuery(b, filter)
+	query := buildTeamsQuery(builder, filter)
 
 	sql, _, err := query.ToSql()
 
