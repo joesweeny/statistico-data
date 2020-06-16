@@ -1,14 +1,14 @@
 package performance
 
 type StatFilter struct {
+	Action  string  `json:"action"`
+	Games   uint8   `json:"games"`
+	Measure string  `json:"measure"`
+	Metric  string  `json:"metric"`
 	Seasons []uint64 `json:"seasons"`
 	Stat    string  `json:"stat"`
-	Action  string  `json:"action"`
-	Metric  string  `json:"metric"`
-	Measure string  `json:"measure"`
 	Value   float32 `json:"value"`
 	Venue   string  `json:"venue"`
-	Games   uint8   `json:"games"`
 }
 
 type Team struct {
