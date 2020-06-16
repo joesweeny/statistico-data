@@ -1,9 +1,9 @@
 package performance
 
 type StatFilter struct {
+	Seasons []uint64 `json:"seasons"`
 	Stat    string  `json:"stat"`
 	Action  string  `json:"action"`
-	Team    string  `json:"team"`
 	Metric  string  `json:"metric"`
 	Measure string  `json:"measure"`
 	Value   float32 `json:"value"`
@@ -17,5 +17,5 @@ type Team struct {
 }
 
 type StatReader interface {
-	GetTeams(s *StatFilter) ([]Team, error)
+	GetTeams(s *StatFilter) ([]*Team, error)
 }
