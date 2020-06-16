@@ -17,7 +17,7 @@ func buildTeamsQuery(s sq.StatementBuilderType, f *performance.StatFilter) sq.Se
 	seasons := f.Seasons
 
 	b := s.Select("team_id, team_name")
-	b = b.FromSelect(buildSubSelect(stat, venue, action, seasons), "ranked")
+	b = b.FromSelect(buildSubSelect(stat, venue, action, measure, seasons), "ranked")
 	b = b.Where(sq.LtOrEq{"rank": games})
 	b = parseWhereHavingClause(b, games, value, measure, stat, metric)
 	b = b.GroupBy("team_id, team_name")
@@ -53,7 +53,17 @@ func parseWhereHavingClause(b sq.SelectBuilder, games uint8, value float32, meas
 	return b
 }
 
-func buildSubSelect(stat, venue, action string, seasons []uint64) sq.SelectBuilder {
+func buildSubSelect(stat, venue, action, measure string, seasons []uint64) sq.SelectBuilder {
+	if action == "combined" {
+		if measure == "total" {
+			stat = fmt.Sprintf("SUM(%s) as %s", stat, stat)
+		}
+
+		if measure == "average" {
+			stat = fmt.Sprintf("AVG(%s) as %s", stat, stat)
+		}
+	}
+
 	b := sq.Select("team_id", "team_name", stat, "rank() over (partition by team_id order by date desc)")
 
 	if venue == "home" {
@@ -63,6 +73,11 @@ func buildSubSelect(stat, venue, action string, seasons []uint64) sq.SelectBuild
 
 		if action == "against" {
 			b = b.From("home_stats_against")
+		}
+
+		if action == "combined" {
+			b = b.FromSelect(buildUnionSubSelect(venue), "stats")
+			b = b.GroupBy("team_id, team_name", "date")
 		}
 	}
 
@@ -74,10 +89,29 @@ func buildSubSelect(stat, venue, action string, seasons []uint64) sq.SelectBuild
 		if action == "against" {
 			b = b.From("away_stats_against")
 		}
+
+		if action == "combined" {
+			b = b.FromSelect(buildUnionSubSelect(venue), "stats")
+			b = b.GroupBy("team_id, team_name", "date")
+		}
 	}
 
 	if len(seasons) > 0 {
 		b = b.Where(sq.Eq{"season_id": seasons})
+	}
+
+	return b
+}
+
+func buildUnionSubSelect(venue string) sq.SelectBuilder {
+	b := sq.Select("*")
+
+	if venue == "home" {
+		b = b.From("home_stats_for UNION SELECT * FROM home_stats_against")
+	}
+
+	if venue == "away" {
+		b = b.From("away_stats_for UNION SELECT * FROM away_stats_against")
 	}
 
 	return b
