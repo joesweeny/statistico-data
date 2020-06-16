@@ -3,7 +3,7 @@ package postgres
 import (
 	"fmt"
 	sq "github.com/Masterminds/squirrel"
-	"github.com/statistico/statistico-data/internal/performance"
+	"github.com/statistico/statistico-data/internal/app/performance"
 )
 
 func buildTeamsQuery(s sq.StatementBuilderType, f *performance.StatFilter) sq.SelectBuilder {

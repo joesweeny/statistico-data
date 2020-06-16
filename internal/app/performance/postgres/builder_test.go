@@ -2,7 +2,7 @@ package postgres
 
 import (
 	sq "github.com/Masterminds/squirrel"
-	"github.com/statistico/statistico-data/internal/performance"
+	"github.com/statistico/statistico-data/internal/app/performance"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
