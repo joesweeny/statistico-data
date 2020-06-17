@@ -154,7 +154,7 @@ func TestBuildTeamsQuery(t *testing.T) {
 		}
 
 		sql := "SELECT team_id, team_name " +
-			"FROM (SELECT team_id, team_name, AVG(shots_total) as shots_total, rank() over (partition by team_id order by date desc) " +
+			"FROM (SELECT team_id, team_name, SUM(shots_total) as shots_total, rank() over (partition by team_id order by date desc) " +
 			"FROM (SELECT * FROM away_stats_for UNION SELECT * FROM away_stats_against) AS stats " +
 			"WHERE season_id IN ($1,$2) GROUP BY team_id, team_name, date) AS ranked " +
 			"WHERE rank <= $3 " +
@@ -162,6 +162,87 @@ func TestBuildTeamsQuery(t *testing.T) {
 			"HAVING AVG(shots_total) >= $4"
 
 		bindings := []interface{}{uint64(45), uint64(222), uint8(3), float32(5)}
+
+		assertCorrectSql(t, &filter, sql, bindings)
+	})
+
+	t.Run("builds query for xg combined at home venue greater than total", func(t *testing.T) {
+		t.Helper()
+
+		filter := performance.StatFilter{
+			Seasons: []uint64{45, 222},
+			Stat:    "xg",
+			Action:  "combined",
+			Metric:  "gte",
+			Measure: "total",
+			Value:   5,
+			Venue:   "home",
+			Games:   3,
+		}
+
+		sql := "SELECT team_id, team_name " +
+			"FROM (SELECT team_id, team_name, SUM(xg) as xg, rank() over (partition by team_id order by date desc) " +
+			"FROM (SELECT * FROM home_stats_for UNION SELECT * FROM home_stats_against) AS stats " +
+			"WHERE season_id IN ($1,$2) GROUP BY team_id, team_name, date) AS ranked " +
+			"WHERE rank <= $3 AND xg >= $4 " +
+			"GROUP BY team_id, team_name " +
+			"HAVING COUNT(*) = $5"
+
+		bindings := []interface{}{uint64(45), uint64(222), uint8(3), float32(5), uint8(3)}
+
+		assertCorrectSql(t, &filter, sql, bindings)
+	})
+
+	t.Run("builds query for goals for at home and away greater than total", func(t *testing.T) {
+		t.Helper()
+
+		filter := performance.StatFilter{
+			Seasons: []uint64{45, 222},
+			Stat:    "goals",
+			Action:  "for",
+			Metric:  "gte",
+			Measure: "total",
+			Value:   5,
+			Venue:   "home_away",
+			Games:   3,
+		}
+
+		sql := "SELECT team_id, team_name " +
+			"FROM (SELECT team_id, team_name, goals, rank() over (partition by team_id order by date desc) " +
+			"FROM (SELECT * FROM home_stats_for UNION SELECT * FROM away_stats_for) AS stats " +
+			"WHERE season_id IN ($1,$2) ORDER BY date) AS ranked " +
+			"WHERE rank <= $3 AND goals >= $4 " +
+			"GROUP BY team_id, team_name " +
+			"HAVING COUNT(*) = $5"
+
+		bindings := []interface{}{uint64(45), uint64(222), uint8(3), float32(5), uint8(3)}
+
+		assertCorrectSql(t, &filter, sql, bindings)
+	})
+
+	t.Run("builds query for goals against at home and away less than average", func(t *testing.T) {
+		t.Helper()
+
+		filter := performance.StatFilter{
+			Seasons: []uint64{},
+			Stat:    "goals",
+			Action:  "against",
+			Metric:  "lte",
+			Measure: "average",
+			Value:   5,
+			Venue:   "home_away",
+			Games:   3,
+		}
+
+		sql := "SELECT team_id, team_name " +
+			"FROM (SELECT team_id, team_name, goals, rank() over (partition by team_id order by date desc) " +
+			"FROM (SELECT * FROM home_stats_against UNION SELECT * FROM away_stats_against) AS stats " +
+			"ORDER BY date) AS ranked " +
+			"WHERE rank <= $1 " +
+			"GROUP BY team_id, team_name " +
+			"HAVING AVG(goals) <= $2"
+
+		bindings := []interface{}{uint8(3), float32(5)}
 
 		assertCorrectSql(t, &filter, sql, bindings)
 	})

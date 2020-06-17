@@ -55,13 +55,7 @@ func parseWhereHavingClause(b sq.SelectBuilder, games uint8, value float32, meas
 
 func buildSubSelect(stat, venue, action, measure string, seasons []uint64) sq.SelectBuilder {
 	if action == "combined" {
-		if measure == "total" {
-			stat = fmt.Sprintf("SUM(%s) as %s", stat, stat)
-		}
-
-		if measure == "average" {
-			stat = fmt.Sprintf("AVG(%s) as %s", stat, stat)
-		}
+		stat = fmt.Sprintf("SUM(%s) as %s", stat, stat)
 	}
 
 	b := sq.Select("team_id", "team_name", stat, "rank() over (partition by team_id order by date desc)")
@@ -76,7 +70,7 @@ func buildSubSelect(stat, venue, action, measure string, seasons []uint64) sq.Se
 		}
 
 		if action == "combined" {
-			b = b.FromSelect(buildUnionSubSelect(venue), "stats")
+			b = b.FromSelect(buildUnionSubSelect(venue, action), "stats")
 			b = b.GroupBy("team_id, team_name", "date")
 		}
 	}
@@ -91,8 +85,18 @@ func buildSubSelect(stat, venue, action, measure string, seasons []uint64) sq.Se
 		}
 
 		if action == "combined" {
-			b = b.FromSelect(buildUnionSubSelect(venue), "stats")
+			b = b.FromSelect(buildUnionSubSelect(venue, action), "stats")
 			b = b.GroupBy("team_id, team_name", "date")
+		}
+	}
+
+	if venue == "home_away" {
+		if action == "for" {
+			b = b.FromSelect(buildUnionSubSelect(venue, action), "stats")
+		}
+
+		if action == "against" {
+			b = b.FromSelect(buildUnionSubSelect(venue, action), "stats")
 		}
 	}
 
@@ -100,10 +104,14 @@ func buildSubSelect(stat, venue, action, measure string, seasons []uint64) sq.Se
 		b = b.Where(sq.Eq{"season_id": seasons})
 	}
 
+	if venue == "home_away" {
+		b = b.OrderBy("date")
+	}
+
 	return b
 }
 
-func buildUnionSubSelect(venue string) sq.SelectBuilder {
+func buildUnionSubSelect(venue, action string) sq.SelectBuilder {
 	b := sq.Select("*")
 
 	if venue == "home" {
@@ -112,6 +120,16 @@ func buildUnionSubSelect(venue string) sq.SelectBuilder {
 
 	if venue == "away" {
 		b = b.From("away_stats_for UNION SELECT * FROM away_stats_against")
+	}
+
+	if venue == "home_away" {
+		if action == "for" {
+			b = b.From("home_stats_for UNION SELECT * FROM away_stats_for")
+		}
+
+		if action == "against" {
+			b = b.From("home_stats_against UNION SELECT * FROM away_stats_against")
+		}
 	}
 
 	return b
