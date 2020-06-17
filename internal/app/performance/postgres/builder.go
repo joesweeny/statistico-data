@@ -1,9 +1,11 @@
 package postgres
 
 import (
+	"encoding/json"
 	"fmt"
 	sq "github.com/Masterminds/squirrel"
 	"github.com/statistico/statistico-data/internal/app/performance"
+	"strings"
 )
 
 func buildTeamsQuery(s sq.StatementBuilderType, f *performance.StatFilter) sq.SelectBuilder {
@@ -16,13 +18,12 @@ func buildTeamsQuery(s sq.StatementBuilderType, f *performance.StatFilter) sq.Se
 	stat := f.Stat
 	seasons := f.Seasons
 
-	b := s.Select("team_id, team_name")
-	b = b.FromSelect(buildSubSelect(stat, venue, action, measure, seasons), "ranked")
-	b = b.Where(sq.LtOrEq{"rank": games})
-	b = parseWhereHavingClause(b, games, value, measure, stat, metric)
-	b = b.GroupBy("team_id, team_name")
+	b := s.Select("team_id, team_name").
+		FromSelect(buildSubSelect(stat, venue, action, seasons), "ranked").
+		Where(sq.LtOrEq{"rank": games}).
+		GroupBy("team_id, team_name")
 
-	return b
+	return parseWhereHavingClause(b, games, value, measure, stat, metric)
 }
 
 func parseWhereHavingClause(b sq.SelectBuilder, games uint8, value float32, measure, stat, metric string) sq.SelectBuilder {
@@ -53,12 +54,16 @@ func parseWhereHavingClause(b sq.SelectBuilder, games uint8, value float32, meas
 	return b
 }
 
-func buildSubSelect(stat, venue, action, measure string, seasons []uint64) sq.SelectBuilder {
-	if action == "combined" {
+func buildSubSelect(stat, venue, action string, seasons []uint64) sq.SelectBuilder {
+	if action == "combined" && venue != "home_away" {
 		stat = fmt.Sprintf("SUM(%s) as %s", stat, stat)
 	}
 
 	b := sq.Select("team_id", "team_name", stat, "rank() over (partition by team_id order by date desc)")
+
+	if action == "combined" && venue == "home_away" {
+		return buildHomeAwayCombinedQuery(b, stat, seasons)
+	}
 
 	if venue == "home" {
 		if action == "for" {
@@ -104,10 +109,6 @@ func buildSubSelect(stat, venue, action, measure string, seasons []uint64) sq.Se
 		b = b.Where(sq.Eq{"season_id": seasons})
 	}
 
-	if venue == "home_away" {
-		b = b.OrderBy("date")
-	}
-
 	return b
 }
 
@@ -133,4 +134,33 @@ func buildUnionSubSelect(venue, action string) sq.SelectBuilder {
 	}
 
 	return b
+}
+
+func buildHomeAwayCombinedQuery(b sq.SelectBuilder, stat string, seasons []uint64) sq.SelectBuilder {
+	stat = fmt.Sprintf("SUM(%s) as %s", stat, stat)
+
+	homeStats := sq.Select("team_id", "team_name", stat, "date").
+		FromSelect(buildUnionSubSelect("home", ""), "home_stats").
+		GroupBy("team_id, team_name", "date")
+
+	awayStats := sq.Select("team_id", "team_name", stat, "date").
+		FromSelect(buildUnionSubSelect("away", ""), "away_stats").
+		GroupBy("team_id, team_name", "date")
+
+	if len(seasons) > 0 {
+		homeStats = homeStats.Where(fmt.Sprintf("season_id IN (%s)", parseSeasonsSlice(seasons)))
+		awayStats = awayStats.Where(fmt.Sprintf("season_id IN (%s)", parseSeasonsSlice(seasons)))
+	}
+
+	homeSql, _, _ := homeStats.ToSql()
+	awaySql, _, _ := awayStats.ToSql()
+
+	combined := fmt.Sprintf("((%s UNION %s)) combined", homeSql, awaySql)
+
+	return b.From(combined)
+}
+
+func parseSeasonsSlice(seasons []uint64) string {
+	s, _ := json.Marshal(seasons)
+	return strings.Trim(string(s), "[]")
 }

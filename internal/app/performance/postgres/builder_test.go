@@ -210,7 +210,7 @@ func TestBuildTeamsQuery(t *testing.T) {
 		sql := "SELECT team_id, team_name " +
 			"FROM (SELECT team_id, team_name, goals, rank() over (partition by team_id order by date desc) " +
 			"FROM (SELECT * FROM home_stats_for UNION SELECT * FROM away_stats_for) AS stats " +
-			"WHERE season_id IN ($1,$2) ORDER BY date) AS ranked " +
+			"WHERE season_id IN ($1,$2)) AS ranked " +
 			"WHERE rank <= $3 AND goals >= $4 " +
 			"GROUP BY team_id, team_name " +
 			"HAVING COUNT(*) = $5"
@@ -236,13 +236,46 @@ func TestBuildTeamsQuery(t *testing.T) {
 
 		sql := "SELECT team_id, team_name " +
 			"FROM (SELECT team_id, team_name, goals, rank() over (partition by team_id order by date desc) " +
-			"FROM (SELECT * FROM home_stats_against UNION SELECT * FROM away_stats_against) AS stats " +
-			"ORDER BY date) AS ranked " +
+			"FROM (SELECT * FROM home_stats_against UNION SELECT * FROM away_stats_against) AS stats) AS ranked " +
 			"WHERE rank <= $1 " +
 			"GROUP BY team_id, team_name " +
 			"HAVING AVG(goals) <= $2"
 
 		bindings := []interface{}{uint8(3), float32(5)}
+
+		assertCorrectSql(t, &filter, sql, bindings)
+	})
+
+	t.Run("builds query for xg combined at home and away greater than total", func(t *testing.T) {
+		t.Helper()
+
+		filter := performance.StatFilter{
+			Seasons: []uint64{16036,5},
+			Stat:    "xg",
+			Action:  "combined",
+			Metric:  "gte",
+			Measure: "total",
+			Value:   5,
+			Venue:   "home_away",
+			Games:   3,
+		}
+
+		sql := "SELECT team_id, team_name " +
+			"FROM (SELECT team_id, team_name, xg, rank() over (partition by team_id order by date desc) " +
+			"FROM ((SELECT team_id, team_name, SUM(xg) as xg, date " +
+			"FROM (SELECT * FROM home_stats_for UNION SELECT * FROM home_stats_against) AS home_stats " +
+			"WHERE season_id IN (16036,5) " +
+			"GROUP BY team_id, team_name, date " +
+			"UNION " +
+			"SELECT team_id, team_name, SUM(xg) as xg, date " +
+			"FROM (SELECT * FROM away_stats_for UNION SELECT * FROM away_stats_against) AS away_stats " +
+			"WHERE season_id IN (16036,5) " +
+			"GROUP BY team_id, team_name, date)) combined) AS ranked " +
+			"WHERE rank <= $1 AND xg >= $2 " +
+			"GROUP BY team_id, team_name " +
+			"HAVING COUNT(*) = $3"
+
+		bindings := []interface{}{uint8(3), float32(5), uint8(3)}
 
 		assertCorrectSql(t, &filter, sql, bindings)
 	})
