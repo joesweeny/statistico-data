@@ -7,7 +7,7 @@ option go_package = "internal/app/grpc/proto";
 import "internal/app/grpc/proto/team.proto";
 
 service PerformanceService {
-  rpc GetTeamsMatchingStats(TeamStatRequest) returns (TeamStatResponse) {}
+  rpc GetTeamsMatchingStat(TeamStatRequest) returns (TeamStatResponse) {}
 }
 
 message TeamStatRequest {
