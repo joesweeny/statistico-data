@@ -279,6 +279,40 @@ func TestBuildTeamsQuery(t *testing.T) {
 
 		assertCorrectSql(t, &filter, sql, bindings)
 	})
+
+	t.Run("builds query for goals combined at home and away less than average", func(t *testing.T) {
+		t.Helper()
+
+		filter := performance.StatFilter{
+			Seasons: []uint64{16036,5},
+			Stat:    "goals",
+			Action:  "combined",
+			Metric:  "lte",
+			Measure: "average",
+			Value:   5,
+			Venue:   "home_away",
+			Games:   3,
+		}
+
+		sql := "SELECT team_id, team_name " +
+			"FROM (SELECT team_id, team_name, goals, rank() over (partition by team_id order by date desc) " +
+			"FROM ((SELECT team_id, team_name, SUM(goals) as goals, date " +
+			"FROM (SELECT * FROM home_stats_for UNION SELECT * FROM home_stats_against) AS home_stats " +
+			"WHERE season_id IN (16036,5) " +
+			"GROUP BY team_id, team_name, date " +
+			"UNION " +
+			"SELECT team_id, team_name, SUM(goals) as goals, date " +
+			"FROM (SELECT * FROM away_stats_for UNION SELECT * FROM away_stats_against) AS away_stats " +
+			"WHERE season_id IN (16036,5) " +
+			"GROUP BY team_id, team_name, date)) combined) AS ranked " +
+			"WHERE rank <= $1 " +
+			"GROUP BY team_id, team_name " +
+			"HAVING AVG(goals) <= $2"
+
+		bindings := []interface{}{uint8(3), float32(5)}
+
+		assertCorrectSql(t, &filter, sql, bindings)
+	})
 }
 
 func assertCorrectSql(t *testing.T, filter *performance.StatFilter, expected string, bindings []interface{}) {
