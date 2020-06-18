@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package proto;
+
+option go_package = "internal/app/grpc/proto";
+
+import "internal/app/grpc/proto/team.proto";
+
+service PerformanceService {
+  rpc GetTeamsMatchingStat(TeamStatRequest) returns (TeamStatResponse) {}
+}
+
+message TeamStatRequest {
+  string action = 1;
+  uint32 games = 2;
+  string measure = 3;
+  string metric = 4;
+  repeated uint64 seasons = 5;
+  string stat = 6;
+  float value = 7;
+  string venue = 8;
+}
+
+message TeamStatResponse {
+  repeated Team teams = 1;
+}
+
