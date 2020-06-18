@@ -2,7 +2,10 @@ syntax = "proto3";
 
 package proto;
 
+option go_package = "internal/app/grpc/proto";
+
 import "google/protobuf/wrappers.proto";
+
 
 message Competition {
     int64 id = 1;
