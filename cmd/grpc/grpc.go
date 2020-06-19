@@ -24,6 +24,7 @@ func main() {
 	server := grpc.NewServer(opts)
 
 	proto.RegisterFixtureServiceServer(server, app.FixtureService())
+	proto.RegisterPerformanceServiceServer(server, app.PerformanceService())
 	proto.RegisterResultServiceServer(server, app.ResultService())
 	proto.RegisterPlayerStatsServiceServer(server, app.PlayerStatsService())
 	proto.RegisterTeamStatsServiceServer(server, app.TeamStatsService())

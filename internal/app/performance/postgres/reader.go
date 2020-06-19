@@ -18,9 +18,10 @@ func (s *StatReader) TeamsMatchingFilter(f *performance.StatFilter) ([]*performa
 	}
 
 	var teams []*performance.Team
-	var t performance.Team
 
 	for rows.Next() {
+		var t performance.Team
+
 		err := rows.Scan(&t.ID, &t.Name)
 
 		if err != nil {
@@ -35,4 +36,8 @@ func (s *StatReader) TeamsMatchingFilter(f *performance.StatFilter) ([]*performa
 
 func (s *StatReader) queryBuilder() sq.StatementBuilderType {
 	return sq.StatementBuilder.PlaceholderFormat(sq.Dollar).RunWith(s.connection)
+}
+
+func NewStatReader(connection *sql.DB) *StatReader {
+	return &StatReader{connection: connection}
 }

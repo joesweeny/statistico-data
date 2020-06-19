@@ -43,8 +43,7 @@ func (r *FixtureRepository) Update(f *app.Fixture) error {
 		return err
 	}
 
-	query := `
-	UPDATE sportmonks_fixture set season_id = $2, round_id = $3, venue_id = $4, home_team_id = $5, away_team_id = $6,
+	query := `UPDATE sportmonks_fixture set season_id = $2, round_id = $3, venue_id = $4, home_team_id = $5, away_team_id = $6,
 	referee_id = $7, date = $8, updated_at = $9 where id = $1`
 
 	_, err = r.connection.Exec(
