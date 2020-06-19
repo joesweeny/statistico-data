@@ -34,9 +34,6 @@ func TestPerformanceService_GetTeamsMatchingStat(t *testing.T) {
 		Venue:   "home",
 	}
 
-	reader := new(mock.StatReader)
-	service := grpc.NewPerformanceService(reader)
-
 	t.Run("returns a TeamStatResponse struct containing team information", func(t *testing.T) {
 		t.Helper()
 
@@ -50,6 +47,9 @@ func TestPerformanceService_GetTeamsMatchingStat(t *testing.T) {
 				Name: "Liverpool",
 			},
 		}
+
+		reader := new(mock.StatReader)
+		service := grpc.NewPerformanceService(reader)
 
 		reader.On("TeamsMatchingFilter", &filter).Return(teams, nil)
 
@@ -77,12 +77,15 @@ func TestPerformanceService_GetTeamsMatchingStat(t *testing.T) {
 	t.Run("returns error if error returned by reader", func(t *testing.T) {
 		t.Helper()
 
+		reader := new(mock.StatReader)
+		service := grpc.NewPerformanceService(reader)
+
 		reader.On("TeamsMatchingFilter", &filter).Return([]*performance.Team{}, errors.New("error occurred"))
 
-		response, err := service.GetTeamsMatchingStat(context.Background(), &request)
+		_, err := service.GetTeamsMatchingStat(context.Background(), &request)
 
-		if response != nil {
-			t.Fatalf("Expected nil, got %+v", response)
+		if err == nil {
+			t.Fatal("Expected error, got nil")
 		}
 
 		assert.Equal(t, "rpc error: code = Internal desc = Internal server error", err.Error())
