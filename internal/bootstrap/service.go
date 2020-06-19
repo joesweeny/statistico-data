@@ -8,6 +8,10 @@ func (c Container) FixtureService() *grpc.FixtureService {
 	return grpc.NewFixtureService(c.FixtureRepository(), c.ProtoFixtureFactory(), c.Logger)
 }
 
+func (c Container) PerformanceService() *grpc.PerformanceService {
+	return grpc.NewPerformanceService(c.StatReader())
+}
+
 func (c Container) ResultService() *grpc.ResultService {
 	return grpc.NewResultService(c.FixtureRepository(), c.ProtoResultFactory(), c.Logger)
 }

@@ -3,9 +3,11 @@ services:
   postgres:
     image: postgres
     environment:
-      POSTGRES_USER: dev
+      POSTGRES_USER: statistico
       POSTGRES_PASSWORD: password
-      POSTGRES_DB: statshub
+      POSTGRES_DB: statistico_data
+    volumes:
+      - .:/opt
     ports:
       - 5432:5432
 
@@ -16,9 +18,9 @@ services:
     environment:
       DB_DRIVER: postgres
       DB_HOST: postgres
-      DB_NAME: statshub
+      DB_NAME: statistico_data
       DB_PASSWORD: password
-      DB_USER: dev
+      DB_USER: statistico
       DB_PORT: 5432
     tty: true
     links:
@@ -48,8 +50,8 @@ services:
       DB_DRIVER: postgres
       DB_HOST: postgres
       DB_PASSWORD: password
-      DB_NAME: statshub
-      DB_USER: dev
+      DB_NAME: statistico_data
+      DB_USER: statistico
       DB_PORT: 5432
     links:
       - postgres
