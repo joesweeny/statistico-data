@@ -40,7 +40,7 @@ func convertTeams(t []*performance.Team) []*proto.Team {
 
 	for _, team := range t {
 		x := proto.Team{
-			Id:   int64(team.ID),
+			Id:   team.ID,
 			Name: team.Name,
 		}
 

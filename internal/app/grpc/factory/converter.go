@@ -8,12 +8,28 @@ import (
 )
 
 // Convert a domain Team struct into a proto Team struct
-func teamToProto(t *app.Team) *proto.Team {
-	var x proto.Team
-	x.Id = int64(t.ID)
-	x.Name = t.Name
+func TeamToProto(t *app.Team) *proto.Team {
+	team := proto.Team{
+		Id:             t.ID,
+		Name:           t.Name,
+		CountryId:      t.CountryID,
+		VenueId:        t.VenueID,
+		IsNationalTeam: t.NationalTeam,
+	}
 
-	return &x
+	if t.ShortCode != nil {
+		team.ShortCode = &wrappers.StringValue{Value: *t.ShortCode}
+	}
+
+	if t.Founded != nil {
+		team.Founded = &wrappers.UInt64Value{Value: uint64(*t.Founded)}
+	}
+
+	if t.Logo != nil {
+		team.Logo = &wrappers.StringValue{Value: *t.Logo}
+	}
+
+	return &team
 }
 
 // Convert a domain Competition struct into a proto Competition struct
@@ -282,8 +298,8 @@ func venueToProto(v *app.Venue) *proto.Venue {
 // Convert a domain Team and Result struct data into a proto MatchData struct
 func toMatchData(home *app.Team, away *app.Team, res *app.Result) *proto.MatchData {
 	return &proto.MatchData{
-		HomeTeam: teamToProto(home),
-		AwayTeam: teamToProto(away),
+		HomeTeam: TeamToProto(home),
+		AwayTeam: TeamToProto(away),
 		Stats:    toMatchStats(res),
 	}
 }
