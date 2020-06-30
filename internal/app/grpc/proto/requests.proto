@@ -39,6 +39,10 @@ message SeasonRequest {
 }
 
 message TeamRequest {
+    uint64 team_id = 1;
+}
+
+message TeamResultRequest {
     // The Team ID that the Result set relates to
     int64 team_id = 1;
     // The number of results to return. If limit is not set the whole Result set for the Team
