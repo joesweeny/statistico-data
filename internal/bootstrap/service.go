@@ -20,6 +20,10 @@ func (c Container) PlayerStatsService() *grpc.PlayerStatsService {
 	return grpc.NewPlayerStatsService(c.FixtureRepository(), c.ProtoPlayerStatsFactory(), c.Logger)
 }
 
+func (c Container) TeamService() *grpc.TeamService {
+	return grpc.NewTeamService(c.TeamRepository(), c.Logger)
+}
+
 func (c Container) TeamStatsService() *grpc.TeamStatsService {
 	return grpc.NewTeamStatsService(
 		c.FixtureRepository(),
