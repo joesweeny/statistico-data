@@ -43,8 +43,8 @@ func (b FixtureFactory) BuildFixture(f *app.Fixture) (*proto.Fixture, error) {
 
 	p := proto.Fixture{
 		Id:       int64(f.ID),
-		HomeTeam: teamToProto(home),
-		AwayTeam: teamToProto(away),
+		HomeTeam: TeamToProto(home),
+		AwayTeam: TeamToProto(away),
 		Competition: competitionToProto(comp),
 		Season:   seasonToProto(season),
 		DateTime: &proto.Date{

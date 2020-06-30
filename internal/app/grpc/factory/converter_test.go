@@ -78,6 +78,59 @@ func TestPlayerStatsToLineupPlayerProto(t *testing.T) {
 	})
 }
 
+func TestTeamToProtoTeam(t *testing.T) {
+	t.Run("a new proto Team struct is hydrated", func(t *testing.T) {
+		code := "WHU"
+		founded := 1895
+		logo := "https://logo.com"
+
+		team := app.Team{
+			ID:           1,
+			Name:         "West Ham United",
+			ShortCode:    &code,
+			CountryID:    8,
+			VenueID:      214,
+			NationalTeam: false,
+			Founded:      &founded,
+			Logo:         &logo,
+		}
+
+		proto := TeamToProto(&team)
+
+		a := assert.New(t)
+		a.Equal(uint64(1), proto.Id)
+		a.Equal("West Ham United", proto.Name)
+		a.Equal("WHU", proto.ShortCode.Value)
+		a.Equal(uint64(8), proto.CountryId)
+		a.Equal(uint64(214), proto.VenueId)
+		a.Equal(false, proto.IsNationalTeam.Value)
+		a.Equal(uint64(1895), proto.Founded.Value)
+		a.Equal("https://logo.com", proto.Logo.Value)
+	})
+
+	t.Run("handle null values when converting team struct", func(t *testing.T) {
+		team := app.Team{
+			ID:           1,
+			Name:         "West Ham United",
+			CountryID:    8,
+			VenueID:      214,
+			NationalTeam: false,
+		}
+
+		proto := TeamToProto(&team)
+
+		a := assert.New(t)
+		a.Equal(uint64(1), proto.Id)
+		a.Equal("West Ham United", proto.Name)
+		a.Nil(proto.ShortCode)
+		a.Equal(uint64(8), proto.CountryId)
+		a.Equal(uint64(214), proto.VenueId)
+		a.Equal(false, proto.IsNationalTeam.Value)
+		a.Nil(proto.Founded)
+		a.Nil(proto.Logo)
+	})
+}
+
 func TestTeamStatsToProto(t *testing.T) {
 	t.Run("returns a proto team stats struct", func(t *testing.T) {
 		m := newTeamStats()

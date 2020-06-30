@@ -44,7 +44,7 @@ func (s ResultService) GetHistoricalResultsForFixture(r *proto.HistoricalResultR
 	return s.sendResults(fixtures, stream)
 }
 
-func (s ResultService) GetResultsForTeam(r *proto.TeamRequest, stream proto.ResultService_GetResultsForTeamServer) error {
+func (s ResultService) GetResultsForTeam(r *proto.TeamResultRequest, stream proto.ResultService_GetResultsForTeamServer) error {
 	date, err := time.Parse(time.RFC3339, r.DateBefore)
 
 	if err != nil {
