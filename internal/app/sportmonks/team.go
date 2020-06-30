@@ -51,14 +51,14 @@ func (t TeamRequester) sendTeamRequests(seasonID uint64, ch chan<- *app.Team, w 
 		}
 
 		for _, team := range res {
-			ch <- transformTeam(&team)
+			ch <- transformTeam(team)
 		}
 	}
 
 	w.Done()
 }
 
-func transformTeam(t *spClient.Team) *app.Team {
+func transformTeam(t spClient.Team) *app.Team {
 	return &app.Team{
 		ID:           uint64(t.ID),
 		Name:         t.Name,

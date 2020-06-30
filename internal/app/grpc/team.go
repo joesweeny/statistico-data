@@ -16,7 +16,7 @@ type TeamService struct {
 	logger *logrus.Logger
 }
 
-func (t *TeamService) GetTeamById(ctx context.Context, r *proto.TeamRequest) (*proto.Team, error) {
+func (t *TeamService) GetTeamByID(ctx context.Context, r *proto.TeamRequest) (*proto.Team, error) {
 	team, err := t.teamRepo.ByID(r.TeamId)
 
 	if err != nil {

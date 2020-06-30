@@ -40,7 +40,7 @@ func TestTeamService_GetTeamById(t *testing.T) {
 
 		repo.On("ByID", uint64(1)).Return(&team, nil)
 
-		response, err := service.GetTeamById(context.Background(), &request)
+		response, err := service.GetTeamByID(context.Background(), &request)
 
 		if err != nil {
 			t.Fatalf("Expected nil, got %s", err.Error())
@@ -69,7 +69,7 @@ func TestTeamService_GetTeamById(t *testing.T) {
 
 		repo.On("ByID", uint64(1)).Return(&app.Team{}, errors.New("error occurred"))
 
-		_, err := service.GetTeamById(context.Background(), &request)
+		_, err := service.GetTeamByID(context.Background(), &request)
 
 		if err == nil {
 			t.Fatal("Expected error, got nil")

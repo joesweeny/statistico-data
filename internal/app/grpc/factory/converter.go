@@ -14,7 +14,7 @@ func TeamToProto(t *app.Team) *proto.Team {
 		Name:           t.Name,
 		CountryId:      t.CountryID,
 		VenueId:        t.VenueID,
-		IsNationalTeam: t.NationalTeam,
+		IsNationalTeam: &wrappers.BoolValue{Value: t.NationalTeam},
 	}
 
 	if t.ShortCode != nil {
