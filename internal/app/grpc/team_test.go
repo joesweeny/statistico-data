@@ -52,7 +52,7 @@ func TestTeamService_GetTeamById(t *testing.T) {
 		a.Equal("WHU", response.ShortCode.Value)
 		a.Equal(uint64(8), response.CountryId)
 		a.Equal(uint64(214), response.VenueId)
-		a.Equal(false, response.IsNationalTeam)
+		a.Equal(false, response.IsNationalTeam.Value)
 		a.Equal(uint64(1895), response.Founded.Value)
 		a.Equal("https://logo.com", response.Logo.Value)
 		a.Nil(hook.LastEntry())
