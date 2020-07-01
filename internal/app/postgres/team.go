@@ -2,9 +2,9 @@ package postgres
 
 import (
 	"database/sql"
-	"fmt"
 	"github.com/jonboulle/clockwork"
 	"github.com/statistico/statistico-data/internal/app"
+	"github.com/statistico/statistico-data/internal/app/errors"
 	"time"
 )
 
@@ -89,7 +89,11 @@ func rowToTeam(r *sql.Row) (*app.Team, error) {
 	)
 
 	if err != nil {
-		return &t, fmt.Errorf("team with ID %d does not exist", t.ID)
+		if err == sql.ErrNoRows {
+			return nil, errors.ErrorNotFound
+		}
+
+		return nil, errors.ErrorDatabaseConnection
 	}
 
 	t.CreatedAt = time.Unix(created, 0)

@@ -2,6 +2,7 @@ package postgres_test
 
 import (
 	"github.com/statistico/statistico-data/internal/app"
+	"github.com/statistico/statistico-data/internal/app/errors"
 	"github.com/statistico/statistico-data/internal/app/postgres"
 	"github.com/statistico/statistico-data/internal/app/test"
 	"github.com/stretchr/testify/assert"
@@ -71,6 +72,10 @@ func TestTeamRepository_ByID(t *testing.T) {
 			t.Errorf("Error when retrieving a record from the database: %s", err.Error())
 		}
 
+		if r == nil {
+			t.Fatalf("Expected resource, got nil")
+		}
+
 		a := assert.New(t)
 
 		a.Equal(uint64(43), r.ID)
@@ -89,9 +94,13 @@ func TestTeamRepository_ByID(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
 
-		if _, err := repo.ByID(4); err == nil {
+		_, err := repo.ByID(4)
+
+		if err == nil {
 			t.Fatalf("Test failed, expected %v, got nil", err)
 		}
+
+		assert.Equal(t, errors.ErrorNotFound, err)
 	})
 }
 
@@ -155,6 +164,8 @@ func TestTeamRepository_Update(t *testing.T) {
 		if err == nil {
 			t.Fatalf("Test failed, expected %v, got nil", err)
 		}
+
+		assert.Equal(t, errors.ErrorNotFound, err)
 	})
 }
 

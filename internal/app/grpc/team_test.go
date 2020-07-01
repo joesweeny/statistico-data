@@ -2,10 +2,10 @@ package grpc_test
 
 import (
 	"context"
-	"errors"
 	"github.com/sirupsen/logrus"
 	"github.com/sirupsen/logrus/hooks/test"
 	"github.com/statistico/statistico-data/internal/app"
+	"github.com/statistico/statistico-data/internal/app/errors"
 	"github.com/statistico/statistico-data/internal/app/grpc"
 	"github.com/statistico/statistico-data/internal/app/grpc/proto"
 	"github.com/statistico/statistico-data/internal/app/mock"
@@ -20,7 +20,7 @@ func TestTeamService_GetTeamById(t *testing.T) {
 		request := proto.TeamRequest{TeamId: 1}
 
 		repo := new(mock.TeamRepository)
-		logger, hook := test.NewNullLogger()
+		logger, _ := test.NewNullLogger()
 		service := grpc.NewTeamService(repo, logger)
 
 		code := "WHU"
@@ -55,19 +55,18 @@ func TestTeamService_GetTeamById(t *testing.T) {
 		a.Equal(false, response.IsNationalTeam.Value)
 		a.Equal(uint64(1895), response.Founded.Value)
 		a.Equal("https://logo.com", response.Logo.Value)
-		a.Nil(hook.LastEntry())
 	})
 
-	t.Run("returns error if error returned by repository", func(t *testing.T) {
+	t.Run("returns not found if error returned by repository", func(t *testing.T) {
 		t.Helper()
 
 		request := proto.TeamRequest{TeamId: 1}
 
 		repo := new(mock.TeamRepository)
-		logger, hook := test.NewNullLogger()
+		logger, _ := test.NewNullLogger()
 		service := grpc.NewTeamService(repo, logger)
 
-		repo.On("ByID", uint64(1)).Return(&app.Team{}, errors.New("error occurred"))
+		repo.On("ByID", uint64(1)).Return(&app.Team{}, errors.ErrorNotFound)
 
 		_, err := service.GetTeamByID(context.Background(), &request)
 
@@ -76,7 +75,27 @@ func TestTeamService_GetTeamById(t *testing.T) {
 		}
 
 		assert.Equal(t, "rpc error: code = NotFound desc = team with ID 1 does not exist", err.Error())
+	})
+
+	t.Run("returns internal server error and logs error", func(t *testing.T) {
+		t.Helper()
+
+		request := proto.TeamRequest{TeamId: 1}
+
+		repo := new(mock.TeamRepository)
+		logger, hook := test.NewNullLogger()
+		service := grpc.NewTeamService(repo, logger)
+
+		repo.On("ByID", uint64(1)).Return(&app.Team{}, errors.ErrorDatabaseConnection)
+
+		_, err := service.GetTeamByID(context.Background(), &request)
+
+		if err == nil {
+			t.Fatal("Expected error, got nil")
+		}
+
+		assert.Equal(t, "rpc error: code = Internal desc = internal server error", err.Error())
 		assert.Equal(t, 1, len(hook.Entries))
-		assert.Equal(t, logrus.WarnLevel, hook.LastEntry().Level)
+		assert.Equal(t, logrus.ErrorLevel, hook.LastEntry().Level)
 	})
 }
