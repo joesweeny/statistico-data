@@ -93,7 +93,7 @@ func rowToTeam(r *sql.Row) (*app.Team, error) {
 			return nil, errors.ErrorNotFound
 		}
 
-		return nil, errors.ErrorDatabaseConnection
+		return nil, err
 	}
 
 	t.CreatedAt = time.Unix(created, 0)

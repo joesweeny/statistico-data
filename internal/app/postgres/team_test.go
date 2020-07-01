@@ -140,6 +140,10 @@ func TestTeamRepository_Update(t *testing.T) {
 			t.Errorf("Error when updating a record in the database: %s", err.Error())
 		}
 
+		if r == nil {
+			t.Fatalf("Expected resource, got nil")
+		}
+
 		a := assert.New(t)
 
 		a.Equal(uint64(43), r.ID)
