@@ -2,10 +2,11 @@ package grpc_test
 
 import (
 	"context"
+	"errors"
 	"github.com/sirupsen/logrus"
 	"github.com/sirupsen/logrus/hooks/test"
 	"github.com/statistico/statistico-data/internal/app"
-	"github.com/statistico/statistico-data/internal/app/errors"
+	e "github.com/statistico/statistico-data/internal/app/errors"
 	"github.com/statistico/statistico-data/internal/app/grpc"
 	"github.com/statistico/statistico-data/internal/app/grpc/proto"
 	"github.com/statistico/statistico-data/internal/app/mock"
@@ -66,7 +67,7 @@ func TestTeamService_GetTeamById(t *testing.T) {
 		logger, _ := test.NewNullLogger()
 		service := grpc.NewTeamService(repo, logger)
 
-		repo.On("ByID", uint64(1)).Return(&app.Team{}, errors.ErrorNotFound)
+		repo.On("ByID", uint64(1)).Return(&app.Team{}, e.ErrorNotFound)
 
 		_, err := service.GetTeamByID(context.Background(), &request)
 
@@ -86,7 +87,7 @@ func TestTeamService_GetTeamById(t *testing.T) {
 		logger, hook := test.NewNullLogger()
 		service := grpc.NewTeamService(repo, logger)
 
-		repo.On("ByID", uint64(1)).Return(&app.Team{}, errors.ErrorDatabaseConnection)
+		repo.On("ByID", uint64(1)).Return(&app.Team{}, errors.New("connection error"))
 
 		_, err := service.GetTeamByID(context.Background(), &request)
 
