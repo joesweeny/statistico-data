@@ -1,3 +1,9 @@
 #!/bin/bash
 
+NETWORK_NAME=statistico-web-gateway_default
+
+if [ -z $(docker network ls --filter name=^${NETWORK_NAME}$ --format="{{ .Name }}") ]; then
+     docker network create ${NETWORK_NAME};
+fi
+
 bin/docker-dev up  $@

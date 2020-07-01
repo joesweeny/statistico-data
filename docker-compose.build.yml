@@ -8,6 +8,8 @@ services:
       POSTGRES_DB: statistico_data
     volumes:
       - .:/opt
+    networks:
+      - statistico-data_internal
     ports:
       - 5432:5432
 
@@ -34,10 +36,15 @@ services:
     <<: *console
     command: ["./bin/migrate"]
 
-  grpc:
+  statistico-data-grpc:
     <<: *console
     ports:
       - "50051:50051"
+    networks:
+      - statistico-data_internal
+      - statistico-web-gateway_default
+    links:
+      - postgres
     command: ["./grpc", "--port 50051"]
 
   test:
@@ -57,3 +64,9 @@ services:
       - postgres
     depends_on:
       - postgres
+
+networks:
+  statistico-data_internal:
+    external: false
+  statistico-web-gateway_default:
+    external: true
