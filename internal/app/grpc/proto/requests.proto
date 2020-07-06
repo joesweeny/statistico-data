@@ -51,10 +51,13 @@ message TeamResultRequest {
     // A filter to return Results before a specific date
     // RFC3339 formatted string i.e "2006-01-02T15:04:05Z07:00"
     google.protobuf.StringValue date_before = 3;
+    // A filter to return Results after a specific date
+    // RFC3339 formatted string i.e "2006-01-02T15:04:05Z07:00"
+    google.protobuf.StringValue date_after = 4;
     // A filter to return based limited to either home or away results
-    google.protobuf.StringValue venue = 4;
+    google.protobuf.StringValue venue = 5;
     // A filter to limit the results returned associated to a specific season
-    google.protobuf.UInt64Value season_id = 5;
+    repeated uint64 season_ids = 6;
     // Order the date column to return results in specific order
-    google.protobuf.StringValue sort = 6;
+    google.protobuf.StringValue sort = 7;
 }
