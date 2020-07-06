@@ -23,7 +23,7 @@ type FixtureRepository interface {
 	Insert(f *Fixture) error
 	Update(f *Fixture) error
 	ByID(id uint64) (*Fixture, error)
-	ByTeamID(id uint64, limit int32, before time.Time) ([]Fixture, error)
+	ByTeamID(id uint64, limit *uint64, before *time.Time, venue *string) ([]Fixture, error)
 	Get(q FixtureRepositoryQuery) ([]Fixture, error)
 	GetIDs(q FixtureRepositoryQuery) ([]uint64, error)
 }

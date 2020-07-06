@@ -69,11 +69,37 @@ func (r *FixtureRepository) ByID(id uint64) (*app.Fixture, error) {
 	return rowToFixture(row, id)
 }
 
-func (r *FixtureRepository) ByTeamID(id uint64, limit int32, before time.Time) ([]app.Fixture, error) {
-	query := `SELECT * FROM sportmonks_fixture WHERE date < $2 AND (home_team_id = $1 OR away_team_id = $1)
-	ORDER BY date DESC LIMIT $3`
+func (r *FixtureRepository) ByTeamID(id uint64, limit *uint64, before *time.Time, venue *string) ([]app.Fixture, error) {
+	builder := r.queryBuilder()
 
-	rows, err := r.connection.Query(query, id, before.Unix(), limit)
+	query := builder.Select("sportmonks_fixture.*").From("sportmonks_fixture")
+
+	if limit != nil {
+		query = query.Limit(*limit)
+	}
+
+	if before != nil {
+		query = query.Where(sq.Lt{"date": before.Unix()})
+	}
+
+	if venue == nil {
+		query = query.Where(sq.Or{
+			sq.Eq{"home_team_id": id},
+			sq.Eq{"away_team_id": id},
+		})
+	} else {
+		if *venue == "home" {
+			query = query.Where(sq.Eq{"home_team_id": id})
+		}
+
+		if *venue == "away" {
+			query = query.Where(sq.Eq{"away_team_id": id})
+		}
+	}
+
+	query = query.OrderBy("date DESC")
+
+	rows, err := query.Query()
 
 	if err != nil {
 		return []app.Fixture{}, err
