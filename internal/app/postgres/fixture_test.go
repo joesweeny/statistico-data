@@ -226,7 +226,12 @@ func TestFixtureRepository_ByTeamID(t *testing.T) {
 		limit := uint64(100)
 		before := time.Unix(1550066317, 0)
 
-		fix, err := repo.ByTeamID(66, &limit, &before, nil)
+		query := app.FixtureFilterQuery{
+			DateBefore: &before,
+			Limit:      &limit,
+		}
+
+		fix, err := repo.ByTeamID(66, query)
 
 		if err != nil {
 			t.Fatalf("Test failed, expected nil, got %s", err.Error())
@@ -250,8 +255,15 @@ func TestFixtureRepository_ByTeamID(t *testing.T) {
 
 		limit := uint64(1)
 		before := time.Unix(1550066317, 0)
+		sort := "date_desc"
 
-		fix, err := repo.ByTeamID(66, &limit, &before, nil)
+		query := app.FixtureFilterQuery{
+			DateBefore: &before,
+			Limit:      &limit,
+			SortBy:     &sort,
+		}
+
+		fix, err := repo.ByTeamID(66, query)
 
 		if err != nil {
 			t.Fatalf("Test failed, expected nil, got %s", err.Error())
@@ -277,7 +289,12 @@ func TestFixtureRepository_ByTeamID(t *testing.T) {
 		limit := uint64(1)
 		before := time.Unix(1550066317, 0)
 
-		fix, err := repo.ByTeamID(14059, &limit, &before, nil)
+		query := app.FixtureFilterQuery{
+			DateBefore: &before,
+			Limit:      &limit,
+		}
+
+		fix, err := repo.ByTeamID(14059, query)
 
 		if err != nil {
 			t.Fatalf("Test failed, expected nil, got %s", err.Error())
@@ -301,7 +318,11 @@ func TestFixtureRepository_ByTeamID(t *testing.T) {
 
 		venue := "away"
 
-		fix, err := repo.ByTeamID(32, nil, nil, &venue)
+		query := app.FixtureFilterQuery{
+			Venue: &venue,
+		}
+
+		fix, err := repo.ByTeamID(32, query)
 
 		if err != nil {
 			t.Fatalf("Test failed, expected nil, got %s", err.Error())

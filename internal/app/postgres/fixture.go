@@ -69,37 +69,47 @@ func (r *FixtureRepository) ByID(id uint64) (*app.Fixture, error) {
 	return rowToFixture(row, id)
 }
 
-func (r *FixtureRepository) ByTeamID(id uint64, limit *uint64, before *time.Time, venue *string) ([]app.Fixture, error) {
+func (r *FixtureRepository) ByTeamID(id uint64, query app.FixtureFilterQuery) ([]app.Fixture, error) {
 	builder := r.queryBuilder()
 
-	query := builder.Select("sportmonks_fixture.*").From("sportmonks_fixture")
+	q := builder.Select("sportmonks_fixture.*").From("sportmonks_fixture")
 
-	if limit != nil {
-		query = query.Limit(*limit)
+	if query.Limit != nil {
+		q = q.Limit(*query.Limit)
 	}
 
-	if before != nil {
-		query = query.Where(sq.Lt{"date": before.Unix()})
+	if query.DateBefore != nil {
+		q = q.Where(sq.Lt{"date": query.DateBefore.Unix()})
 	}
 
-	if venue == nil {
-		query = query.Where(sq.Or{
+	if query.Venue == nil {
+		q = q.Where(sq.Or{
 			sq.Eq{"home_team_id": id},
 			sq.Eq{"away_team_id": id},
 		})
 	} else {
-		if *venue == "home" {
-			query = query.Where(sq.Eq{"home_team_id": id})
+		if *query.Venue == "home" {
+			q = q.Where(sq.Eq{"home_team_id": id})
 		}
 
-		if *venue == "away" {
-			query = query.Where(sq.Eq{"away_team_id": id})
+		if *query.Venue == "away" {
+			q = q.Where(sq.Eq{"away_team_id": id})
 		}
 	}
 
-	query = query.OrderBy("date DESC")
+	if query.SortBy != nil && *query.SortBy == "date_asc" {
+		q = q.OrderBy("date ASC")
+	}
 
-	rows, err := query.Query()
+	if query.SortBy != nil && *query.SortBy == "date_desc" {
+		q = q.OrderBy("date DESC")
+	}
+
+	if query.SortBy == nil {
+		q = q.OrderBy("date DESC")
+	}
+
+	rows, err := q.Query()
 
 	if err != nil {
 		return []app.Fixture{}, err

@@ -23,7 +23,7 @@ type FixtureRepository interface {
 	Insert(f *Fixture) error
 	Update(f *Fixture) error
 	ByID(id uint64) (*Fixture, error)
-	ByTeamID(id uint64, limit *uint64, before *time.Time, venue *string) ([]Fixture, error)
+	ByTeamID(id uint64, query FixtureFilterQuery) ([]Fixture, error)
 	Get(q FixtureRepositoryQuery) ([]Fixture, error)
 	GetIDs(q FixtureRepositoryQuery) ([]uint64, error)
 }
@@ -33,6 +33,13 @@ type FixtureRepository interface {
 // the channel before closing the channel once successful execution is complete.
 type FixtureRequester interface {
 	FixturesBySeasonIDs(ids []uint64) <-chan *Fixture
+}
+
+type FixtureFilterQuery struct {
+	DateBefore *time.Time
+	Limit      *uint64
+	SortBy     *string
+	Venue      *string
 }
 
 type FixtureRepositoryQuery struct {

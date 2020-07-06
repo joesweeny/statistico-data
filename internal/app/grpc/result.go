@@ -57,7 +57,14 @@ func (s ResultService) GetResultsForTeam(r *proto.TeamResultRequest, stream prot
 		limit = maxLimit
 	}
 
-	fixtures, err := s.fixtureRepo.ByTeamID(uint64(r.TeamId), &limit, &date, nil)
+	query := app.FixtureFilterQuery{
+		DateBefore: &date,
+		Limit:      &limit,
+		SortBy:     nil,
+		Venue:      nil,
+	}
+
+	fixtures, err := s.fixtureRepo.ByTeamID(uint64(r.TeamId), query)
 
 	if err != nil {
 		s.logger.Warnf("Error retrieving Fixture(s) in Result Service. Error: %s", err.Error())
