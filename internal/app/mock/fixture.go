@@ -3,7 +3,6 @@ package mock
 import (
 	"github.com/statistico/statistico-data/internal/app"
 	"github.com/stretchr/testify/mock"
-	"time"
 )
 
 type FixtureRepository struct {
@@ -26,8 +25,8 @@ func (m *FixtureRepository) ByID(id uint64) (*app.Fixture, error) {
 	return c, args.Error(1)
 }
 
-func (m *FixtureRepository) ByTeamID(id uint64, limit *uint64, before *time.Time, venue *string) ([]app.Fixture, error) {
-	args := m.Called(id, limit, before, venue)
+func (m *FixtureRepository) ByTeamID(id uint64, query app.FixtureFilterQuery) ([]app.Fixture, error) {
+	args := m.Called(id, query)
 	return args.Get(0).([]app.Fixture), args.Error(1)
 }
 

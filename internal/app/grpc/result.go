@@ -10,8 +10,6 @@ import (
 	"time"
 )
 
-const maxLimit = uint64(10000)
-
 type ResultService struct {
 	fixtureRepo app.FixtureRepository
 	factory     *factory.ResultFactory
@@ -45,19 +43,39 @@ func (s ResultService) GetHistoricalResultsForFixture(r *proto.HistoricalResultR
 }
 
 func (s ResultService) GetResultsForTeam(r *proto.TeamResultRequest, stream proto.ResultService_GetResultsForTeamServer) error {
-	date, err := time.Parse(time.RFC3339, r.DateBefore)
+	var query app.FixtureFilterQuery
 
-	if err != nil {
-		return status.Error(codes.InvalidArgument, "Date provided is not a valid RFC3339 date")
+	if r.GetDateBefore() != nil {
+		date, err := time.Parse(time.RFC3339, r.GetDateBefore().GetValue())
+
+		if err != nil {
+			return status.Error(codes.InvalidArgument, "Date provided is not a valid RFC3339 date")
+		}
+
+		query.DateBefore = &date
 	}
 
-	limit := uint64(r.Limit.GetValue())
-
-	if limit == 0 {
-		limit = maxLimit
+	if r.GetLimit() != nil {
+		v := r.GetLimit().GetValue()
+		query.Limit = &v
 	}
 
-	fixtures, err := s.fixtureRepo.ByTeamID(uint64(r.TeamId), &limit, &date, nil)
+	if r.GetSeasonId() != nil {
+		v := r.GetSeasonId().GetValue()
+		query.SeasonID = &v
+	}
+
+	if r.GetSort() != nil {
+		v := r.GetSort().GetValue()
+		query.SortBy = &v
+	}
+
+	if r.GetVenue() != nil {
+		v := r.GetVenue().GetValue()
+		query.Venue = &v
+	}
+
+	fixtures, err := s.fixtureRepo.ByTeamID(r.GetTeamId(), query)
 
 	if err != nil {
 		s.logger.Warnf("Error retrieving Fixture(s) in Result Service. Error: %s", err.Error())
