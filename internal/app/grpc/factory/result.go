@@ -43,13 +43,15 @@ func (r ResultFactory) BuildResult(f *app.Fixture) (*proto.Result, error) {
 	}
 
 	p := proto.Result{
-		Id:        int64(x.FixtureID),
+		Id:        x.FixtureID,
+		HomeTeam:  TeamToProto(home),
+		AwayTeam:  TeamToProto(away),
 		Season:    seasonToProto(season),
 		DateTime:  &proto.Date{
 			Utc: f.Date.Unix(),
 			Rfc: f.Date.Format(time.RFC3339),
 		},
-		MatchData: toMatchData(home, away, x),
+		Stats: toMatchStats(x),
 	}
 
 	if f.VenueID != nil {

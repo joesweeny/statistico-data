@@ -295,15 +295,6 @@ func venueToProto(v *app.Venue) *proto.Venue {
 	return &ven
 }
 
-// Convert a domain Team and Result struct data into a proto MatchData struct
-func toMatchData(home *app.Team, away *app.Team, res *app.Result) *proto.MatchData {
-	return &proto.MatchData{
-		HomeTeam: TeamToProto(home),
-		AwayTeam: TeamToProto(away),
-		Stats:    toMatchStats(res),
-	}
-}
-
 // Convert a domain Result struct into a proto MatchStats struct
 func toMatchStats(res *app.Result) *proto.MatchStats {
 	stats := proto.MatchStats{
