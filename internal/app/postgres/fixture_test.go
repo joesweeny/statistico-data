@@ -223,7 +223,10 @@ func TestFixtureRepository_ByTeamID(t *testing.T) {
 
 		insertFixtures(t, repo)
 
-		fix, err := repo.ByTeamID(66, 100, time.Unix(1550066317, 0))
+		limit := uint64(100)
+		before := time.Unix(1550066317, 0)
+
+		fix, err := repo.ByTeamID(66, &limit, &before, nil)
 
 		if err != nil {
 			t.Fatalf("Test failed, expected nil, got %s", err.Error())
@@ -239,13 +242,16 @@ func TestFixtureRepository_ByTeamID(t *testing.T) {
 		assert.Equal(t, 3, len(fix))
 	})
 
-	t.Run("results can be filtered by limit", func(t *testing.T) {
+	t.Run("can be filtered by limit", func(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
 
 		insertFixtures(t, repo)
 
-		fix, err := repo.ByTeamID(66, 1, time.Unix(1550066317, 0))
+		limit := uint64(1)
+		before := time.Unix(1550066317, 0)
+
+		fix, err := repo.ByTeamID(66, &limit, &before, nil)
 
 		if err != nil {
 			t.Fatalf("Test failed, expected nil, got %s", err.Error())
@@ -268,7 +274,10 @@ func TestFixtureRepository_ByTeamID(t *testing.T) {
 
 		insertFixtures(t, repo)
 
-		fix, err := repo.ByTeamID(14059, 1, time.Unix(1550066317, 0))
+		limit := uint64(1)
+		before := time.Unix(1550066317, 0)
+
+		fix, err := repo.ByTeamID(14059, &limit, &before, nil)
 
 		if err != nil {
 			t.Fatalf("Test failed, expected nil, got %s", err.Error())
@@ -282,6 +291,31 @@ func TestFixtureRepository_ByTeamID(t *testing.T) {
 
 		assert.Equal(t, 9, len(all))
 		assert.Equal(t, 0, len(fix))
+	})
+
+	t.Run("can be filtered by venue", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+
+		insertFixtures(t, repo)
+
+		venue := "away"
+
+		fix, err := repo.ByTeamID(32, nil, nil, &venue)
+
+		if err != nil {
+			t.Fatalf("Test failed, expected nil, got %s", err.Error())
+		}
+
+		all, err := repo.Get(app.FixtureRepositoryQuery{})
+
+		if err != nil {
+			t.Fatalf("Test failed, expected nil, got %s", err.Error())
+		}
+
+		assert.Equal(t, 9, len(all))
+		assert.Equal(t, 1, len(fix))
+		assert.Equal(t, uint64(32), fix[0].AwayTeamID)
 	})
 }
 

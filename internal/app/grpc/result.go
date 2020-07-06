@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-const maxLimit = 10000
+const maxLimit = uint64(10000)
 
 type ResultService struct {
 	fixtureRepo app.FixtureRepository
@@ -51,13 +51,13 @@ func (s ResultService) GetResultsForTeam(r *proto.TeamResultRequest, stream prot
 		return status.Error(codes.InvalidArgument, "Date provided is not a valid RFC3339 date")
 	}
 
-	limit := r.Limit.GetValue()
+	limit := uint64(r.Limit.GetValue())
 
 	if limit == 0 {
 		limit = maxLimit
 	}
 
-	fixtures, err := s.fixtureRepo.ByTeamID(uint64(r.TeamId), limit, date)
+	fixtures, err := s.fixtureRepo.ByTeamID(uint64(r.TeamId), &limit, &date, nil)
 
 	if err != nil {
 		s.logger.Warnf("Error retrieving Fixture(s) in Result Service. Error: %s", err.Error())
