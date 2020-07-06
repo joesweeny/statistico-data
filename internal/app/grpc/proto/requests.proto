@@ -44,11 +44,15 @@ message TeamRequest {
 
 message TeamResultRequest {
     // The Team ID that the Result set relates to
-    int64 team_id = 1;
+    uint64 team_id = 1;
     // The number of results to return. If limit is not set the whole Result set for the Team
     // will be returned
-    google.protobuf.Int32Value limit = 2;
+    google.protobuf.UInt64Value limit = 2;
     // A filter to return Results before a specific date
     // RFC3339 formatted string i.e "2006-01-02T15:04:05Z07:00"
-    string date_before = 3;
+    google.protobuf.StringValue date_before = 3;
+    // A filter to return based limited to either home or away results
+    google.protobuf.StringValue venue = 4;
+    // Order the date column to return results in specific order
+    google.protobuf.StringValue sort = 5;
 }
