@@ -97,6 +97,10 @@ func (r *FixtureRepository) ByTeamID(id uint64, query app.FixtureFilterQuery) ([
 		}
 	}
 
+	if query.SeasonID != nil {
+		q = q.Where(sq.Eq{"season_id": *query.SeasonID})
+	}
+
 	if query.SortBy != nil && *query.SortBy == "date_asc" {
 		q = q.OrderBy("date ASC")
 	}

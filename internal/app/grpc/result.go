@@ -60,6 +60,11 @@ func (s ResultService) GetResultsForTeam(r *proto.TeamResultRequest, stream prot
 		query.Limit = &v
 	}
 
+	if r.GetSeasonId() != nil {
+		v := r.GetSeasonId().GetValue()
+		query.SeasonID = &v
+	}
+
 	if r.GetSort() != nil {
 		v := r.GetSort().GetValue()
 		query.SortBy = &v
