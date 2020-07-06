@@ -78,6 +78,10 @@ func (r *FixtureRepository) ByTeamID(id uint64, query app.FixtureFilterQuery) ([
 		q = q.Limit(*query.Limit)
 	}
 
+	if query.DateAfter != nil {
+		q = q.Where(sq.Gt{"date": query.DateAfter.Unix()})
+	}
+
 	if query.DateBefore != nil {
 		q = q.Where(sq.Lt{"date": query.DateBefore.Unix()})
 	}
@@ -97,8 +101,8 @@ func (r *FixtureRepository) ByTeamID(id uint64, query app.FixtureFilterQuery) ([
 		}
 	}
 
-	if query.SeasonID != nil {
-		q = q.Where(sq.Eq{"season_id": *query.SeasonID})
+	if len(query.SeasonIDs) > 0 {
+		q = q.Where(sq.Eq{"season_id": query.SeasonIDs})
 	}
 
 	if query.SortBy != nil && *query.SortBy == "date_asc" {

@@ -36,9 +36,10 @@ type FixtureRequester interface {
 }
 
 type FixtureFilterQuery struct {
+	DateAfter  *time.Time
 	DateBefore *time.Time
 	Limit      *uint64
-	SeasonID   *uint64
+	SeasonIDs  []uint64
 	SortBy     *string
 	Venue      *string
 }
