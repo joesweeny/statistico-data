@@ -19,19 +19,14 @@ service ResultService {
 }
 
 message Result {
-    int64 id = 1;
-    Season season = 3;
-    Round round = 4;
-    Venue venue = 5;
-    google.protobuf.Int64Value referee_id = 6;
+    uint64 id = 1;
+    Team home_team = 2;
+    Team away_team = 3;
+    Season season = 4;
+    Round round = 5;
+    Venue venue = 6;
     Date date_time = 7;
-    MatchData match_data = 8;
-}
-
-message MatchData {
-    Team home_team = 1;
-    Team away_team = 2;
-    MatchStats stats = 3;
+    MatchStats stats = 8;
 }
 
 message MatchStats {
