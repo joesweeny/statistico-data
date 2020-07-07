@@ -107,9 +107,9 @@ func playerStatsToProto(p *app.PlayerStats) *proto.PlayerStats {
 // Convert a domain Round struct into a proto Round struct
 func roundToProto(r *app.Round) *proto.Round {
 	return &proto.Round{
-		Id:        int64(r.ID),
+		Id:        r.ID,
 		Name:      r.Name,
-		SeasonId:  int64(r.SeasonID),
+		SeasonId:  r.SeasonID,
 		StartDate: r.StartDate.Format(time.RFC3339),
 		EndDate:   r.EndDate.Format(time.RFC3339),
 	}
@@ -118,7 +118,7 @@ func roundToProto(r *app.Round) *proto.Round {
 // Convert a domain Season struct into a proto Season struct
 func seasonToProto(s *app.Season) *proto.Season {
 	var x proto.Season
-	x.Id = int64(s.ID)
+	x.Id = s.ID
 	x.Name = s.Name
 	x.IsCurrent = &wrappers.BoolValue{
 		Value: s.IsCurrent,
@@ -282,39 +282,32 @@ func teamStatsToProto(t *app.TeamStats) *proto.TeamStats {
 
 // Convert a domain Venue struct into a proto Venue struct
 func venueToProto(v *app.Venue) *proto.Venue {
-	id := wrappers.Int64Value{
-		Value: int64(v.ID),
+	return &proto.Venue{
+		Id: v.ID,
+		Name: v.Name,
 	}
-	name := wrappers.StringValue{
-		Value: v.Name,
-	}
-	ven := proto.Venue{}
-	ven.Id = &id
-	ven.Name = &name
-
-	return &ven
 }
 
 // Convert a domain Result struct into a proto MatchStats struct
 func toMatchStats(res *app.Result) *proto.MatchStats {
 	stats := proto.MatchStats{
-		HomeScore: &wrappers.Int32Value{
-			Value: int32(*res.HomeScore),
+		HomeScore: &wrappers.UInt32Value{
+			Value: uint32(*res.HomeScore),
 		},
-		AwayScore: &wrappers.Int32Value{
-			Value: int32(*res.AwayScore),
+		AwayScore: &wrappers.UInt32Value{
+			Value: uint32(*res.AwayScore),
 		},
 	}
 
 	if res.HomePenScore != nil {
-		stats.HomePenScore = &wrappers.Int32Value{
-			Value: int32(*res.HomePenScore),
+		stats.HomePenScore = &wrappers.UInt32Value{
+			Value: uint32(*res.HomePenScore),
 		}
 	}
 
 	if res.AwayPenScore != nil {
-		stats.AwayPenScore = &wrappers.Int32Value{
-			Value: int32(*res.AwayPenScore),
+		stats.AwayPenScore = &wrappers.UInt32Value{
+			Value: uint32(*res.AwayPenScore),
 		}
 	}
 
@@ -355,38 +348,38 @@ func toMatchStats(res *app.Result) *proto.MatchStats {
 	}
 
 	if res.HomeLeaguePosition != nil {
-		stats.HomeLeaguePosition = &wrappers.Int32Value{
-			Value: int32(*res.HomeLeaguePosition),
+		stats.HomeLeaguePosition = &wrappers.UInt32Value{
+			Value: uint32(*res.HomeLeaguePosition),
 		}
 	}
 
 	if res.AwayLeaguePosition != nil {
-		stats.AwayLeaguePosition = &wrappers.Int32Value{
-			Value: int32(*res.AwayLeaguePosition),
+		stats.AwayLeaguePosition = &wrappers.UInt32Value{
+			Value: uint32(*res.AwayLeaguePosition),
 		}
 	}
 
 	if res.Minutes != nil {
-		stats.Minutes = &wrappers.Int32Value{
-			Value: int32(*res.Minutes),
+		stats.Minutes = &wrappers.UInt32Value{
+			Value: uint32(*res.Minutes),
 		}
 	}
 
 	if res.AddedTime != nil {
-		stats.AddedTime = &wrappers.Int32Value{
-			Value: int32(*res.AddedTime),
+		stats.AddedTime = &wrappers.UInt32Value{
+			Value: uint32(*res.AddedTime),
 		}
 	}
 
 	if res.ExtraTime != nil {
-		stats.ExtraTime = &wrappers.Int32Value{
-			Value: int32(*res.ExtraTime),
+		stats.ExtraTime = &wrappers.UInt32Value{
+			Value: uint32(*res.ExtraTime),
 		}
 	}
 
 	if res.InjuryTime != nil {
-		stats.InjuryTime = &wrappers.Int32Value{
-			Value: int32(*res.InjuryTime),
+		stats.InjuryTime = &wrappers.UInt32Value{
+			Value: uint32(*res.InjuryTime),
 		}
 	}
 
