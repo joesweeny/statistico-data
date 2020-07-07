@@ -33,17 +33,17 @@ message MatchStats {
     google.protobuf.StringValue pitch = 1;
     google.protobuf.StringValue home_formation = 2;
     google.protobuf.StringValue away_formation = 3;
-    google.protobuf.Int32Value home_score = 4;
-    google.protobuf.Int32Value away_score = 5;
-    google.protobuf.Int32Value home_pen_score = 6;
-    google.protobuf.Int32Value away_pen_score = 7;
+    google.protobuf.UInt32Value home_score = 4;
+    google.protobuf.UInt32Value away_score = 5;
+    google.protobuf.UInt32Value home_pen_score = 6;
+    google.protobuf.UInt32Value away_pen_score = 7;
     google.protobuf.StringValue half_time_score = 8;
     google.protobuf.StringValue full_time_score = 9;
     google.protobuf.StringValue extra_time_score = 10;
-    google.protobuf.Int32Value home_league_position = 11;
-    google.protobuf.Int32Value away_league_position = 12;
-    google.protobuf.Int32Value minutes = 13;
-    google.protobuf.Int32Value added_time = 15;
-    google.protobuf.Int32Value extra_time = 16;
-    google.protobuf.Int32Value injury_time = 17;
+    google.protobuf.UInt32Value home_league_position = 11;
+    google.protobuf.UInt32Value away_league_position = 12;
+    google.protobuf.UInt32Value minutes = 13;
+    google.protobuf.UInt32Value added_time = 15;
+    google.protobuf.UInt32Value extra_time = 16;
+    google.protobuf.UInt32Value injury_time = 17;
 }
