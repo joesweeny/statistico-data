@@ -1,6 +1,7 @@
 package grpc
 
 import (
+	"fmt"
 	"github.com/sirupsen/logrus"
 	"github.com/statistico/statistico-data/internal/app"
 	"github.com/statistico/statistico-data/internal/app/grpc/factory"
@@ -49,10 +50,26 @@ func (s ResultService) GetResultsForTeam(r *proto.TeamResultRequest, stream prot
 		date, err := time.Parse(time.RFC3339, r.GetDateBefore().GetValue())
 
 		if err != nil {
-			return status.Error(codes.InvalidArgument, "Date provided is not a valid RFC3339 date")
+			return status.Error(
+				codes.InvalidArgument,
+				fmt.Sprintf("Date provided '%s' is not a valid RFC3339 date", r.GetDateBefore().GetValue()),
+			)
 		}
 
 		query.DateBefore = &date
+	}
+
+	if r.GetDateAfter() != nil {
+		date, err := time.Parse(time.RFC3339, r.GetDateAfter().GetValue())
+
+		if err != nil {
+			return status.Error(
+				codes.InvalidArgument,
+				fmt.Sprintf("Date provided '%s' is not a valid RFC3339 date", r.GetDateAfter().GetValue()),
+			)
+		}
+
+		query.DateAfter = &date
 	}
 
 	if r.GetLimit() != nil {
