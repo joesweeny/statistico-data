@@ -56,6 +56,8 @@ message TeamResultRequest {
     google.protobuf.StringValue date_after = 4;
     // A filter to return based limited to either home or away results
     google.protobuf.StringValue venue = 5;
+    // A filter to limit the results returned associated to a specific season
+    repeated uint64 season_ids = 6;
     // Order the date column to return results in specific order
-    google.protobuf.StringValue sort = 6;
+    google.protobuf.StringValue sort = 7;
 }
