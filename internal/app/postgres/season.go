@@ -112,6 +112,10 @@ func (r *SeasonRepository) CurrentSeasonIDs() ([]uint64, error) {
 	return seasons, nil
 }
 
+func (r *SeasonRepository) Get(q app.SeasonFilterQuery) ([]app.Season, error ) {
+	
+}
+
 func rowToSeason(r *sql.Row) (*app.Season, error) {
 	var created int64
 	var updated int64
