@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	sq "github.com/Masterminds/squirrel"
 	"github.com/jonboulle/clockwork"
 	"github.com/statistico/statistico-data/internal/app"
 	"time"
@@ -60,6 +61,44 @@ func (r *CompetitionRepository) ByID(id uint64) (*app.Competition, error) {
 	return rowToCompetition(row)
 }
 
+func (r *CompetitionRepository) Get(q app.CompetitionFilterQuery) ([]app.Competition, error) {
+	builder := r.queryBuilder()
+
+	query := builder.Select("sportmonks_competition.*").From("sportmonks_competition")
+
+	if q.IsCup != nil {
+		if *q.IsCup {
+			query = query.Where(sq.Eq{"is_cup": true})
+		} else {
+			query = query.Where(sq.Eq{"is_cup": false})
+		}
+	}
+
+	if len(q.CountryIds) > 0 {
+		query = query.Where(sq.Eq{"country_id": q.CountryIds})
+	}
+
+	if q.SortBy != nil && *q.SortBy == "id_asc" {
+		query = query.OrderBy("id ASC")
+	}
+
+	if q.SortBy != nil && *q.SortBy == "id_desc" {
+		query = query.OrderBy("id DESC")
+	}
+
+	if q.SortBy == nil {
+		query = query.OrderBy("id ASC")
+	}
+
+	rows, err := query.Query()
+
+	if err != nil {
+		return []app.Competition{}, err
+	}
+
+	return rowsToCompetition(rows)
+}
+
 func rowToCompetition(r *sql.Row) (*app.Competition, error) {
 	var created int64
 	var updated int64
@@ -74,6 +113,32 @@ func rowToCompetition(r *sql.Row) (*app.Competition, error) {
 	c.UpdatedAt = time.Unix(updated, 0)
 
 	return &c, nil
+}
+
+func rowsToCompetition(rows *sql.Rows) ([]app.Competition, error) {
+	defer rows.Close()
+
+	var created int64
+	var updated int64
+	var comps []app.Competition
+	c := app.Competition{}
+
+	for rows.Next() {
+		if err := rows.Scan(&c.ID, &c.Name, &c.CountryID, &c.IsCup, &created, &updated); err != nil {
+			return comps, err
+		}
+
+		c.CreatedAt = time.Unix(created, 0)
+		c.UpdatedAt = time.Unix(updated, 0)
+
+		comps = append(comps, c)
+	}
+
+	return comps, nil
+}
+
+func (r *CompetitionRepository) queryBuilder() sq.StatementBuilderType {
+	return sq.StatementBuilder.PlaceholderFormat(sq.Dollar).RunWith(r.connection)
 }
 
 func NewCompetitionRepository(connection *sql.DB, clock clockwork.Clock) *CompetitionRepository {
