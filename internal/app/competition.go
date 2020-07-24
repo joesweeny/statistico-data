@@ -19,6 +19,7 @@ type CompetitionRepository interface {
 	Insert(c *Competition) error
 	Update(c *Competition) error
 	ByID(id uint64) (*Competition, error)
+	Get(q CompetitionFilterQuery) ([]Competition, error)
 }
 
 // CompetitionRequester provides an interface allowing this application to request data from an external
@@ -26,4 +27,9 @@ type CompetitionRepository interface {
 // the channel before closing the channel once successful execution is complete.
 type CompetitionRequester interface {
 	Competitions() <-chan *Competition
+}
+
+type CompetitionFilterQuery struct {
+	CountryIds  []uint64
+	IsCup       *bool
 }
