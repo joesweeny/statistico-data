@@ -13,7 +13,7 @@ service CompetitionService {
 
 
 message Competition {
-    int64 id = 1;
+    uint64 id = 1;
     string name = 2;
-    google.protobuf.BoolValue is_cup = 3;
+    bool is_cup = 3;
 }

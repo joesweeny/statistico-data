@@ -35,11 +35,9 @@ func TeamToProto(t *app.Team) *proto.Team {
 // Convert a domain Competition struct into a proto Competition struct
 func competitionToProto(c *app.Competition) *proto.Competition {
 	var x proto.Competition
-	x.Id = int64(c.ID)
+	x.Id = c.ID
 	x.Name = c.Name
-	x.IsCup = &wrappers.BoolValue{
-		Value: c.IsCup,
-	}
+	x.IsCup = c.IsCup
 
 	return &x
 }
