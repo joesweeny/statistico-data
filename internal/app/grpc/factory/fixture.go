@@ -45,7 +45,7 @@ func (b FixtureFactory) BuildFixture(f *app.Fixture) (*proto.Fixture, error) {
 		Id:       int64(f.ID),
 		HomeTeam: TeamToProto(home),
 		AwayTeam: TeamToProto(away),
-		Competition: competitionToProto(comp),
+		Competition: CompetitionToProto(comp),
 		Season:   seasonToProto(season),
 		DateTime: &proto.Date{
 			Utc: f.Date.Unix(),

@@ -33,7 +33,7 @@ func TeamToProto(t *app.Team) *proto.Team {
 }
 
 // Convert a domain Competition struct into a proto Competition struct
-func competitionToProto(c *app.Competition) *proto.Competition {
+func CompetitionToProto(c *app.Competition) *proto.Competition {
 	var x proto.Competition
 	x.Id = c.ID
 	x.Name = c.Name
