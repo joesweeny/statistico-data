@@ -6,6 +6,15 @@ option go_package = "internal/app/grpc/proto";
 
 import "google/protobuf/wrappers.proto";
 
+message CompetitionRequest {
+    // A filter to limit the competitions returned associated to a specific countries
+    repeated uint64 country_ids = 1;
+    // Order the ID column to return competitions in specific order
+    google.protobuf.StringValue sort = 2;
+    // A filter to limit the competitions returned depending on if they are a cup competition or not
+    google.protobuf.BoolValue is_cup = 3;
+}
+
 message FixtureRequest {
     uint64 fixture_id = 1;
 }

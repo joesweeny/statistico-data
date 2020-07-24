@@ -185,7 +185,6 @@ func TestPlayerProcessor_Process(t *testing.T) {
 		requester.AssertExpectations(t)
 		playerRepo.AssertExpectations(t)
 		squadRepo.AssertExpectations(t)
-		//assert.Nil(t, hook.LastEntry())
 	})
 }
 
