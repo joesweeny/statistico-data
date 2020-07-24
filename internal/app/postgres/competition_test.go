@@ -265,6 +265,68 @@ func TestCompetitionRepository_Get(t *testing.T) {
 		assert.Equal(t, uint64(146), fetched[0].ID)
 		assert.Equal(t, uint64(148), fetched[1].ID)
 	})
+
+	t.Run("return competitions ordered by ID ascending", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+
+		competitions := []*app.Competition{
+			newCompetition(146, 462, false),
+			newCompetition(147, 463, true),
+			newCompetition(148, 464, false),
+		}
+
+		for _, comp := range competitions {
+			if err := repo.Insert(comp); err != nil {
+				t.Errorf("Error when inserting record into the database: %s", err.Error())
+			}
+		}
+
+		sort := "id_asc"
+
+		filter := app.CompetitionFilterQuery{SortBy: &sort}
+
+		fetched, err := repo.Get(filter)
+
+		if err != nil {
+			t.Errorf("Error when retrieving a record from the database: %s", err.Error())
+		}
+
+		assert.Equal(t, uint64(146), fetched[0].ID)
+		assert.Equal(t, uint64(147), fetched[1].ID)
+		assert.Equal(t, uint64(148), fetched[2].ID)
+	})
+
+	t.Run("return competitions ordered by ID descending", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+
+		competitions := []*app.Competition{
+			newCompetition(146, 462, false),
+			newCompetition(147, 463, true),
+			newCompetition(148, 464, false),
+		}
+
+		for _, comp := range competitions {
+			if err := repo.Insert(comp); err != nil {
+				t.Errorf("Error when inserting record into the database: %s", err.Error())
+			}
+		}
+
+		sort := "id_desc"
+
+		filter := app.CompetitionFilterQuery{SortBy: &sort}
+
+		fetched, err := repo.Get(filter)
+
+		if err != nil {
+			t.Errorf("Error when retrieving a record from the database: %s", err.Error())
+		}
+
+		assert.Equal(t, uint64(148), fetched[0].ID)
+		assert.Equal(t, uint64(147), fetched[1].ID)
+		assert.Equal(t, uint64(146), fetched[2].ID)
+	})
 }
 
 func newCompetition(id uint64, country uint64, isCup bool) *app.Competition {
