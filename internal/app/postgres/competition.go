@@ -78,6 +78,18 @@ func (r *CompetitionRepository) Get(q app.CompetitionFilterQuery) ([]app.Competi
 		query = query.Where(sq.Eq{"country_id": q.CountryIds})
 	}
 
+	if q.SortBy != nil && *q.SortBy == "id_asc" {
+		query = query.OrderBy("id ASC")
+	}
+
+	if q.SortBy != nil && *q.SortBy == "id_desc" {
+		query = query.OrderBy("id DESC")
+	}
+
+	if q.SortBy == nil {
+		query = query.OrderBy("id ASC")
+	}
+
 	rows, err := query.Query()
 
 	if err != nil {

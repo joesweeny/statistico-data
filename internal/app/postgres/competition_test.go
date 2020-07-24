@@ -18,7 +18,7 @@ func TestCompetitionRepository_Insert(t *testing.T) {
 		defer cleanUp()
 
 		for i := 1; i < 4; i++ {
-			c := newCompetition(uint64(i))
+			c := newCompetition(uint64(i), 462, false)
 
 			if err := repo.Insert(c); err != nil {
 				t.Errorf("Error when inserting record into the database: %s", err.Error())
@@ -39,7 +39,7 @@ func TestCompetitionRepository_Insert(t *testing.T) {
 	t.Run("returns error when ID primary key violates unique constraint", func(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
-		c := newCompetition(50)
+		c := newCompetition(50, 462, false)
 
 		if err := repo.Insert(c); err != nil {
 			t.Errorf("Test failed, expected nil, got %s", err)
@@ -59,7 +59,7 @@ func TestCompetitionRepository_ByID(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
 
-		c := newCompetition(45)
+		c := newCompetition(45, 462, false)
 
 		if err := repo.Insert(c); err != nil {
 			t.Errorf("Error when inserting record into the database: %s", err.Error())
@@ -99,7 +99,7 @@ func TestCompetitionRepository_Update(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
 
-		c := newCompetition(45)
+		c := newCompetition(45, 462, false)
 
 		if err := repo.Insert(c); err != nil {
 			t.Errorf("Error when inserting record into the database: %s", err.Error())
@@ -131,7 +131,7 @@ func TestCompetitionRepository_Update(t *testing.T) {
 	t.Run("returns error if record does not exist", func(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
-		c := newCompetition(146)
+		c := newCompetition(146, 462, false)
 
 		err := repo.Update(c)
 
@@ -141,12 +141,138 @@ func TestCompetitionRepository_Update(t *testing.T) {
 	})
 }
 
-func newCompetition(id uint64) *app.Competition {
+func TestCompetitionRepository_Get(t *testing.T) {
+	conn, cleanUp := test.GetConnection(t, "sportmonks_competition")
+	repo := postgres.NewCompetitionRepository(conn, test.Clock)
+
+	t.Run("returns competitions filtered by is cup filter is true", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+
+		competitions := []*app.Competition{
+			newCompetition(146, 462, false),
+			newCompetition(147, 462, true),
+			newCompetition(148, 462, false),
+		}
+
+		for _, comp := range competitions {
+			if err := repo.Insert(comp); err != nil {
+				t.Errorf("Error when inserting record into the database: %s", err.Error())
+			}
+		}
+
+		isCup := true
+
+		filter := app.CompetitionFilterQuery{
+			IsCup:      &isCup,
+		}
+
+		fetched, err := repo.Get(filter)
+
+		if err != nil {
+			t.Errorf("Error when retrieving a record from the database: %s", err.Error())
+		}
+
+		assert.Equal(t, 1, len(fetched))
+		assert.Equal(t, uint64(147), fetched[0].ID)
+	})
+
+	t.Run("returns competitions filtered by is cup filter is false", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+
+		competitions := []*app.Competition{
+			newCompetition(146, 462, false),
+			newCompetition(147, 462, true),
+			newCompetition(148, 462, false),
+		}
+
+		for _, comp := range competitions {
+			if err := repo.Insert(comp); err != nil {
+				t.Errorf("Error when inserting record into the database: %s", err.Error())
+			}
+		}
+
+		isCup := false
+
+		filter := app.CompetitionFilterQuery{
+			IsCup:      &isCup,
+		}
+
+		fetched, err := repo.Get(filter)
+
+		if err != nil {
+			t.Errorf("Error when retrieving a record from the database: %s", err.Error())
+		}
+
+		assert.Equal(t, 2, len(fetched))
+		assert.Equal(t, uint64(146), fetched[0].ID)
+		assert.Equal(t, uint64(148), fetched[1].ID)
+	})
+
+	t.Run("returns all records if filter query parameters are nil", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+
+		competitions := []*app.Competition{
+			newCompetition(146, 462, false),
+			newCompetition(147, 462, true),
+			newCompetition(148, 462, false),
+		}
+
+		for _, comp := range competitions {
+			if err := repo.Insert(comp); err != nil {
+				t.Errorf("Error when inserting record into the database: %s", err.Error())
+			}
+		}
+
+		fetched, err := repo.Get(app.CompetitionFilterQuery{})
+
+		if err != nil {
+			t.Errorf("Error when retrieving a record from the database: %s", err.Error())
+		}
+
+		assert.Equal(t, 3, len(fetched))
+	})
+
+	t.Run("returns competitions filtered by country IDs", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+
+		competitions := []*app.Competition{
+			newCompetition(146, 462, false),
+			newCompetition(147, 463, true),
+			newCompetition(148, 464, false),
+		}
+
+		for _, comp := range competitions {
+			if err := repo.Insert(comp); err != nil {
+				t.Errorf("Error when inserting record into the database: %s", err.Error())
+			}
+		}
+
+		filter := app.CompetitionFilterQuery{
+			CountryIds:      []uint64{462, 464},
+		}
+
+		fetched, err := repo.Get(filter)
+
+		if err != nil {
+			t.Errorf("Error when retrieving a record from the database: %s", err.Error())
+		}
+
+		assert.Equal(t, 2, len(fetched))
+		assert.Equal(t, uint64(146), fetched[0].ID)
+		assert.Equal(t, uint64(148), fetched[1].ID)
+	})
+}
+
+func newCompetition(id uint64, country uint64, isCup bool) *app.Competition {
 	return &app.Competition{
 		ID:        id,
 		Name:      "Premier League",
-		CountryID: uint64(462),
-		IsCup:     false,
+		CountryID: country,
+		IsCup:     isCup,
 		CreatedAt: time.Unix(1546965200, 0),
 		UpdatedAt: time.Unix(1546965200, 0),
 	}
