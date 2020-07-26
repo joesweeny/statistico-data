@@ -231,7 +231,7 @@ func TestSeasonRepository_ByCompetitionId(t *testing.T) {
 			}
 		}
 
-		fetched, err := repo.ByCompetitionId(16036)
+		fetched, err := repo.ByCompetitionId(16036, "name_asc")
 
 		if err != nil {
 			t.Fatalf("Expected nil, got %s", err.Error())

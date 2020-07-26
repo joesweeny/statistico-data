@@ -2,6 +2,7 @@ package postgres
 
 import (
 	"database/sql"
+	sq "github.com/Masterminds/squirrel"
 	"github.com/jonboulle/clockwork"
 	"github.com/statistico/statistico-data/internal/app"
 	"time"
@@ -110,10 +111,22 @@ func (r *SeasonRepository) CurrentSeasonIDs() ([]uint64, error) {
 	return seasons, nil
 }
 
-func (r *SeasonRepository) ByCompetitionId(id uint64) ([]app.Season, error ) {
-	query := `SELECT * FROM sportmonks_season where league_id = $1 order by name asc`
+func (r *SeasonRepository) ByCompetitionId(id uint64, sort string) ([]app.Season, error) {
+	builder := r.queryBuilder()
 
-	rows, err := r.connection.Query(query, id)
+	query := builder.Select("*").
+		From("sportmonks_season").
+		Where(sq.Eq{"league_id": id})
+
+	if sort == "name_asc" {
+		query = query.OrderBy("name ASC")
+	}
+
+	if sort == "name_desc" {
+		query = query.OrderBy("name DESC")
+	}
+
+	rows, err := query.Query()
 
 	if err != nil {
 		return []app.Season{}, err
@@ -160,6 +173,10 @@ func rowToSeason(r *sql.Row) (*app.Season, error) {
 	s.UpdatedAt = time.Unix(updated, 0)
 
 	return &s, nil
+}
+
+func (r *SeasonRepository) queryBuilder() sq.StatementBuilderType {
+	return sq.StatementBuilder.PlaceholderFormat(sq.Dollar).RunWith(r.connection)
 }
 
 func NewSeasonRepository(connection *sql.DB, clock clockwork.Clock) *SeasonRepository {

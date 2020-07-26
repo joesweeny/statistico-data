@@ -35,8 +35,8 @@ func (m *SeasonRepository) CurrentSeasonIDs() ([]uint64, error) {
 	return args.Get(0).([]uint64), args.Error(1)
 }
 
-func (m *SeasonRepository) ByCompetitionId(id uint64) ([]app.Season, error) {
-	args := m.Called(id)
+func (m *SeasonRepository) ByCompetitionId(id uint64, sort string) ([]app.Season, error) {
+	args := m.Called(id, sort)
 	return args.Get(0).([]app.Season), args.Error(1)
 }
 
