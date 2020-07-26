@@ -2,8 +2,7 @@ package postgres
 
 import (
 	"database/sql"
-	"errors"
-	"fmt"
+	sq "github.com/Masterminds/squirrel"
 	"github.com/jonboulle/clockwork"
 	"github.com/statistico/statistico-data/internal/app"
 	"time"
@@ -112,6 +111,54 @@ func (r *SeasonRepository) CurrentSeasonIDs() ([]uint64, error) {
 	return seasons, nil
 }
 
+func (r *SeasonRepository) ByCompetitionId(id uint64, sort string) ([]app.Season, error) {
+	builder := r.queryBuilder()
+
+	query := builder.Select("*").
+		From("sportmonks_season").
+		Where(sq.Eq{"league_id": id})
+
+	if sort == "name_asc" {
+		query = query.OrderBy("name ASC")
+	}
+
+	if sort == "name_desc" {
+		query = query.OrderBy("name DESC")
+	}
+
+	rows, err := query.Query()
+
+	if err != nil {
+		return []app.Season{}, err
+	}
+
+	var created int64
+	var updated int64
+	var seasons []app.Season
+	var season app.Season
+
+	for rows.Next() {
+		err := rows.Scan(
+			&season.ID,
+			&season.Name,
+			&season.CompetitionID,
+			&season.IsCurrent,
+			&created, &updated,
+		)
+
+		if err != nil {
+			return seasons, err
+		}
+
+		season.CreatedAt = time.Unix(created, 0)
+		season.UpdatedAt = time.Unix(updated, 0)
+
+		seasons = append(seasons, season)
+	}
+
+	return seasons, nil
+}
+
 func rowToSeason(r *sql.Row) (*app.Season, error) {
 	var created int64
 	var updated int64
@@ -119,13 +166,17 @@ func rowToSeason(r *sql.Row) (*app.Season, error) {
 	var s = app.Season{}
 
 	if err := r.Scan(&s.ID, &s.Name, &s.CompetitionID, &s.IsCurrent, &created, &updated); err != nil {
-		return &s, errors.New(fmt.Sprintf("Season with ID %d does not exist", s.ID))
+		return &s, err
 	}
 
 	s.CreatedAt = time.Unix(created, 0)
 	s.UpdatedAt = time.Unix(updated, 0)
 
 	return &s, nil
+}
+
+func (r *SeasonRepository) queryBuilder() sq.StatementBuilderType {
+	return sq.StatementBuilder.PlaceholderFormat(sq.Dollar).RunWith(r.connection)
 }
 
 func NewSeasonRepository(connection *sql.DB, clock clockwork.Clock) *SeasonRepository {

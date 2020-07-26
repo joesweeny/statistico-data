@@ -18,7 +18,7 @@ func TestSeasonRepository_Insert(t *testing.T) {
 		defer cleanUp()
 
 		for i := 1; i < 4; i++ {
-			s := newSeason(uint64(i), true)
+			s := newSeason(uint64(i), 560,"2018-2019",true)
 
 			if err := repo.Insert(s); err != nil {
 				t.Errorf("Error when inserting record into the database: %s", err.Error())
@@ -39,7 +39,7 @@ func TestSeasonRepository_Insert(t *testing.T) {
 	t.Run("returns error when ID primary key violates unique constraint", func(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
-		c := newSeason(10, true)
+		c := newSeason(10, 560,"2018-2019",true)
 
 		if err := repo.Insert(c); err != nil {
 			t.Errorf("Test failed, expected nil, got %s", err)
@@ -59,7 +59,7 @@ func TestSeasonRepository_Update(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
 
-		s := newSeason(50, true)
+		s := newSeason(50, 560,"2018-2019",true)
 
 		if err := repo.Insert(s); err != nil {
 			t.Errorf("Error when inserting record into the database: %s", err.Error())
@@ -93,7 +93,7 @@ func TestSeasonRepository_Update(t *testing.T) {
 	t.Run("returns an error if record does not exist", func(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
-		c := newSeason(146, true)
+		c := newSeason(146, 560,"2018-2019",true)
 
 		err := repo.Update(c)
 
@@ -111,7 +111,7 @@ func TestSeasonRepository_ByID(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
 
-		s := newSeason(146, true)
+		s := newSeason(146, 560,"2018-2019",true)
 
 		err := repo.Update(s)
 
@@ -158,7 +158,7 @@ func TestSeasonRepository_IDs(t *testing.T) {
 		defer cleanUp()
 
 		for i := 1; i <= 4; i++ {
-			s := newSeason(uint64(i), true)
+			s := newSeason(uint64(i), 560,"2018-2019",true)
 
 			if err := repo.Insert(s); err != nil {
 				t.Errorf("Error when inserting record into the dataCurrentSeasonIdsbase: %s", err.Error())
@@ -188,7 +188,7 @@ func TestSeasonRepository_CurrentSeasonIDs(t *testing.T) {
 		var seasons []app.Season
 
 		for i := 1; i <= 4; i++ {
-			s := newSeason(uint64(i), true)
+			s := newSeason(uint64(i), 560,"2018-2019",true)
 
 			seasons = append(seasons, *s)
 
@@ -197,7 +197,7 @@ func TestSeasonRepository_CurrentSeasonIDs(t *testing.T) {
 			}
 		}
 
-		if err := repo.Insert(newSeason(10, false)); err != nil {
+		if err := repo.Insert(newSeason(10, 560,"2018-2019",false)); err != nil {
 			t.Errorf("Error when inserting record into the database: %s", err.Error())
 		}
 
@@ -211,11 +211,76 @@ func TestSeasonRepository_CurrentSeasonIDs(t *testing.T) {
 	})
 }
 
-func newSeason(id uint64, current bool) *app.Season {
+func TestSeasonRepository_ByCompetitionId(t *testing.T) {
+	conn, cleanUp := test.GetConnection(t, "sportmonks_season")
+	repo := postgres.NewSeasonRepository(conn, test.Clock)
+
+	t.Run("returns a slice of season struct associated to a competition", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+
+		seasons := []*app.Season{
+			newSeason(1, 16036, "2018-2019",false),
+			newSeason(2, 12068, "2018-2019",false),
+			newSeason(3, 16036, "2018-2019",true),
+		}
+
+		for _, s := range seasons {
+			if err := repo.Insert(s); err != nil {
+				t.Errorf("Error when inserting record into the database: %s", err.Error())
+			}
+		}
+
+		fetched, err := repo.ByCompetitionId(16036, "name_asc")
+
+		if err != nil {
+			t.Fatalf("Expected nil, got %s", err.Error())
+		}
+
+		assert.Equal(t, 2, len(fetched))
+		assert.Equal(t, uint64(1), fetched[0].ID)
+		assert.Equal(t, uint64(3), fetched[1].ID)
+	})
+
+	t.Run("returned results can be sorted by name descending", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+
+		seasons := []*app.Season{
+			newSeason(1, 16036, "2019-2020",false),
+			newSeason(2, 12068, "2018-2019",false),
+			newSeason(3, 16036, "2018-2019",true),
+			newSeason(4, 16036, "2020-2021",true),
+			newSeason(5, 12068, "2018-2019",true),
+		}
+
+		for _, s := range seasons {
+			if err := repo.Insert(s); err != nil {
+				t.Errorf("Error when inserting record into the database: %s", err.Error())
+			}
+		}
+
+		fetched, err := repo.ByCompetitionId(16036, "name_desc")
+
+		if err != nil {
+			t.Fatalf("Expected nil, got %s", err.Error())
+		}
+
+		assert.Equal(t, 3, len(fetched))
+		assert.Equal(t, uint64(4), fetched[0].ID)
+		assert.Equal(t, "2020-2021", fetched[0].Name)
+		assert.Equal(t, uint64(1), fetched[1].ID)
+		assert.Equal(t, "2019-2020", fetched[1].Name)
+		assert.Equal(t, uint64(3), fetched[2].ID)
+		assert.Equal(t, "2018-2019", fetched[2].Name)
+	})
+}
+
+func newSeason(id uint64, competitionId uint64, name string, current bool) *app.Season {
 	return &app.Season{
 		ID:            id,
-		Name:          "2018-2019",
-		CompetitionID: uint64(560),
+		Name:          name,
+		CompetitionID: competitionId,
 		IsCurrent:     current,
 		CreatedAt:     time.Unix(1546965200, 0),
 		UpdatedAt:     time.Unix(1546965200, 0),
