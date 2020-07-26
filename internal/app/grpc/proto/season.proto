@@ -5,6 +5,11 @@ package proto;
 option go_package = "internal/app/grpc/proto";
 
 import "google/protobuf/wrappers.proto";
+import "internal/app/grpc/proto/requests.proto";
+
+service SeasonService {
+    rpc GetForCompetition(SeasonCompetitionRequest) returns (stream Season) {}
+}
 
 message Season {
     uint64 id = 1;
