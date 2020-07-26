@@ -18,7 +18,7 @@ func (s *SeasonService) GetSeasonsForCompetition(
 	r *proto.SeasonCompetitionRequest,
 	stream proto.SeasonService_GetSeasonsForCompetitionServer,
 ) error {
-	seasons, err := s.seasonRepo.ByCompetitionId(r.CompetitionId, r.GetSort().GetValue())
+	seasons, err := s.seasonRepo.ByCompetitionId(r.GetCompetitionId(), r.GetSort().GetValue())
 
 	if err != nil {
 		s.logger.Errorf("Error retrieving Season(s) in Season Service. Error: %s", err.Error())
