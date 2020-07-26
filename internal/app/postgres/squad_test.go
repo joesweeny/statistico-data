@@ -176,10 +176,10 @@ func TestSquadRepository_CurrentSeason(t *testing.T) {
 		defer cleanUpSeason()
 
 		seasons := []*app.Season{
-			newSeason(39, true),
-			newSeason(99, false),
-			newSeason(4502, false),
-			newSeason(23, true),
+			newSeason(39, 560,true),
+			newSeason(99, 560, false),
+			newSeason(4502, 560, false),
+			newSeason(23, 560, true),
 		}
 
 		for _, s := range seasons {

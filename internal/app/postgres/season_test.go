@@ -18,7 +18,7 @@ func TestSeasonRepository_Insert(t *testing.T) {
 		defer cleanUp()
 
 		for i := 1; i < 4; i++ {
-			s := newSeason(uint64(i), true)
+			s := newSeason(uint64(i), 560,true)
 
 			if err := repo.Insert(s); err != nil {
 				t.Errorf("Error when inserting record into the database: %s", err.Error())
@@ -39,7 +39,7 @@ func TestSeasonRepository_Insert(t *testing.T) {
 	t.Run("returns error when ID primary key violates unique constraint", func(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
-		c := newSeason(10, true)
+		c := newSeason(10, 560,true)
 
 		if err := repo.Insert(c); err != nil {
 			t.Errorf("Test failed, expected nil, got %s", err)
@@ -59,7 +59,7 @@ func TestSeasonRepository_Update(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
 
-		s := newSeason(50, true)
+		s := newSeason(50, 560,true)
 
 		if err := repo.Insert(s); err != nil {
 			t.Errorf("Error when inserting record into the database: %s", err.Error())
@@ -93,7 +93,7 @@ func TestSeasonRepository_Update(t *testing.T) {
 	t.Run("returns an error if record does not exist", func(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
-		c := newSeason(146, true)
+		c := newSeason(146, 560,true)
 
 		err := repo.Update(c)
 
@@ -111,7 +111,7 @@ func TestSeasonRepository_ByID(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
 
-		s := newSeason(146, true)
+		s := newSeason(146, 560,true)
 
 		err := repo.Update(s)
 
@@ -158,7 +158,7 @@ func TestSeasonRepository_IDs(t *testing.T) {
 		defer cleanUp()
 
 		for i := 1; i <= 4; i++ {
-			s := newSeason(uint64(i), true)
+			s := newSeason(uint64(i), 560,true)
 
 			if err := repo.Insert(s); err != nil {
 				t.Errorf("Error when inserting record into the dataCurrentSeasonIdsbase: %s", err.Error())
@@ -188,7 +188,7 @@ func TestSeasonRepository_CurrentSeasonIDs(t *testing.T) {
 		var seasons []app.Season
 
 		for i := 1; i <= 4; i++ {
-			s := newSeason(uint64(i), true)
+			s := newSeason(uint64(i), 560,true)
 
 			seasons = append(seasons, *s)
 
@@ -197,7 +197,7 @@ func TestSeasonRepository_CurrentSeasonIDs(t *testing.T) {
 			}
 		}
 
-		if err := repo.Insert(newSeason(10, false)); err != nil {
+		if err := repo.Insert(newSeason(10, 560,false)); err != nil {
 			t.Errorf("Error when inserting record into the database: %s", err.Error())
 		}
 
@@ -211,11 +211,11 @@ func TestSeasonRepository_CurrentSeasonIDs(t *testing.T) {
 	})
 }
 
-func newSeason(id uint64, current bool) *app.Season {
+func newSeason(id uint64, competitionId uint64, current bool) *app.Season {
 	return &app.Season{
 		ID:            id,
 		Name:          "2018-2019",
-		CompetitionID: uint64(560),
+		CompetitionID: competitionId,
 		IsCurrent:     current,
 		CreatedAt:     time.Unix(1546965200, 0),
 		UpdatedAt:     time.Unix(1546965200, 0),

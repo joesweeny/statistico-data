@@ -21,7 +21,7 @@ type SeasonRepository interface {
 	ByID(id uint64) (*Season, error)
 	IDs() ([]uint64, error)
 	CurrentSeasonIDs() ([]uint64, error)
-	Get(q SeasonFilterQuery) ([]Season, error)
+	ByCompetitionId(id uint64) ([]Season, error)
 }
 
 // SeasonRequester provides an interface allowing this application to request data from an external
@@ -29,10 +29,4 @@ type SeasonRepository interface {
 // the channel before closing the channel once successful execution is complete.
 type SeasonRequester interface {
 	Seasons() <-chan *Season
-}
-
-type SeasonFilterQuery struct {
-	CompetitionIds  []uint64
-	IsCurrent       *bool
-	SortBy          *string
 }
