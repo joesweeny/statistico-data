@@ -250,6 +250,8 @@ func TestSeasonRepository_ByCompetitionId(t *testing.T) {
 			newSeason(1, 16036, "2019-2020",false),
 			newSeason(2, 12068, "2018-2019",false),
 			newSeason(3, 16036, "2018-2019",true),
+			newSeason(4, 16036, "2020-2021",true),
+			newSeason(5, 12068, "2018-2019",true),
 		}
 
 		for _, s := range seasons {
@@ -264,11 +266,13 @@ func TestSeasonRepository_ByCompetitionId(t *testing.T) {
 			t.Fatalf("Expected nil, got %s", err.Error())
 		}
 
-		assert.Equal(t, 2, len(fetched))
-		assert.Equal(t, uint64(1), fetched[0].ID)
-		assert.Equal(t, "2019-2020", fetched[0].Name)
-		assert.Equal(t, uint64(3), fetched[1].ID)
-		assert.Equal(t, "2018-2019", fetched[1].Name)
+		assert.Equal(t, 3, len(fetched))
+		assert.Equal(t, uint64(4), fetched[0].ID)
+		assert.Equal(t, "2020-2021", fetched[0].Name)
+		assert.Equal(t, uint64(1), fetched[1].ID)
+		assert.Equal(t, "2019-2020", fetched[1].Name)
+		assert.Equal(t, uint64(3), fetched[2].ID)
+		assert.Equal(t, "2018-2019", fetched[2].Name)
 	})
 }
 
