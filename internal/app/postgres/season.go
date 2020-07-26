@@ -111,7 +111,7 @@ func (r *SeasonRepository) CurrentSeasonIDs() ([]uint64, error) {
 }
 
 func (r *SeasonRepository) ByCompetitionId(id uint64) ([]app.Season, error ) {
-	query := `SELECT * FROM sportmonks_season where competition_id = $1`
+	query := `SELECT * FROM sportmonks_season where league_id = $1 order by name asc`
 
 	rows, err := r.connection.Query(query, id)
 

@@ -211,6 +211,38 @@ func TestSeasonRepository_CurrentSeasonIDs(t *testing.T) {
 	})
 }
 
+func TestSeasonRepository_ByCompetitionId(t *testing.T) {
+	conn, cleanUp := test.GetConnection(t, "sportmonks_season")
+	repo := postgres.NewSeasonRepository(conn, test.Clock)
+
+	t.Run("returns a slice of season struct associated to a competition", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+
+		seasons := []*app.Season{
+			newSeason(1, 16036, false),
+			newSeason(2, 12068, false),
+			newSeason(3, 16036, true),
+		}
+
+		for _, s := range seasons {
+			if err := repo.Insert(s); err != nil {
+				t.Errorf("Error when inserting record into the database: %s", err.Error())
+			}
+		}
+
+		fetched, err := repo.ByCompetitionId(16036)
+
+		if err != nil {
+			t.Fatalf("Expected nil, got %s", err.Error())
+		}
+
+		assert.Equal(t, 2, len(fetched))
+		assert.Equal(t, uint64(1), fetched[0].ID)
+		assert.Equal(t, uint64(3), fetched[1].ID)
+	})
+}
+
 func newSeason(id uint64, competitionId uint64, current bool) *app.Season {
 	return &app.Season{
 		ID:            id,
