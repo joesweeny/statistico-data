@@ -109,15 +109,16 @@ var file_internal_app_grpc_proto_season_proto_rawDesc = []byte{
 	0x61, 0x6d, 0x65, 0x12, 0x39, 0x0a, 0x0a, 0x69, 0x73, 0x5f, 0x63, 0x75, 0x72, 0x72, 0x65, 0x6e,
 	0x74, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65,
 	0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x42, 0x6f, 0x6f, 0x6c, 0x56, 0x61,
-	0x6c, 0x75, 0x65, 0x52, 0x09, 0x69, 0x73, 0x43, 0x75, 0x72, 0x72, 0x65, 0x6e, 0x74, 0x32, 0x58,
+	0x6c, 0x75, 0x65, 0x52, 0x09, 0x69, 0x73, 0x43, 0x75, 0x72, 0x72, 0x65, 0x6e, 0x74, 0x32, 0x5f,
 	0x0a, 0x0d, 0x53, 0x65, 0x61, 0x73, 0x6f, 0x6e, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12,
-	0x47, 0x0a, 0x11, 0x47, 0x65, 0x74, 0x46, 0x6f, 0x72, 0x43, 0x6f, 0x6d, 0x70, 0x65, 0x74, 0x69,
-	0x74, 0x69, 0x6f, 0x6e, 0x12, 0x1f, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x53, 0x65, 0x61,
-	0x73, 0x6f, 0x6e, 0x43, 0x6f, 0x6d, 0x70, 0x65, 0x74, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65,
-	0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x0d, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x53, 0x65,
-	0x61, 0x73, 0x6f, 0x6e, 0x22, 0x00, 0x30, 0x01, 0x42, 0x19, 0x5a, 0x17, 0x69, 0x6e, 0x74, 0x65,
-	0x72, 0x6e, 0x61, 0x6c, 0x2f, 0x61, 0x70, 0x70, 0x2f, 0x67, 0x72, 0x70, 0x63, 0x2f, 0x70, 0x72,
-	0x6f, 0x74, 0x6f, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x4e, 0x0a, 0x18, 0x47, 0x65, 0x74, 0x53, 0x65, 0x61, 0x73, 0x6f, 0x6e, 0x73, 0x46, 0x6f, 0x72,
+	0x43, 0x6f, 0x6d, 0x70, 0x65, 0x74, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x1f, 0x2e, 0x70, 0x72,
+	0x6f, 0x74, 0x6f, 0x2e, 0x53, 0x65, 0x61, 0x73, 0x6f, 0x6e, 0x43, 0x6f, 0x6d, 0x70, 0x65, 0x74,
+	0x69, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x0d, 0x2e, 0x70,
+	0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x53, 0x65, 0x61, 0x73, 0x6f, 0x6e, 0x22, 0x00, 0x30, 0x01, 0x42,
+	0x19, 0x5a, 0x17, 0x69, 0x6e, 0x74, 0x65, 0x72, 0x6e, 0x61, 0x6c, 0x2f, 0x61, 0x70, 0x70, 0x2f,
+	0x67, 0x72, 0x70, 0x63, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74,
+	0x6f, 0x33,
 }
 
 var (
@@ -140,8 +141,8 @@ var file_internal_app_grpc_proto_season_proto_goTypes = []interface{}{
 }
 var file_internal_app_grpc_proto_season_proto_depIdxs = []int32{
 	1, // 0: proto.Season.is_current:type_name -> google.protobuf.BoolValue
-	2, // 1: proto.SeasonService.GetForCompetition:input_type -> proto.SeasonCompetitionRequest
-	0, // 2: proto.SeasonService.GetForCompetition:output_type -> proto.Season
+	2, // 1: proto.SeasonService.GetSeasonsForCompetition:input_type -> proto.SeasonCompetitionRequest
+	0, // 2: proto.SeasonService.GetSeasonsForCompetition:output_type -> proto.Season
 	2, // [2:3] is the sub-list for method output_type
 	1, // [1:2] is the sub-list for method input_type
 	1, // [1:1] is the sub-list for extension type_name
@@ -201,7 +202,7 @@ const _ = grpc.SupportPackageIsVersion6
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type SeasonServiceClient interface {
-	GetForCompetition(ctx context.Context, in *SeasonCompetitionRequest, opts ...grpc.CallOption) (SeasonService_GetForCompetitionClient, error)
+	GetSeasonsForCompetition(ctx context.Context, in *SeasonCompetitionRequest, opts ...grpc.CallOption) (SeasonService_GetSeasonsForCompetitionClient, error)
 }
 
 type seasonServiceClient struct {
@@ -212,12 +213,12 @@ func NewSeasonServiceClient(cc grpc.ClientConnInterface) SeasonServiceClient {
 	return &seasonServiceClient{cc}
 }
 
-func (c *seasonServiceClient) GetForCompetition(ctx context.Context, in *SeasonCompetitionRequest, opts ...grpc.CallOption) (SeasonService_GetForCompetitionClient, error) {
-	stream, err := c.cc.NewStream(ctx, &_SeasonService_serviceDesc.Streams[0], "/proto.SeasonService/GetForCompetition", opts...)
+func (c *seasonServiceClient) GetSeasonsForCompetition(ctx context.Context, in *SeasonCompetitionRequest, opts ...grpc.CallOption) (SeasonService_GetSeasonsForCompetitionClient, error) {
+	stream, err := c.cc.NewStream(ctx, &_SeasonService_serviceDesc.Streams[0], "/proto.SeasonService/GetSeasonsForCompetition", opts...)
 	if err != nil {
 		return nil, err
 	}
-	x := &seasonServiceGetForCompetitionClient{stream}
+	x := &seasonServiceGetSeasonsForCompetitionClient{stream}
 	if err := x.ClientStream.SendMsg(in); err != nil {
 		return nil, err
 	}
@@ -227,16 +228,16 @@ func (c *seasonServiceClient) GetForCompetition(ctx context.Context, in *SeasonC
 	return x, nil
 }
 
-type SeasonService_GetForCompetitionClient interface {
+type SeasonService_GetSeasonsForCompetitionClient interface {
 	Recv() (*Season, error)
 	grpc.ClientStream
 }
 
-type seasonServiceGetForCompetitionClient struct {
+type seasonServiceGetSeasonsForCompetitionClient struct {
 	grpc.ClientStream
 }
 
-func (x *seasonServiceGetForCompetitionClient) Recv() (*Season, error) {
+func (x *seasonServiceGetSeasonsForCompetitionClient) Recv() (*Season, error) {
 	m := new(Season)
 	if err := x.ClientStream.RecvMsg(m); err != nil {
 		return nil, err
@@ -246,39 +247,39 @@ func (x *seasonServiceGetForCompetitionClient) Recv() (*Season, error) {
 
 // SeasonServiceServer is the server API for SeasonService service.
 type SeasonServiceServer interface {
-	GetForCompetition(*SeasonCompetitionRequest, SeasonService_GetForCompetitionServer) error
+	GetSeasonsForCompetition(*SeasonCompetitionRequest, SeasonService_GetSeasonsForCompetitionServer) error
 }
 
 // UnimplementedSeasonServiceServer can be embedded to have forward compatible implementations.
 type UnimplementedSeasonServiceServer struct {
 }
 
-func (*UnimplementedSeasonServiceServer) GetForCompetition(*SeasonCompetitionRequest, SeasonService_GetForCompetitionServer) error {
-	return status.Errorf(codes.Unimplemented, "method GetForCompetition not implemented")
+func (*UnimplementedSeasonServiceServer) GetSeasonsForCompetition(*SeasonCompetitionRequest, SeasonService_GetSeasonsForCompetitionServer) error {
+	return status.Errorf(codes.Unimplemented, "method GetSeasonsForCompetition not implemented")
 }
 
 func RegisterSeasonServiceServer(s *grpc.Server, srv SeasonServiceServer) {
 	s.RegisterService(&_SeasonService_serviceDesc, srv)
 }
 
-func _SeasonService_GetForCompetition_Handler(srv interface{}, stream grpc.ServerStream) error {
+func _SeasonService_GetSeasonsForCompetition_Handler(srv interface{}, stream grpc.ServerStream) error {
 	m := new(SeasonCompetitionRequest)
 	if err := stream.RecvMsg(m); err != nil {
 		return err
 	}
-	return srv.(SeasonServiceServer).GetForCompetition(m, &seasonServiceGetForCompetitionServer{stream})
+	return srv.(SeasonServiceServer).GetSeasonsForCompetition(m, &seasonServiceGetSeasonsForCompetitionServer{stream})
 }
 
-type SeasonService_GetForCompetitionServer interface {
+type SeasonService_GetSeasonsForCompetitionServer interface {
 	Send(*Season) error
 	grpc.ServerStream
 }
 
-type seasonServiceGetForCompetitionServer struct {
+type seasonServiceGetSeasonsForCompetitionServer struct {
 	grpc.ServerStream
 }
 
-func (x *seasonServiceGetForCompetitionServer) Send(m *Season) error {
+func (x *seasonServiceGetSeasonsForCompetitionServer) Send(m *Season) error {
 	return x.ServerStream.SendMsg(m)
 }
 
@@ -288,8 +289,8 @@ var _SeasonService_serviceDesc = grpc.ServiceDesc{
 	Methods:     []grpc.MethodDesc{},
 	Streams: []grpc.StreamDesc{
 		{
-			StreamName:    "GetForCompetition",
-			Handler:       _SeasonService_GetForCompetition_Handler,
+			StreamName:    "GetSeasonsForCompetition",
+			Handler:       _SeasonService_GetSeasonsForCompetition_Handler,
 			ServerStreams: true,
 		},
 	},

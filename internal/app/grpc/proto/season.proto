@@ -8,7 +8,7 @@ import "google/protobuf/wrappers.proto";
 import "internal/app/grpc/proto/requests.proto";
 
 service SeasonService {
-    rpc GetForCompetition(SeasonCompetitionRequest) returns (stream Season) {}
+    rpc GetSeasonsForCompetition(SeasonCompetitionRequest) returns (stream Season) {}
 }
 
 message Season {
