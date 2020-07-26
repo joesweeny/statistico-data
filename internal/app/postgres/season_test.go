@@ -241,6 +241,35 @@ func TestSeasonRepository_ByCompetitionId(t *testing.T) {
 		assert.Equal(t, uint64(1), fetched[0].ID)
 		assert.Equal(t, uint64(3), fetched[1].ID)
 	})
+
+	t.Run("returned results can be sorted by name descending", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+
+		seasons := []*app.Season{
+			newSeason(1, 16036, "2019-2020",false),
+			newSeason(2, 12068, "2018-2019",false),
+			newSeason(3, 16036, "2018-2019",true),
+		}
+
+		for _, s := range seasons {
+			if err := repo.Insert(s); err != nil {
+				t.Errorf("Error when inserting record into the database: %s", err.Error())
+			}
+		}
+
+		fetched, err := repo.ByCompetitionId(16036, "name_desc")
+
+		if err != nil {
+			t.Fatalf("Expected nil, got %s", err.Error())
+		}
+
+		assert.Equal(t, 2, len(fetched))
+		assert.Equal(t, uint64(1), fetched[0].ID)
+		assert.Equal(t, "2019-2020", fetched[0].Name)
+		assert.Equal(t, uint64(3), fetched[1].ID)
+		assert.Equal(t, "2018-2019", fetched[1].Name)
+	})
 }
 
 func newSeason(id uint64, competitionId uint64, name string, current bool) *app.Season {
