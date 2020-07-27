@@ -23,7 +23,7 @@ type TeamRepository interface {
 	Insert(t *Team) error
 	Update(t *Team) error
 	ByID(id uint64) (*Team, error)
-	BySeasonId(id uint64) ([]*Team, error)
+	BySeasonId(id uint64) ([]Team, error)
 }
 
 // TeamRequester provides an interface allowing this application to request data from an external

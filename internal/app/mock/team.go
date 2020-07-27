@@ -25,9 +25,9 @@ func (m *TeamRepository) ByID(id uint64) (*app.Team, error) {
 	return c, args.Error(1)
 }
 
-func (m *TeamRepository) BySeasonId(id uint64) ([]*app.Team, error) {
+func (m *TeamRepository) BySeasonId(id uint64) ([]app.Team, error) {
 	args := m.Called(id)
-	return args.Get(0).([]*app.Team), args.Error(1)
+	return args.Get(0).([]app.Team), args.Error(1)
 }
 
 type TeamRequester struct {

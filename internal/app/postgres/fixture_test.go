@@ -18,7 +18,7 @@ func TestFixtureRepository_Insert(t *testing.T) {
 		defer cleanUp()
 
 		for i := 1; i < 4; i++ {
-			c := newFixture(uint64(i))
+			c := newFixture(uint64(i), 14567, 451, 924)
 
 			if err := repo.Insert(c); err != nil {
 				t.Errorf("Error when inserting record into the database: %s", err.Error())
@@ -39,7 +39,7 @@ func TestFixtureRepository_Insert(t *testing.T) {
 	t.Run("returns error when ID primary key violates unique constraint", func(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
-		c := newFixture(50)
+		c := newFixture(50, 14567, 451, 924)
 
 		if err := repo.Insert(c); err != nil {
 			t.Errorf("Test failed, expected nil, got %s", err)
@@ -59,7 +59,7 @@ func TestFixtureRepository_ByID(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
 
-		f := newFixture(43)
+		f := newFixture(43, 14567, 451, 924)
 
 		if err := repo.Insert(f); err != nil {
 			t.Errorf("Error when inserting record into the database: %s", err.Error())
@@ -105,7 +105,7 @@ func TestFixtureRepository_Update(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
 
-		f := newFixture(78)
+		f := newFixture(78, 14567, 451, 924)
 
 		if err := repo.Insert(f); err != nil {
 			t.Errorf("Error when inserting record into the database: %s", err.Error())
@@ -147,7 +147,7 @@ func TestFixtureRepository_Update(t *testing.T) {
 	t.Run("returns an error if fixture does not exist", func(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
-		c := newFixture(146)
+		c := newFixture(146, 14567, 451, 924)
 
 		err := repo.Update(c)
 
@@ -166,7 +166,7 @@ func TestFixtureRepository_GetIDs(t *testing.T) {
 		defer cleanUp()
 
 		for i := 1; i <= 4; i++ {
-			s := newFixture(uint64(i))
+			s := newFixture(uint64(i), 14567, 451, 924)
 
 			if err := repo.Insert(s); err != nil {
 				t.Errorf("Error when inserting record into the database: %s", err.Error())
@@ -840,22 +840,22 @@ func TestFixtureRepository_Get(t *testing.T) {
 	})
 }
 
-func newFixture(id uint64) *app.Fixture {
+func newFixture(id, seasonId, homeId, awayId uint64) *app.Fixture {
 	var roundId = uint64(165789)
 
 	return &app.Fixture{
 		ID:         id,
-		SeasonID:   uint64(14567),
+		SeasonID:   seasonId,
 		RoundID:    &roundId,
-		HomeTeamID: 451,
-		AwayTeamID: 924,
+		HomeTeamID: homeId,
+		AwayTeamID: awayId,
 		Date:       time.Unix(1548086929, 0),
 	}
 }
 
 func insertFixtures(t *testing.T, repo app.FixtureRepository) {
 	for i := 1; i <= 4; i++ {
-		s := newFixture(uint64(i))
+		s := newFixture(uint64(i), 14567, 451, 924)
 
 		if err := repo.Insert(s); err != nil {
 			t.Errorf("Error when inserting record into the database: %s", err.Error())

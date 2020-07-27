@@ -70,11 +70,10 @@ func (r TeamRepository) ByID(id uint64) (*app.Team, error) {
 	return rowToTeam(row)
 }
 
-func (r TeamRepository) BySeasonId(id uint64) ([]*app.Team, error) {
+func (r TeamRepository) BySeasonId(id uint64) ([]app.Team, error) {
 	builder := r.queryBuilder()
 
-	sub := builder.Select("*").
-		Prefix("IN").
+	sub := builder.Select("").
 		From("sportmonks_fixture").
 		Distinct().
 		Options("home_team_id").
@@ -82,18 +81,18 @@ func (r TeamRepository) BySeasonId(id uint64) ([]*app.Team, error) {
 
 	query := builder.Select("sportmonks_team.*").
 		From("sportmonks_team").
-		Where(sub).
+		Where(sub.Prefix("sportmonks_team.id IN (").Suffix(")")).
 		OrderBy("sportmonks_team.name ASC")
 
 	rows, err := query.Query()
 
 	if err != nil {
-		return []*app.Team{}, err
+		return []app.Team{}, err
 	}
 
 	var created int64
 	var updated int64
-	var teams []*app.Team
+	var teams []app.Team
 	var team app.Team
 
 	for rows.Next() {
@@ -111,13 +110,13 @@ func (r TeamRepository) BySeasonId(id uint64) ([]*app.Team, error) {
 		)
 
 		if err != nil {
-			return []*app.Team{}, err
+			return []app.Team{}, err
 		}
 
 		team.CreatedAt = time.Unix(created, 0)
 		team.UpdatedAt = time.Unix(updated, 0)
 
-		teams = append(teams, &team)
+		teams = append(teams, team)
 	}
 
 	return teams, nil
