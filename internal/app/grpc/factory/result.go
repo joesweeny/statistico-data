@@ -46,7 +46,7 @@ func (r ResultFactory) BuildResult(f *app.Fixture) (*proto.Result, error) {
 		Id:        x.FixtureID,
 		HomeTeam:  TeamToProto(home),
 		AwayTeam:  TeamToProto(away),
-		Season:    seasonToProto(season),
+		Season:    SeasonToProto(season),
 		DateTime:  &proto.Date{
 			Utc: f.Date.Unix(),
 			Rfc: f.Date.Format(time.RFC3339),

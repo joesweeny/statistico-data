@@ -114,7 +114,7 @@ func roundToProto(r *app.Round) *proto.Round {
 }
 
 // Convert a domain Season struct into a proto Season struct
-func seasonToProto(s *app.Season) *proto.Season {
+func SeasonToProto(s *app.Season) *proto.Season {
 	var x proto.Season
 	x.Id = s.ID
 	x.Name = s.Name

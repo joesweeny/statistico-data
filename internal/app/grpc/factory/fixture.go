@@ -46,7 +46,7 @@ func (b FixtureFactory) BuildFixture(f *app.Fixture) (*proto.Fixture, error) {
 		HomeTeam: TeamToProto(home),
 		AwayTeam: TeamToProto(away),
 		Competition: CompetitionToProto(comp),
-		Season:   seasonToProto(season),
+		Season:   SeasonToProto(season),
 		DateTime: &proto.Date{
 			Utc: f.Date.Unix(),
 			Rfc: f.Date.Format(time.RFC3339),
