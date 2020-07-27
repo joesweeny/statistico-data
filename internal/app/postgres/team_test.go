@@ -19,7 +19,7 @@ func TestTeamRepository_Insert(t *testing.T) {
 		defer cleanUp()
 
 		for i := 1; i < 4; i++ {
-			c := newTeam(uint64(i))
+			c := newTeam(uint64(i), "West Ham United")
 
 			if err := repo.Insert(c); err != nil {
 				t.Errorf("Error when inserting record into the database: %s", err.Error())
@@ -40,7 +40,7 @@ func TestTeamRepository_Insert(t *testing.T) {
 	t.Run("returns error when ID primary key violates unique constraint", func(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
-		c := newTeam(50)
+		c := newTeam(50, "West Ham United")
 
 		if err := repo.Insert(c); err != nil {
 			t.Errorf("Test failed, expected nil, got %s", err)
@@ -60,7 +60,7 @@ func TestTeamRepository_ByID(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
 
-		m := newTeam(43)
+		m := newTeam(43, "West Ham United")
 
 		if err := repo.Insert(m); err != nil {
 			t.Errorf("Error when inserting record into the database: %s", err.Error())
@@ -112,7 +112,7 @@ func TestTeamRepository_Update(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
 
-		m := newTeam(43)
+		m := newTeam(43, "West Ham United")
 
 		if err := repo.Insert(m); err != nil {
 			t.Errorf("Error when inserting record into the database: %s", err.Error())
@@ -161,7 +161,7 @@ func TestTeamRepository_Update(t *testing.T) {
 	t.Run("returns an error if team does not exist", func(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
-		c := newTeam(146)
+		c := newTeam(146, "West Ham United")
 
 		err := repo.Update(c)
 
@@ -173,10 +173,96 @@ func TestTeamRepository_Update(t *testing.T) {
 	})
 }
 
-func newTeam(id uint64) *app.Team {
+func TestTeamRepository_BySeasonId(t *testing.T) {
+	teamConn, teamCleanUp := test.GetConnection(t, "sportmonks_team")
+	fixtureConn, fixtureCleanUp := test.GetConnection(t, "sportmonks_fixture")
+	teamRepo := postgres.NewTeamRepository(teamConn, test.Clock)
+	fixtureRepo := postgres.NewFixtureRepository(fixtureConn, test.Clock)
+
+	t.Run("returns a slice on team struct of teams associated to a season", func(t *testing.T) {
+		t.Helper()
+		defer teamCleanUp()
+		defer fixtureCleanUp()
+
+		teams := []*app.Team{
+			newTeam(1, "Newcastle United"),
+			newTeam(3, "West Ham United"),
+			newTeam(2, "AFC Bournemouth"),
+			newTeam(4, "Chelsea"),
+		}
+
+		for _, team := range teams {
+			err := teamRepo.Insert(team)
+
+			if err != nil {
+				t.Fatalf("Expected nil, got %s", err.Error())
+			}
+		}
+
+		fixtures := []*app.Fixture{
+			{
+				ID:         1,
+				SeasonID:   uint64(14567),
+				HomeTeamID: 1,
+				AwayTeamID: 3,
+				Date:       time.Unix(1548086929, 0),
+			},
+			{
+				ID:         2,
+				SeasonID:   uint64(14567),
+				HomeTeamID: 1,
+				AwayTeamID: 4,
+				Date:       time.Unix(1548086920, 0),
+			},
+			{
+				ID:         3,
+				SeasonID:   uint64(14567),
+				HomeTeamID: 3,
+				AwayTeamID: 1,
+				Date:       time.Unix(1548086925, 0),
+			},
+			{
+				ID:         4,
+				SeasonID:   uint64(14567),
+				HomeTeamID: 4,
+				AwayTeamID: 3,
+				Date:       time.Unix(1548086925, 0),
+			},
+			{
+				ID:         5,
+				SeasonID:   uint64(65432),
+				HomeTeamID: 2,
+				AwayTeamID: 4,
+				Date:       time.Unix(1548086925, 0),
+			},
+		}
+
+		for _, fix := range fixtures {
+			if err := fixtureRepo.Insert(fix); err != nil {
+				t.Errorf("Error when inserting record into the database: %s", err.Error())
+			}
+		}
+
+		fetched, err := teamRepo.BySeasonId(14567)
+
+		if err != nil {
+			t.Fatalf("Expected nil, got %s", err.Error())
+		}
+
+		assert.Equal(t, 3, len(fetched))
+		assert.Equal(t, uint64(4), fetched[0].ID)
+		assert.Equal(t, "Chelsea", fetched[0].Name)
+		assert.Equal(t, uint64(1), fetched[1].ID)
+		assert.Equal(t, "Newcastle United", fetched[1].Name)
+		assert.Equal(t, uint64(3), fetched[2].ID)
+		assert.Equal(t, "West Ham United", fetched[2].Name)
+	})
+}
+
+func newTeam(id uint64, name string) *app.Team {
 	return &app.Team{
 		ID:           id,
-		Name:         "West Ham United",
+		Name:         name,
 		VenueID:      560,
 		CountryID:    uint64(462),
 		NationalTeam: false,
