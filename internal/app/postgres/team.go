@@ -2,6 +2,7 @@ package postgres
 
 import (
 	"database/sql"
+	sq "github.com/Masterminds/squirrel"
 	"github.com/jonboulle/clockwork"
 	"github.com/statistico/statistico-data/internal/app"
 	"github.com/statistico/statistico-data/internal/app/errors"
@@ -69,6 +70,59 @@ func (r TeamRepository) ByID(id uint64) (*app.Team, error) {
 	return rowToTeam(row)
 }
 
+func (r TeamRepository) BySeasonId(id uint64) ([]*app.Team, error) {
+	builder := r.queryBuilder()
+
+	sub := builder.Select("*").
+		Prefix("IN").
+		From("sportmonks_fixture").
+		Distinct().
+		Options("home_team_id").
+		Where(sq.Eq{"season_id": id})
+
+	query := builder.Select("sportmonks_team.*").
+		From("sportmonks_team").
+		Where(sub).
+		OrderBy("sportmonks_team.name ASC")
+
+	rows, err := query.Query()
+
+	if err != nil {
+		return []*app.Team{}, err
+	}
+
+	var created int64
+	var updated int64
+	var teams []*app.Team
+	var team app.Team
+
+	for rows.Next() {
+		err := rows.Scan(
+			&team.ID,
+			&team.Name,
+			&team.ShortCode,
+			&team.CountryID,
+			&team.VenueID,
+			&team.NationalTeam,
+			&team.Founded,
+			&team.Logo,
+			&created,
+			&updated,
+		)
+
+		if err != nil {
+			return []*app.Team{}, err
+		}
+
+		team.CreatedAt = time.Unix(created, 0)
+		team.UpdatedAt = time.Unix(updated, 0)
+
+		teams = append(teams, &team)
+	}
+
+	return teams, nil
+}
+
 func rowToTeam(r *sql.Row) (*app.Team, error) {
 	var created int64
 	var updated int64
@@ -100,6 +154,10 @@ func rowToTeam(r *sql.Row) (*app.Team, error) {
 	t.UpdatedAt = time.Unix(updated, 0)
 
 	return &t, nil
+}
+
+func (r TeamRepository) queryBuilder() sq.StatementBuilderType {
+	return sq.StatementBuilder.PlaceholderFormat(sq.Dollar).RunWith(r.connection)
 }
 
 func NewTeamRepository(connection *sql.DB, clock clockwork.Clock) *TeamRepository {
