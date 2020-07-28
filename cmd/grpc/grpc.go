@@ -28,6 +28,7 @@ func main() {
 	proto.RegisterPerformanceServiceServer(server, app.PerformanceService())
 	proto.RegisterResultServiceServer(server, app.ResultService())
 	proto.RegisterPlayerStatsServiceServer(server, app.PlayerStatsService())
+	proto.RegisterSeasonServiceServer(server, app.SeasonService())
 	proto.RegisterTeamServiceServer(server, app.TeamService())
 	proto.RegisterTeamStatsServiceServer(server, app.TeamStatsService())
 

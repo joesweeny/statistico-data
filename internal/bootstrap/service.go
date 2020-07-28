@@ -24,6 +24,9 @@ func (c Container) PlayerStatsService() *grpc.PlayerStatsService {
 	return grpc.NewPlayerStatsService(c.FixtureRepository(), c.ProtoPlayerStatsFactory(), c.Logger)
 }
 
+func (c Container) SeasonService() *grpc.SeasonService {
+	return grpc.NewSeasonService(c.SeasonRepository(), c.Logger)
+}
 func (c Container) TeamService() *grpc.TeamService {
 	return grpc.NewTeamService(c.TeamRepository(), c.Logger)
 }

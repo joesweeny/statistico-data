@@ -38,6 +38,7 @@ func CompetitionToProto(c *app.Competition) *proto.Competition {
 	x.Id = c.ID
 	x.Name = c.Name
 	x.IsCup = c.IsCup
+	x.CountryId = c.CountryID
 
 	return &x
 }
