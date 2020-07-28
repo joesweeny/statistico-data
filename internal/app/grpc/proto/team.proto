@@ -9,7 +9,7 @@ import "internal/app/grpc/proto/requests.proto";
 
 service TeamService {
     rpc GetTeamByID(TeamRequest) returns (Team) {}
-    rpc GetTeamsBySeasonId(SeasonTeamRequest) returns (stream Team) {}
+    rpc GetTeamsBySeasonId(SeasonTeamsRequest) returns (stream Team) {}
 }
 
 message Team {

@@ -53,7 +53,7 @@ message SeasonRequest {
     string date_before = 2;
 }
 
-message SeasonTeamRequest {
+message SeasonTeamsRequest {
     uint64 season_id = 1;
 }
 

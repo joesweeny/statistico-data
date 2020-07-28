@@ -33,7 +33,7 @@ func (t *TeamService) GetTeamByID(ctx context.Context, r *proto.TeamRequest) (*p
 	return factory.TeamToProto(team), nil
 }
 
-func (t *TeamService) GetTeamsBySeasonId(r *proto.SeasonTeamRequest, stream proto.TeamService_GetTeamsBySeasonIdServer) error {
+func (t *TeamService) GetTeamsBySeasonId(r *proto.SeasonTeamsRequest, stream proto.TeamService_GetTeamsBySeasonIdServer) error {
 	teams, err := t.teamRepo.BySeasonId(r.GetSeasonId())
 
 	if err != nil {

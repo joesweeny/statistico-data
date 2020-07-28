@@ -120,7 +120,7 @@ func TestTeamService_GetTeamsBySeasonId(t *testing.T) {
 
 		repo.On("BySeasonId", uint64(16036)).Return(teams, nil)
 
-		request := proto.SeasonTeamRequest{SeasonId: 16036}
+		request := proto.SeasonTeamsRequest{SeasonId: 16036}
 
 		server.On("Send", mock2.AnythingOfType("*proto.Team")).
 			Times(3).
@@ -149,7 +149,7 @@ func TestTeamService_GetTeamsBySeasonId(t *testing.T) {
 
 		server.AssertNotCalled(t, "Send")
 
-		request := proto.SeasonTeamRequest{SeasonId: 16036}
+		request := proto.SeasonTeamsRequest{SeasonId: 16036}
 
 		err := service.GetTeamsBySeasonId(&request, server)
 
@@ -181,7 +181,7 @@ func TestTeamService_GetTeamsBySeasonId(t *testing.T) {
 
 		repo.On("BySeasonId", uint64(16036)).Return(teams, nil)
 
-		request := proto.SeasonTeamRequest{SeasonId: 16036}
+		request := proto.SeasonTeamsRequest{SeasonId: 16036}
 
 		server.On("Send", mock2.AnythingOfType("*proto.Team")).Return(errors.New("oh no"))
 
