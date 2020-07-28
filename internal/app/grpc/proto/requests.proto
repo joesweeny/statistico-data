@@ -55,8 +55,6 @@ message SeasonRequest {
 
 message SeasonTeamRequest {
     uint64 season_id = 1;
-    // Order the name column to return teams in specific order
-    google.protobuf.StringValue sort = 2;
 }
 
 message TeamRequest {

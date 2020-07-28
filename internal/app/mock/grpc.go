@@ -25,3 +25,13 @@ func (s *SeasonServer) Send(season *proto.Season) error {
 	args := s.Called(season)
 	return args.Error(0)
 }
+
+type TeamServer struct {
+	mock.Mock
+	grpc.ServerStream
+}
+
+func (t *TeamServer) Send(team *proto.Team) error {
+	args := t.Called(team)
+	return args.Error(0)
+}

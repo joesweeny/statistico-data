@@ -11,7 +11,9 @@ import (
 	"github.com/statistico/statistico-data/internal/app/grpc/proto"
 	"github.com/statistico/statistico-data/internal/app/mock"
 	"github.com/stretchr/testify/assert"
+	mock2 "github.com/stretchr/testify/mock"
 	"testing"
+	"time"
 )
 
 func TestTeamService_GetTeamById(t *testing.T) {
@@ -99,4 +101,113 @@ func TestTeamService_GetTeamById(t *testing.T) {
 		assert.Equal(t, 1, len(hook.Entries))
 		assert.Equal(t, logrus.ErrorLevel, hook.LastEntry().Level)
 	})
+}
+
+func TestTeamService_GetTeamsBySeasonId(t *testing.T) {
+	t.Run("returns a slice of proto team struct", func(t *testing.T) {
+		t.Helper()
+
+		repo := new(mock.TeamRepository)
+		logger, _ := test.NewNullLogger()
+		service := grpc.NewTeamService(repo, logger)
+		server := new(mock.TeamServer)
+
+		teams := []app.Team{
+			newTeam(1, "West Ham United"),
+			newTeam(2, "Arsenal"),
+			newTeam(3, "Chelsea"),
+		}
+
+		repo.On("BySeasonId", uint64(16036)).Return(teams, nil)
+
+		request := proto.SeasonTeamRequest{SeasonId: 16036}
+
+		server.On("Send", mock2.AnythingOfType("*proto.Team")).
+			Times(3).
+			Return(nil)
+
+		err := service.GetTeamsBySeasonId(&request, server)
+
+		if err != nil {
+			t.Fatalf("Expected nil, got %s", err.Error())
+		}
+
+		assert.Nil(t, err)
+		repo.AssertExpectations(t)
+		server.AssertExpectations(t)
+	})
+
+	t.Run("logs error and returns internal server error if error returned from team repository", func(t *testing.T) {
+		t.Helper()
+
+		repo := new(mock.TeamRepository)
+		logger, hook := test.NewNullLogger()
+		service := grpc.NewTeamService(repo, logger)
+		server := new(mock.TeamServer)
+
+		repo.On("BySeasonId", uint64(16036)).Return([]app.Team{}, errors.New("oh no"))
+
+		server.AssertNotCalled(t, "Send")
+
+		request := proto.SeasonTeamRequest{SeasonId: 16036}
+
+		err := service.GetTeamsBySeasonId(&request, server)
+
+		if err == nil {
+			t.Fatal("Expected error, got nil")
+		}
+
+		assert.Equal(t, "rpc error: code = Internal desc = Internal server error", err.Error())
+		assert.Equal(t, "Error retrieving Team(s) in Team Service. Error: oh no", hook.LastEntry().Message)
+		assert.Equal(t, 1, len(hook.Entries))
+		assert.Equal(t, logrus.ErrorLevel, hook.LastEntry().Level)
+		repo.AssertExpectations(t)
+		server.AssertExpectations(t)
+	})
+
+	t.Run("logs error and returns internal server error if error returned when streaming", func(t *testing.T) {
+		t.Helper()
+
+		repo := new(mock.TeamRepository)
+		logger, hook := test.NewNullLogger()
+		service := grpc.NewTeamService(repo, logger)
+		server := new(mock.TeamServer)
+
+		teams := []app.Team{
+			newTeam(1, "West Ham United"),
+			newTeam(2, "Arsenal"),
+			newTeam(3, "Chelsea"),
+		}
+
+		repo.On("BySeasonId", uint64(16036)).Return(teams, nil)
+
+		request := proto.SeasonTeamRequest{SeasonId: 16036}
+
+		server.On("Send", mock2.AnythingOfType("*proto.Team")).Return(errors.New("oh no"))
+
+		err := service.GetTeamsBySeasonId(&request, server)
+
+		if err == nil {
+			t.Fatal("Expected error, got nil")
+		}
+
+		assert.Equal(t, "rpc error: code = Internal desc = Internal server error", err.Error())
+		assert.Equal(t, "Error streaming Team back to client. Error: oh no", hook.LastEntry().Message)
+		assert.Equal(t, 1, len(hook.Entries))
+		assert.Equal(t, logrus.ErrorLevel, hook.LastEntry().Level)
+		repo.AssertExpectations(t)
+		server.AssertExpectations(t)
+	})
+}
+
+func newTeam(id uint64, name string) app.Team {
+	return app.Team{
+		ID:           id,
+		Name:         name,
+		VenueID:      560,
+		CountryID:    uint64(462),
+		NationalTeam: false,
+		CreatedAt:    time.Unix(1546965200, 0),
+		UpdatedAt:    time.Unix(1546965200, 0),
+	}
 }
