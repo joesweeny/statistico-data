@@ -164,13 +164,17 @@ var file_internal_app_grpc_proto_team_proto_rawDesc = []byte{
 	0x75, 0x6e, 0x64, 0x65, 0x64, 0x12, 0x30, 0x0a, 0x04, 0x6c, 0x6f, 0x67, 0x6f, 0x18, 0x08, 0x20,
 	0x01, 0x28, 0x0b, 0x32, 0x1c, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f,
 	0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x56, 0x61, 0x6c, 0x75,
-	0x65, 0x52, 0x04, 0x6c, 0x6f, 0x67, 0x6f, 0x32, 0x3f, 0x0a, 0x0b, 0x54, 0x65, 0x61, 0x6d, 0x53,
-	0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x30, 0x0a, 0x0b, 0x47, 0x65, 0x74, 0x54, 0x65, 0x61,
-	0x6d, 0x42, 0x79, 0x49, 0x44, 0x12, 0x12, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x54, 0x65,
-	0x61, 0x6d, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x0b, 0x2e, 0x70, 0x72, 0x6f, 0x74,
-	0x6f, 0x2e, 0x54, 0x65, 0x61, 0x6d, 0x22, 0x00, 0x42, 0x19, 0x5a, 0x17, 0x69, 0x6e, 0x74, 0x65,
-	0x72, 0x6e, 0x61, 0x6c, 0x2f, 0x61, 0x70, 0x70, 0x2f, 0x67, 0x72, 0x70, 0x63, 0x2f, 0x70, 0x72,
-	0x6f, 0x74, 0x6f, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x65, 0x52, 0x04, 0x6c, 0x6f, 0x67, 0x6f, 0x32, 0x81, 0x01, 0x0a, 0x0b, 0x54, 0x65, 0x61, 0x6d,
+	0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x30, 0x0a, 0x0b, 0x47, 0x65, 0x74, 0x54, 0x65,
+	0x61, 0x6d, 0x42, 0x79, 0x49, 0x44, 0x12, 0x12, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x54,
+	0x65, 0x61, 0x6d, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x0b, 0x2e, 0x70, 0x72, 0x6f,
+	0x74, 0x6f, 0x2e, 0x54, 0x65, 0x61, 0x6d, 0x22, 0x00, 0x12, 0x40, 0x0a, 0x12, 0x47, 0x65, 0x74,
+	0x54, 0x65, 0x61, 0x6d, 0x73, 0x42, 0x79, 0x53, 0x65, 0x61, 0x73, 0x6f, 0x6e, 0x49, 0x64, 0x12,
+	0x19, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x53, 0x65, 0x61, 0x73, 0x6f, 0x6e, 0x54, 0x65,
+	0x61, 0x6d, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x0b, 0x2e, 0x70, 0x72, 0x6f,
+	0x74, 0x6f, 0x2e, 0x54, 0x65, 0x61, 0x6d, 0x22, 0x00, 0x30, 0x01, 0x42, 0x19, 0x5a, 0x17, 0x69,
+	0x6e, 0x74, 0x65, 0x72, 0x6e, 0x61, 0x6c, 0x2f, 0x61, 0x70, 0x70, 0x2f, 0x67, 0x72, 0x70, 0x63,
+	0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -192,6 +196,7 @@ var file_internal_app_grpc_proto_team_proto_goTypes = []interface{}{
 	(*wrappers.BoolValue)(nil),   // 2: google.protobuf.BoolValue
 	(*wrappers.UInt64Value)(nil), // 3: google.protobuf.UInt64Value
 	(*TeamRequest)(nil),          // 4: proto.TeamRequest
+	(*SeasonTeamsRequest)(nil),   // 5: proto.SeasonTeamsRequest
 }
 var file_internal_app_grpc_proto_team_proto_depIdxs = []int32{
 	1, // 0: proto.Team.short_code:type_name -> google.protobuf.StringValue
@@ -199,9 +204,11 @@ var file_internal_app_grpc_proto_team_proto_depIdxs = []int32{
 	3, // 2: proto.Team.founded:type_name -> google.protobuf.UInt64Value
 	1, // 3: proto.Team.logo:type_name -> google.protobuf.StringValue
 	4, // 4: proto.TeamService.GetTeamByID:input_type -> proto.TeamRequest
-	0, // 5: proto.TeamService.GetTeamByID:output_type -> proto.Team
-	5, // [5:6] is the sub-list for method output_type
-	4, // [4:5] is the sub-list for method input_type
+	5, // 5: proto.TeamService.GetTeamsBySeasonId:input_type -> proto.SeasonTeamsRequest
+	0, // 6: proto.TeamService.GetTeamByID:output_type -> proto.Team
+	0, // 7: proto.TeamService.GetTeamsBySeasonId:output_type -> proto.Team
+	6, // [6:8] is the sub-list for method output_type
+	4, // [4:6] is the sub-list for method input_type
 	4, // [4:4] is the sub-list for extension type_name
 	4, // [4:4] is the sub-list for extension extendee
 	0, // [0:4] is the sub-list for field type_name
@@ -260,6 +267,7 @@ const _ = grpc.SupportPackageIsVersion6
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type TeamServiceClient interface {
 	GetTeamByID(ctx context.Context, in *TeamRequest, opts ...grpc.CallOption) (*Team, error)
+	GetTeamsBySeasonId(ctx context.Context, in *SeasonTeamsRequest, opts ...grpc.CallOption) (TeamService_GetTeamsBySeasonIdClient, error)
 }
 
 type teamServiceClient struct {
@@ -279,9 +287,42 @@ func (c *teamServiceClient) GetTeamByID(ctx context.Context, in *TeamRequest, op
 	return out, nil
 }
 
+func (c *teamServiceClient) GetTeamsBySeasonId(ctx context.Context, in *SeasonTeamsRequest, opts ...grpc.CallOption) (TeamService_GetTeamsBySeasonIdClient, error) {
+	stream, err := c.cc.NewStream(ctx, &_TeamService_serviceDesc.Streams[0], "/proto.TeamService/GetTeamsBySeasonId", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &teamServiceGetTeamsBySeasonIdClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type TeamService_GetTeamsBySeasonIdClient interface {
+	Recv() (*Team, error)
+	grpc.ClientStream
+}
+
+type teamServiceGetTeamsBySeasonIdClient struct {
+	grpc.ClientStream
+}
+
+func (x *teamServiceGetTeamsBySeasonIdClient) Recv() (*Team, error) {
+	m := new(Team)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 // TeamServiceServer is the server API for TeamService service.
 type TeamServiceServer interface {
 	GetTeamByID(context.Context, *TeamRequest) (*Team, error)
+	GetTeamsBySeasonId(*SeasonTeamsRequest, TeamService_GetTeamsBySeasonIdServer) error
 }
 
 // UnimplementedTeamServiceServer can be embedded to have forward compatible implementations.
@@ -290,6 +331,9 @@ type UnimplementedTeamServiceServer struct {
 
 func (*UnimplementedTeamServiceServer) GetTeamByID(context.Context, *TeamRequest) (*Team, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetTeamByID not implemented")
+}
+func (*UnimplementedTeamServiceServer) GetTeamsBySeasonId(*SeasonTeamsRequest, TeamService_GetTeamsBySeasonIdServer) error {
+	return status.Errorf(codes.Unimplemented, "method GetTeamsBySeasonId not implemented")
 }
 
 func RegisterTeamServiceServer(s *grpc.Server, srv TeamServiceServer) {
@@ -314,6 +358,27 @@ func _TeamService_GetTeamByID_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _TeamService_GetTeamsBySeasonId_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(SeasonTeamsRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(TeamServiceServer).GetTeamsBySeasonId(m, &teamServiceGetTeamsBySeasonIdServer{stream})
+}
+
+type TeamService_GetTeamsBySeasonIdServer interface {
+	Send(*Team) error
+	grpc.ServerStream
+}
+
+type teamServiceGetTeamsBySeasonIdServer struct {
+	grpc.ServerStream
+}
+
+func (x *teamServiceGetTeamsBySeasonIdServer) Send(m *Team) error {
+	return x.ServerStream.SendMsg(m)
+}
+
 var _TeamService_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "proto.TeamService",
 	HandlerType: (*TeamServiceServer)(nil),
@@ -323,6 +388,12 @@ var _TeamService_serviceDesc = grpc.ServiceDesc{
 			Handler:    _TeamService_GetTeamByID_Handler,
 		},
 	},
-	Streams:  []grpc.StreamDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "GetTeamsBySeasonId",
+			Handler:       _TeamService_GetTeamsBySeasonId_Handler,
+			ServerStreams: true,
+		},
+	},
 	Metadata: "internal/app/grpc/proto/team.proto",
 }
