@@ -33,6 +33,26 @@ func (t *TeamService) GetTeamByID(ctx context.Context, r *proto.TeamRequest) (*p
 	return factory.TeamToProto(team), nil
 }
 
+func (t *TeamService) GetTeamsBySeasonId(r *proto.SeasonTeamRequest, stream proto.TeamService_GetTeamsBySeasonIdServer) error {
+	teams, err := t.teamRepo.BySeasonId(r.GetSeasonId())
+
+	if err != nil {
+		t.logger.Errorf("Error retrieving Team(s) in Team Service. Error: %s", err.Error())
+		return status.Error(codes.Internal, "Internal server error")
+	}
+
+	for _, team := range teams {
+		te := factory.TeamToProto(&team)
+
+		if err := stream.Send(te); err != nil {
+			t.logger.Errorf("Error streaming Team back to client. Error: %s", err.Error())
+			return status.Error(codes.Internal, "Internal server error")
+		}
+	}
+
+	return nil
+}
+
 func NewTeamService(r app.TeamRepository, l *logrus.Logger) *TeamService {
 	return &TeamService{
 		teamRepo: r,
