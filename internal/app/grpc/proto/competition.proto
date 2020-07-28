@@ -10,9 +10,9 @@ service CompetitionService {
     rpc ListCompetitions(CompetitionRequest) returns (stream Competition) {}
 }
 
-
 message Competition {
     uint64 id = 1;
     string name = 2;
     bool is_cup = 3;
+    uint64 country_id = 4;
 }
