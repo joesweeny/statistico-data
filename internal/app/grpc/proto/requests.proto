@@ -80,3 +80,9 @@ message TeamResultRequest {
     // Order the date column to return results in specific order
     google.protobuf.StringValue sort = 7;
 }
+
+message TeamSeasonsRequest {
+    uint64 team_id = 1;
+    // Order the name column to return seasons in specific order
+    google.protobuf.StringValue sort = 2;
+}

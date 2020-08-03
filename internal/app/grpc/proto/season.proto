@@ -9,6 +9,7 @@ import "internal/app/grpc/proto/requests.proto";
 
 service SeasonService {
     rpc GetSeasonsForCompetition(SeasonCompetitionRequest) returns (stream Season) {}
+    rpc GetSeasonsForTeam(TeamSeasonsRequest) returns (stream Season) {}
 }
 
 message Season {
