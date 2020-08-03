@@ -143,7 +143,7 @@ func (r *SeasonRepository) ByTeamId(id uint64, sort string) ([]app.Season, error
 		Distinct().
 		Options("season_id").
 		Where(sq.Or{sq.Eq{"home_team_id": id}, sq.Eq{"away_team_id": id}})
-	
+
 	query := builder.Select("sportmonks_season.*").
 		From("sportmonks_season").
 		Where(sub.Prefix("sportmonks_season.id IN (").Suffix(")"))
