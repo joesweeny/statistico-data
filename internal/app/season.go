@@ -22,6 +22,7 @@ type SeasonRepository interface {
 	IDs() ([]uint64, error)
 	CurrentSeasonIDs() ([]uint64, error)
 	ByCompetitionId(id uint64, sort string) ([]Season, error)
+	ByTeamId(id uint64, sort string) ([]Season, error)
 }
 
 // SeasonRequester provides an interface allowing this application to request data from an external

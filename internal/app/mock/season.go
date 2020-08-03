@@ -40,6 +40,11 @@ func (m *SeasonRepository) ByCompetitionId(id uint64, sort string) ([]app.Season
 	return args.Get(0).([]app.Season), args.Error(1)
 }
 
+func (m *SeasonRepository) ByTeamId(id uint64, sort string) ([]app.Season, error) {
+	args := m.Called(id, sort)
+	return args.Get(0).([]app.Season), args.Error(1)
+}
+
 type SeasonRequester struct {
 	mock.Mock
 }

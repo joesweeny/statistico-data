@@ -159,6 +159,10 @@ func (r *SeasonRepository) ByCompetitionId(id uint64, sort string) ([]app.Season
 	return seasons, nil
 }
 
+func (r *SeasonRepository) ByTeamId(id uint64, sort string) ([]app.Season, error) {
+	//
+}
+
 func rowToSeason(r *sql.Row) (*app.Season, error) {
 	var created int64
 	var updated int64
