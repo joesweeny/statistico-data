@@ -37,6 +37,26 @@ func (s *SeasonService) GetSeasonsForCompetition(
 	return nil
 }
 
+func (s *SeasonService) GetSeasonsForTeam(r *proto.TeamSeasonsRequest, stream proto.SeasonService_GetSeasonsForTeamServer) error {
+	seasons, err := s.seasonRepo.ByTeamId(r.GetTeamId(), r.GetSort().GetValue())
+
+	if err != nil {
+		s.logger.Errorf("Error retrieving Season(s) in Season Service. Error: %s", err.Error())
+		return status.Error(codes.Internal, "Internal server error")
+	}
+
+	for _, season := range seasons {
+		se := factory.SeasonToProto(&season)
+
+		if err := stream.Send(se); err != nil {
+			s.logger.Errorf("Error streaming Season back to client. Error: %s", err.Error())
+			return status.Error(codes.Internal, "Internal server error")
+		}
+	}
+
+	return nil
+}
+
 func NewSeasonService(r app.SeasonRepository, l *logrus.Logger) *SeasonService {
 	return &SeasonService{
 		seasonRepo: r,
