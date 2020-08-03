@@ -276,6 +276,89 @@ func TestSeasonRepository_ByCompetitionId(t *testing.T) {
 	})
 }
 
+func TestSeasonRepository_ByTeamId(t *testing.T) {
+	seasonConn, seasonCleanUp := test.GetConnection(t, "sportmonks_season")
+	seasonRepo := postgres.NewSeasonRepository(seasonConn, test.Clock)
+	fixtureConn, fixtureCleanUp := test.GetConnection(t, "sportmonks_fixture")
+	fixtureRepo := postgres.NewFixtureRepository(fixtureConn, test.Clock)
+
+	t.Run("returns a slice of season struct for an associated team", func(t *testing.T) {
+		t.Helper()
+		defer seasonCleanUp()
+		defer fixtureCleanUp()
+
+		seasons := []*app.Season{
+			newSeason(1, 18, "2017/2018", false),
+			newSeason(2, 100, "2017/2018", false),
+			newSeason(3, 18, "2018/2019", true),
+			newSeason(4, 100, "2018/2019", true),
+			newSeason(5, 20, "2018/2019", true),
+			newSeason(6, 25, "2018/2019", true),
+		}
+
+		for _, s := range seasons {
+			if err := seasonRepo.Insert(s); err != nil {
+				t.Errorf("Error when inserting record into the database: %s", err.Error())
+			}
+		}
+
+		fixtures := []*app.Fixture{
+			{
+				ID:         1,
+				SeasonID:   uint64(1),
+				HomeTeamID: 1,
+				AwayTeamID: 3,
+				Date:       time.Unix(1548086929, 0),
+			},
+			{
+				ID:         2,
+				SeasonID:   uint64(2),
+				HomeTeamID: 1,
+				AwayTeamID: 4,
+				Date:       time.Unix(1548086920, 0),
+			},
+			{
+				ID:         3,
+				SeasonID:   uint64(1),
+				HomeTeamID: 3,
+				AwayTeamID: 1,
+				Date:       time.Unix(1548086925, 0),
+			},
+			{
+				ID:         4,
+				SeasonID:   uint64(14567),
+				HomeTeamID: 4,
+				AwayTeamID: 3,
+				Date:       time.Unix(1548086925, 0),
+			},
+			{
+				ID:         5,
+				SeasonID:   uint64(4),
+				HomeTeamID: 2,
+				AwayTeamID: 1,
+				Date:       time.Unix(1548086925, 0),
+			},
+		}
+
+		for _, fix := range fixtures {
+			if err := fixtureRepo.Insert(fix); err != nil {
+				t.Errorf("Error when inserting record into the database: %s", err.Error())
+			}
+		}
+
+		fetched, err := seasonRepo.ByTeamId(1, "name_asc")
+
+		if err != nil {
+			t.Fatalf("Expected nil, got %s", err.Error())
+		}
+
+		assert.Equal(t, 3, len(fetched))
+		assert.Equal(t, uint64(1), fetched[0].ID)
+		assert.Equal(t, uint64(2), fetched[1].ID)
+		assert.Equal(t, uint64(4), fetched[2].ID)
+	})
+}
+
 func newSeason(id uint64, competitionId uint64, name string, current bool) *app.Season {
 	return &app.Season{
 		ID:            id,

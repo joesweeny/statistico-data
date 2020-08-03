@@ -132,6 +132,56 @@ func (r *SeasonRepository) ByCompetitionId(id uint64, sort string) ([]app.Season
 		return []app.Season{}, err
 	}
 
+	return rowsToSeasonSlice(rows)
+}
+
+func (r *SeasonRepository) ByTeamId(id uint64, sort string) ([]app.Season, error) {
+	builder := r.queryBuilder()
+
+	sub := builder.Select("").
+		From("sportmonks_fixture").
+		Distinct().
+		Options("season_id").
+		Where(sq.Or{sq.Eq{"home_team_id": id}, sq.Eq{"away_team_id": id}})
+
+	query := builder.Select("sportmonks_season.*").
+		From("sportmonks_season").
+		Where(sub.Prefix("sportmonks_season.id IN (").Suffix(")"))
+
+	if sort == "name_asc" {
+		query = query.OrderBy("sportmonks_season.name ASC")
+	}
+
+	if sort == "name_desc" {
+		query = query.OrderBy("sportmonks_season.name DESC")
+	}
+
+	rows, err := query.Query()
+
+	if err != nil {
+		return []app.Season{}, err
+	}
+
+	return rowsToSeasonSlice(rows)
+}
+
+func rowToSeason(r *sql.Row) (*app.Season, error) {
+	var created int64
+	var updated int64
+
+	var s = app.Season{}
+
+	if err := r.Scan(&s.ID, &s.Name, &s.CompetitionID, &s.IsCurrent, &created, &updated); err != nil {
+		return &s, err
+	}
+
+	s.CreatedAt = time.Unix(created, 0)
+	s.UpdatedAt = time.Unix(updated, 0)
+
+	return &s, nil
+}
+
+func rowsToSeasonSlice(rows *sql.Rows) ([]app.Season, error) {
 	var created int64
 	var updated int64
 	var seasons []app.Season
@@ -157,22 +207,6 @@ func (r *SeasonRepository) ByCompetitionId(id uint64, sort string) ([]app.Season
 	}
 
 	return seasons, nil
-}
-
-func rowToSeason(r *sql.Row) (*app.Season, error) {
-	var created int64
-	var updated int64
-
-	var s = app.Season{}
-
-	if err := r.Scan(&s.ID, &s.Name, &s.CompetitionID, &s.IsCurrent, &created, &updated); err != nil {
-		return &s, err
-	}
-
-	s.CreatedAt = time.Unix(created, 0)
-	s.UpdatedAt = time.Unix(updated, 0)
-
-	return &s, nil
 }
 
 func (r *SeasonRepository) queryBuilder() sq.StatementBuilderType {
