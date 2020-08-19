@@ -15,7 +15,7 @@ require (
 	github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e // indirect
 	github.com/pkg/errors v0.8.1
 	github.com/sirupsen/logrus v1.4.2
-	github.com/statistico/statistico-sportmonks-go-client v0.1.1-0.20200303140725-20658b5179e3
+	github.com/statistico/statistico-sportmonks-go-client v0.1.1-0.20200819072529-122343e1b6f0
 	github.com/statistico/statistico-understat-parser v0.0.0-20191121181340-7c8c9511f89e
 	github.com/stretchr/testify v1.5.1
 	golang.org/x/net v0.0.0-20200520182314-0ba52f642ac2 // indirect
