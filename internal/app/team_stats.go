@@ -25,6 +25,13 @@ type TeamStats struct {
 	UpdatedAt     time.Time `json:"updated_at"`
 }
 
+// TeamStat domain struct for a single stat for a fixture
+type TeamStat struct {
+	FixtureID     uint64 `json:"fixture_id"`
+	Stat          string `json:"stat"`
+	Value         *int   `json:"value"`
+}
+
 // TeamShots domain sub entity.
 type TeamShots struct {
 	Total      *int `json:"total"`
@@ -53,6 +60,7 @@ type TeamStatsRepository interface {
 	InsertTeamStats(m *TeamStats) error
 	UpdateTeamStats(m *TeamStats) error
 	ByFixtureAndTeam(fixtureID, teamID uint64) (*TeamStats, error)
+	StatByTeam(stat, string, teamId uint64, fixtureIds []uint64) ([]TeamStat, error)
 }
 
 // TeamStatsRequester provides an interface allowing this application to request data from an external
