@@ -51,6 +51,7 @@ func transformTeamStats(s *spClient.TeamStats) *app.TeamStats {
 		TeamShots:     handleTeamShots(&s.Shots),
 		TeamPasses:    handleTeamPasses(&s.Passes),
 		TeamAttacks:   handleTeamAttacks(&s.Attacks),
+		Goals:         helpers.ParseNullableInt(s.Goals),
 		Fouls:         helpers.ParseNullableInt(s.Fouls),
 		Corners:       helpers.ParseNullableInt(s.Corners),
 		Offsides:      helpers.ParseNullableInt(s.Offsides),

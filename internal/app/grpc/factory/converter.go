@@ -204,6 +204,12 @@ func teamStatsToProto(t *app.TeamStats) *proto.TeamStats {
 		}
 	}
 
+	if t.Goals != nil {
+		stats.Goals = &wrappers.UInt32Value{
+			Value: uint32(*t.Goals),
+		}
+	}
+
 	if t.Fouls != nil {
 		stats.Fouls = &wrappers.UInt32Value{
 			Value: uint32(*t.Fouls),
