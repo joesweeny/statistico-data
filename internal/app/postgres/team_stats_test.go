@@ -2,6 +2,7 @@ package postgres_test
 
 import (
 	"github.com/statistico/statistico-data/internal/app"
+	"github.com/statistico/statistico-data/internal/app/errors"
 	"github.com/statistico/statistico-data/internal/app/postgres"
 	"github.com/statistico/statistico-data/internal/app/test"
 	"github.com/stretchr/testify/assert"
@@ -208,6 +209,74 @@ func TestTeamStatsRepository_UpdateTeamStats(t *testing.T) {
 		if err == nil {
 			t.Fatalf("Test failed, expected nil, got %v", err)
 		}
+	})
+}
+
+func TestTeamStatsRepository_StatByFixtureAndTeam(t *testing.T) {
+	conn, cleanUp := test.GetConnection(t, "sportmonks_team_stats")
+	repo := postgres.NewTeamStatsRepository(conn, test.Clock)
+
+	t.Run("returns a TeamStat struct for specific fixture, team and stat", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+
+		st := newTeamStats(42, 65)
+
+		value := 15
+
+		st.OnGoal = &value
+
+		if err := repo.InsertTeamStats(st); err != nil {
+			t.Fatalf("Error when inserting record into the database: %s", err.Error())
+		}
+
+		fetched, err := repo.StatByFixtureAndTeam("shots_on_goal", 42, 65)
+
+		if err != nil {
+			t.Fatalf("Expected nil, got %s", err.Error())
+		}
+
+		a := assert.New(t)
+
+		a.Equal(uint64(42), fetched.FixtureID)
+		a.Equal("shots_on_goal", fetched.Stat)
+		a.Equal(15, *fetched.Value)
+	})
+
+	t.Run("returns value as nil if null in database", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+
+		st := newTeamStats(42, 65)
+
+		if err := repo.InsertTeamStats(st); err != nil {
+			t.Fatalf("Error when inserting record into the database: %s", err.Error())
+		}
+
+		fetched, err := repo.StatByFixtureAndTeam("shots_on_goal", 42, 65)
+
+		if err != nil {
+			t.Fatalf("Expected nil, got %s", err.Error())
+		}
+
+		a := assert.New(t)
+
+		a.Equal(uint64(42), fetched.FixtureID)
+		a.Equal("shots_on_goal", fetched.Stat)
+		a.Nil(fetched.Value)
+	})
+
+	t.Run("returns ErrorNotFound if record does not exist in the database", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+
+		_, err := repo.StatByFixtureAndTeam("shots_on_goal", 42, 65)
+
+		if err == nil {
+			t.Fatal("Expected error, got nil")
+		}
+
+		assert.Equal(t, errors.ErrorNotFound, err)
 	})
 }
 

@@ -113,8 +113,7 @@ func (t *TeamStatsRepository) StatByFixtureAndTeam(stat string, fixtureID, teamI
 	builder := t.queryBuilder()
 
 	row := builder.
-		Select("fixture_id").
-		Column("? AS stat", stat).
+		Select(fmt.Sprintf("fixture_id, %s", stat)).
 		From("sportmonks_team_stats").
 		Where(sq.Eq{"fixture_id": fixtureID}).
 		Where(sq.Eq{"team_id": teamID}).
@@ -122,7 +121,7 @@ func (t *TeamStatsRepository) StatByFixtureAndTeam(stat string, fixtureID, teamI
 
 	s := app.TeamStat{Stat: stat}
 
-	if err := row.Scan(&s.FixtureID, &s.Stat); err != nil {
+	if err := row.Scan(&s.FixtureID, &s.Value); err != nil {
 		if err == sql.ErrNoRows {
 			return nil, errors.ErrorNotFound
 		}
