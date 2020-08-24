@@ -30,18 +30,19 @@ message TeamStats {
     google.protobuf.UInt32Value passes_percentage = 10;
     google.protobuf.UInt32Value attacks_total = 11;
     google.protobuf.UInt32Value attacks_dangerous = 12;
-    google.protobuf.UInt32Value fouls = 13;
-    google.protobuf.UInt32Value corners = 14;
-    google.protobuf.UInt32Value offsides = 15;
-    google.protobuf.UInt32Value possession = 16;
-    google.protobuf.UInt32Value yellow_cards = 17;
-    google.protobuf.UInt32Value red_cards = 18;
-    google.protobuf.UInt32Value saves = 19;
-    google.protobuf.UInt32Value substitutions = 20;
-    google.protobuf.UInt32Value goal_kicks = 21;
-    google.protobuf.UInt32Value goal_attempts = 22;
-    google.protobuf.UInt32Value free_kicks = 23;
-    google.protobuf.UInt32Value throw_ins = 24;
+    google.protobuf.UInt32Value goals = 13;
+    google.protobuf.UInt32Value fouls = 14;
+    google.protobuf.UInt32Value corners = 15;
+    google.protobuf.UInt32Value offsides = 16;
+    google.protobuf.UInt32Value possession = 17;
+    google.protobuf.UInt32Value yellow_cards = 18;
+    google.protobuf.UInt32Value red_cards = 19;
+    google.protobuf.UInt32Value saves = 20;
+    google.protobuf.UInt32Value substitutions = 21;
+    google.protobuf.UInt32Value goal_kicks = 22;
+    google.protobuf.UInt32Value goal_attempts = 23;
+    google.protobuf.UInt32Value free_kicks = 24;
+    google.protobuf.UInt32Value throw_ins = 25;
 }
 
 message TeamXG {
