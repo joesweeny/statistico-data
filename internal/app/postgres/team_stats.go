@@ -3,8 +3,10 @@ package postgres
 import (
 	"database/sql"
 	"fmt"
+	sq "github.com/Masterminds/squirrel"
 	"github.com/jonboulle/clockwork"
 	"github.com/statistico/statistico-data/internal/app"
+	"github.com/statistico/statistico-data/internal/app/errors"
 	"time"
 )
 
@@ -107,6 +109,29 @@ func (t *TeamStatsRepository) ByFixtureAndTeam(fixtureID, teamID uint64) (*app.T
 	return rowToStats(row, fixtureID, teamID)
 }
 
+func (t *TeamStatsRepository) StatByFixtureAndTeam(stat string, fixtureID, teamID uint64) (*app.TeamStat, error) {
+	builder := t.queryBuilder()
+
+	row := builder.
+		Select(fmt.Sprintf("fixture_id, %s", stat)).
+		From("sportmonks_team_stats").
+		Where(sq.Eq{"fixture_id": fixtureID}).
+		Where(sq.Eq{"team_id": teamID}).
+		QueryRow()
+
+	s := app.TeamStat{Stat: stat}
+
+	if err := row.Scan(&s.FixtureID, &s.Value); err != nil {
+		if err == sql.ErrNoRows {
+			return nil, errors.ErrorNotFound
+		}
+
+		return nil, err
+	}
+
+	return &s, nil
+}
+
 func rowToStats(r *sql.Row, fixtureID, teamID uint64) (*app.TeamStats, error) {
 	var created int64
 	var updated int64
@@ -151,6 +176,10 @@ func rowToStats(r *sql.Row, fixtureID, teamID uint64) (*app.TeamStats, error) {
 	a.UpdatedAt = time.Unix(updated, 0)
 
 	return &a, nil
+}
+
+func (t *TeamStatsRepository) queryBuilder() sq.StatementBuilderType {
+	return sq.StatementBuilder.PlaceholderFormat(sq.Dollar).RunWith(t.connection)
 }
 
 func NewTeamStatsRepository(connection *sql.DB, clock clockwork.Clock) *TeamStatsRepository {
