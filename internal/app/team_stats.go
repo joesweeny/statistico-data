@@ -9,6 +9,7 @@ type TeamStats struct {
 	TeamShots     `json:"shots"`
 	TeamPasses    `json:"passes"`
 	TeamAttacks   `json:"attacks"`
+	Goals         *int      `json:"goals"`
 	Fouls         *int      `json:"fouls"`
 	Corners       *int      `json:"corners"`
 	Offsides      *int      `json:"offsides"`

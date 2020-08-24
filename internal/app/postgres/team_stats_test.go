@@ -72,6 +72,7 @@ func TestTeamStatsRepository_ByFixtureAndTeam(t *testing.T) {
 		a.Nil(m.TeamPasses.Percentage)
 		a.Nil(m.TeamAttacks.Total)
 		a.Nil(m.TeamAttacks.Dangerous)
+		a.Nil(m.Goals)
 		a.Nil(m.Fouls)
 		a.Nil(m.Corners)
 		a.Nil(m.Offsides)
@@ -125,6 +126,7 @@ func TestTeamStatsRepository_UpdateTeamStats(t *testing.T) {
 		var passPer = float32(98.45)
 		var attTotal = 50
 		var attDan = 50
+		var goals = 5
 		var fouls = 56
 		var corner = 4
 		var offside = 3
@@ -148,6 +150,7 @@ func TestTeamStatsRepository_UpdateTeamStats(t *testing.T) {
 		m.TeamPasses.Percentage = &passPer
 		m.TeamAttacks.Total = &attTotal
 		m.TeamAttacks.Dangerous = &attDan
+		m.Goals = &goals
 		m.Fouls = &fouls
 		m.Corners = &corner
 		m.Offsides = &offside
@@ -184,6 +187,7 @@ func TestTeamStatsRepository_UpdateTeamStats(t *testing.T) {
 		a.Equal(float32(98.45), *m.TeamPasses.Percentage)
 		a.Equal(50, *m.TeamAttacks.Total)
 		a.Equal(50, *m.TeamAttacks.Dangerous)
+		a.Equal(5, *m.Goals)
 		a.Equal(56, *m.Fouls)
 		a.Equal(4, *m.Corners)
 		a.Equal(3, *m.Offsides)
