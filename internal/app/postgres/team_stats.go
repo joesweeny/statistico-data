@@ -134,6 +134,66 @@ func (t *TeamStatsRepository) StatByFixtureAndTeam(stat string, fixtureID, teamI
 	return &s, nil
 }
 
+func (t *TeamStatsRepository) Get() ([]*app.TeamStats, error) {
+	query := `SELECT * FROM sportmonks_team_stats`
+
+	rows, err := t.connection.Query(query)
+
+	if err != nil {
+		return []*app.TeamStats{}, err
+	}
+
+	defer rows.Close()
+
+	stats := []*app.TeamStats{}
+
+	for rows.Next() {
+		var created int64
+		var updated int64
+
+		var a = app.TeamStats{}
+
+		err := rows.Scan(
+			&a.FixtureID,
+			&a.TeamID,
+			&a.TeamShots.Total,
+			&a.TeamShots.OnGoal,
+			&a.TeamShots.OffGoal,
+			&a.TeamShots.Blocked,
+			&a.TeamShots.InsideBox,
+			&a.TeamShots.OutsideBox,
+			&a.TeamPasses.Total,
+			&a.TeamPasses.Accuracy,
+			&a.TeamPasses.Percentage,
+			&a.TeamAttacks.Total,
+			&a.TeamAttacks.Dangerous,
+			&a.Fouls,
+			&a.Corners,
+			&a.Offsides,
+			&a.Possession,
+			&a.YellowCards,
+			&a.RedCards,
+			&a.Saves,
+			&a.Substitutions,
+			&a.GoalKicks,
+			&a.GoalAttempts,
+			&a.FreeKicks,
+			&a.ThrowIns,
+			&created,
+			&updated,
+			&a.Goals,
+		)
+
+		if err != nil {
+			return []*app.TeamStats{}, err
+		}
+
+		stats = append(stats, &a)
+	}
+
+	return stats, nil
+}
+
 func rowToStats(r *sql.Row, fixtureID, teamID uint64) (*app.TeamStats, error) {
 	var created int64
 	var updated int64

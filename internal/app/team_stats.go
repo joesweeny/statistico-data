@@ -62,6 +62,7 @@ type TeamStatsRepository interface {
 	UpdateTeamStats(m *TeamStats) error
 	ByFixtureAndTeam(fixtureID, teamID uint64) (*TeamStats, error)
 	StatByFixtureAndTeam(stat string, fixtureID, teamID uint64) (*TeamStat, error)
+	Get() ([]*TeamStats, error)
 }
 
 // TeamStatsRequester provides an interface allowing this application to request data from an external

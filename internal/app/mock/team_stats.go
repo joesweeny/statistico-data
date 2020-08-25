@@ -30,6 +30,11 @@ func (m *TeamStatsRepository) StatByFixtureAndTeam(stat string, fixtureID, teamI
 	return args.Get(0).(*app.TeamStat), args.Error(1)
 }
 
+func (m *TeamStatsRepository) Get() ([]*app.TeamStats, error) {
+	args := m.Called()
+	return args.Get(0).([]*app.TeamStats), args.Error(1)
+}
+
 type TeamStatsRequester struct {
 	mock.Mock
 }
