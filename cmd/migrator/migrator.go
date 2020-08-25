@@ -45,6 +45,10 @@ func main() {
 			stat.Goals = result.AwayScore
 		}
 
+		if err := statsRepo.UpdateTeamStats(stat); err != nil {
+			fmt.Printf("Error updating stat in team stats repository %d\n", stat.FixtureID)
+		}
+
 		fmt.Printf("Goals migrated for Fixture %d\n", stat.FixtureID)
 	}
 
