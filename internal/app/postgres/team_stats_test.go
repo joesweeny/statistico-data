@@ -244,7 +244,7 @@ func TestTeamStatsRepository_StatByFixtureAndTeam(t *testing.T) {
 
 		a.Equal(uint64(42), fetched.FixtureID)
 		a.Equal("shots_on_goal", fetched.Stat)
-		a.Equal(15, *fetched.Value)
+		a.Equal(uint32(15), *fetched.Value)
 	})
 
 	t.Run("returns value as nil if null in database", func(t *testing.T) {
