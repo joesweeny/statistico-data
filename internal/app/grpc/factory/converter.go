@@ -285,6 +285,16 @@ func teamStatsToProto(t *app.TeamStats) *proto.TeamStats {
 	return &stats
 }
 
+func TeamStatToProto(s *app.TeamStat) *proto.TeamStat {
+	return &proto.TeamStat{
+		FixtureId: s.FixtureID,
+		Stat:      s.Stat,
+		Value:     &wrappers.UInt32Value{
+			Value: *s.Value,
+		},
+	}
+}
+
 // Convert a domain Venue struct into a proto Venue struct
 func venueToProto(v *app.Venue) *proto.Venue {
 	return &proto.Venue{

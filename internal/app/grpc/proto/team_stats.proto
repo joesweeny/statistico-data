@@ -9,12 +9,19 @@ import "internal/app/grpc/proto/requests.proto";
 
 service TeamStatsService {
     rpc GetTeamStatsForFixture(FixtureRequest) returns (TeamStatsResponse) {}
+    rpc GetStatForTeam(TeamStatRequest) returns (stream TeamStat) {}
 }
 
 message TeamStatsResponse {
     TeamStats home_team = 1;
     TeamStats away_team = 2;
     TeamXG    team_xg   = 3;
+}
+
+message TeamStat {
+    uint64 fixture_id = 1;
+    string stat = 2;
+    google.protobuf.UInt32Value value = 3;
 }
 
 message TeamStats {
