@@ -649,6 +649,128 @@ func (x *TeamSeasonsRequest) GetSort() *wrappers.StringValue {
 	return nil
 }
 
+type TeamStatRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Stat string `protobuf:"bytes,1,opt,name=stat,proto3" json:"stat,omitempty"`
+	// The Team ID that the Result set relates to
+	TeamId uint64 `protobuf:"varint,2,opt,name=team_id,json=teamId,proto3" json:"team_id,omitempty"`
+	// The number of results to return. If limit is not set the whole Result set for the Team
+	// will be returned
+	Limit *wrappers.UInt64Value `protobuf:"bytes,3,opt,name=limit,proto3" json:"limit,omitempty"`
+	// A filter to return stats before a specific date
+	// RFC3339 formatted string i.e "2006-01-02T15:04:05Z07:00"
+	DateBefore *wrappers.StringValue `protobuf:"bytes,4,opt,name=date_before,json=dateBefore,proto3" json:"date_before,omitempty"`
+	// A filter to return stats after a specific date
+	// RFC3339 formatted string i.e "2006-01-02T15:04:05Z07:00"
+	DateAfter *wrappers.StringValue `protobuf:"bytes,5,opt,name=date_after,json=dateAfter,proto3" json:"date_after,omitempty"`
+	// A filter to return based stats limited to match being played either home or away
+	Venue *wrappers.StringValue `protobuf:"bytes,6,opt,name=venue,proto3" json:"venue,omitempty"`
+	// A filter to limit the results returned associated to a specific season
+	SeasonIds []uint64 `protobuf:"varint,7,rep,packed,name=season_ids,json=seasonIds,proto3" json:"season_ids,omitempty"`
+	// Order the date column to return stats in specific order
+	Sort *wrappers.StringValue `protobuf:"bytes,8,opt,name=sort,proto3" json:"sort,omitempty"`
+	// Return stats for opposing team
+	Opponent *wrappers.BoolValue `protobuf:"bytes,9,opt,name=opponent,proto3" json:"opponent,omitempty"`
+}
+
+func (x *TeamStatRequest) Reset() {
+	*x = TeamStatRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_internal_app_grpc_proto_requests_proto_msgTypes[10]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *TeamStatRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*TeamStatRequest) ProtoMessage() {}
+
+func (x *TeamStatRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_internal_app_grpc_proto_requests_proto_msgTypes[10]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use TeamStatRequest.ProtoReflect.Descriptor instead.
+func (*TeamStatRequest) Descriptor() ([]byte, []int) {
+	return file_internal_app_grpc_proto_requests_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *TeamStatRequest) GetStat() string {
+	if x != nil {
+		return x.Stat
+	}
+	return ""
+}
+
+func (x *TeamStatRequest) GetTeamId() uint64 {
+	if x != nil {
+		return x.TeamId
+	}
+	return 0
+}
+
+func (x *TeamStatRequest) GetLimit() *wrappers.UInt64Value {
+	if x != nil {
+		return x.Limit
+	}
+	return nil
+}
+
+func (x *TeamStatRequest) GetDateBefore() *wrappers.StringValue {
+	if x != nil {
+		return x.DateBefore
+	}
+	return nil
+}
+
+func (x *TeamStatRequest) GetDateAfter() *wrappers.StringValue {
+	if x != nil {
+		return x.DateAfter
+	}
+	return nil
+}
+
+func (x *TeamStatRequest) GetVenue() *wrappers.StringValue {
+	if x != nil {
+		return x.Venue
+	}
+	return nil
+}
+
+func (x *TeamStatRequest) GetSeasonIds() []uint64 {
+	if x != nil {
+		return x.SeasonIds
+	}
+	return nil
+}
+
+func (x *TeamStatRequest) GetSort() *wrappers.StringValue {
+	if x != nil {
+		return x.Sort
+	}
+	return nil
+}
+
+func (x *TeamStatRequest) GetOpponent() *wrappers.BoolValue {
+	if x != nil {
+		return x.Opponent
+	}
+	return nil
+}
+
 var File_internal_app_grpc_proto_requests_proto protoreflect.FileDescriptor
 
 var file_internal_app_grpc_proto_requests_proto_rawDesc = []byte{
@@ -732,9 +854,36 @@ var file_internal_app_grpc_proto_requests_proto_rawDesc = []byte{
 	0x64, 0x12, 0x30, 0x0a, 0x04, 0x73, 0x6f, 0x72, 0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32,
 	0x1c, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75,
 	0x66, 0x2e, 0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x56, 0x61, 0x6c, 0x75, 0x65, 0x52, 0x04, 0x73,
-	0x6f, 0x72, 0x74, 0x42, 0x19, 0x5a, 0x17, 0x69, 0x6e, 0x74, 0x65, 0x72, 0x6e, 0x61, 0x6c, 0x2f,
-	0x61, 0x70, 0x70, 0x2f, 0x67, 0x72, 0x70, 0x63, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x06,
-	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x6f, 0x72, 0x74, 0x22, 0xab, 0x03, 0x0a, 0x0f, 0x54, 0x65, 0x61, 0x6d, 0x53, 0x74, 0x61, 0x74,
+	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x12, 0x0a, 0x04, 0x73, 0x74, 0x61, 0x74, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x73, 0x74, 0x61, 0x74, 0x12, 0x17, 0x0a, 0x07, 0x74,
+	0x65, 0x61, 0x6d, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x04, 0x52, 0x06, 0x74, 0x65,
+	0x61, 0x6d, 0x49, 0x64, 0x12, 0x32, 0x0a, 0x05, 0x6c, 0x69, 0x6d, 0x69, 0x74, 0x18, 0x03, 0x20,
+	0x01, 0x28, 0x0b, 0x32, 0x1c, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f,
+	0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x55, 0x49, 0x6e, 0x74, 0x36, 0x34, 0x56, 0x61, 0x6c, 0x75,
+	0x65, 0x52, 0x05, 0x6c, 0x69, 0x6d, 0x69, 0x74, 0x12, 0x3d, 0x0a, 0x0b, 0x64, 0x61, 0x74, 0x65,
+	0x5f, 0x62, 0x65, 0x66, 0x6f, 0x72, 0x65, 0x18, 0x04, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1c, 0x2e,
+	0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e,
+	0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x56, 0x61, 0x6c, 0x75, 0x65, 0x52, 0x0a, 0x64, 0x61, 0x74,
+	0x65, 0x42, 0x65, 0x66, 0x6f, 0x72, 0x65, 0x12, 0x3b, 0x0a, 0x0a, 0x64, 0x61, 0x74, 0x65, 0x5f,
+	0x61, 0x66, 0x74, 0x65, 0x72, 0x18, 0x05, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1c, 0x2e, 0x67, 0x6f,
+	0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x53, 0x74,
+	0x72, 0x69, 0x6e, 0x67, 0x56, 0x61, 0x6c, 0x75, 0x65, 0x52, 0x09, 0x64, 0x61, 0x74, 0x65, 0x41,
+	0x66, 0x74, 0x65, 0x72, 0x12, 0x32, 0x0a, 0x05, 0x76, 0x65, 0x6e, 0x75, 0x65, 0x18, 0x06, 0x20,
+	0x01, 0x28, 0x0b, 0x32, 0x1c, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f,
+	0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x56, 0x61, 0x6c, 0x75,
+	0x65, 0x52, 0x05, 0x76, 0x65, 0x6e, 0x75, 0x65, 0x12, 0x1d, 0x0a, 0x0a, 0x73, 0x65, 0x61, 0x73,
+	0x6f, 0x6e, 0x5f, 0x69, 0x64, 0x73, 0x18, 0x07, 0x20, 0x03, 0x28, 0x04, 0x52, 0x09, 0x73, 0x65,
+	0x61, 0x73, 0x6f, 0x6e, 0x49, 0x64, 0x73, 0x12, 0x30, 0x0a, 0x04, 0x73, 0x6f, 0x72, 0x74, 0x18,
+	0x08, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1c, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70,
+	0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x56, 0x61,
+	0x6c, 0x75, 0x65, 0x52, 0x04, 0x73, 0x6f, 0x72, 0x74, 0x12, 0x36, 0x0a, 0x08, 0x6f, 0x70, 0x70,
+	0x6f, 0x6e, 0x65, 0x6e, 0x74, 0x18, 0x09, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6f,
+	0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x42, 0x6f,
+	0x6f, 0x6c, 0x56, 0x61, 0x6c, 0x75, 0x65, 0x52, 0x08, 0x6f, 0x70, 0x70, 0x6f, 0x6e, 0x65, 0x6e,
+	0x74, 0x42, 0x19, 0x5a, 0x17, 0x69, 0x6e, 0x74, 0x65, 0x72, 0x6e, 0x61, 0x6c, 0x2f, 0x61, 0x70,
+	0x70, 0x2f, 0x67, 0x72, 0x70, 0x63, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x06, 0x70, 0x72,
+	0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -749,7 +898,7 @@ func file_internal_app_grpc_proto_requests_proto_rawDescGZIP() []byte {
 	return file_internal_app_grpc_proto_requests_proto_rawDescData
 }
 
-var file_internal_app_grpc_proto_requests_proto_msgTypes = make([]protoimpl.MessageInfo, 10)
+var file_internal_app_grpc_proto_requests_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
 var file_internal_app_grpc_proto_requests_proto_goTypes = []interface{}{
 	(*CompetitionRequest)(nil),       // 0: proto.CompetitionRequest
 	(*FixtureRequest)(nil),           // 1: proto.FixtureRequest
@@ -761,25 +910,32 @@ var file_internal_app_grpc_proto_requests_proto_goTypes = []interface{}{
 	(*TeamRequest)(nil),              // 7: proto.TeamRequest
 	(*TeamResultRequest)(nil),        // 8: proto.TeamResultRequest
 	(*TeamSeasonsRequest)(nil),       // 9: proto.TeamSeasonsRequest
-	(*wrappers.StringValue)(nil),     // 10: google.protobuf.StringValue
-	(*wrappers.BoolValue)(nil),       // 11: google.protobuf.BoolValue
-	(*wrappers.UInt64Value)(nil),     // 12: google.protobuf.UInt64Value
+	(*TeamStatRequest)(nil),          // 10: proto.TeamStatRequest
+	(*wrappers.StringValue)(nil),     // 11: google.protobuf.StringValue
+	(*wrappers.BoolValue)(nil),       // 12: google.protobuf.BoolValue
+	(*wrappers.UInt64Value)(nil),     // 13: google.protobuf.UInt64Value
 }
 var file_internal_app_grpc_proto_requests_proto_depIdxs = []int32{
-	10, // 0: proto.CompetitionRequest.sort:type_name -> google.protobuf.StringValue
-	11, // 1: proto.CompetitionRequest.is_cup:type_name -> google.protobuf.BoolValue
-	10, // 2: proto.SeasonCompetitionRequest.sort:type_name -> google.protobuf.StringValue
-	12, // 3: proto.TeamResultRequest.limit:type_name -> google.protobuf.UInt64Value
-	10, // 4: proto.TeamResultRequest.date_before:type_name -> google.protobuf.StringValue
-	10, // 5: proto.TeamResultRequest.date_after:type_name -> google.protobuf.StringValue
-	10, // 6: proto.TeamResultRequest.venue:type_name -> google.protobuf.StringValue
-	10, // 7: proto.TeamResultRequest.sort:type_name -> google.protobuf.StringValue
-	10, // 8: proto.TeamSeasonsRequest.sort:type_name -> google.protobuf.StringValue
-	9,  // [9:9] is the sub-list for method output_type
-	9,  // [9:9] is the sub-list for method input_type
-	9,  // [9:9] is the sub-list for extension type_name
-	9,  // [9:9] is the sub-list for extension extendee
-	0,  // [0:9] is the sub-list for field type_name
+	11, // 0: proto.CompetitionRequest.sort:type_name -> google.protobuf.StringValue
+	12, // 1: proto.CompetitionRequest.is_cup:type_name -> google.protobuf.BoolValue
+	11, // 2: proto.SeasonCompetitionRequest.sort:type_name -> google.protobuf.StringValue
+	13, // 3: proto.TeamResultRequest.limit:type_name -> google.protobuf.UInt64Value
+	11, // 4: proto.TeamResultRequest.date_before:type_name -> google.protobuf.StringValue
+	11, // 5: proto.TeamResultRequest.date_after:type_name -> google.protobuf.StringValue
+	11, // 6: proto.TeamResultRequest.venue:type_name -> google.protobuf.StringValue
+	11, // 7: proto.TeamResultRequest.sort:type_name -> google.protobuf.StringValue
+	11, // 8: proto.TeamSeasonsRequest.sort:type_name -> google.protobuf.StringValue
+	13, // 9: proto.TeamStatRequest.limit:type_name -> google.protobuf.UInt64Value
+	11, // 10: proto.TeamStatRequest.date_before:type_name -> google.protobuf.StringValue
+	11, // 11: proto.TeamStatRequest.date_after:type_name -> google.protobuf.StringValue
+	11, // 12: proto.TeamStatRequest.venue:type_name -> google.protobuf.StringValue
+	11, // 13: proto.TeamStatRequest.sort:type_name -> google.protobuf.StringValue
+	12, // 14: proto.TeamStatRequest.opponent:type_name -> google.protobuf.BoolValue
+	15, // [15:15] is the sub-list for method output_type
+	15, // [15:15] is the sub-list for method input_type
+	15, // [15:15] is the sub-list for extension type_name
+	15, // [15:15] is the sub-list for extension extendee
+	0,  // [0:15] is the sub-list for field type_name
 }
 
 func init() { file_internal_app_grpc_proto_requests_proto_init() }
@@ -908,6 +1064,18 @@ func file_internal_app_grpc_proto_requests_proto_init() {
 				return nil
 			}
 		}
+		file_internal_app_grpc_proto_requests_proto_msgTypes[10].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*TeamStatRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -915,7 +1083,7 @@ func file_internal_app_grpc_proto_requests_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_internal_app_grpc_proto_requests_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   10,
+			NumMessages:   11,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

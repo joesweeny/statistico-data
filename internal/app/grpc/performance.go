@@ -12,7 +12,7 @@ type PerformanceService struct {
 	reader performance.StatReader
 }
 
-func (s *PerformanceService) GetTeamsMatchingStat(c context.Context, r *proto.TeamStatRequest) (*proto.TeamStatResponse, error) {
+func (s *PerformanceService) GetTeamsMatchingStat(c context.Context, r *proto.TeamStatPerformanceRequest) (*proto.TeamStatResponse, error) {
 	q := performance.StatFilter{
 		Action:  r.GetAction(),
 		Games:   uint8(r.GetGames()),

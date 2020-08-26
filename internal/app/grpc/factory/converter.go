@@ -127,7 +127,7 @@ func SeasonToProto(s *app.Season) *proto.Season {
 }
 
 // Convert a domain TeamStats struct into a proto TeamStats struct
-func teamStatsToProto(t *app.TeamStats) *proto.TeamStats {
+func TeamStatsToProto(t *app.TeamStats) *proto.TeamStats {
 	stats := proto.TeamStats{
 		TeamId: t.TeamID,
 	}
@@ -283,6 +283,16 @@ func teamStatsToProto(t *app.TeamStats) *proto.TeamStats {
 	}
 
 	return &stats
+}
+
+func TeamStatToProto(s *app.TeamStat) *proto.TeamStat {
+	return &proto.TeamStat{
+		FixtureId: s.FixtureID,
+		Stat:      s.Stat,
+		Value:     &wrappers.UInt32Value{
+			Value: *s.Value,
+		},
+	}
 }
 
 // Convert a domain Venue struct into a proto Venue struct

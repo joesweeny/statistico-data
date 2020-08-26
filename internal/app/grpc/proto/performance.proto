@@ -7,10 +7,10 @@ option go_package = "internal/app/grpc/proto";
 import "internal/app/grpc/proto/team.proto";
 
 service PerformanceService {
-  rpc GetTeamsMatchingStat(TeamStatRequest) returns (TeamStatResponse) {}
+  rpc GetTeamsMatchingStat(TeamStatPerformanceRequest) returns (TeamStatResponse) {}
 }
 
-message TeamStatRequest {
+message TeamStatPerformanceRequest {
   string action = 1;
   uint32 games = 2;
   string measure = 3;

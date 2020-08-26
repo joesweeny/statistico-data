@@ -135,7 +135,7 @@ func TestTeamStatsToProto(t *testing.T) {
 	t.Run("returns a proto team stats struct", func(t *testing.T) {
 		m := newTeamStats()
 
-		proto := teamStatsToProto(m)
+		proto := TeamStatsToProto(m)
 
 		a := assert.New(t)
 		a.Equal(uint64(850), proto.TeamId)

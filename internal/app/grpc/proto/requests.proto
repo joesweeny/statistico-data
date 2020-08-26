@@ -86,3 +86,26 @@ message TeamSeasonsRequest {
     // Order the name column to return seasons in specific order
     google.protobuf.StringValue sort = 2;
 }
+
+message TeamStatRequest {
+    string stat = 1;
+    // The Team ID that the Result set relates to
+    uint64 team_id = 2;
+    // The number of results to return. If limit is not set the whole Result set for the Team
+    // will be returned
+    google.protobuf.UInt64Value limit = 3;
+    // A filter to return stats before a specific date
+    // RFC3339 formatted string i.e "2006-01-02T15:04:05Z07:00"
+    google.protobuf.StringValue date_before = 4;
+    // A filter to return stats after a specific date
+    // RFC3339 formatted string i.e "2006-01-02T15:04:05Z07:00"
+    google.protobuf.StringValue date_after = 5;
+    // A filter to return based stats limited to match being played either home or away
+    google.protobuf.StringValue venue = 6;
+    // A filter to limit the results returned associated to a specific season
+    repeated uint64 season_ids = 7;
+    // Order the date column to return stats in specific order
+    google.protobuf.StringValue sort = 8;
+    // Return stats for opposing team
+    google.protobuf.BoolValue opponent = 9;
+}

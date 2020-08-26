@@ -12,7 +12,7 @@ import (
 )
 
 func TestPerformanceService_GetTeamsMatchingStat(t *testing.T) {
-	request := proto.TeamStatRequest{
+	request := proto.TeamStatPerformanceRequest{
 		Action:  "for",
 		Games:   3,
 		Measure: "average",
