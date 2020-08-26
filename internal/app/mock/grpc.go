@@ -35,3 +35,13 @@ func (t *TeamServer) Send(team *proto.Team) error {
 	args := t.Called(team)
 	return args.Error(0)
 }
+
+type TeamStatServer struct {
+	mock.Mock
+	grpc.ServerStream
+}
+
+func (t *TeamStatServer) Send(stat *proto.TeamStat) error {
+	args := t.Called(stat)
+	return args.Error(0)
+}

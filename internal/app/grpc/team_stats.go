@@ -16,7 +16,6 @@ type TeamStatsService struct {
 	fixtureRepository app.FixtureRepository
 	statRepository    app.TeamStatsRepository
 	xGRepo            app.FixtureTeamXGRepository
-	factory           *factory.TeamStatsFactory
 	logger            *logrus.Logger
 }
 
@@ -60,7 +59,7 @@ func (s TeamStatsService) GetTeamStatsForFixture(c context.Context, r *proto.Fix
 		return nil, status.Error(codes.NotFound, fmt.Sprintf("fixture with ID %d does not exist", r.FixtureId))
 	}
 
-	home, err := s.factory.BuildTeamStats(fix, fix.HomeTeamID)
+	home, err := s.statRepository.ByFixtureAndTeam(fix.ID, fix.HomeTeamID)
 
 	if err != nil {
 		s.logger.Warnf("Error hydrating proto team stats: %s", err.Error())
@@ -70,7 +69,7 @@ func (s TeamStatsService) GetTeamStatsForFixture(c context.Context, r *proto.Fix
 		)
 	}
 
-	away, err := s.factory.BuildTeamStats(fix, fix.AwayTeamID)
+	away, err := s.statRepository.ByFixtureAndTeam(fix.ID, fix.AwayTeamID)
 
 	if err != nil {
 		s.logger.Warnf("Error hydrating proto team stats: %s", err.Error())
@@ -91,8 +90,8 @@ func (s TeamStatsService) GetTeamStatsForFixture(c context.Context, r *proto.Fix
 	}
 
 	res := proto.TeamStatsResponse{
-		HomeTeam: home,
-		AwayTeam: away,
+		HomeTeam: factory.TeamStatsToProto(home),
+		AwayTeam: factory.TeamStatsToProto(away),
 		TeamXg: &proto.TeamXG{
 			Home: parseXgRating(xg.Home),
 			Away: parseXgRating(xg.Away),
@@ -118,10 +117,9 @@ func NewTeamStatsService(
 	r app.FixtureRepository,
 	s app.TeamStatsRepository,
 	x app.FixtureTeamXGRepository,
-	f *factory.TeamStatsFactory,
 	log *logrus.Logger,
 ) *TeamStatsService {
-	return &TeamStatsService{fixtureRepository: r, statRepository: s, xGRepo: x, factory: f, logger: log}
+	return &TeamStatsService{fixtureRepository: r, statRepository: s, xGRepo: x, logger: log}
 }
 
 func parseXgRating(xg *float32) *wrappers.FloatValue {

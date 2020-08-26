@@ -31,10 +31,6 @@ func (c Container) ProtoResultFactory() *factory.ResultFactory {
 	)
 }
 
-func (c Container) ProtoTeamStatsFactory() *factory.TeamStatsFactory {
-	return factory.NewTeamStatsFactory(c.TeamStatsRepository(), c.Logger)
-}
-
 func (c Container) RestFixtureFactory() *rest.FixtureFactory {
 	return rest.NewFixtureFactory(c.RoundRepository(), c.TeamRepository(), c.VenueRepository())
 }
