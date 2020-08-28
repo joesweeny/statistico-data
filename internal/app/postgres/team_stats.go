@@ -115,7 +115,7 @@ func (t *TeamStatsRepository) StatByFixtureAndTeam(stat string, fixtureID, teamI
 	builder := t.queryBuilder()
 
 	row := builder.
-		Select(fmt.Sprintf("fixture_id, %s", stat)).
+		Select(fmt.Sprintf("fixture_id, CEIL(%s)", stat)).
 		From("sportmonks_team_stats").
 		Where(sq.Eq{"fixture_id": fixtureID}).
 		Where(sq.Eq{"team_id": teamID}).
