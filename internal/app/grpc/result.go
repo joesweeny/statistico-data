@@ -1,6 +1,7 @@
 package grpc
 
 import (
+	"context"
 	"fmt"
 	"github.com/sirupsen/logrus"
 	"github.com/statistico/statistico-data/internal/app"
@@ -15,6 +16,23 @@ type ResultService struct {
 	fixtureRepo app.FixtureRepository
 	factory     *factory.ResultFactory
 	logger      *logrus.Logger
+}
+
+func (s ResultService) GetById(ctx context.Context, r *proto.ResultRequest) (*proto.Result, error) {
+	fix, err := s.fixtureRepo.ByID(r.GetFixtureId())
+
+	if err != nil {
+		return nil, status.Error(codes.NotFound, fmt.Sprintf("Result for fixture %d does not exist", r.GetFixtureId()))
+	}
+
+	x, err := s.factory.BuildResult(fix)
+
+	if err != nil {
+		s.logger.Warnf("Error hydrating Result. Error: %s", err.Error())
+		return nil, status.Error(codes.Internal, "Internal server error")
+	}
+
+	return x, nil
 }
 
 func (s ResultService) GetHistoricalResultsForFixture(r *proto.HistoricalResultRequest, stream proto.ResultService_GetHistoricalResultsForFixtureServer) error {
