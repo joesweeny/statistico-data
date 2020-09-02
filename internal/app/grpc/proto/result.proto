@@ -13,6 +13,7 @@ import "internal/app/grpc/proto/team.proto";
 import "internal/app/grpc/proto/venue.proto";
 
 service ResultService {
+    rpc GetById(ResultRequest) returns (Result) {}
     rpc GetHistoricalResultsForFixture(HistoricalResultRequest) returns (stream Result) {}
     rpc GetResultsForSeason(SeasonRequest) returns (stream Result) {}
     rpc GetResultsForTeam(TeamResultRequest) returns (stream Result) {}
