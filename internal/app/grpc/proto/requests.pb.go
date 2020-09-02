@@ -215,6 +215,53 @@ func (x *HistoricalResultRequest) GetDateBefore() string {
 	return ""
 }
 
+type ResultRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	FixtureId uint64 `protobuf:"varint,1,opt,name=fixture_id,json=fixtureId,proto3" json:"fixture_id,omitempty"`
+}
+
+func (x *ResultRequest) Reset() {
+	*x = ResultRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_internal_app_grpc_proto_requests_proto_msgTypes[3]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ResultRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ResultRequest) ProtoMessage() {}
+
+func (x *ResultRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_internal_app_grpc_proto_requests_proto_msgTypes[3]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ResultRequest.ProtoReflect.Descriptor instead.
+func (*ResultRequest) Descriptor() ([]byte, []int) {
+	return file_internal_app_grpc_proto_requests_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *ResultRequest) GetFixtureId() uint64 {
+	if x != nil {
+		return x.FixtureId
+	}
+	return 0
+}
+
 type SeasonCompetitionRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -228,7 +275,7 @@ type SeasonCompetitionRequest struct {
 func (x *SeasonCompetitionRequest) Reset() {
 	*x = SeasonCompetitionRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_internal_app_grpc_proto_requests_proto_msgTypes[3]
+		mi := &file_internal_app_grpc_proto_requests_proto_msgTypes[4]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -241,7 +288,7 @@ func (x *SeasonCompetitionRequest) String() string {
 func (*SeasonCompetitionRequest) ProtoMessage() {}
 
 func (x *SeasonCompetitionRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_internal_app_grpc_proto_requests_proto_msgTypes[3]
+	mi := &file_internal_app_grpc_proto_requests_proto_msgTypes[4]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -254,7 +301,7 @@ func (x *SeasonCompetitionRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SeasonCompetitionRequest.ProtoReflect.Descriptor instead.
 func (*SeasonCompetitionRequest) Descriptor() ([]byte, []int) {
-	return file_internal_app_grpc_proto_requests_proto_rawDescGZIP(), []int{3}
+	return file_internal_app_grpc_proto_requests_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *SeasonCompetitionRequest) GetCompetitionId() uint64 {
@@ -286,7 +333,7 @@ type SeasonFixtureRequest struct {
 func (x *SeasonFixtureRequest) Reset() {
 	*x = SeasonFixtureRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_internal_app_grpc_proto_requests_proto_msgTypes[4]
+		mi := &file_internal_app_grpc_proto_requests_proto_msgTypes[5]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -299,7 +346,7 @@ func (x *SeasonFixtureRequest) String() string {
 func (*SeasonFixtureRequest) ProtoMessage() {}
 
 func (x *SeasonFixtureRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_internal_app_grpc_proto_requests_proto_msgTypes[4]
+	mi := &file_internal_app_grpc_proto_requests_proto_msgTypes[5]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -312,7 +359,7 @@ func (x *SeasonFixtureRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SeasonFixtureRequest.ProtoReflect.Descriptor instead.
 func (*SeasonFixtureRequest) Descriptor() ([]byte, []int) {
-	return file_internal_app_grpc_proto_requests_proto_rawDescGZIP(), []int{4}
+	return file_internal_app_grpc_proto_requests_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *SeasonFixtureRequest) GetSeasonId() uint64 {
@@ -351,7 +398,7 @@ type SeasonRequest struct {
 func (x *SeasonRequest) Reset() {
 	*x = SeasonRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_internal_app_grpc_proto_requests_proto_msgTypes[5]
+		mi := &file_internal_app_grpc_proto_requests_proto_msgTypes[6]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -364,7 +411,7 @@ func (x *SeasonRequest) String() string {
 func (*SeasonRequest) ProtoMessage() {}
 
 func (x *SeasonRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_internal_app_grpc_proto_requests_proto_msgTypes[5]
+	mi := &file_internal_app_grpc_proto_requests_proto_msgTypes[6]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -377,7 +424,7 @@ func (x *SeasonRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SeasonRequest.ProtoReflect.Descriptor instead.
 func (*SeasonRequest) Descriptor() ([]byte, []int) {
-	return file_internal_app_grpc_proto_requests_proto_rawDescGZIP(), []int{5}
+	return file_internal_app_grpc_proto_requests_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *SeasonRequest) GetSeasonId() int64 {
@@ -405,7 +452,7 @@ type SeasonTeamsRequest struct {
 func (x *SeasonTeamsRequest) Reset() {
 	*x = SeasonTeamsRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_internal_app_grpc_proto_requests_proto_msgTypes[6]
+		mi := &file_internal_app_grpc_proto_requests_proto_msgTypes[7]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -418,7 +465,7 @@ func (x *SeasonTeamsRequest) String() string {
 func (*SeasonTeamsRequest) ProtoMessage() {}
 
 func (x *SeasonTeamsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_internal_app_grpc_proto_requests_proto_msgTypes[6]
+	mi := &file_internal_app_grpc_proto_requests_proto_msgTypes[7]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -431,7 +478,7 @@ func (x *SeasonTeamsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SeasonTeamsRequest.ProtoReflect.Descriptor instead.
 func (*SeasonTeamsRequest) Descriptor() ([]byte, []int) {
-	return file_internal_app_grpc_proto_requests_proto_rawDescGZIP(), []int{6}
+	return file_internal_app_grpc_proto_requests_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *SeasonTeamsRequest) GetSeasonId() uint64 {
@@ -452,7 +499,7 @@ type TeamRequest struct {
 func (x *TeamRequest) Reset() {
 	*x = TeamRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_internal_app_grpc_proto_requests_proto_msgTypes[7]
+		mi := &file_internal_app_grpc_proto_requests_proto_msgTypes[8]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -465,7 +512,7 @@ func (x *TeamRequest) String() string {
 func (*TeamRequest) ProtoMessage() {}
 
 func (x *TeamRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_internal_app_grpc_proto_requests_proto_msgTypes[7]
+	mi := &file_internal_app_grpc_proto_requests_proto_msgTypes[8]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -478,7 +525,7 @@ func (x *TeamRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TeamRequest.ProtoReflect.Descriptor instead.
 func (*TeamRequest) Descriptor() ([]byte, []int) {
-	return file_internal_app_grpc_proto_requests_proto_rawDescGZIP(), []int{7}
+	return file_internal_app_grpc_proto_requests_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *TeamRequest) GetTeamId() uint64 {
@@ -515,7 +562,7 @@ type TeamResultRequest struct {
 func (x *TeamResultRequest) Reset() {
 	*x = TeamResultRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_internal_app_grpc_proto_requests_proto_msgTypes[8]
+		mi := &file_internal_app_grpc_proto_requests_proto_msgTypes[9]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -528,7 +575,7 @@ func (x *TeamResultRequest) String() string {
 func (*TeamResultRequest) ProtoMessage() {}
 
 func (x *TeamResultRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_internal_app_grpc_proto_requests_proto_msgTypes[8]
+	mi := &file_internal_app_grpc_proto_requests_proto_msgTypes[9]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -541,7 +588,7 @@ func (x *TeamResultRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TeamResultRequest.ProtoReflect.Descriptor instead.
 func (*TeamResultRequest) Descriptor() ([]byte, []int) {
-	return file_internal_app_grpc_proto_requests_proto_rawDescGZIP(), []int{8}
+	return file_internal_app_grpc_proto_requests_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *TeamResultRequest) GetTeamId() uint64 {
@@ -606,7 +653,7 @@ type TeamSeasonsRequest struct {
 func (x *TeamSeasonsRequest) Reset() {
 	*x = TeamSeasonsRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_internal_app_grpc_proto_requests_proto_msgTypes[9]
+		mi := &file_internal_app_grpc_proto_requests_proto_msgTypes[10]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -619,7 +666,7 @@ func (x *TeamSeasonsRequest) String() string {
 func (*TeamSeasonsRequest) ProtoMessage() {}
 
 func (x *TeamSeasonsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_internal_app_grpc_proto_requests_proto_msgTypes[9]
+	mi := &file_internal_app_grpc_proto_requests_proto_msgTypes[10]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -632,7 +679,7 @@ func (x *TeamSeasonsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TeamSeasonsRequest.ProtoReflect.Descriptor instead.
 func (*TeamSeasonsRequest) Descriptor() ([]byte, []int) {
-	return file_internal_app_grpc_proto_requests_proto_rawDescGZIP(), []int{9}
+	return file_internal_app_grpc_proto_requests_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *TeamSeasonsRequest) GetTeamId() uint64 {
@@ -679,7 +726,7 @@ type TeamStatRequest struct {
 func (x *TeamStatRequest) Reset() {
 	*x = TeamStatRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_internal_app_grpc_proto_requests_proto_msgTypes[10]
+		mi := &file_internal_app_grpc_proto_requests_proto_msgTypes[11]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -692,7 +739,7 @@ func (x *TeamStatRequest) String() string {
 func (*TeamStatRequest) ProtoMessage() {}
 
 func (x *TeamStatRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_internal_app_grpc_proto_requests_proto_msgTypes[10]
+	mi := &file_internal_app_grpc_proto_requests_proto_msgTypes[11]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -705,7 +752,7 @@ func (x *TeamStatRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TeamStatRequest.ProtoReflect.Descriptor instead.
 func (*TeamStatRequest) Descriptor() ([]byte, []int) {
-	return file_internal_app_grpc_proto_requests_proto_rawDescGZIP(), []int{10}
+	return file_internal_app_grpc_proto_requests_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *TeamStatRequest) GetStat() string {
@@ -801,7 +848,10 @@ var file_internal_app_grpc_proto_requests_proto_rawDesc = []byte{
 	0x05, 0x6c, 0x69, 0x6d, 0x69, 0x74, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x05, 0x6c, 0x69,
 	0x6d, 0x69, 0x74, 0x12, 0x1f, 0x0a, 0x0b, 0x64, 0x61, 0x74, 0x65, 0x5f, 0x62, 0x65, 0x66, 0x6f,
 	0x72, 0x65, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0a, 0x64, 0x61, 0x74, 0x65, 0x42, 0x65,
-	0x66, 0x6f, 0x72, 0x65, 0x22, 0x73, 0x0a, 0x18, 0x53, 0x65, 0x61, 0x73, 0x6f, 0x6e, 0x43, 0x6f,
+	0x66, 0x6f, 0x72, 0x65, 0x22, 0x2e, 0x0a, 0x0d, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x52, 0x65,
+	0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x1d, 0x0a, 0x0a, 0x66, 0x69, 0x78, 0x74, 0x75, 0x72, 0x65,
+	0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x09, 0x66, 0x69, 0x78, 0x74, 0x75,
+	0x72, 0x65, 0x49, 0x64, 0x22, 0x73, 0x0a, 0x18, 0x53, 0x65, 0x61, 0x73, 0x6f, 0x6e, 0x43, 0x6f,
 	0x6d, 0x70, 0x65, 0x74, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
 	0x12, 0x25, 0x0a, 0x0e, 0x63, 0x6f, 0x6d, 0x70, 0x65, 0x74, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x5f,
 	0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x0d, 0x63, 0x6f, 0x6d, 0x70, 0x65, 0x74,
@@ -898,39 +948,40 @@ func file_internal_app_grpc_proto_requests_proto_rawDescGZIP() []byte {
 	return file_internal_app_grpc_proto_requests_proto_rawDescData
 }
 
-var file_internal_app_grpc_proto_requests_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
+var file_internal_app_grpc_proto_requests_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
 var file_internal_app_grpc_proto_requests_proto_goTypes = []interface{}{
 	(*CompetitionRequest)(nil),       // 0: proto.CompetitionRequest
 	(*FixtureRequest)(nil),           // 1: proto.FixtureRequest
 	(*HistoricalResultRequest)(nil),  // 2: proto.HistoricalResultRequest
-	(*SeasonCompetitionRequest)(nil), // 3: proto.SeasonCompetitionRequest
-	(*SeasonFixtureRequest)(nil),     // 4: proto.SeasonFixtureRequest
-	(*SeasonRequest)(nil),            // 5: proto.SeasonRequest
-	(*SeasonTeamsRequest)(nil),       // 6: proto.SeasonTeamsRequest
-	(*TeamRequest)(nil),              // 7: proto.TeamRequest
-	(*TeamResultRequest)(nil),        // 8: proto.TeamResultRequest
-	(*TeamSeasonsRequest)(nil),       // 9: proto.TeamSeasonsRequest
-	(*TeamStatRequest)(nil),          // 10: proto.TeamStatRequest
-	(*wrappers.StringValue)(nil),     // 11: google.protobuf.StringValue
-	(*wrappers.BoolValue)(nil),       // 12: google.protobuf.BoolValue
-	(*wrappers.UInt64Value)(nil),     // 13: google.protobuf.UInt64Value
+	(*ResultRequest)(nil),            // 3: proto.ResultRequest
+	(*SeasonCompetitionRequest)(nil), // 4: proto.SeasonCompetitionRequest
+	(*SeasonFixtureRequest)(nil),     // 5: proto.SeasonFixtureRequest
+	(*SeasonRequest)(nil),            // 6: proto.SeasonRequest
+	(*SeasonTeamsRequest)(nil),       // 7: proto.SeasonTeamsRequest
+	(*TeamRequest)(nil),              // 8: proto.TeamRequest
+	(*TeamResultRequest)(nil),        // 9: proto.TeamResultRequest
+	(*TeamSeasonsRequest)(nil),       // 10: proto.TeamSeasonsRequest
+	(*TeamStatRequest)(nil),          // 11: proto.TeamStatRequest
+	(*wrappers.StringValue)(nil),     // 12: google.protobuf.StringValue
+	(*wrappers.BoolValue)(nil),       // 13: google.protobuf.BoolValue
+	(*wrappers.UInt64Value)(nil),     // 14: google.protobuf.UInt64Value
 }
 var file_internal_app_grpc_proto_requests_proto_depIdxs = []int32{
-	11, // 0: proto.CompetitionRequest.sort:type_name -> google.protobuf.StringValue
-	12, // 1: proto.CompetitionRequest.is_cup:type_name -> google.protobuf.BoolValue
-	11, // 2: proto.SeasonCompetitionRequest.sort:type_name -> google.protobuf.StringValue
-	13, // 3: proto.TeamResultRequest.limit:type_name -> google.protobuf.UInt64Value
-	11, // 4: proto.TeamResultRequest.date_before:type_name -> google.protobuf.StringValue
-	11, // 5: proto.TeamResultRequest.date_after:type_name -> google.protobuf.StringValue
-	11, // 6: proto.TeamResultRequest.venue:type_name -> google.protobuf.StringValue
-	11, // 7: proto.TeamResultRequest.sort:type_name -> google.protobuf.StringValue
-	11, // 8: proto.TeamSeasonsRequest.sort:type_name -> google.protobuf.StringValue
-	13, // 9: proto.TeamStatRequest.limit:type_name -> google.protobuf.UInt64Value
-	11, // 10: proto.TeamStatRequest.date_before:type_name -> google.protobuf.StringValue
-	11, // 11: proto.TeamStatRequest.date_after:type_name -> google.protobuf.StringValue
-	11, // 12: proto.TeamStatRequest.venue:type_name -> google.protobuf.StringValue
-	11, // 13: proto.TeamStatRequest.sort:type_name -> google.protobuf.StringValue
-	12, // 14: proto.TeamStatRequest.opponent:type_name -> google.protobuf.BoolValue
+	12, // 0: proto.CompetitionRequest.sort:type_name -> google.protobuf.StringValue
+	13, // 1: proto.CompetitionRequest.is_cup:type_name -> google.protobuf.BoolValue
+	12, // 2: proto.SeasonCompetitionRequest.sort:type_name -> google.protobuf.StringValue
+	14, // 3: proto.TeamResultRequest.limit:type_name -> google.protobuf.UInt64Value
+	12, // 4: proto.TeamResultRequest.date_before:type_name -> google.protobuf.StringValue
+	12, // 5: proto.TeamResultRequest.date_after:type_name -> google.protobuf.StringValue
+	12, // 6: proto.TeamResultRequest.venue:type_name -> google.protobuf.StringValue
+	12, // 7: proto.TeamResultRequest.sort:type_name -> google.protobuf.StringValue
+	12, // 8: proto.TeamSeasonsRequest.sort:type_name -> google.protobuf.StringValue
+	14, // 9: proto.TeamStatRequest.limit:type_name -> google.protobuf.UInt64Value
+	12, // 10: proto.TeamStatRequest.date_before:type_name -> google.protobuf.StringValue
+	12, // 11: proto.TeamStatRequest.date_after:type_name -> google.protobuf.StringValue
+	12, // 12: proto.TeamStatRequest.venue:type_name -> google.protobuf.StringValue
+	12, // 13: proto.TeamStatRequest.sort:type_name -> google.protobuf.StringValue
+	13, // 14: proto.TeamStatRequest.opponent:type_name -> google.protobuf.BoolValue
 	15, // [15:15] is the sub-list for method output_type
 	15, // [15:15] is the sub-list for method input_type
 	15, // [15:15] is the sub-list for extension type_name
@@ -981,7 +1032,7 @@ func file_internal_app_grpc_proto_requests_proto_init() {
 			}
 		}
 		file_internal_app_grpc_proto_requests_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*SeasonCompetitionRequest); i {
+			switch v := v.(*ResultRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -993,7 +1044,7 @@ func file_internal_app_grpc_proto_requests_proto_init() {
 			}
 		}
 		file_internal_app_grpc_proto_requests_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*SeasonFixtureRequest); i {
+			switch v := v.(*SeasonCompetitionRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1005,7 +1056,7 @@ func file_internal_app_grpc_proto_requests_proto_init() {
 			}
 		}
 		file_internal_app_grpc_proto_requests_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*SeasonRequest); i {
+			switch v := v.(*SeasonFixtureRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1017,7 +1068,7 @@ func file_internal_app_grpc_proto_requests_proto_init() {
 			}
 		}
 		file_internal_app_grpc_proto_requests_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*SeasonTeamsRequest); i {
+			switch v := v.(*SeasonRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1029,7 +1080,7 @@ func file_internal_app_grpc_proto_requests_proto_init() {
 			}
 		}
 		file_internal_app_grpc_proto_requests_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*TeamRequest); i {
+			switch v := v.(*SeasonTeamsRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1041,7 +1092,7 @@ func file_internal_app_grpc_proto_requests_proto_init() {
 			}
 		}
 		file_internal_app_grpc_proto_requests_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*TeamResultRequest); i {
+			switch v := v.(*TeamRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1053,7 +1104,7 @@ func file_internal_app_grpc_proto_requests_proto_init() {
 			}
 		}
 		file_internal_app_grpc_proto_requests_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*TeamSeasonsRequest); i {
+			switch v := v.(*TeamResultRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1065,6 +1116,18 @@ func file_internal_app_grpc_proto_requests_proto_init() {
 			}
 		}
 		file_internal_app_grpc_proto_requests_proto_msgTypes[10].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*TeamSeasonsRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_internal_app_grpc_proto_requests_proto_msgTypes[11].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*TeamStatRequest); i {
 			case 0:
 				return &v.state
@@ -1083,7 +1146,7 @@ func file_internal_app_grpc_proto_requests_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_internal_app_grpc_proto_requests_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   11,
+			NumMessages:   12,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

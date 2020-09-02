@@ -31,6 +31,10 @@ message HistoricalResultRequest {
     string date_before = 4;
 }
 
+message ResultRequest {
+    uint64 fixture_id = 1;
+}
+
 message SeasonCompetitionRequest {
     uint64 competition_id = 1;
     // Order the name column to return seasons in specific order
