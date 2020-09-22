@@ -13,12 +13,13 @@ const fixtureXGCurrentSeason = "fixture-xg:current-season"
 
 var currentSeason = map[string]map[int]string {
 	"EPL": {
-		16036: "2019",
+		17420: "2020",
 	},
 }
 
 var historicSeasons =  map[string]map[int]string {
 	"EPL": {
+		16036: "2019",
 		12962: "2018",
 		6397: "2017",
 		13: "2016",
