@@ -44,6 +44,7 @@ var historicSeasons =  map[string]map[int]string {
 		6397: "2017",
 		13: "2016",
 		10: "2015",
+		12: "2014",
 	},
 	"La liga": {
 		16326: "2019",
