@@ -12,12 +12,32 @@ const fixtureXG = "fixture-xg"
 const fixtureXGCurrentSeason = "fixture-xg:current-season"
 
 var currentSeason = map[string]map[int]string {
+	"Bundesliga": {
+		17361: "2020",
+	},
 	"EPL": {
 		17420: "2020",
+	},
+	"La liga": {
+		17480: "2020",
+	},
+	"Ligue_1": {
+		17160: "2020",
+	},
+	"Serie A": {
+		17488: "2020",
 	},
 }
 
 var historicSeasons =  map[string]map[int]string {
+	"Bundesliga": {
+		16264: "2019",
+		13005: "2018",
+		8026: "2017",
+		219: "2016",
+		218: "2015",
+		217: "2014",
+	},
 	"EPL": {
 		16036: "2019",
 		12962: "2018",
@@ -25,10 +45,65 @@ var historicSeasons =  map[string]map[int]string {
 		13: "2016",
 		10: "2015",
 	},
+	"La liga": {
+		16326: "2019",
+		13133: "2018",
+		8442: "2017",
+		853: "2016",
+		2063: "2015",
+		2061: "2014",
+	},
+	"Ligue_1": {
+		16043: "2019",
+		12935: "2018",
+		6405: "2017",
+		765: "2016",
+		1390: "2015",
+		1389: "2014",
+	},
+	"Serie A": {
+		16415: "2019",
+		13158: "2018",
+		8557: "2017",
+		802: "2016",
+		1584: "2015",
+		1583: "2014",
+	},
 }
 
 var teamMapper = map[string]string {
+	"GFC Ajaccio": "Gazélec Ajaccio",
+	"AC Milan": "Milan",
+	"Alaves": "Deportivo Alavés",
+	"Atletico Madrid": "Atlético Madrid",
+	"Almeria": "Almería",
+	"Bayern Munich": "Bayern München",
+	"Cadiz": "Cádiz",
+	"Celta Vigo": "Celta de Vigo",
+	"Cordoba": "Córdoba",
+	"Deportivo La Coruna": "Deportivo La Coruña",
+	"FC Cologne": "Köln",
 	"Bournemouth": "AFC Bournemouth",
+	"Borussia M.Gladbach": "Borussia M'gladbach",
+	"Eibar": "SD Eibar",
+	"Evian Thonon Gaillard": "Evian TG",
+	"Fortuna Duesseldorf": "Fortuna Düsseldorf",
+	"Hertha Berlin": "Hertha BSC",
+	"Leganes": "Leganés",
+	"Lyon": "Olympique Lyonnais",
+	"Malaga": "Málaga",
+	"Marseille": "Olympique Marseille",
+	"Nimes": "Nîmes",
+	"Nuernberg": "Nürnberg",
+	"Parma Calcio 1913": "Parma",
+	"RasenBallsport Leipzig": "RB Leipzig",
+	"Saint-Etienne": "Saint-Étienne",
+	"SC Bastia": "Bastia",
+	"SD Huesca": "Huesca",
+	"SPAL 2013": "SPAL",
+	"Sporting Gijon": "Sporting Gijón",
+	"Verona": "Hellas Verona",
+	"VfB Stuttgart": "Stuttgart",
 }
 
 type FixtureTeamXGProcessor struct {
@@ -151,7 +226,7 @@ func (f FixtureTeamXGProcessor) parseFixture(u understat.Fixture, seasonID uint6
 	fixs, err := f.fixtureRepo.Get(query)
 
 	if err != nil || len(fixs) == 0 {
-		return nil, fmt.Errorf("unable to find matching fixture xg for understat ID %s", u.ID)
+		return nil, fmt.Errorf("unable to find matching fixture xg for understat ID %s, home %s, away %s", u.ID, home, away)
 	}
 
 	return &fixs[0], nil
