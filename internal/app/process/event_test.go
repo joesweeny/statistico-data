@@ -212,9 +212,7 @@ func TestEventProcessor_Process(t *testing.T) {
 
 		fix = append(fix, *newFixture(uint64(12)))
 
-		seasonID := uint64(12)
-
-		query := app.FixtureRepositoryQuery{SeasonID: &seasonID}
+		query := app.FixtureRepositoryQuery{SeasonIDs: []uint64{uint64(12)}}
 
 		fixtureRepo.On("Get", query).Return(fix, nil)
 		requester.On("EventsByFixtureIDs", []uint64{12}).Return(goalCh, subCh)
@@ -273,8 +271,7 @@ func TestEventProcessor_Process(t *testing.T) {
 		var fix []app.Fixture
 		fix = append(fix, *newFixture(uint64(12)))
 
-		seasonID := uint64(12)
-		query := app.FixtureRepositoryQuery{SeasonID: &seasonID}
+		query := app.FixtureRepositoryQuery{SeasonIDs: []uint64{uint64(12)}}
 
 		fixtureRepo.On("Get", query).Return(fix, nil)
 		requester.On("EventsByFixtureIDs", []uint64{12}).Return(goalCh, subCh)
@@ -333,8 +330,7 @@ func TestEventProcessor_Process(t *testing.T) {
 		var fix []app.Fixture
 		fix = append(fix, *newFixture(uint64(12)))
 
-		seasonID := uint64(12)
-		query := app.FixtureRepositoryQuery{SeasonID: &seasonID}
+		query := app.FixtureRepositoryQuery{SeasonIDs: []uint64{uint64(12)}}
 
 		fixtureRepo.On("Get", query).Return(fix, nil)
 		requester.On("EventsByFixtureIDs", []uint64{12}).Return(goalCh, subCh)

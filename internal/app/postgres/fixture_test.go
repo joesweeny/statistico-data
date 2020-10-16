@@ -350,9 +350,7 @@ func TestFixtureRepository_Get(t *testing.T) {
 
 		insertFixtures(t, repo)
 
-		season := uint64(6012)
-
-		query := app.FixtureRepositoryQuery{SeasonID: &season}
+		query := app.FixtureRepositoryQuery{SeasonIDs: []uint64{uint64(6012)}}
 
 		fix, err := repo.Get(query)
 
@@ -382,10 +380,9 @@ func TestFixtureRepository_Get(t *testing.T) {
 
 		insertFixtures(t, repo)
 
-		season := uint64(6012)
 		before := time.Unix(1550066319, 0)
 
-		query := app.FixtureRepositoryQuery{SeasonID: &season, DateTo: &before}
+		query := app.FixtureRepositoryQuery{SeasonIDs: []uint64{uint64(6012)}, DateTo: &before}
 
 		fix, err := repo.Get(query)
 
@@ -443,11 +440,10 @@ func TestFixtureRepository_Get(t *testing.T) {
 
 		insertFixtures(t, repo)
 
-		season := uint64(6012)
 		from := time.Unix(1550066313, 0)
 		to := time.Unix(1550066316, 0)
 
-		query := app.FixtureRepositoryQuery{DateTo: &to, DateFrom: &from, SeasonID: &season}
+		query := app.FixtureRepositoryQuery{DateTo: &to, DateFrom: &from, SeasonIDs: []uint64{uint64(6012)}}
 
 		fix, err := repo.Get(query)
 
@@ -524,9 +520,7 @@ func TestFixtureRepository_Get(t *testing.T) {
 
 		insertFixtures(t, repo)
 
-		season := uint64(999999999)
-
-		query := app.FixtureRepositoryQuery{SeasonID: &season}
+		query := app.FixtureRepositoryQuery{SeasonIDs: []uint64{uint64(999999999)}}
 
 		fix, err := repo.Get(query)
 

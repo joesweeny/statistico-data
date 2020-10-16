@@ -196,8 +196,7 @@ func TestPlayerStatsProcessor_Process(t *testing.T) {
 
 		fix := []app.Fixture{*newFixture(45)}
 
-		seasonID := uint64(45)
-		query := app.FixtureRepositoryQuery{SeasonID: &seasonID}
+		query := app.FixtureRepositoryQuery{SeasonIDs: []uint64{uint64(45)}}
 
 		fixtureRepo.On("Get", query).Return(fix, nil)
 		requester.On("PlayerStatsByFixtureIDs", []uint64{45}).Return(ch)
@@ -240,8 +239,7 @@ func TestPlayerStatsProcessor_Process(t *testing.T) {
 
 		fix := []app.Fixture{*newFixture(45)}
 
-		seasonID := uint64(45)
-		query := app.FixtureRepositoryQuery{SeasonID: &seasonID}
+		query := app.FixtureRepositoryQuery{SeasonIDs: []uint64{uint64(45)}}
 
 		fixtureRepo.On("Get", query).Return(fix, nil)
 		requester.On("PlayerStatsByFixtureIDs", []uint64{45}).Return(ch)
@@ -284,8 +282,7 @@ func TestPlayerStatsProcessor_Process(t *testing.T) {
 
 		fix := []app.Fixture{*newFixture(45)}
 
-		seasonID := uint64(45)
-		query := app.FixtureRepositoryQuery{SeasonID: &seasonID}
+		query := app.FixtureRepositoryQuery{SeasonIDs: []uint64{uint64(45)}}
 
 		fixtureRepo.On("Get", query).Return(fix, nil)
 		requester.On("PlayerStatsByFixtureIDs", []uint64{45}).Return(ch)
@@ -329,8 +326,7 @@ func TestPlayerStatsProcessor_Process(t *testing.T) {
 
 		fix := []app.Fixture{*newFixture(45)}
 
-		seasonID := uint64(45)
-		query := app.FixtureRepositoryQuery{SeasonID: &seasonID}
+		query := app.FixtureRepositoryQuery{SeasonIDs: []uint64{uint64(45)}}
 
 		fixtureRepo.On("Get", query).Return(fix, nil)
 		requester.On("PlayerStatsByFixtureIDs", []uint64{45}).Return(ch)
