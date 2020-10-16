@@ -15,6 +15,7 @@ import "internal/app/grpc/proto/venue.proto";
 service FixtureService {
     rpc ListSeasonFixtures(SeasonFixtureRequest) returns (stream Fixture) {}
     rpc FixtureByID(FixtureRequest) returns (Fixture) {}
+    rpc Search(FixtureSearchRequest) returns (stream Fixture) {}
 }
 
 message Fixture {
