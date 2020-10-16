@@ -78,7 +78,7 @@ func parseFixtureQuery(r *http.Request, ps httprouter.Params) (app.FixtureReposi
 	}
 
 	seasonID := uint64(id)
-	query.SeasonID = &seasonID
+	query.SeasonIDs = append(query.SeasonIDs, seasonID)
 	query.DateFrom = from
 	query.DateTo = to
 	query.SortBy = &sort

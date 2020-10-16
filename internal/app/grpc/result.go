@@ -129,7 +129,7 @@ func (s ResultService) GetResultsForSeason(r *proto.SeasonRequest, stream proto.
 	id := uint64(r.SeasonId)
 
 	query := app.FixtureRepositoryQuery{
-		SeasonID: &id,
+		SeasonIDs: []uint64{id},
 		DateTo:   &date,
 	}
 

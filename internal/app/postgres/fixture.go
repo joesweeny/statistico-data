@@ -155,8 +155,8 @@ func (r *FixtureRepository) GetIDs(q app.FixtureRepositoryQuery) ([]uint64, erro
 }
 
 func buildQuery(b sq.SelectBuilder, q app.FixtureRepositoryQuery) sq.SelectBuilder {
-	if q.SeasonID != nil {
-		b = b.Where(sq.Eq{"season_id": q.SeasonID})
+	if len(q.SeasonIDs) > 0 {
+		b = b.Where(sq.Eq{"season_id": q.SeasonIDs})
 	}
 
 	if q.HomeTeamID != nil {
