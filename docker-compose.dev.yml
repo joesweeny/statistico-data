@@ -6,6 +6,6 @@ services:
     env_file:
       - .env
 
-  grpc:
+  statistico-data-grpc:
     env_file:
       - .env
