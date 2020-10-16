@@ -174,7 +174,7 @@ var file_internal_app_grpc_proto_fixture_proto_rawDesc = []byte{
 	0x6f, 0x74, 0x6f, 0x2e, 0x56, 0x65, 0x6e, 0x75, 0x65, 0x52, 0x05, 0x76, 0x65, 0x6e, 0x75, 0x65,
 	0x12, 0x28, 0x0a, 0x09, 0x64, 0x61, 0x74, 0x65, 0x5f, 0x74, 0x69, 0x6d, 0x65, 0x18, 0x08, 0x20,
 	0x01, 0x28, 0x0b, 0x32, 0x0b, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x44, 0x61, 0x74, 0x65,
-	0x52, 0x08, 0x64, 0x61, 0x74, 0x65, 0x54, 0x69, 0x6d, 0x65, 0x32, 0x8f, 0x01, 0x0a, 0x0e, 0x46,
+	0x52, 0x08, 0x64, 0x61, 0x74, 0x65, 0x54, 0x69, 0x6d, 0x65, 0x32, 0xca, 0x01, 0x0a, 0x0e, 0x46,
 	0x69, 0x78, 0x74, 0x75, 0x72, 0x65, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x45, 0x0a,
 	0x12, 0x4c, 0x69, 0x73, 0x74, 0x53, 0x65, 0x61, 0x73, 0x6f, 0x6e, 0x46, 0x69, 0x78, 0x74, 0x75,
 	0x72, 0x65, 0x73, 0x12, 0x1b, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x53, 0x65, 0x61, 0x73,
@@ -183,9 +183,13 @@ var file_internal_app_grpc_proto_fixture_proto_rawDesc = []byte{
 	0x22, 0x00, 0x30, 0x01, 0x12, 0x36, 0x0a, 0x0b, 0x46, 0x69, 0x78, 0x74, 0x75, 0x72, 0x65, 0x42,
 	0x79, 0x49, 0x44, 0x12, 0x15, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x46, 0x69, 0x78, 0x74,
 	0x75, 0x72, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x0e, 0x2e, 0x70, 0x72, 0x6f,
-	0x74, 0x6f, 0x2e, 0x46, 0x69, 0x78, 0x74, 0x75, 0x72, 0x65, 0x22, 0x00, 0x42, 0x19, 0x5a, 0x17,
-	0x69, 0x6e, 0x74, 0x65, 0x72, 0x6e, 0x61, 0x6c, 0x2f, 0x61, 0x70, 0x70, 0x2f, 0x67, 0x72, 0x70,
-	0x63, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x74, 0x6f, 0x2e, 0x46, 0x69, 0x78, 0x74, 0x75, 0x72, 0x65, 0x22, 0x00, 0x12, 0x39, 0x0a, 0x06,
+	0x53, 0x65, 0x61, 0x72, 0x63, 0x68, 0x12, 0x1b, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x46,
+	0x69, 0x78, 0x74, 0x75, 0x72, 0x65, 0x53, 0x65, 0x61, 0x72, 0x63, 0x68, 0x52, 0x65, 0x71, 0x75,
+	0x65, 0x73, 0x74, 0x1a, 0x0e, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x46, 0x69, 0x78, 0x74,
+	0x75, 0x72, 0x65, 0x22, 0x00, 0x30, 0x01, 0x42, 0x19, 0x5a, 0x17, 0x69, 0x6e, 0x74, 0x65, 0x72,
+	0x6e, 0x61, 0x6c, 0x2f, 0x61, 0x70, 0x70, 0x2f, 0x67, 0x72, 0x70, 0x63, 0x2f, 0x70, 0x72, 0x6f,
+	0x74, 0x6f, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -211,24 +215,27 @@ var file_internal_app_grpc_proto_fixture_proto_goTypes = []interface{}{
 	(*Date)(nil),                 // 6: proto.Date
 	(*SeasonFixtureRequest)(nil), // 7: proto.SeasonFixtureRequest
 	(*FixtureRequest)(nil),       // 8: proto.FixtureRequest
+	(*FixtureSearchRequest)(nil), // 9: proto.FixtureSearchRequest
 }
 var file_internal_app_grpc_proto_fixture_proto_depIdxs = []int32{
-	1, // 0: proto.Fixture.competition:type_name -> proto.Competition
-	2, // 1: proto.Fixture.season:type_name -> proto.Season
-	3, // 2: proto.Fixture.home_team:type_name -> proto.Team
-	3, // 3: proto.Fixture.away_team:type_name -> proto.Team
-	4, // 4: proto.Fixture.round:type_name -> proto.Round
-	5, // 5: proto.Fixture.venue:type_name -> proto.Venue
-	6, // 6: proto.Fixture.date_time:type_name -> proto.Date
-	7, // 7: proto.FixtureService.ListSeasonFixtures:input_type -> proto.SeasonFixtureRequest
-	8, // 8: proto.FixtureService.FixtureByID:input_type -> proto.FixtureRequest
-	0, // 9: proto.FixtureService.ListSeasonFixtures:output_type -> proto.Fixture
-	0, // 10: proto.FixtureService.FixtureByID:output_type -> proto.Fixture
-	9, // [9:11] is the sub-list for method output_type
-	7, // [7:9] is the sub-list for method input_type
-	7, // [7:7] is the sub-list for extension type_name
-	7, // [7:7] is the sub-list for extension extendee
-	0, // [0:7] is the sub-list for field type_name
+	1,  // 0: proto.Fixture.competition:type_name -> proto.Competition
+	2,  // 1: proto.Fixture.season:type_name -> proto.Season
+	3,  // 2: proto.Fixture.home_team:type_name -> proto.Team
+	3,  // 3: proto.Fixture.away_team:type_name -> proto.Team
+	4,  // 4: proto.Fixture.round:type_name -> proto.Round
+	5,  // 5: proto.Fixture.venue:type_name -> proto.Venue
+	6,  // 6: proto.Fixture.date_time:type_name -> proto.Date
+	7,  // 7: proto.FixtureService.ListSeasonFixtures:input_type -> proto.SeasonFixtureRequest
+	8,  // 8: proto.FixtureService.FixtureByID:input_type -> proto.FixtureRequest
+	9,  // 9: proto.FixtureService.Search:input_type -> proto.FixtureSearchRequest
+	0,  // 10: proto.FixtureService.ListSeasonFixtures:output_type -> proto.Fixture
+	0,  // 11: proto.FixtureService.FixtureByID:output_type -> proto.Fixture
+	0,  // 12: proto.FixtureService.Search:output_type -> proto.Fixture
+	10, // [10:13] is the sub-list for method output_type
+	7,  // [7:10] is the sub-list for method input_type
+	7,  // [7:7] is the sub-list for extension type_name
+	7,  // [7:7] is the sub-list for extension extendee
+	0,  // [0:7] is the sub-list for field type_name
 }
 
 func init() { file_internal_app_grpc_proto_fixture_proto_init() }
@@ -291,6 +298,7 @@ const _ = grpc.SupportPackageIsVersion6
 type FixtureServiceClient interface {
 	ListSeasonFixtures(ctx context.Context, in *SeasonFixtureRequest, opts ...grpc.CallOption) (FixtureService_ListSeasonFixturesClient, error)
 	FixtureByID(ctx context.Context, in *FixtureRequest, opts ...grpc.CallOption) (*Fixture, error)
+	Search(ctx context.Context, in *FixtureSearchRequest, opts ...grpc.CallOption) (FixtureService_SearchClient, error)
 }
 
 type fixtureServiceClient struct {
@@ -342,10 +350,43 @@ func (c *fixtureServiceClient) FixtureByID(ctx context.Context, in *FixtureReque
 	return out, nil
 }
 
+func (c *fixtureServiceClient) Search(ctx context.Context, in *FixtureSearchRequest, opts ...grpc.CallOption) (FixtureService_SearchClient, error) {
+	stream, err := c.cc.NewStream(ctx, &_FixtureService_serviceDesc.Streams[1], "/proto.FixtureService/Search", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &fixtureServiceSearchClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type FixtureService_SearchClient interface {
+	Recv() (*Fixture, error)
+	grpc.ClientStream
+}
+
+type fixtureServiceSearchClient struct {
+	grpc.ClientStream
+}
+
+func (x *fixtureServiceSearchClient) Recv() (*Fixture, error) {
+	m := new(Fixture)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 // FixtureServiceServer is the server API for FixtureService service.
 type FixtureServiceServer interface {
 	ListSeasonFixtures(*SeasonFixtureRequest, FixtureService_ListSeasonFixturesServer) error
 	FixtureByID(context.Context, *FixtureRequest) (*Fixture, error)
+	Search(*FixtureSearchRequest, FixtureService_SearchServer) error
 }
 
 // UnimplementedFixtureServiceServer can be embedded to have forward compatible implementations.
@@ -357,6 +398,9 @@ func (*UnimplementedFixtureServiceServer) ListSeasonFixtures(*SeasonFixtureReque
 }
 func (*UnimplementedFixtureServiceServer) FixtureByID(context.Context, *FixtureRequest) (*Fixture, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FixtureByID not implemented")
+}
+func (*UnimplementedFixtureServiceServer) Search(*FixtureSearchRequest, FixtureService_SearchServer) error {
+	return status.Errorf(codes.Unimplemented, "method Search not implemented")
 }
 
 func RegisterFixtureServiceServer(s *grpc.Server, srv FixtureServiceServer) {
@@ -402,6 +446,27 @@ func _FixtureService_FixtureByID_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _FixtureService_Search_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(FixtureSearchRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(FixtureServiceServer).Search(m, &fixtureServiceSearchServer{stream})
+}
+
+type FixtureService_SearchServer interface {
+	Send(*Fixture) error
+	grpc.ServerStream
+}
+
+type fixtureServiceSearchServer struct {
+	grpc.ServerStream
+}
+
+func (x *fixtureServiceSearchServer) Send(m *Fixture) error {
+	return x.ServerStream.SendMsg(m)
+}
+
 var _FixtureService_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "proto.FixtureService",
 	HandlerType: (*FixtureServiceServer)(nil),
@@ -415,6 +480,11 @@ var _FixtureService_serviceDesc = grpc.ServiceDesc{
 		{
 			StreamName:    "ListSeasonFixtures",
 			Handler:       _FixtureService_ListSeasonFixtures_Handler,
+			ServerStreams: true,
+		},
+		{
+			StreamName:    "Search",
+			Handler:       _FixtureService_Search_Handler,
 			ServerStreams: true,
 		},
 	},

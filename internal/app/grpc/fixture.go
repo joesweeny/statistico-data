@@ -78,6 +78,10 @@ func (s *FixtureService) FixtureByID(c context.Context, r *proto.FixtureRequest)
 	return f, nil
 }
 
+func (s *FixtureService) Search(r *proto.FixtureSearchRequest, stream proto.FixtureService_SearchServer) error {
+	return nil
+}
+
 func NewFixtureService(r app.FixtureRepository, f *factory.FixtureFactory, log *logrus.Logger) *FixtureService {
 	return &FixtureService{fixtureRepo: r, factory: f, logger: log}
 }

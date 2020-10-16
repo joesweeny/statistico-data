@@ -19,6 +19,21 @@ message FixtureRequest {
     uint64 fixture_id = 1;
 }
 
+message FixtureSearchRequest {
+    // A filter to limit the results returned associated to a specific season
+    repeated uint64 season_ids = 1;
+    // The number of results to return.
+    google.protobuf.UInt64Value limit = 2;
+    // A filter to return Results before a specific date
+    // RFC3339 formatted string i.e "2006-01-02T15:04:05Z07:00"
+    google.protobuf.StringValue date_before = 3;
+    // A filter to return Results after a specific date
+    // RFC3339 formatted string i.e "2006-01-02T15:04:05Z07:00"
+    google.protobuf.StringValue date_after = 4;
+    // Order the date column to return results in specific order
+    google.protobuf.StringValue sort = 5;
+}
+
 message HistoricalResultRequest {
     // The Home Team ID that the Result set relates to
     uint64 home_team_id = 1;
