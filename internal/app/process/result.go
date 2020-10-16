@@ -53,7 +53,9 @@ func (r ResultProcessor) processByID(done chan bool, id uint64) {
 }
 
 func (r ResultProcessor) processSeason(done chan bool, seasonID uint64) {
-	query := app.FixtureRepositoryQuery{SeasonID: &seasonID}
+	query := app.FixtureRepositoryQuery{
+		SeasonIDs: []uint64{seasonID},
+	}
 
 	fix, err := r.fixtureRepo.Get(query)
 

@@ -55,7 +55,9 @@ func (e EventProcessor) processEventsByFixtureID(id uint64, done chan bool) {
 }
 
 func (e EventProcessor) processEventsBySeasonID(id uint64, done chan bool) {
-	query := app.FixtureRepositoryQuery{SeasonID: &id}
+	query := app.FixtureRepositoryQuery{
+		SeasonIDs: []uint64{id},
+	}
 
 	fix, err := e.fixtureRepo.Get(query)
 

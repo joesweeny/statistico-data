@@ -61,7 +61,7 @@ func (s *FixtureService) ListSeasonFixtures(r *proto.SeasonFixtureRequest, strea
 }
 
 func (s *FixtureService) FixtureByID(c context.Context, r *proto.FixtureRequest) (*proto.Fixture, error) {
-	fix, err := s.fixtureRepo.ByID(uint64(r.FixtureId))
+	fix, err := s.fixtureRepo.ByID(r.FixtureId)
 
 	if err != nil {
 		s.logger.Warnf("Error fetching fixture in gRPC fixture service: %s", err.Error())
@@ -79,9 +79,82 @@ func (s *FixtureService) FixtureByID(c context.Context, r *proto.FixtureRequest)
 }
 
 func (s *FixtureService) Search(r *proto.FixtureSearchRequest, stream proto.FixtureService_SearchServer) error {
+	query, err := buildFixtureRepositoryQuery(r)
+
+	if err != nil {
+		return err
+	}
+
+	fixtures, err := s.fixtureRepo.Get(query)
+
+	if err != nil {
+		s.logger.Warnf("Error retrieving Fixture(s). Error: %s", err.Error())
+		return status.Error(codes.Internal, "Internal server error")
+	}
+
+	for _, fix := range fixtures {
+		f, err := s.factory.BuildFixture(&fix)
+
+		if err != nil {
+			s.logger.Errorf("Error hydrating Fixture. Error: %s", err.Error())
+			return status.Error(codes.Internal, "Internal server error")
+		}
+
+		if err := stream.Send(f); err != nil {
+			s.logger.Errorf("Error streaming Fixture back to client. Error: %s", err.Error())
+			return status.Error(codes.Internal, "Internal server error")
+		}
+	}
+
 	return nil
 }
 
 func NewFixtureService(r app.FixtureRepository, f *factory.FixtureFactory, log *logrus.Logger) *FixtureService {
 	return &FixtureService{fixtureRepo: r, factory: f, logger: log}
+}
+
+func buildFixtureRepositoryQuery(r *proto.FixtureSearchRequest) (app.FixtureRepositoryQuery, error) {
+	var query app.FixtureRepositoryQuery
+
+	if r.GetDateBefore() != nil {
+		date, err := time.Parse(time.RFC3339, r.GetDateBefore().GetValue())
+
+		if err != nil {
+			return query, status.Error(
+				codes.InvalidArgument,
+				fmt.Sprintf("Date provided '%s' is not a valid RFC3339 date", r.GetDateBefore().GetValue()),
+			)
+		}
+
+		query.DateTo = &date
+	}
+
+	if r.GetDateAfter() != nil {
+		date, err := time.Parse(time.RFC3339, r.GetDateAfter().GetValue())
+
+		if err != nil {
+			return query, status.Error(
+				codes.InvalidArgument,
+				fmt.Sprintf("Date provided '%s' is not a valid RFC3339 date", r.GetDateAfter().GetValue()),
+			)
+		}
+
+		query.DateFrom = &date
+	}
+
+	if r.GetLimit() != nil {
+		v := r.GetLimit().GetValue()
+		query.Limit = &v
+	}
+
+	if len(r.GetSeasonIds()) > 0 {
+		query.SeasonIDs = r.GetSeasonIds()
+	}
+
+	if r.GetSort() != nil {
+		v := r.GetSort().GetValue()
+		query.SortBy = &v
+	}
+
+	return query, nil
 }

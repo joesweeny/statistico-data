@@ -45,9 +45,9 @@ type FixtureFilterQuery struct {
 }
 
 type FixtureRepositoryQuery struct {
-	LeagueIds        []uint64
+	LeagueIDs        []uint64
 	Filters          []FixtureStatFilter
-	SeasonID         *uint64
+	SeasonIDs        []uint64
 	HomeTeamID       *uint64
 	AwayTeamID       *uint64
 	HomeTeamNameLike *string

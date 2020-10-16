@@ -221,7 +221,7 @@ func (f FixtureTeamXGProcessor) parseFixture(u understat.Fixture, seasonID uint6
 	query := app.FixtureRepositoryQuery{
 		HomeTeamNameLike: &home,
 		AwayTeamNameLike: &away,
-		SeasonID: &seasonID,
+		SeasonIDs: []uint64{seasonID},
 	}
 
 	fixs, err := f.fixtureRepo.Get(query)
