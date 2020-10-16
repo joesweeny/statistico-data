@@ -34,7 +34,7 @@ services:
     <<: *console
     command: ["./bin/migrate"]
 
-  grpc:
+  statistico-data-grpc:
     <<: *console
     ports:
       - "50051:50051"
