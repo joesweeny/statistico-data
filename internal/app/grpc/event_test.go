@@ -10,7 +10,6 @@ import (
 	"github.com/statistico/statistico-data/internal/app/grpc/proto"
 	"github.com/statistico/statistico-data/internal/app/mock"
 	"github.com/stretchr/testify/assert"
-	grpc2 "google.golang.org/grpc"
 	"testing"
 	"time"
 )
@@ -39,7 +38,7 @@ func TestEventService_FixtureEvents(t *testing.T) {
 
 		req := proto.FixtureRequest{FixtureId: uint64(45)}
 
-		res, err := service.FixtureEvents(context.Background(), &req, grpc2.CallOption(nil))
+		res, err := service.FixtureEvents(context.Background(), &req)
 
 		if err != nil {
 			t.Fatalf("Expected nil, got %s", err)
@@ -100,7 +99,7 @@ func TestEventService_FixtureEvents(t *testing.T) {
 
 		req := proto.FixtureRequest{FixtureId: uint64(45)}
 
-		_, err := service.FixtureEvents(context.Background(), &req, grpc2.CallOption(nil))
+		_, err := service.FixtureEvents(context.Background(), &req)
 
 		if err == nil {
 			t.Fatalf("Expected error, got nil")
@@ -125,7 +124,7 @@ func TestEventService_FixtureEvents(t *testing.T) {
 
 		req := proto.FixtureRequest{FixtureId: uint64(45)}
 
-		_, err := service.FixtureEvents(context.Background(), &req, grpc2.CallOption(nil))
+		_, err := service.FixtureEvents(context.Background(), &req)
 
 		if err == nil {
 			t.Fatalf("Expected error, got nil")

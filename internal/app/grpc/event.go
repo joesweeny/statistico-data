@@ -6,7 +6,6 @@ import (
 	"github.com/statistico/statistico-data/internal/app"
 	"github.com/statistico/statistico-data/internal/app/grpc/factory"
 	"github.com/statistico/statistico-data/internal/app/grpc/proto"
-	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
@@ -16,22 +15,22 @@ type EventService struct {
 	logger     *logrus.Logger
 }
 
-func (e *EventService) FixtureEvents(ctx context.Context, in *proto.FixtureRequest, opts ...grpc.CallOption) (*proto.FixtureEventsResponse, error) {
-	cards, err := e.eventRepo.CardEventsForFixture(in.FixtureId)
+func (e *EventService) FixtureEvents(ctx context.Context, req *proto.FixtureRequest) (*proto.FixtureEventsResponse, error) {
+	cards, err := e.eventRepo.CardEventsForFixture(req.FixtureId)
 
 	if err != nil {
 		e.logger.Errorf("Error retrieving card events in Event Service. Error: %s", err.Error())
 		return nil, status.Error(codes.Internal, "Internal server error")
 	}
 
-	goals, err := e.eventRepo.GoalEventsForFixture(in.FixtureId)
+	goals, err := e.eventRepo.GoalEventsForFixture(req.FixtureId)
 
 	if err != nil {
 		e.logger.Errorf("Error retrieving goal events in Event Service. Error: %s", err.Error())
 		return nil, status.Error(codes.Internal, "Internal server error")
 	}
 
-	res := proto.FixtureEventsResponse{FixtureId: in.FixtureId}
+	res := proto.FixtureEventsResponse{FixtureId: req.FixtureId}
 
 	for _, c := range cards {
 		res.Cards = append(res.Cards, factory.CardEventToProto(c))

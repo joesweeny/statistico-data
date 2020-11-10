@@ -8,6 +8,10 @@ func (c Container) CompetitionService() *grpc.CompetitionService {
 	return grpc.NewCompetitionService(c.CompetitionRepository(), c.Logger)
 }
 
+func (c Container) EventService() *grpc.EventService {
+	return grpc.NewEventService(c.EventRepository(), c.Logger)
+}
+
 func (c Container) FixtureService() *grpc.FixtureService {
 	return grpc.NewFixtureService(c.FixtureRepository(), c.ProtoFixtureFactory(), c.Logger)
 }
