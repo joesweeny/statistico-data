@@ -49,7 +49,7 @@ func (e EventProcessor) processEventsByFixtureID(id uint64, done chan bool) {
 
 	ids := []uint64{fix.ID}
 
-	goals, subs := e.requester.EventsByFixtureIDs(ids)
+	goals, subs, _ := e.requester.EventsByFixtureIDs(ids)
 
 	go e.parseEvents(goals, subs, done)
 }
@@ -72,7 +72,7 @@ func (e EventProcessor) processEventsBySeasonID(id uint64, done chan bool) {
 		ids = append(ids, f.ID)
 	}
 
-	goals, subs := e.requester.EventsByFixtureIDs(ids)
+	goals, subs, _ := e.requester.EventsByFixtureIDs(ids)
 
 	go e.parseEvents(goals, subs, done)
 }
@@ -96,7 +96,7 @@ func (e EventProcessor) processTodayEvents(done chan bool) {
 		return
 	}
 
-	goals, subs := e.requester.EventsByFixtureIDs(ids)
+	goals, subs, _ := e.requester.EventsByFixtureIDs(ids)
 
 	go e.parseEvents(goals, subs, done)
 }

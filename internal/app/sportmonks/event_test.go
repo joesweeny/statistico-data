@@ -13,7 +13,7 @@ import (
 )
 
 func TestEventRequester_EventsByFixtureIDs(t *testing.T) {
-	t.Run("returns two channels containing goal and substitution events", func(t *testing.T) {
+	t.Run("returns three channels containing card, goal and substitution events", func(t *testing.T) {
 		server := mock.HttpClient(func(req *http.Request) (*http.Response, error) {
 			return &http.Response{
 				StatusCode: 200,
@@ -31,13 +31,16 @@ func TestEventRequester_EventsByFixtureIDs(t *testing.T) {
 
 		requester := sportmonks.NewEventRequester(&client, logger)
 
-		goals, subs := requester.EventsByFixtureIDs([]uint64{uint64(5), uint64(23)})
+		goals, subs, cards := requester.EventsByFixtureIDs([]uint64{uint64(5), uint64(23)})
 
 		goalOne := <-goals
 		goalTwo := <-goals
 
 		subOne := <-subs
 		subTwo := <-subs
+
+		cardOne := <-cards
+		cardTwo := <-cards
 
 		a := assert.New(t)
 
@@ -72,6 +75,20 @@ func TestEventRequester_EventsByFixtureIDs(t *testing.T) {
 		a.Equal(uint64(3530), subTwo.PlayerOutID)
 		a.Equal(54, subTwo.Minute)
 		a.Nil(subTwo.Injured)
+
+		a.Equal(uint64(11867603002), cardOne.ID)
+		a.Equal(uint64(20), cardOne.TeamID)
+		a.Equal("yellowcard", cardOne.Type)
+		a.Equal(uint64(1310), cardOne.PlayerID)
+		a.Equal(uint8(33), cardOne.Minute)
+		a.Nil(cardOne.Reason)
+
+		a.Equal(uint64(11867603003), cardTwo.ID)
+		a.Equal(uint64(451), cardTwo.TeamID)
+		a.Equal("redcard", cardTwo.Type)
+		a.Equal(uint64(13101), cardTwo.PlayerID)
+		a.Equal(uint8(90), cardTwo.Minute)
+		a.Equal("serious foul play", *cardTwo.Reason)
 	})
 }
 
@@ -208,6 +225,32 @@ var fixtureEventsResponse = `{
 					  "injuried": null
 				}
 			]
+		},
+		"cards": {
+		  "data": [
+			{
+			  "id": 11867603002,
+			  "team_id": "20",
+			  "type": "yellowcard",
+			  "fixture_id": 11867603,
+			  "player_id": 1310,
+			  "player_name": "F. Fernandez",
+			  "minute": 33,
+			  "extra_minute": null,
+			  "reason": null
+			},
+			{
+			  "id": 11867603003,
+			  "team_id": "451",
+			  "type": "redcard",
+			  "fixture_id": 11867603,
+			  "player_id": 13101,
+			  "player_name": "P. Zabaleta",
+			  "minute": 90,
+			  "extra_minute": null,
+			  "reason": "serious foul play"
+			}
+		  ]
 		}
   	}
 }`
