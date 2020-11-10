@@ -298,9 +298,7 @@ func newCardEvent(id, fixtureID uint64) *app.CardEvent {
 		Type:        "red",
 		FixtureID:   fixtureID,
 		PlayerID:    uint64(3401),
-		PlayerName:  "Manuel Lanzini",
 		Minute:      85,
-		ExtraMinute: nil,
 		Reason:      nil,
 		CreatedAt:   time.Time{},
 	}
