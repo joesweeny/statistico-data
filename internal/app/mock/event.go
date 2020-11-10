@@ -24,6 +24,16 @@ func (m *EventRepository) InsertSubstitutionEvent(e *app.SubstitutionEvent) erro
 	return args.Error(0)
 }
 
+func (m *EventRepository) CardEventsForFixture(fixtureID uint64) ([]*app.CardEvent, error) {
+	args := m.Called(fixtureID)
+	return args.Get(0).([]*app.CardEvent), args.Error(1)
+}
+
+func (m *EventRepository) GoalEventsForFixture(fixtureID uint64) ([]*app.GoalEvent, error) {
+	args := m.Called(fixtureID)
+	return args.Get(0).([]*app.GoalEvent), args.Error(1)
+}
+
 func (m *EventRepository) GoalEventByID(id uint64) (*app.GoalEvent, error) {
 	args := m.Called(id)
 	c := args.Get(0).(*app.GoalEvent)

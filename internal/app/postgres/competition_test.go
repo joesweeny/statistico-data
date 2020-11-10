@@ -164,7 +164,7 @@ func TestCompetitionRepository_Get(t *testing.T) {
 		isCup := true
 
 		filter := app.CompetitionFilterQuery{
-			IsCup:      &isCup,
+			IsCup: &isCup,
 		}
 
 		fetched, err := repo.Get(filter)
@@ -196,7 +196,7 @@ func TestCompetitionRepository_Get(t *testing.T) {
 		isCup := false
 
 		filter := app.CompetitionFilterQuery{
-			IsCup:      &isCup,
+			IsCup: &isCup,
 		}
 
 		fetched, err := repo.Get(filter)
@@ -252,7 +252,7 @@ func TestCompetitionRepository_Get(t *testing.T) {
 		}
 
 		filter := app.CompetitionFilterQuery{
-			CountryIds:      []uint64{462, 464},
+			CountryIds: []uint64{462, 464},
 		}
 
 		fetched, err := repo.Get(filter)

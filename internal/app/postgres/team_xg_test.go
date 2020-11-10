@@ -17,7 +17,7 @@ func TestFixtureTeamXGRepository_Insert(t *testing.T) {
 		defer cleanUp()
 
 		for i := 1; i < 4; i++ {
-			f := newFixtureTeamXG(uint64(i), uint64(i + 1))
+			f := newFixtureTeamXG(uint64(i), uint64(i+1))
 
 			if err := repo.Insert(f); err != nil {
 				t.Errorf("Test failed, expected nil, got %s", err)

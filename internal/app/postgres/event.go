@@ -66,6 +66,92 @@ func (e *EventRepository) InsertSubstitutionEvent(s *app.SubstitutionEvent) erro
 	return err
 }
 
+func (e *EventRepository) CardEventsForFixture(fixtureID uint64) ([]*app.CardEvent, error) {
+	builder := e.queryBuilder()
+
+	rows, err := builder.
+		Select("sportmonks_card_event.*").
+		From("sportmonks_card_event").
+		Where(sq.Eq{"fixture_id": fixtureID}).
+		Query()
+
+	if err != nil {
+		return []*app.CardEvent{}, err
+	}
+
+	defer rows.Close()
+
+	var created int64
+	var events []*app.CardEvent
+	var event app.CardEvent
+
+	for rows.Next() {
+		err := rows.Scan(
+			&event.ID,
+			&event.TeamID,
+			&event.FixtureID,
+			&event.Type,
+			&event.PlayerID,
+			&event.Minute,
+			&event.Reason,
+			&created,
+		)
+
+		if err != nil {
+			return events, err
+		}
+
+		event.CreatedAt = time.Unix(created, 0)
+
+		events = append(events, &event)
+	}
+
+	return events, nil
+}
+
+func (e *EventRepository) GoalEventsForFixture(fixtureID uint64) ([]*app.GoalEvent, error) {
+	builder := e.queryBuilder()
+
+	rows, err := builder.
+		Select("sportmonks_goal_event.*").
+		From("sportmonks_goal_event").
+		Where(sq.Eq{"fixture_id": fixtureID}).
+		Query()
+
+	if err != nil {
+		return []*app.GoalEvent{}, err
+	}
+
+	defer rows.Close()
+
+	var created int64
+	var events []*app.GoalEvent
+	var event app.GoalEvent
+
+	for rows.Next() {
+		err := rows.Scan(
+			&event.ID,
+			&event.TeamID,
+			&event.PlayerID,
+			&event.PlayerAssistID,
+			&event.Minute,
+			&event.Score,
+			&created,
+			&event.FixtureID,
+		)
+
+		if err != nil {
+			return events, err
+		}
+
+		event.CreatedAt = time.Unix(created, 0)
+
+		events = append(events, &event)
+	}
+
+	return events, nil
+}
+
 func (e *EventRepository) GoalEventByID(id uint64) (*app.GoalEvent, error) {
 	query := `SELECT * FROM sportmonks_goal_event WHERE id = $1`
 
