@@ -47,6 +47,7 @@ type EventRepository interface {
 	InsertSubstitutionEvent(e *SubstitutionEvent) error
 	CardEventsForFixture(fixtureID uint64) ([]*CardEvent, error)
 	GoalEventsForFixture(fixtureID uint64) ([]*GoalEvent, error)
+	CardEventByID(id uint64) (*CardEvent, error)
 	GoalEventByID(id uint64) (*GoalEvent, error)
 	SubstitutionEventByID(id uint64) (*SubstitutionEvent, error)
 }

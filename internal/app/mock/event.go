@@ -34,6 +34,12 @@ func (m *EventRepository) GoalEventsForFixture(fixtureID uint64) ([]*app.GoalEve
 	return args.Get(0).([]*app.GoalEvent), args.Error(1)
 }
 
+func (m *EventRepository) CardEventByID(id uint64) (*app.CardEvent, error) {
+	args := m.Called(id)
+	c := args.Get(0).(*app.CardEvent)
+	return c, args.Error(1)
+}
+
 func (m *EventRepository) GoalEventByID(id uint64) (*app.GoalEvent, error) {
 	args := m.Called(id)
 	c := args.Get(0).(*app.GoalEvent)

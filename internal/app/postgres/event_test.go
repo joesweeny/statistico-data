@@ -93,6 +93,49 @@ func TestEventRepository_InsertSubstitutionEvent(t *testing.T) {
 	})
 }
 
+func TestEventRepository_CardEventByID(t *testing.T) {
+	conn, cleanUp := test.GetConnection(t, "sportmonks_card_event")
+	repo := postgres.NewEventRepository(conn, test.Clock)
+
+	t.Run("goal event can be retrieved by ID", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+
+		m := newCardEvent(33, 45)
+
+		if err := repo.InsertCardEvent(m); err != nil {
+			t.Errorf("Test failed, expected nil, got %s", err)
+		}
+
+		c, err := repo.CardEventByID(33)
+
+		if err != nil {
+			t.Fatalf("Error when retrieving a record from the database: %s", err.Error())
+		}
+
+		a := assert.New(t)
+		a.Equal(uint64(33), c.ID)
+		a.Equal(uint64(4509), c.TeamID)
+		a.Equal("redcard", c.Type)
+		a.Equal(uint64(45), c.FixtureID)
+		a.Equal(uint64(3401), c.PlayerID)
+		a.Equal(uint8(85), c.Minute)
+		a.Nil(c.Reason)
+		a.Equal("2019-01-14 11:25:00 +0000 UTC", c.CreatedAt.String())
+	})
+
+	t.Run("returns error if goal event does not exist", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+
+		_, err := repo.CardEventByID(99)
+
+		if err == nil {
+			t.Fatalf("Test failed, expected %v, got nil", err)
+		}
+	})
+}
+
 func TestEventRepository_GoalEventByID(t *testing.T) {
 	conn, cleanUp := test.GetConnection(t, "sportmonks_goal_event")
 	repo := postgres.NewEventRepository(conn, test.Clock)
@@ -295,7 +338,7 @@ func newCardEvent(id, fixtureID uint64) *app.CardEvent {
 	return &app.CardEvent{
 		ID:          id,
 		TeamID:      uint64(4509),
-		Type:        "red",
+		Type:        "redcard",
 		FixtureID:   fixtureID,
 		PlayerID:    uint64(3401),
 		Minute:      85,

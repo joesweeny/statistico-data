@@ -45,7 +45,14 @@ func TestEventProcessor_Process(t *testing.T) {
 
 		subCh := subEventChannel(subs)
 
-		cardCh := cardEventChannel([]*app.CardEvent{})
+		cardOne := newCardEvent(1)
+		cardTwo := newCardEvent(2)
+
+		cards := make([]*app.CardEvent, 2)
+		cards[0] = cardOne
+		cards[1] = cardTwo
+
+		cardCh := cardEventChannel(cards)
 
 		fixtureRepo.On("ByID", uint64(12)).Return(newFixture(uint64(12)), nil)
 		requester.On("EventsByFixtureIDs", []uint64{12}).Return(goalCh, subCh, cardCh)
@@ -59,6 +66,11 @@ func TestEventProcessor_Process(t *testing.T) {
 		eventRepo.On("SubstitutionEventByID", uint64(2)).Return(&app.SubstitutionEvent{}, errors.New("not found"))
 		eventRepo.On("InsertSubstitutionEvent", subOne).Return(nil)
 		eventRepo.On("InsertSubstitutionEvent", subTwo).Return(nil)
+
+		eventRepo.On("CardEventByID", uint64(1)).Return(&app.CardEvent{}, errors.New("not found"))
+		eventRepo.On("CardEventByID", uint64(2)).Return(&app.CardEvent{}, errors.New("not found"))
+		eventRepo.On("InsertCardEvent", cardOne).Return(nil)
+		eventRepo.On("InsertCardEvent", cardTwo).Return(nil)
 
 		processor.Process("events:by-result-id", "12", done)
 
@@ -101,7 +113,14 @@ func TestEventProcessor_Process(t *testing.T) {
 
 		subCh := subEventChannel(subs)
 
-		cardCh := cardEventChannel([]*app.CardEvent{})
+		cardOne := newCardEvent(1)
+		cardTwo := newCardEvent(2)
+
+		cards := make([]*app.CardEvent, 2)
+		cards[0] = cardOne
+		cards[1] = cardTwo
+
+		cardCh := cardEventChannel(cards)
 
 		fixtureRepo.On("ByID", uint64(12)).Return(newFixture(uint64(12)), nil)
 		requester.On("EventsByFixtureIDs", []uint64{12}).Return(goalCh, subCh, cardCh)
@@ -115,6 +134,11 @@ func TestEventProcessor_Process(t *testing.T) {
 		eventRepo.On("SubstitutionEventByID", uint64(2)).Return(subTwo, nil)
 		eventRepo.AssertNotCalled(t, "InsertSubstitutionEvent", subOne)
 		eventRepo.AssertNotCalled(t, "InsertSubstitutionEvent", subTwo)
+
+		eventRepo.On("CardEventByID", uint64(1)).Return(cardOne, nil)
+		eventRepo.On("CardEventByID", uint64(2)).Return(cardTwo, nil)
+		eventRepo.AssertNotCalled(t, "InsertCardEvent", cardOne)
+		eventRepo.AssertNotCalled(t, "InsertCardEvent", cardTwo)
 
 		processor.Process("events:by-result-id", "12", done)
 
@@ -157,7 +181,14 @@ func TestEventProcessor_Process(t *testing.T) {
 
 		subCh := subEventChannel(subs)
 
-		cardCh := cardEventChannel([]*app.CardEvent{})
+		cardOne := newCardEvent(1)
+		cardTwo := newCardEvent(2)
+
+		cards := make([]*app.CardEvent, 2)
+		cards[0] = cardOne
+		cards[1] = cardTwo
+
+		cardCh := cardEventChannel(cards)
 
 		fixtureRepo.On("ByID", uint64(12)).Return(newFixture(uint64(12)), nil)
 		requester.On("EventsByFixtureIDs", []uint64{12}).Return(goalCh, subCh, cardCh)
@@ -172,6 +203,11 @@ func TestEventProcessor_Process(t *testing.T) {
 		eventRepo.On("InsertSubstitutionEvent", subOne).Return(nil)
 		eventRepo.On("InsertSubstitutionEvent", subTwo).Return(errors.New("error occurred"))
 
+		eventRepo.On("CardEventByID", uint64(1)).Return(&app.CardEvent{}, errors.New("not found"))
+		eventRepo.On("CardEventByID", uint64(2)).Return(&app.CardEvent{}, errors.New("not found"))
+		eventRepo.On("InsertCardEvent", cardOne).Return(nil)
+		eventRepo.On("InsertCardEvent", cardTwo).Return(errors.New("error occurred"))
+
 		processor.Process("events:by-result-id", "12", done)
 
 		<-done
@@ -179,7 +215,7 @@ func TestEventProcessor_Process(t *testing.T) {
 		requester.AssertExpectations(t)
 		fixtureRepo.AssertExpectations(t)
 		eventRepo.AssertExpectations(t)
-		assert.Equal(t, 2, len(hook.Entries))
+		assert.Equal(t, 3, len(hook.Entries))
 		assert.Equal(t, logrus.WarnLevel, hook.LastEntry().Level)
 	})
 
@@ -214,7 +250,14 @@ func TestEventProcessor_Process(t *testing.T) {
 
 		subCh := subEventChannel(subs)
 
-		cardCh := cardEventChannel([]*app.CardEvent{})
+		cardOne := newCardEvent(1)
+		cardTwo := newCardEvent(2)
+
+		cards := make([]*app.CardEvent, 2)
+		cards[0] = cardOne
+		cards[1] = cardTwo
+
+		cardCh := cardEventChannel(cards)
 
 		var fix []app.Fixture
 
@@ -234,6 +277,11 @@ func TestEventProcessor_Process(t *testing.T) {
 		eventRepo.On("SubstitutionEventByID", uint64(2)).Return(&app.SubstitutionEvent{}, errors.New("not found"))
 		eventRepo.On("InsertSubstitutionEvent", subOne).Return(nil)
 		eventRepo.On("InsertSubstitutionEvent", subTwo).Return(nil)
+
+		eventRepo.On("CardEventByID", uint64(1)).Return(&app.CardEvent{}, errors.New("not found"))
+		eventRepo.On("CardEventByID", uint64(2)).Return(&app.CardEvent{}, errors.New("not found"))
+		eventRepo.On("InsertCardEvent", cardOne).Return(nil)
+		eventRepo.On("InsertCardEvent", cardTwo).Return(nil)
 
 		processor.Process("events:by-season-id", "12", done)
 
@@ -276,7 +324,14 @@ func TestEventProcessor_Process(t *testing.T) {
 
 		subCh := subEventChannel(subs)
 
-		cardCh := cardEventChannel([]*app.CardEvent{})
+		cardOne := newCardEvent(1)
+		cardTwo := newCardEvent(2)
+
+		cards := make([]*app.CardEvent, 2)
+		cards[0] = cardOne
+		cards[1] = cardTwo
+
+		cardCh := cardEventChannel(cards)
 
 		var fix []app.Fixture
 		fix = append(fix, *newFixture(uint64(12)))
@@ -295,6 +350,11 @@ func TestEventProcessor_Process(t *testing.T) {
 		eventRepo.On("SubstitutionEventByID", uint64(2)).Return(subTwo, nil)
 		eventRepo.AssertNotCalled(t, "InsertSubstitutionEvent", subOne)
 		eventRepo.AssertNotCalled(t, "InsertSubstitutionEvent", subTwo)
+
+		eventRepo.On("CardEventByID", uint64(1)).Return(cardOne, nil)
+		eventRepo.On("CardEventByID", uint64(2)).Return(cardTwo, nil)
+		eventRepo.AssertNotCalled(t, "InsertCardEvent", cardOne)
+		eventRepo.AssertNotCalled(t, "InsertCardEvent", cardTwo)
 
 		processor.Process("events:by-season-id", "12", done)
 
@@ -337,7 +397,14 @@ func TestEventProcessor_Process(t *testing.T) {
 
 		subCh := subEventChannel(subs)
 
-		cardCh := cardEventChannel([]*app.CardEvent{})
+		cardOne := newCardEvent(1)
+		cardTwo := newCardEvent(2)
+
+		cards := make([]*app.CardEvent, 2)
+		cards[0] = cardOne
+		cards[1] = cardTwo
+
+		cardCh := cardEventChannel(cards)
 
 		var fix []app.Fixture
 		fix = append(fix, *newFixture(uint64(12)))
@@ -357,6 +424,11 @@ func TestEventProcessor_Process(t *testing.T) {
 		eventRepo.On("InsertSubstitutionEvent", subOne).Return(nil)
 		eventRepo.On("InsertSubstitutionEvent", subTwo).Return(errors.New("error occurred"))
 
+		eventRepo.On("CardEventByID", uint64(1)).Return(&app.CardEvent{}, errors.New("not found"))
+		eventRepo.On("CardEventByID", uint64(2)).Return(&app.CardEvent{}, errors.New("not found"))
+		eventRepo.On("InsertCardEvent", cardOne).Return(nil)
+		eventRepo.On("InsertCardEvent", cardTwo).Return(errors.New("error occurred"))
+
 		processor.Process("events:by-season-id", "12", done)
 
 		<-done
@@ -364,7 +436,7 @@ func TestEventProcessor_Process(t *testing.T) {
 		requester.AssertExpectations(t)
 		fixtureRepo.AssertExpectations(t)
 		eventRepo.AssertExpectations(t)
-		assert.Equal(t, 2, len(hook.Entries))
+		assert.Equal(t, 3, len(hook.Entries))
 		assert.Equal(t, logrus.WarnLevel, hook.LastEntry().Level)
 	})
 
@@ -399,7 +471,14 @@ func TestEventProcessor_Process(t *testing.T) {
 
 		subCh := subEventChannel(subs)
 
-		cardCh := cardEventChannel([]*app.CardEvent{})
+		cardOne := newCardEvent(1)
+		cardTwo := newCardEvent(2)
+
+		cards := make([]*app.CardEvent, 2)
+		cards[0] = cardOne
+		cards[1] = cardTwo
+
+		cardCh := cardEventChannel(cards)
 
 		now := clock.Now()
 		y, m, d := now.Date()
@@ -420,6 +499,11 @@ func TestEventProcessor_Process(t *testing.T) {
 		eventRepo.On("SubstitutionEventByID", uint64(2)).Return(&app.SubstitutionEvent{}, errors.New("not found"))
 		eventRepo.On("InsertSubstitutionEvent", subOne).Return(nil)
 		eventRepo.On("InsertSubstitutionEvent", subTwo).Return(nil)
+
+		eventRepo.On("CardEventByID", uint64(1)).Return(&app.CardEvent{}, errors.New("not found"))
+		eventRepo.On("CardEventByID", uint64(2)).Return(&app.CardEvent{}, errors.New("not found"))
+		eventRepo.On("InsertCardEvent", cardOne).Return(nil)
+		eventRepo.On("InsertCardEvent", cardTwo).Return(nil)
 
 		processor.Process("events:today", "", done)
 
@@ -462,7 +546,14 @@ func TestEventProcessor_Process(t *testing.T) {
 
 		subCh := subEventChannel(subs)
 
-		cardCh := cardEventChannel([]*app.CardEvent{})
+		cardOne := newCardEvent(1)
+		cardTwo := newCardEvent(2)
+
+		cards := make([]*app.CardEvent, 2)
+		cards[0] = cardOne
+		cards[1] = cardTwo
+
+		cardCh := cardEventChannel(cards)
 
 		now := clock.Now()
 		y, m, d := now.Date()
@@ -483,6 +574,11 @@ func TestEventProcessor_Process(t *testing.T) {
 		eventRepo.On("SubstitutionEventByID", uint64(2)).Return(subTwo, nil)
 		eventRepo.AssertNotCalled(t, "InsertSubstitutionEvent", subOne)
 		eventRepo.AssertNotCalled(t, "InsertSubstitutionEvent", subTwo)
+
+		eventRepo.On("CardEventByID", uint64(1)).Return(cardOne, nil)
+		eventRepo.On("CardEventByID", uint64(2)).Return(cardTwo, nil)
+		eventRepo.AssertNotCalled(t, "InsertCardEvent", cardOne)
+		eventRepo.AssertNotCalled(t, "InsertCardEvent", cardTwo)
 
 		processor.Process("events:today", "", done)
 
@@ -525,7 +621,14 @@ func TestEventProcessor_Process(t *testing.T) {
 
 		subCh := subEventChannel(subs)
 
-		cardCh := cardEventChannel([]*app.CardEvent{})
+		cardOne := newCardEvent(1)
+		cardTwo := newCardEvent(2)
+
+		cards := make([]*app.CardEvent, 2)
+		cards[0] = cardOne
+		cards[1] = cardTwo
+
+		cardCh := cardEventChannel(cards)
 
 		now := clock.Now()
 		y, m, d := now.Date()
@@ -547,6 +650,11 @@ func TestEventProcessor_Process(t *testing.T) {
 		eventRepo.On("InsertSubstitutionEvent", subOne).Return(nil)
 		eventRepo.On("InsertSubstitutionEvent", subTwo).Return(errors.New("error occurred"))
 
+		eventRepo.On("CardEventByID", uint64(1)).Return(&app.CardEvent{}, errors.New("not found"))
+		eventRepo.On("CardEventByID", uint64(2)).Return(&app.CardEvent{}, errors.New("not found"))
+		eventRepo.On("InsertCardEvent", cardOne).Return(nil)
+		eventRepo.On("InsertCardEvent", cardTwo).Return(errors.New("error occurred"))
+
 		processor.Process("events:today", "", done)
 
 		<-done
@@ -554,9 +662,22 @@ func TestEventProcessor_Process(t *testing.T) {
 		requester.AssertExpectations(t)
 		fixtureRepo.AssertExpectations(t)
 		eventRepo.AssertExpectations(t)
-		assert.Equal(t, 2, len(hook.Entries))
+		assert.Equal(t, 3, len(hook.Entries))
 		assert.Equal(t, logrus.WarnLevel, hook.LastEntry().Level)
 	})
+}
+
+func newCardEvent(id uint64) *app.CardEvent {
+	return &app.CardEvent{
+		ID:          id,
+		TeamID:      uint64(4509),
+		Type:        "redcard",
+		FixtureID:   uint64(45),
+		PlayerID:    uint64(3401),
+		Minute:      85,
+		Reason:      nil,
+		CreatedAt:   time.Unix(1546965200, 0),
+	}
 }
 
 func newGoalEvent(id uint64) *app.GoalEvent {

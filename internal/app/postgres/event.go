@@ -152,6 +152,34 @@ func (e *EventRepository) GoalEventsForFixture(fixtureID uint64) ([]*app.GoalEve
 	return events, nil
 }
 
+func (e *EventRepository) CardEventByID(id uint64) (*app.CardEvent, error) {
+	query := `SELECT * FROM sportmonks_card_event WHERE id = $1`
+
+	var c = app.CardEvent{}
+	var created int64
+
+	row := e.connection.QueryRow(query, id)
+
+	err := row.Scan(
+		&c.ID,
+		&c.TeamID,
+		&c.FixtureID,
+		&c.Type,
+		&c.PlayerID,
+		&c.Minute,
+		&c.Reason,
+		&created,
+	)
+
+	if err != nil {
+		return &c, fmt.Errorf("card event with ID %d does not exist", id)
+	}
+
+	c.CreatedAt = time.Unix(created, 0)
+
+	return &c, nil
+}
+
 func (e *EventRepository) GoalEventByID(id uint64) (*app.GoalEvent, error) {
 	query := `SELECT * FROM sportmonks_goal_event WHERE id = $1`
 

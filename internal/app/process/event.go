@@ -49,9 +49,9 @@ func (e EventProcessor) processEventsByFixtureID(id uint64, done chan bool) {
 
 	ids := []uint64{fix.ID}
 
-	goals, subs, _ := e.requester.EventsByFixtureIDs(ids)
+	goals, subs, cards := e.requester.EventsByFixtureIDs(ids)
 
-	go e.parseEvents(goals, subs, done)
+	go e.parseEvents(goals, subs, cards, done)
 }
 
 func (e EventProcessor) processEventsBySeasonID(id uint64, done chan bool) {
@@ -72,9 +72,9 @@ func (e EventProcessor) processEventsBySeasonID(id uint64, done chan bool) {
 		ids = append(ids, f.ID)
 	}
 
-	goals, subs, _ := e.requester.EventsByFixtureIDs(ids)
+	goals, subs, cards := e.requester.EventsByFixtureIDs(ids)
 
-	go e.parseEvents(goals, subs, done)
+	go e.parseEvents(goals, subs, cards, done)
 }
 
 func (e EventProcessor) processTodayEvents(done chan bool) {
@@ -96,15 +96,23 @@ func (e EventProcessor) processTodayEvents(done chan bool) {
 		return
 	}
 
-	goals, subs, _ := e.requester.EventsByFixtureIDs(ids)
+	goals, subs, cards := e.requester.EventsByFixtureIDs(ids)
 
-	go e.parseEvents(goals, subs, done)
+	go e.parseEvents(goals, subs, cards, done)
 }
 
-func (e EventProcessor) parseEvents(g <-chan *app.GoalEvent, s <-chan *app.SubstitutionEvent, done chan bool) {
+func (e EventProcessor) parseEvents(g <-chan *app.GoalEvent, s <-chan *app.SubstitutionEvent, c <-chan *app.CardEvent, done chan bool) {
 	var wg = sync.WaitGroup{}
 
-	wg.Add(2)
+	wg.Add(3)
+
+	go func(c <-chan *app.CardEvent) {
+		for card := range c {
+			e.persistCardEvent(card)
+		}
+
+		wg.Done()
+	}(c)
 
 	go func(g <-chan *app.GoalEvent) {
 		for goal := range g {
@@ -125,6 +133,16 @@ func (e EventProcessor) parseEvents(g <-chan *app.GoalEvent, s <-chan *app.Subst
 	wg.Wait()
 
 	done <- true
+}
+
+func (e EventProcessor) persistCardEvent(x *app.CardEvent) {
+	if _, err := e.eventRepo.CardEventByID(x.ID); err == nil {
+		return
+	}
+
+	if err := e.eventRepo.InsertCardEvent(x); err != nil {
+		e.logger.Warningf("Error '%s' occurred when inserting card event struct: %+v\n,", err.Error(), *x)
+	}
 }
 
 func (e EventProcessor) persistGoalEvent(x *app.GoalEvent) {
