@@ -30,7 +30,7 @@ type CompetitionRequester interface {
 }
 
 type CompetitionFilterQuery struct {
-	CountryIds  []uint64
-	IsCup       *bool
-	SortBy      *string
+	CountryIds []uint64
+	IsCup      *bool
+	SortBy     *string
 }

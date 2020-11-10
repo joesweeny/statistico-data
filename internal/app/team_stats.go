@@ -28,9 +28,9 @@ type TeamStats struct {
 
 // TeamStat domain struct for a single stat for a fixture
 type TeamStat struct {
-	FixtureID     uint64    `json:"fixture_id"`
-	Stat          string    `json:"stat"`
-	Value         *uint32   `json:"value"`
+	FixtureID uint64  `json:"fixture_id"`
+	Stat      string  `json:"stat"`
+	Value     *uint32 `json:"value"`
 }
 
 // TeamShots domain sub entity.
@@ -45,8 +45,8 @@ type TeamShots struct {
 
 // TeamPasses domain sub entity.
 type TeamPasses struct {
-	Total      *int `json:"total"`
-	Accuracy   *int `json:"accuracy"`
+	Total      *int     `json:"total"`
+	Accuracy   *int     `json:"accuracy"`
 	Percentage *float32 `json:"percentage"`
 }
 

@@ -179,6 +179,63 @@ func TestEventRepository_SubstitutionEventByID(t *testing.T) {
 	})
 }
 
+func TestEventRepository_InsertCardEvent(t *testing.T) {
+	conn, cleanUp := test.GetConnection(t, "sportmonks_card_event")
+	repo := postgres.NewEventRepository(conn, test.Clock)
+
+	t.Run("increases table count", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+
+		for i := 1; i < 4; i++ {
+			m := newCardEvent(uint64(i))
+
+			if err := repo.InsertCardEvent(m); err != nil {
+				t.Errorf("Error when inserting record into the database: %s", err.Error())
+			}
+
+			row := conn.QueryRow("select count(*) from sportmonks_card_event")
+
+			var count int
+
+			if err := row.Scan(&count); err != nil {
+				t.Errorf("Error when scanning rows returned by the database: %s", err.Error())
+			}
+
+			assert.Equal(t, i, count)
+		}
+	})
+
+	t.Run("returns error when ID primary key violates unique constraint", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+		m := newCardEvent(50)
+
+		if err := repo.InsertCardEvent(m); err != nil {
+			t.Errorf("Test failed, expected nil, got %s", err)
+		}
+
+		if e := repo.InsertCardEvent(m); e == nil {
+			t.Fatalf("Test failed, expected %s, got nil", e)
+		}
+	})
+}
+
+func newCardEvent(id uint64) *app.CardEvent {
+	return &app.CardEvent{
+		ID:          id,
+		TeamID:      uint64(4509),
+		Type:        "red",
+		FixtureID:   uint64(45),
+		PlayerID:    uint64(3401),
+		PlayerName:  "Manuel Lanzini",
+		Minute:      85,
+		ExtraMinute: nil,
+		Reason:      nil,
+		CreatedAt:   time.Time{},
+	}
+}
+
 func newGoalEvent(id uint64) *app.GoalEvent {
 	return &app.GoalEvent{
 		ID:        id,
