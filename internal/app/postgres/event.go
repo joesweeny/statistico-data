@@ -3,6 +3,7 @@ package postgres
 import (
 	"database/sql"
 	"fmt"
+	sq "github.com/Masterminds/squirrel"
 	"github.com/jonboulle/clockwork"
 	"github.com/statistico/statistico-data/internal/app"
 	"time"
@@ -11,6 +12,18 @@ import (
 type EventRepository struct {
 	connection *sql.DB
 	clock      clockwork.Clock
+}
+
+func (e *EventRepository) InsertCardEvent(c *app.CardEvent) error {
+	builder := e.queryBuilder()
+
+	_, err := builder.
+		Insert("sportmonks_card_event").
+		Columns("id", "team_id", "fixture_id", "type", "player_id", "minute", "reason", "created_at").
+		Values(c.ID, c.TeamID, c.FixtureID, c.Type, c.PlayerID, c.Minute, c.Reason, e.clock.Now().Unix()).
+		Exec()
+
+	return err
 }
 
 func (e *EventRepository) InsertGoalEvent(g *app.GoalEvent) error {
@@ -72,13 +85,13 @@ func (e *EventRepository) GoalEventByID(id uint64) (*app.GoalEvent, error) {
 	return &g, nil
 }
 
-func (g *EventRepository) SubstitutionEventByID(id uint64) (*app.SubstitutionEvent, error) {
+func (e *EventRepository) SubstitutionEventByID(id uint64) (*app.SubstitutionEvent, error) {
 	query := `SELECT * FROM sportmonks_substitution_event WHERE id = $1`
 
 	var s = app.SubstitutionEvent{}
 	var created int64
 
-	row := g.connection.QueryRow(query, id)
+	row := e.connection.QueryRow(query, id)
 
 	err := row.Scan(&s.ID, &s.TeamID, &s.PlayerInID, &s.PlayerOutID, &s.Minute, &s.Injured, &created, &s.FixtureID)
 
@@ -93,4 +106,8 @@ func (g *EventRepository) SubstitutionEventByID(id uint64) (*app.SubstitutionEve
 
 func NewEventRepository(connection *sql.DB, clock clockwork.Clock) *EventRepository {
 	return &EventRepository{connection: connection, clock: clock}
+}
+
+func (e *EventRepository) queryBuilder() sq.StatementBuilderType {
+	return sq.StatementBuilder.PlaceholderFormat(sq.Dollar).RunWith(e.connection)
 }

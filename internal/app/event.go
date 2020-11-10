@@ -4,6 +4,20 @@ import (
 	"time"
 )
 
+// CardEvent domain entity
+type CardEvent struct {
+	ID          uint64    `json:"id"`
+	TeamID      uint64    `json:"team_id"`
+	Type        string    `json:"type"`
+	FixtureID   uint64    `json:"fixture_id"`
+	PlayerID    uint64    `json:"player_id"`
+	PlayerName  string    `json:"player_name"`
+	Minute      uint8     `json:"minute"`
+	ExtraMinute *uint8    `json:"extra_minute"`
+	Reason      *string   `json:"reason"`
+	CreatedAt   time.Time `json:"created_at"`
+}
+
 // GoalEvent domain entity.
 type GoalEvent struct {
 	ID             uint64    `json:"id"`
@@ -30,6 +44,7 @@ type SubstitutionEvent struct {
 
 // EventRepository provides an interface to persist event domain struct objects to a storage engine.
 type EventRepository interface {
+	InsertCardEvent(e *CardEvent) error
 	InsertGoalEvent(e *GoalEvent) error
 	InsertSubstitutionEvent(e *SubstitutionEvent) error
 	GoalEventByID(id uint64) (*GoalEvent, error)
