@@ -18,7 +18,7 @@ func TestEventRepository_InsertGoalEvent(t *testing.T) {
 		defer cleanUp()
 
 		for i := 1; i < 4; i++ {
-			m := newGoalEvent(uint64(i))
+			m := newGoalEvent(uint64(i), 45)
 
 			if err := repo.InsertGoalEvent(m); err != nil {
 				t.Errorf("Error when inserting record into the database: %s", err.Error())
@@ -39,7 +39,7 @@ func TestEventRepository_InsertGoalEvent(t *testing.T) {
 	t.Run("returns error when ID primary key violates unique constraint", func(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
-		m := newGoalEvent(50)
+		m := newGoalEvent(50, 45)
 
 		if err := repo.InsertGoalEvent(m); err != nil {
 			t.Errorf("Test failed, expected nil, got %s", err)
@@ -101,7 +101,7 @@ func TestEventRepository_GoalEventByID(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
 
-		m := newGoalEvent(33)
+		m := newGoalEvent(33, 45)
 
 		if err := repo.InsertGoalEvent(m); err != nil {
 			t.Errorf("Test failed, expected nil, got %s", err)
@@ -188,7 +188,7 @@ func TestEventRepository_InsertCardEvent(t *testing.T) {
 		defer cleanUp()
 
 		for i := 1; i < 4; i++ {
-			m := newCardEvent(uint64(i))
+			m := newCardEvent(uint64(i), 45)
 
 			if err := repo.InsertCardEvent(m); err != nil {
 				t.Errorf("Error when inserting record into the database: %s", err.Error())
@@ -209,7 +209,7 @@ func TestEventRepository_InsertCardEvent(t *testing.T) {
 	t.Run("returns error when ID primary key violates unique constraint", func(t *testing.T) {
 		t.Helper()
 		defer cleanUp()
-		m := newCardEvent(50)
+		m := newCardEvent(50, 45)
 
 		if err := repo.InsertCardEvent(m); err != nil {
 			t.Errorf("Test failed, expected nil, got %s", err)
@@ -221,12 +221,82 @@ func TestEventRepository_InsertCardEvent(t *testing.T) {
 	})
 }
 
-func newCardEvent(id uint64) *app.CardEvent {
+func TestEventRepository_CardEventsForFixture(t *testing.T) {
+	conn, cleanUp := test.GetConnection(t, "sportmonks_card_event")
+	repo := postgres.NewEventRepository(conn, test.Clock)
+
+	t.Run("returns a slice of card event struct", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+
+		events := []*app.CardEvent{
+			newCardEvent(1, 45),
+			newCardEvent(2, 102),
+			newCardEvent(3, 45),
+			newCardEvent(4, 45),
+		}
+
+		for _, e := range events {
+			if err := repo.InsertCardEvent(e); err != nil {
+				t.Errorf("Error when inserting record into the database: %s", err.Error())
+			}
+		}
+
+		fetched, err := repo.CardEventsForFixture(45)
+
+		if err != nil {
+			t.Fatalf("Expected nil, got %s", err)
+		}
+
+		assert.Equal(t, 3, len(fetched))
+
+		for _, e := range fetched {
+			assert.Equal(t, uint64(45), e.FixtureID)
+		}
+	})
+}
+
+func TestEventRepository_GoalEventsForFixture(t *testing.T) {
+	conn, cleanUp := test.GetConnection(t, "sportmonks_goal_event")
+	repo := postgres.NewEventRepository(conn, test.Clock)
+
+	t.Run("returns a slice of goal event struct", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+
+		events := []*app.GoalEvent{
+			newGoalEvent(1, 45),
+			newGoalEvent(2, 102),
+			newGoalEvent(3, 45),
+			newGoalEvent(4, 45),
+		}
+
+		for _, e := range events {
+			if err := repo.InsertGoalEvent(e); err != nil {
+				t.Errorf("Error when inserting record into the database: %s", err.Error())
+			}
+		}
+
+		fetched, err := repo.GoalEventsForFixture(45)
+
+		if err != nil {
+			t.Fatalf("Expected nil, got %s", err)
+		}
+
+		assert.Equal(t, 3, len(fetched))
+
+		for _, e := range fetched {
+			assert.Equal(t, uint64(45), e.FixtureID)
+		}
+	})
+}
+
+func newCardEvent(id, fixtureID uint64) *app.CardEvent {
 	return &app.CardEvent{
 		ID:          id,
 		TeamID:      uint64(4509),
 		Type:        "red",
-		FixtureID:   uint64(45),
+		FixtureID:   fixtureID,
 		PlayerID:    uint64(3401),
 		PlayerName:  "Manuel Lanzini",
 		Minute:      85,
@@ -236,10 +306,10 @@ func newCardEvent(id uint64) *app.CardEvent {
 	}
 }
 
-func newGoalEvent(id uint64) *app.GoalEvent {
+func newGoalEvent(id, fixtureID uint64) *app.GoalEvent {
 	return &app.GoalEvent{
 		ID:        id,
-		FixtureID: uint64(45),
+		FixtureID: fixtureID,
 		TeamID:    uint64(4509),
 		PlayerID:  uint64(3401),
 		Minute:    82,
