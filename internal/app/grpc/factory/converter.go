@@ -7,6 +7,34 @@ import (
 	"time"
 )
 
+// Convert a domain CardEvent struct into a proto CardEvent struct
+func CardEventToProto(e *app.CardEvent) *proto.CardEvent {
+	return &proto.CardEvent{
+		Id:       e.ID,
+		TeamId:   e.TeamID,
+		Type:     e.Type,
+		PlayerId: e.PlayerID,
+		Minute:   uint32(e.Minute),
+	}
+}
+
+// Convert a domain GoalEvent struct into a proto GoalEvent struct
+func GoalEventToProto(e *app.GoalEvent) *proto.GoalEvent {
+	pe := proto.GoalEvent{
+		Id:             e.ID,
+		TeamId:         e.TeamID,
+		PlayerId:       e.PlayerID,
+		Minute:         uint32(e.Minute),
+		Score:          e.Score,
+	}
+
+	if e.PlayerAssistID != nil {
+		pe.PlayerAssistId = &wrappers.UInt64Value{Value: *e.PlayerAssistID}
+	}
+
+	return &pe
+}
+
 // Convert a domain Team struct into a proto Team struct
 func TeamToProto(t *app.Team) *proto.Team {
 	team := proto.Team{

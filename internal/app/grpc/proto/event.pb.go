@@ -180,7 +180,7 @@ type GoalEvent struct {
 	Id             uint64                `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
 	TeamId         uint64                `protobuf:"varint,2,opt,name=team_id,json=teamId,proto3" json:"team_id,omitempty"`
 	PlayerId       uint64                `protobuf:"varint,3,opt,name=player_id,json=playerId,proto3" json:"player_id,omitempty"`
-	PlayerAssistId *wrappers.UInt32Value `protobuf:"bytes,4,opt,name=player_assist_id,json=playerAssistId,proto3" json:"player_assist_id,omitempty"`
+	PlayerAssistId *wrappers.UInt64Value `protobuf:"bytes,4,opt,name=player_assist_id,json=playerAssistId,proto3" json:"player_assist_id,omitempty"`
 	Minute         uint32                `protobuf:"varint,5,opt,name=minute,proto3" json:"minute,omitempty"`
 	Score          string                `protobuf:"bytes,6,opt,name=score,proto3" json:"score,omitempty"`
 }
@@ -238,7 +238,7 @@ func (x *GoalEvent) GetPlayerId() uint64 {
 	return 0
 }
 
-func (x *GoalEvent) GetPlayerAssistId() *wrappers.UInt32Value {
+func (x *GoalEvent) GetPlayerAssistId() *wrappers.UInt64Value {
 	if x != nil {
 		return x.PlayerAssistId
 	}
@@ -294,7 +294,7 @@ var file_internal_app_grpc_proto_event_proto_rawDesc = []byte{
 	0x12, 0x46, 0x0a, 0x10, 0x70, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x5f, 0x61, 0x73, 0x73, 0x69, 0x73,
 	0x74, 0x5f, 0x69, 0x64, 0x18, 0x04, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1c, 0x2e, 0x67, 0x6f, 0x6f,
 	0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x55, 0x49, 0x6e,
-	0x74, 0x33, 0x32, 0x56, 0x61, 0x6c, 0x75, 0x65, 0x52, 0x0e, 0x70, 0x6c, 0x61, 0x79, 0x65, 0x72,
+	0x74, 0x36, 0x34, 0x56, 0x61, 0x6c, 0x75, 0x65, 0x52, 0x0e, 0x70, 0x6c, 0x61, 0x79, 0x65, 0x72,
 	0x41, 0x73, 0x73, 0x69, 0x73, 0x74, 0x49, 0x64, 0x12, 0x16, 0x0a, 0x06, 0x6d, 0x69, 0x6e, 0x75,
 	0x74, 0x65, 0x18, 0x05, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x06, 0x6d, 0x69, 0x6e, 0x75, 0x74, 0x65,
 	0x12, 0x14, 0x0a, 0x05, 0x73, 0x63, 0x6f, 0x72, 0x65, 0x18, 0x06, 0x20, 0x01, 0x28, 0x09, 0x52,
@@ -326,13 +326,13 @@ var file_internal_app_grpc_proto_event_proto_goTypes = []interface{}{
 	(*FixtureEventsResponse)(nil), // 0: proto.FixtureEventsResponse
 	(*CardEvent)(nil),             // 1: proto.CardEvent
 	(*GoalEvent)(nil),             // 2: proto.GoalEvent
-	(*wrappers.UInt32Value)(nil),  // 3: google.protobuf.UInt32Value
+	(*wrappers.UInt64Value)(nil),  // 3: google.protobuf.UInt64Value
 	(*FixtureRequest)(nil),        // 4: proto.FixtureRequest
 }
 var file_internal_app_grpc_proto_event_proto_depIdxs = []int32{
 	1, // 0: proto.FixtureEventsResponse.cards:type_name -> proto.CardEvent
 	2, // 1: proto.FixtureEventsResponse.goals:type_name -> proto.GoalEvent
-	3, // 2: proto.GoalEvent.player_assist_id:type_name -> google.protobuf.UInt32Value
+	3, // 2: proto.GoalEvent.player_assist_id:type_name -> google.protobuf.UInt64Value
 	4, // 3: proto.EventService.FixtureEvents:input_type -> proto.FixtureRequest
 	0, // 4: proto.EventService.FixtureEvents:output_type -> proto.FixtureEventsResponse
 	4, // [4:5] is the sub-list for method output_type

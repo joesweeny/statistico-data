@@ -29,7 +29,7 @@ message GoalEvent {
     uint64 id = 1;
     uint64 team_id = 2;
     uint64 player_id = 3;
-    google.protobuf.UInt32Value player_assist_id = 4;
+    google.protobuf.UInt64Value player_assist_id = 4;
     uint32 minute = 5;
     string score = 6;
 }
