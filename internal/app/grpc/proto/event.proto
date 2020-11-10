@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package proto;
+
+option go_package = "internal/app/grpc/proto";
+
+import "google/protobuf/wrappers.proto";
+import "internal/app/grpc/proto/requests.proto";
+
+service EventService {
+    rpc FixtureEvents(FixtureRequest) returns (FixtureEventsResponse) {}
+}
+
+message FixtureEventsResponse {
+    uint64 fixture_id = 1;
+    repeated CardEvent cards = 2;
+    repeated GoalEvent goals = 3;
+}
+
+message CardEvent {
+    uint64 id = 1;
+    uint64 team_id = 2;
+    string type = 3;
+    uint64 player_id = 4;
+    uint32 minute = 5;
+}
+
+message GoalEvent {
+    uint64 id = 1;
+    uint64 team_id = 2;
+    uint64 player_id = 3;
+    google.protobuf.UInt32Value player_assist_id = 4;
+    uint32 minute = 5;
+    string score = 6;
+}
