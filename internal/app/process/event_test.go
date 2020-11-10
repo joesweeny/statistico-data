@@ -45,8 +45,10 @@ func TestEventProcessor_Process(t *testing.T) {
 
 		subCh := subEventChannel(subs)
 
+		cardCh := cardEventChannel([]*app.CardEvent{})
+
 		fixtureRepo.On("ByID", uint64(12)).Return(newFixture(uint64(12)), nil)
-		requester.On("EventsByFixtureIDs", []uint64{12}).Return(goalCh, subCh)
+		requester.On("EventsByFixtureIDs", []uint64{12}).Return(goalCh, subCh, cardCh)
 
 		eventRepo.On("GoalEventByID", uint64(10)).Return(&app.GoalEvent{}, errors.New("not found"))
 		eventRepo.On("GoalEventByID", uint64(20)).Return(&app.GoalEvent{}, errors.New("not found"))
@@ -99,8 +101,10 @@ func TestEventProcessor_Process(t *testing.T) {
 
 		subCh := subEventChannel(subs)
 
+		cardCh := cardEventChannel([]*app.CardEvent{})
+
 		fixtureRepo.On("ByID", uint64(12)).Return(newFixture(uint64(12)), nil)
-		requester.On("EventsByFixtureIDs", []uint64{12}).Return(goalCh, subCh)
+		requester.On("EventsByFixtureIDs", []uint64{12}).Return(goalCh, subCh, cardCh)
 
 		eventRepo.On("GoalEventByID", uint64(10)).Return(goalOne, nil)
 		eventRepo.On("GoalEventByID", uint64(20)).Return(goalTwo, nil)
@@ -153,8 +157,10 @@ func TestEventProcessor_Process(t *testing.T) {
 
 		subCh := subEventChannel(subs)
 
+		cardCh := cardEventChannel([]*app.CardEvent{})
+
 		fixtureRepo.On("ByID", uint64(12)).Return(newFixture(uint64(12)), nil)
-		requester.On("EventsByFixtureIDs", []uint64{12}).Return(goalCh, subCh)
+		requester.On("EventsByFixtureIDs", []uint64{12}).Return(goalCh, subCh, cardCh)
 
 		eventRepo.On("GoalEventByID", uint64(10)).Return(&app.GoalEvent{}, errors.New("not found"))
 		eventRepo.On("GoalEventByID", uint64(20)).Return(&app.GoalEvent{}, errors.New("not found"))
@@ -208,6 +214,8 @@ func TestEventProcessor_Process(t *testing.T) {
 
 		subCh := subEventChannel(subs)
 
+		cardCh := cardEventChannel([]*app.CardEvent{})
+
 		var fix []app.Fixture
 
 		fix = append(fix, *newFixture(uint64(12)))
@@ -215,7 +223,7 @@ func TestEventProcessor_Process(t *testing.T) {
 		query := app.FixtureRepositoryQuery{SeasonIDs: []uint64{uint64(12)}}
 
 		fixtureRepo.On("Get", query).Return(fix, nil)
-		requester.On("EventsByFixtureIDs", []uint64{12}).Return(goalCh, subCh)
+		requester.On("EventsByFixtureIDs", []uint64{12}).Return(goalCh, subCh, cardCh)
 
 		eventRepo.On("GoalEventByID", uint64(10)).Return(&app.GoalEvent{}, errors.New("not found"))
 		eventRepo.On("GoalEventByID", uint64(20)).Return(&app.GoalEvent{}, errors.New("not found"))
@@ -268,13 +276,15 @@ func TestEventProcessor_Process(t *testing.T) {
 
 		subCh := subEventChannel(subs)
 
+		cardCh := cardEventChannel([]*app.CardEvent{})
+
 		var fix []app.Fixture
 		fix = append(fix, *newFixture(uint64(12)))
 
 		query := app.FixtureRepositoryQuery{SeasonIDs: []uint64{uint64(12)}}
 
 		fixtureRepo.On("Get", query).Return(fix, nil)
-		requester.On("EventsByFixtureIDs", []uint64{12}).Return(goalCh, subCh)
+		requester.On("EventsByFixtureIDs", []uint64{12}).Return(goalCh, subCh, cardCh)
 
 		eventRepo.On("GoalEventByID", uint64(10)).Return(goalOne, nil)
 		eventRepo.On("GoalEventByID", uint64(20)).Return(goalTwo, nil)
@@ -327,13 +337,15 @@ func TestEventProcessor_Process(t *testing.T) {
 
 		subCh := subEventChannel(subs)
 
+		cardCh := cardEventChannel([]*app.CardEvent{})
+
 		var fix []app.Fixture
 		fix = append(fix, *newFixture(uint64(12)))
 
 		query := app.FixtureRepositoryQuery{SeasonIDs: []uint64{uint64(12)}}
 
 		fixtureRepo.On("Get", query).Return(fix, nil)
-		requester.On("EventsByFixtureIDs", []uint64{12}).Return(goalCh, subCh)
+		requester.On("EventsByFixtureIDs", []uint64{12}).Return(goalCh, subCh, cardCh)
 
 		eventRepo.On("GoalEventByID", uint64(10)).Return(&app.GoalEvent{}, errors.New("not found"))
 		eventRepo.On("GoalEventByID", uint64(20)).Return(&app.GoalEvent{}, errors.New("not found"))
@@ -387,6 +399,8 @@ func TestEventProcessor_Process(t *testing.T) {
 
 		subCh := subEventChannel(subs)
 
+		cardCh := cardEventChannel([]*app.CardEvent{})
+
 		now := clock.Now()
 		y, m, d := now.Date()
 		from := time.Date(y, m, d, 0, 0, 0, 0, now.Location())
@@ -395,7 +409,7 @@ func TestEventProcessor_Process(t *testing.T) {
 		query := app.FixtureRepositoryQuery{DateFrom: &from, DateTo: &to}
 
 		fixtureRepo.On("GetIDs", query).Return([]uint64{12}, nil)
-		requester.On("EventsByFixtureIDs", []uint64{12}).Return(goalCh, subCh)
+		requester.On("EventsByFixtureIDs", []uint64{12}).Return(goalCh, subCh, cardCh)
 
 		eventRepo.On("GoalEventByID", uint64(10)).Return(&app.GoalEvent{}, errors.New("not found"))
 		eventRepo.On("GoalEventByID", uint64(20)).Return(&app.GoalEvent{}, errors.New("not found"))
@@ -448,6 +462,8 @@ func TestEventProcessor_Process(t *testing.T) {
 
 		subCh := subEventChannel(subs)
 
+		cardCh := cardEventChannel([]*app.CardEvent{})
+
 		now := clock.Now()
 		y, m, d := now.Date()
 		from := time.Date(y, m, d, 0, 0, 0, 0, now.Location())
@@ -456,7 +472,7 @@ func TestEventProcessor_Process(t *testing.T) {
 		query := app.FixtureRepositoryQuery{DateFrom: &from, DateTo: &to}
 
 		fixtureRepo.On("GetIDs", query).Return([]uint64{12}, nil)
-		requester.On("EventsByFixtureIDs", []uint64{12}).Return(goalCh, subCh)
+		requester.On("EventsByFixtureIDs", []uint64{12}).Return(goalCh, subCh, cardCh)
 
 		eventRepo.On("GoalEventByID", uint64(10)).Return(goalOne, nil)
 		eventRepo.On("GoalEventByID", uint64(20)).Return(goalTwo, nil)
@@ -509,6 +525,8 @@ func TestEventProcessor_Process(t *testing.T) {
 
 		subCh := subEventChannel(subs)
 
+		cardCh := cardEventChannel([]*app.CardEvent{})
+
 		now := clock.Now()
 		y, m, d := now.Date()
 		from := time.Date(y, m, d, 0, 0, 0, 0, now.Location())
@@ -517,7 +535,7 @@ func TestEventProcessor_Process(t *testing.T) {
 		query := app.FixtureRepositoryQuery{DateFrom: &from, DateTo: &to}
 
 		fixtureRepo.On("GetIDs", query).Return([]uint64{12}, nil)
-		requester.On("EventsByFixtureIDs", []uint64{12}).Return(goalCh, subCh)
+		requester.On("EventsByFixtureIDs", []uint64{12}).Return(goalCh, subCh, cardCh)
 
 		eventRepo.On("GoalEventByID", uint64(10)).Return(&app.GoalEvent{}, errors.New("not found"))
 		eventRepo.On("GoalEventByID", uint64(20)).Return(&app.GoalEvent{}, errors.New("not found"))
@@ -565,6 +583,18 @@ func newSubstitutionEvent(id uint64) *app.SubstitutionEvent {
 		Injured:     &true,
 		CreatedAt:   time.Unix(1546965200, 0),
 	}
+}
+
+func cardEventChannel(cards []*app.CardEvent) chan *app.CardEvent {
+	ch := make(chan *app.CardEvent, len(cards))
+
+	for _, c := range cards {
+		ch <- c
+	}
+
+	close(ch)
+
+	return ch
 }
 
 func goalEventChannel(goals []*app.GoalEvent) chan *app.GoalEvent {
