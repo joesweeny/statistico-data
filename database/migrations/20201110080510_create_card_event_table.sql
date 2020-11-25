@@ -1,7 +1,7 @@
 -- +goose Up
 -- +goose StatementBegin
 CREATE TABLE sportmonks_card_event (
-  id INTEGER NOT NULL PRIMARY KEY,
+  id BIGINT NOT NULL PRIMARY KEY,
   team_id INTEGER NOT NULL,
   fixture_id INTEGER NOT NULL,
   type VARCHAR NOT NULL,
