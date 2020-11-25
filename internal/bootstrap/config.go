@@ -19,8 +19,13 @@ type Database struct {
 }
 
 type Services struct {
+	Sentry
 	SportsMonks
 	Understat
+}
+
+type Sentry struct {
+	DSN string
 }
 
 type SportsMonks struct {
@@ -43,11 +48,13 @@ func BuildConfig() *Config {
 		Name:     os.Getenv("DB_NAME"),
 	}
 
+	config.Sentry = Sentry{DSN: os.Getenv("SENTRY_DSN")}
+
 	config.SportsMonks = SportsMonks{
 		ApiKey: os.Getenv("SPORTMONKS_API_KEY"),
 	}
 
-	config.Understat = Understat{BaseURL:"https://understat.com"}
+	config.Understat = Understat{BaseURL: "https://understat.com"}
 
 	return &config
 }
