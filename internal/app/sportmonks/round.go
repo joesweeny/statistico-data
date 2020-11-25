@@ -37,7 +37,7 @@ func (r RoundRequester) sendRoundRequest(seasonID uint64, ch chan<- *app.Round) 
 	res, _, err := r.client.RoundsBySeasonID(context.Background(), int(seasonID), []string{})
 
 	if err != nil {
-		r.logger.Fatalf("Error when calling client '%s' when making round request", err.Error())
+		r.logger.Errorf("Error when calling client '%s' when making round request", err.Error())
 		return
 	}
 

@@ -30,7 +30,7 @@ func (r ResultRequester) parseResults(ids []uint64, ch chan<- *app.Result) {
 		res, _, err := r.client.FixtureByID(context.Background(), int(id), includes, filters)
 
 		if err != nil {
-			r.logger.Fatalf("Error when calling client '%s' when making fixtures request", err.Error())
+			r.logger.Errorf("Error when calling client '%s' when making fixtures request", err.Error())
 			return
 		}
 

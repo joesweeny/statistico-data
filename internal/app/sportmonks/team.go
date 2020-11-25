@@ -38,7 +38,7 @@ func (t TeamRequester) sendTeamRequests(seasonID uint64, ch chan<- *app.Team, w 
 	_, meta, err := t.client.TeamsBySeasonID(context.Background(), int(seasonID), 1, []string{})
 
 	if err != nil {
-		t.logger.Fatalf("Error when calling client '%s' when making team request", err.Error())
+		t.logger.Errorf("Error when calling client '%s' when making team request", err.Error())
 		return
 	}
 
@@ -46,7 +46,7 @@ func (t TeamRequester) sendTeamRequests(seasonID uint64, ch chan<- *app.Team, w 
 		res, _, err := t.client.TeamsBySeasonID(context.Background(), int(seasonID), i, []string{})
 
 		if err != nil {
-			t.logger.Fatalf("Error when calling client '%s' when making team request", err.Error())
+			t.logger.Errorf("Error when calling client '%s' when making team request", err.Error())
 			return
 		}
 

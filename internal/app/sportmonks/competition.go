@@ -16,7 +16,7 @@ func (c CompetitionRequester) Competitions() <-chan *app.Competition {
 	_, meta, err := c.client.Leagues(context.Background(), 1, []string{})
 
 	if err != nil {
-		c.logger.Fatalf("Error when calling client '%s' when making competition request", err.Error())
+		c.logger.Errorf("Error when calling client '%s' when making competition request", err.Error())
 		return nil
 	}
 
@@ -39,7 +39,7 @@ func (c CompetitionRequester) sendCompetitionRequest(page int, ch chan<- *app.Co
 	res, _, err := c.client.Leagues(context.Background(), page, []string{})
 
 	if err != nil {
-		c.logger.Fatalf("Error when calling client '%s' when making competition request", err.Error())
+		c.logger.Errorf("Error when calling client '%s' when making competition request", err.Error())
 		return
 	}
 

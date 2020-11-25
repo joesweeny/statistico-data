@@ -16,7 +16,7 @@ func (c CountryRequester) Countries() <-chan *app.Country {
 	_, meta, err := c.client.Countries(context.Background(), 1, []string{})
 
 	if err != nil {
-		c.logger.Fatalf("Error when calling client '%s' when making country request", err.Error())
+		c.logger.Errorf("Error when calling client '%s' when making country request", err.Error())
 		return nil
 	}
 
@@ -39,7 +39,7 @@ func (c CountryRequester) sendCountryRequest(page int, ch chan<- *app.Country) {
 	res, _, err := c.client.Countries(context.Background(), page, []string{})
 
 	if err != nil {
-		c.logger.Fatalf("Error when calling client '%s' when making country request", err.Error())
+		c.logger.Errorf("Error when calling client '%s' when making country request", err.Error())
 		return
 	}
 
