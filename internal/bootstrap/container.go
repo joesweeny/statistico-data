@@ -3,6 +3,7 @@ package bootstrap
 import (
 	"database/sql"
 	"fmt"
+	"github.com/evalphobia/logrus_sentry"
 	"github.com/jonboulle/clockwork"
 	"github.com/sirupsen/logrus"
 	spClient "github.com/statistico/statistico-sportmonks-go-client"
@@ -29,7 +30,7 @@ func BuildContainer(config *Config) *Container {
 
 	c.Clock = clock()
 	c.Database = databaseConnection(config)
-	c.Logger = logger()
+	c.Logger = logger(config)
 	c.SportMonksClient = sportMonksClient(config)
 	c.UnderstatParser = understatParser(config)
 
@@ -79,13 +80,31 @@ func sportMonksClient(config *Config) *spClient.HTTPClient {
 }
 
 func understatParser(config *Config) *understat.Parser {
-	return &understat.Parser{BaseURL:config.Understat.BaseURL}
+	return &understat.Parser{BaseURL: config.Understat.BaseURL}
 }
 
-func logger() *logrus.Logger {
+func logger(config *Config) *logrus.Logger {
 	logger := logrus.New()
 	logger.SetFormatter(&logrus.JSONFormatter{})
 	logger.SetOutput(os.Stdout)
+
+	tags := map[string]string{
+		"application": "statistico-data",
+	}
+
+	levels := []logrus.Level{
+		logrus.PanicLevel,
+		logrus.FatalLevel,
+		logrus.ErrorLevel,
+	}
+
+	hook, err := logrus_sentry.NewWithTagsSentryHook(config.Sentry.DSN, tags, levels)
+
+	if err == nil {
+		hook.Timeout = 20 * time.Second
+		logger.AddHook(hook)
+	}
+
 	return logger
 }
 

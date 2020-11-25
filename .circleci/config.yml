@@ -22,14 +22,14 @@ workflows:
           filters:
             branches:
               only: master
-      - deploy-to-production:
-          context: aws
-          requires:
-            - build-and-test
-            - release-images
-          filters:
-            branches:
-              only: master
+#      - deploy-to-production:
+#          context: aws
+#          requires:
+#            - build-and-test
+#            - release-images
+#          filters:
+#            branches:
+#              only: master
 
 jobs:
   build-and-test:
@@ -70,20 +70,20 @@ jobs:
             chmod +x ./.circleci/deploy/docker-load.sh && ./.circleci/deploy/docker-load.sh
             chmod +x ./.circleci/deploy/docker-push.sh && ./.circleci/deploy/docker-push.sh
 
-  deploy-to-production:
-    docker:
-      - image: 'circleci/python:3.7.1'
-    steps:
-      - aws-cli/setup
-      - aws-ecs/update-service:
-          family: 'statistico-data-grpc'
-          cluster-name: 'statistico-production'
-          container-image-name-updates: >
-            container=grpc,image-and-tag=${AWS_ECR_ACCOUNT_URL}/statistico-data:${CIRCLE_SHA1}
-      - aws-ecs/update-service:
-          family: 'statistico-data-background'
-          cluster-name: 'statistico-production'
-          container-image-name-updates: >
-            container=console,image-and-tag=${AWS_ECR_ACCOUNT_URL}/statistico-data:${CIRCLE_SHA1},
-            container=cron,image-and-tag=${AWS_ECR_ACCOUNT_URL}/statistico-data:${CIRCLE_SHA1},
-            container=migrate,image-and-tag=${AWS_ECR_ACCOUNT_URL}/statistico-data:${CIRCLE_SHA1}
+#  deploy-to-production:
+#    docker:
+#      - image: 'circleci/python:3.7.1'
+#    steps:
+#      - aws-cli/setup
+#      - aws-ecs/update-service:
+#          family: 'statistico-data-grpc'
+#          cluster-name: 'statistico-production'
+#          container-image-name-updates: >
+#            container=grpc,image-and-tag=${AWS_ECR_ACCOUNT_URL}/statistico-data:${CIRCLE_SHA1}
+#      - aws-ecs/update-service:
+#          family: 'statistico-data-background'
+#          cluster-name: 'statistico-production'
+#          container-image-name-updates: >
+#            container=console,image-and-tag=${AWS_ECR_ACCOUNT_URL}/statistico-data:${CIRCLE_SHA1},
+#            container=cron,image-and-tag=${AWS_ECR_ACCOUNT_URL}/statistico-data:${CIRCLE_SHA1},
+#            container=migrate,image-and-tag=${AWS_ECR_ACCOUNT_URL}/statistico-data:${CIRCLE_SHA1}
