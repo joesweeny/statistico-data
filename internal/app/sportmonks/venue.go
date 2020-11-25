@@ -32,7 +32,7 @@ func (v VenueRequester) callClient(seasonId uint64, ch chan<- *app.Venue) {
 	res, _, err := v.client.VenuesBySeasonID(context.Background(), int(seasonId))
 
 	if err != nil {
-		v.logger.Fatalf("Error when calling client '%s' when making venue request", err.Error())
+		v.logger.Errorf("Error when calling client '%s' when making venue request", err.Error())
 		return
 	}
 

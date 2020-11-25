@@ -16,7 +16,7 @@ func (s SeasonRequester) Seasons() <-chan *app.Season {
 	_, meta, err := s.client.Seasons(context.Background(), 1, []string{})
 
 	if err != nil {
-		s.logger.Fatalf("Error when calling client '%s' when making season request", err.Error())
+		s.logger.Errorf("Error when calling client '%s' when making season request", err.Error())
 		return nil
 	}
 
@@ -39,7 +39,7 @@ func (s SeasonRequester) sendSeasonRequest(page int, ch chan<- *app.Season) {
 	res, _, err := s.client.Seasons(context.Background(), page, []string{})
 
 	if err != nil {
-		s.logger.Fatalf("Error when calling client '%s' when making season request", err.Error())
+		s.logger.Errorf("Error when calling client '%s' when making season request", err.Error())
 		return
 	}
 

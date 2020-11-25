@@ -30,7 +30,7 @@ func (t TeamStatsRequester) parseStats(ids []uint64, ch chan<- *app.TeamStats) {
 		res, _, err := t.client.FixtureByID(context.Background(), int(id), []string{"stats"}, filters)
 
 		if err != nil {
-			t.logger.Warnf(
+			t.logger.Errorf(
 				"Error when calling client '%s' when making fixtures request to parse team stats for fixture %d",
 				err.Error(),
 				id,

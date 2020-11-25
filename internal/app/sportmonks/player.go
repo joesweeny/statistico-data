@@ -17,7 +17,7 @@ func (p PlayerRequester) PlayerByID(id uint64) (*app.Player, error) {
 	res, _, err := p.client.PlayerByID(context.Background(), int(id), []string{})
 
 	if err != nil {
-		p.logger.Warnf("Error calling client '%s' when making player request, player id %ds", err.Error(), id)
+		p.logger.Errorf("Error calling client '%s' when making player request, player id %ds", err.Error(), id)
 		return nil, fmt.Errorf("unable to fetch player with id %d", id)
 	}
 

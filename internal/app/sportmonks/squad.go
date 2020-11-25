@@ -38,7 +38,7 @@ func (s SquadRequester) sendSquadRequests(seasonID uint64, ch chan<- *app.Squad,
 	_, meta, err := s.client.TeamsBySeasonID(context.Background(), int(seasonID), 1, []string{"squad"})
 
 	if err != nil {
-		s.logger.Fatalf("Error when calling client '%s' when making squad request", err.Error())
+		s.logger.Errorf("Error when calling client '%s' when making squad request", err.Error())
 		return
 	}
 
@@ -46,7 +46,7 @@ func (s SquadRequester) sendSquadRequests(seasonID uint64, ch chan<- *app.Squad,
 		res, _, err := s.client.TeamsBySeasonID(context.Background(), int(seasonID), i, []string{"squad"})
 
 		if err != nil {
-			s.logger.Fatalf("Error when calling client '%s' when making squad request", err.Error())
+			s.logger.Errorf("Error when calling client '%s' when making squad request", err.Error())
 			return
 		}
 
