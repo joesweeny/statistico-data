@@ -1,6 +1,6 @@
 # gRPC
 Statistico's internal systems communicate via gRPC. This application's gRPC specifications can be found in the 
-[/proto](https://github.com/statistico/statistico-data/internal/app/grpc/proto) directory. For more on gRPC view
+[statistico-proto](https://github.com/statistico/statistico-proto/data) repository. For more on gRPC view
  [here](https://grpc.io/docs/guides/)
 
 This application exposes four services:
