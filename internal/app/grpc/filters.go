@@ -3,11 +3,11 @@ package grpc
 import (
 	"fmt"
 	"github.com/statistico/statistico-data/internal/app"
-	"github.com/statistico/statistico-data/internal/app/grpc/proto"
+	"github.com/statistico/statistico-proto/data/go"
 	"time"
 )
 
-func fixtureFilterFromTeamStatRequest(r *proto.TeamStatRequest) (*app.FixtureFilterQuery, error) {
+func fixtureFilterFromTeamStatRequest(r *statisticoproto.TeamStatRequest) (*app.FixtureFilterQuery, error) {
 	var query app.FixtureFilterQuery
 
 	if r.GetDateBefore() != nil {

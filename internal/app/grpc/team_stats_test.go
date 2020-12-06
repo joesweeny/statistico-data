@@ -7,8 +7,8 @@ import (
 	"github.com/sirupsen/logrus/hooks/test"
 	"github.com/statistico/statistico-data/internal/app"
 	"github.com/statistico/statistico-data/internal/app/grpc"
-	"github.com/statistico/statistico-data/internal/app/grpc/proto"
 	"github.com/statistico/statistico-data/internal/app/mock"
+	"github.com/statistico/statistico-proto/data/go"
 	"github.com/stretchr/testify/assert"
 	mock2 "github.com/stretchr/testify/mock"
 	"testing"
@@ -28,7 +28,7 @@ func TestTeamStatsService_GetStatForTeam(t *testing.T) {
 
 		server := new(mock.TeamStatServer)
 
-		request := proto.TeamStatRequest{
+		request := statisticoproto.TeamStatRequest{
 			Stat:       "goals",
 			TeamId:     55,
 			SeasonIds:  []uint64{16036, 12968},
@@ -60,7 +60,7 @@ func TestTeamStatsService_GetStatForTeam(t *testing.T) {
 		statRepo.On("StatByFixtureAndTeam", "goals", uint64(1), uint64(55)).Return(&statOne, nil)
 		statRepo.On("StatByFixtureAndTeam", "goals", uint64(2), uint64(55)).Return(&statTwo, nil)
 
-		server.On("Send", mock2.AnythingOfType("*proto.TeamStat")).
+		server.On("Send", mock2.AnythingOfType("*statisticoproto.TeamStat")).
 			Times(2).
 			Return(nil)
 
@@ -88,7 +88,7 @@ func TestTeamStatsService_GetStatForTeam(t *testing.T) {
 
 		server := new(mock.TeamStatServer)
 
-		request := proto.TeamStatRequest{
+		request := statisticoproto.TeamStatRequest{
 			Stat:       "goals",
 			TeamId:     55,
 			SeasonIds:  []uint64{16036, 12968},
@@ -121,7 +121,7 @@ func TestTeamStatsService_GetStatForTeam(t *testing.T) {
 		statRepo.On("StatByFixtureAndTeam", "goals", uint64(1), uint64(2)).Return(&statOne, nil)
 		statRepo.On("StatByFixtureAndTeam", "goals", uint64(2), uint64(49)).Return(&statTwo, nil)
 
-		server.On("Send", mock2.AnythingOfType("*proto.TeamStat")).
+		server.On("Send", mock2.AnythingOfType("*statisticoproto.TeamStat")).
 			Times(2).
 			Return(nil)
 
@@ -149,7 +149,7 @@ func TestTeamStatsService_GetStatForTeam(t *testing.T) {
 
 		server := new(mock.TeamStatServer)
 
-		request := proto.TeamStatRequest{
+		request := statisticoproto.TeamStatRequest{
 			Stat:       "goals",
 			TeamId:     55,
 			SeasonIds:  []uint64{16036, 12968},
@@ -161,7 +161,7 @@ func TestTeamStatsService_GetStatForTeam(t *testing.T) {
 
 		statRepo.AssertNotCalled(t, "StatByFixtureAndTeam", "goals", uint64(1), uint64(2))
 
-		server.AssertNotCalled(t, "Send", mock2.AnythingOfType("*proto.TeamStat"))
+		server.AssertNotCalled(t, "Send", mock2.AnythingOfType("*statisticoproto.TeamStat"))
 
 		err := service.GetStatForTeam(&request, server)
 
@@ -190,7 +190,7 @@ func TestTeamStatsService_GetStatForTeam(t *testing.T) {
 
 		server := new(mock.TeamStatServer)
 
-		request := proto.TeamStatRequest{
+		request := statisticoproto.TeamStatRequest{
 			Stat:       "goals",
 			TeamId:     55,
 			SeasonIds:  []uint64{16036, 12968},
@@ -206,7 +206,7 @@ func TestTeamStatsService_GetStatForTeam(t *testing.T) {
 
 		statRepo.On("StatByFixtureAndTeam", "goals", uint64(1), uint64(55)).Return(&app.TeamStat{}, errors.New("oh no"))
 
-		server.AssertNotCalled(t, "Send", mock2.AnythingOfType("*proto.TeamStat"))
+		server.AssertNotCalled(t, "Send", mock2.AnythingOfType("*statisticoproto.TeamStat"))
 		
 		err := service.GetStatForTeam(&request, server)
 
@@ -234,7 +234,7 @@ func TestTeamStatsService_GetStatForTeam(t *testing.T) {
 
 		server := new(mock.TeamStatServer)
 
-		request := proto.TeamStatRequest{
+		request := statisticoproto.TeamStatRequest{
 			Stat:       "goals",
 			TeamId:     55,
 			SeasonIds:  []uint64{16036, 12968},
@@ -258,7 +258,7 @@ func TestTeamStatsService_GetStatForTeam(t *testing.T) {
 
 		statRepo.On("StatByFixtureAndTeam", "goals", uint64(1), uint64(55)).Return(&statOne, nil)
 
-		server.On("Send", mock2.AnythingOfType("*proto.TeamStat")).Return(errors.New("oh no"))
+		server.On("Send", mock2.AnythingOfType("*statisticoproto.TeamStat")).Return(errors.New("oh no"))
 
 		err := service.GetStatForTeam(&request, server)
 

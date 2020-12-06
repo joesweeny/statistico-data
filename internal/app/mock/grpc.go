@@ -1,7 +1,7 @@
 package mock
 
 import (
-	"github.com/statistico/statistico-data/internal/app/grpc/proto"
+	"github.com/statistico/statistico-proto/data/go"
 	"github.com/stretchr/testify/mock"
 	"google.golang.org/grpc"
 )
@@ -11,7 +11,7 @@ type CompetitionServer struct {
 	grpc.ServerStream
 }
 
-func (c *CompetitionServer) Send(comp *proto.Competition) error {
+func (c *CompetitionServer) Send(comp *statisticoproto.Competition) error {
 	args := c.Called(comp)
 	return args.Error(0)
 }
@@ -21,7 +21,7 @@ type SeasonServer struct {
 	grpc.ServerStream
 }
 
-func (s *SeasonServer) Send(season *proto.Season) error {
+func (s *SeasonServer) Send(season *statisticoproto.Season) error {
 	args := s.Called(season)
 	return args.Error(0)
 }
@@ -31,7 +31,7 @@ type TeamServer struct {
 	grpc.ServerStream
 }
 
-func (t *TeamServer) Send(team *proto.Team) error {
+func (t *TeamServer) Send(team *statisticoproto.Team) error {
 	args := t.Called(team)
 	return args.Error(0)
 }
@@ -41,7 +41,7 @@ type TeamStatServer struct {
 	grpc.ServerStream
 }
 
-func (t *TeamStatServer) Send(stat *proto.TeamStat) error {
+func (t *TeamStatServer) Send(stat *statisticoproto.TeamStat) error {
 	args := t.Called(stat)
 	return args.Error(0)
 }

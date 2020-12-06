@@ -4,7 +4,7 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/statistico/statistico-data/internal/app"
 	"github.com/statistico/statistico-data/internal/app/grpc/factory"
-	"github.com/statistico/statistico-data/internal/app/grpc/proto"
+	"github.com/statistico/statistico-proto/data/go"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
@@ -14,7 +14,7 @@ type CompetitionService struct {
 	logger *logrus.Logger
 }
 
-func (s *CompetitionService) ListCompetitions(r *proto.CompetitionRequest, stream proto.CompetitionService_ListCompetitionsServer) error {
+func (s *CompetitionService) ListCompetitions(r *statisticoproto.CompetitionRequest, stream statisticoproto.CompetitionService_ListCompetitionsServer) error {
 	var query app.CompetitionFilterQuery
 	
 	if len(r.GetCountryIds()) > 0 {

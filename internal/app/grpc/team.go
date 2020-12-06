@@ -7,7 +7,7 @@ import (
 	"github.com/statistico/statistico-data/internal/app"
 	"github.com/statistico/statistico-data/internal/app/errors"
 	"github.com/statistico/statistico-data/internal/app/grpc/factory"
-	"github.com/statistico/statistico-data/internal/app/grpc/proto"
+	"github.com/statistico/statistico-proto/data/go"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
@@ -17,7 +17,7 @@ type TeamService struct {
 	logger *logrus.Logger
 }
 
-func (t *TeamService) GetTeamByID(ctx context.Context, r *proto.TeamRequest) (*proto.Team, error) {
+func (t *TeamService) GetTeamByID(ctx context.Context, r *statisticoproto.TeamRequest) (*statisticoproto.Team, error) {
 	team, err := t.teamRepo.ByID(r.TeamId)
 
 	if err != nil {
@@ -33,7 +33,7 @@ func (t *TeamService) GetTeamByID(ctx context.Context, r *proto.TeamRequest) (*p
 	return factory.TeamToProto(team), nil
 }
 
-func (t *TeamService) GetTeamsBySeasonId(r *proto.SeasonTeamsRequest, stream proto.TeamService_GetTeamsBySeasonIdServer) error {
+func (t *TeamService) GetTeamsBySeasonId(r *statisticoproto.SeasonTeamsRequest, stream statisticoproto.TeamService_GetTeamsBySeasonIdServer) error {
 	teams, err := t.teamRepo.BySeasonId(r.GetSeasonId())
 
 	if err != nil {

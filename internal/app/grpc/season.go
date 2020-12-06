@@ -4,7 +4,7 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/statistico/statistico-data/internal/app"
 	"github.com/statistico/statistico-data/internal/app/grpc/factory"
-	"github.com/statistico/statistico-data/internal/app/grpc/proto"
+	"github.com/statistico/statistico-proto/data/go"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
@@ -15,8 +15,8 @@ type SeasonService struct {
 }
 
 func (s *SeasonService) GetSeasonsForCompetition(
-	r *proto.SeasonCompetitionRequest,
-	stream proto.SeasonService_GetSeasonsForCompetitionServer,
+	r *statisticoproto.SeasonCompetitionRequest,
+	stream statisticoproto.SeasonService_GetSeasonsForCompetitionServer,
 ) error {
 	seasons, err := s.seasonRepo.ByCompetitionId(r.GetCompetitionId(), r.GetSort().GetValue())
 
@@ -37,7 +37,7 @@ func (s *SeasonService) GetSeasonsForCompetition(
 	return nil
 }
 
-func (s *SeasonService) GetSeasonsForTeam(r *proto.TeamSeasonsRequest, stream proto.SeasonService_GetSeasonsForTeamServer) error {
+func (s *SeasonService) GetSeasonsForTeam(r *statisticoproto.TeamSeasonsRequest, stream statisticoproto.SeasonService_GetSeasonsForTeamServer) error {
 	seasons, err := s.seasonRepo.ByTeamId(r.GetTeamId(), r.GetSort().GetValue())
 
 	if err != nil {

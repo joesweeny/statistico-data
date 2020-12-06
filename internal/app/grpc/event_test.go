@@ -7,8 +7,8 @@ import (
 	"github.com/sirupsen/logrus/hooks/test"
 	"github.com/statistico/statistico-data/internal/app"
 	"github.com/statistico/statistico-data/internal/app/grpc"
-	"github.com/statistico/statistico-data/internal/app/grpc/proto"
 	"github.com/statistico/statistico-data/internal/app/mock"
+	"github.com/statistico/statistico-proto/data/go"
 	"github.com/stretchr/testify/assert"
 	"testing"
 	"time"
@@ -36,7 +36,7 @@ func TestEventService_FixtureEvents(t *testing.T) {
 		repo.On("CardEventsForFixture", uint64(45)).Return(cards, nil)
 		repo.On("GoalEventsForFixture", uint64(45)).Return(goals, nil)
 
-		req := proto.FixtureRequest{FixtureId: uint64(45)}
+		req := statisticoproto.FixtureRequest{FixtureId: uint64(45)}
 
 		res, err := service.FixtureEvents(context.Background(), &req)
 
@@ -44,7 +44,7 @@ func TestEventService_FixtureEvents(t *testing.T) {
 			t.Fatalf("Expected nil, got %s", err)
 		}
 
-		expectedCards := []*proto.CardEvent{
+		expectedCards := []*statisticoproto.CardEvent{
 			{
 				Id: 1,
 				TeamId: 4509,
@@ -61,7 +61,7 @@ func TestEventService_FixtureEvents(t *testing.T) {
 			},
 		}
 
-		expectedGoals := []*proto.GoalEvent{
+		expectedGoals := []*statisticoproto.GoalEvent{
 			{
 				Id: 3,
 				TeamId: 4509,
@@ -97,7 +97,7 @@ func TestEventService_FixtureEvents(t *testing.T) {
 		repo.On("CardEventsForFixture", uint64(45)).Return([]*app.CardEvent{}, errors.New("oh no"))
 		repo.AssertNotCalled(t, "GoalEventsForFixture", uint64(45))
 
-		req := proto.FixtureRequest{FixtureId: uint64(45)}
+		req := statisticoproto.FixtureRequest{FixtureId: uint64(45)}
 
 		_, err := service.FixtureEvents(context.Background(), &req)
 
@@ -122,7 +122,7 @@ func TestEventService_FixtureEvents(t *testing.T) {
 		repo.On("CardEventsForFixture", uint64(45)).Return([]*app.CardEvent{}, nil)
 		repo.On("GoalEventsForFixture", uint64(45)).Return([]*app.GoalEvent{}, errors.New("oh no"))
 
-		req := proto.FixtureRequest{FixtureId: uint64(45)}
+		req := statisticoproto.FixtureRequest{FixtureId: uint64(45)}
 
 		_, err := service.FixtureEvents(context.Background(), &req)
 

@@ -2,8 +2,8 @@ package grpc
 
 import (
 	"context"
-	"github.com/statistico/statistico-data/internal/app/grpc/proto"
 	"github.com/statistico/statistico-data/internal/app/performance"
+	"github.com/statistico/statistico-proto/data/go"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
@@ -12,7 +12,7 @@ type PerformanceService struct {
 	reader performance.StatReader
 }
 
-func (s *PerformanceService) GetTeamsMatchingStat(c context.Context, r *proto.TeamStatPerformanceRequest) (*proto.TeamStatResponse, error) {
+func (s *PerformanceService) GetTeamsMatchingStat(c context.Context, r *statisticoproto.TeamStatPerformanceRequest) (*statisticoproto.TeamStatResponse, error) {
 	q := performance.StatFilter{
 		Action:  r.GetAction(),
 		Games:   uint8(r.GetGames()),
@@ -30,16 +30,16 @@ func (s *PerformanceService) GetTeamsMatchingStat(c context.Context, r *proto.Te
 		return nil, status.Error(codes.Internal, "Internal server error")
 	}
 
-	res := proto.TeamStatResponse{Teams: convertTeams(teams)}
+	res := statisticoproto.TeamStatResponse{Teams: convertTeams(teams)}
 
 	return &res, nil
 }
 
-func convertTeams(t []*performance.Team) []*proto.Team {
-	var teams []*proto.Team
+func convertTeams(t []*performance.Team) []*statisticoproto.Team {
+	var teams []*statisticoproto.Team
 
 	for _, team := range t {
-		x := proto.Team{
+		x := statisticoproto.Team{
 			Id:   team.ID,
 			Name: team.Name,
 		}
