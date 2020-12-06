@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/statistico/statistico-data/internal/app/grpc/proto"
+	"github.com/statistico/statistico-proto/data/go"
 	"github.com/statistico/statistico-data/internal/bootstrap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/keepalive"
@@ -23,15 +23,15 @@ func main() {
 	opts := grpc.KeepaliveParams(keepalive.ServerParameters{MaxConnectionIdle:5*time.Minute})
 	server := grpc.NewServer(opts)
 
-	proto.RegisterCompetitionServiceServer(server, app.CompetitionService())
-	proto.RegisterEventServiceServer(server, app.EventService())
-	proto.RegisterFixtureServiceServer(server, app.FixtureService())
-	proto.RegisterPerformanceServiceServer(server, app.PerformanceService())
-	proto.RegisterResultServiceServer(server, app.ResultService())
-	proto.RegisterPlayerStatsServiceServer(server, app.PlayerStatsService())
-	proto.RegisterSeasonServiceServer(server, app.SeasonService())
-	proto.RegisterTeamServiceServer(server, app.TeamService())
-	proto.RegisterTeamStatsServiceServer(server, app.TeamStatsService())
+	statisticoproto.RegisterCompetitionServiceServer(server, app.CompetitionService())
+	statisticoproto.RegisterEventServiceServer(server, app.EventService())
+	statisticoproto.RegisterFixtureServiceServer(server, app.FixtureService())
+	statisticoproto.RegisterPerformanceServiceServer(server, app.PerformanceService())
+	statisticoproto.RegisterResultServiceServer(server, app.ResultService())
+	statisticoproto.RegisterPlayerStatsServiceServer(server, app.PlayerStatsService())
+	statisticoproto.RegisterSeasonServiceServer(server, app.SeasonService())
+	statisticoproto.RegisterTeamServiceServer(server, app.TeamService())
+	statisticoproto.RegisterTeamStatsServiceServer(server, app.TeamStatsService())
 
 	reflection.Register(server)
 

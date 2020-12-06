@@ -21,7 +21,7 @@ grpcurl \
     -d \
     '{"season_id": 16036, "date_from": "2019-04-03T00:00:00+00:00", "date_to": "2019-04-03T23:59:59+00:00"}' \
     localhost:50051  \
-    proto.FixtureService/ListSeasonFixtures
+    statisticoproto.FixtureService/ListSeasonFixtures
 ```
 #### To fetch a fixture by ID
 ```proto
@@ -30,7 +30,7 @@ grpcurl \
     -d \
     '{"fixture_id": 5601}' \
     localhost:50051  \
-    proto.FixtureService/FixtureByID
+    statisticoproto.FixtureService/FixtureByID
 ```
 
 #### To fetch player stats for a given fixture
@@ -40,7 +40,7 @@ grpcurl \
     -d \
     '{"fixture_id": 7019}' \
     localhost:50051  \
-    proto.PlayerStatsService/GetPlayerStatsForFixture
+    statisticoproto.PlayerStatsService/GetPlayerStatsForFixture
 ```  
     
 #### To fetch results for a given Team
@@ -50,7 +50,7 @@ grpcurl \
     -d \
     '{"team_id": 501, "limit": 75, "date_before": "2019-04-03T23:59:59+00:00"}' \
     localhost:50051  \
-    proto.ResultService/GetResultsForTeam
+    statisticoproto.ResultService/GetResultsForTeam
 ```
     
 #### To fetch team stats for a given fixture
@@ -60,5 +60,5 @@ grpcurl \
     -d \
     '{"fixture_id": 7019}' \
     localhost:50051  \
-    proto.TeamStatsService/GetTeamStatsForFixture
+    statisticoproto.TeamStatsService/GetTeamStatsForFixture
 ```

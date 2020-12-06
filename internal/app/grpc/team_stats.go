@@ -7,7 +7,7 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/statistico/statistico-data/internal/app"
 	"github.com/statistico/statistico-data/internal/app/grpc/factory"
-	"github.com/statistico/statistico-data/internal/app/grpc/proto"
+	"github.com/statistico/statistico-proto/data/go"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
@@ -19,7 +19,7 @@ type TeamStatsService struct {
 	logger            *logrus.Logger
 }
 
-func (s TeamStatsService) GetStatForTeam(r *proto.TeamStatRequest, stream proto.TeamStatsService_GetStatForTeamServer) error {
+func (s TeamStatsService) GetStatForTeam(r *statisticoproto.TeamStatRequest, stream statisticoproto.TeamStatsService_GetStatForTeamServer) error {
 	query, err := fixtureFilterFromTeamStatRequest(r)
 
 	if err != nil {
@@ -52,7 +52,7 @@ func (s TeamStatsService) GetStatForTeam(r *proto.TeamStatRequest, stream proto.
 	return nil
 }
 
-func (s TeamStatsService) GetTeamStatsForFixture(c context.Context, r *proto.FixtureRequest) (*proto.TeamStatsResponse, error) {
+func (s TeamStatsService) GetTeamStatsForFixture(c context.Context, r *statisticoproto.FixtureRequest) (*statisticoproto.TeamStatsResponse, error) {
 	fix, err := s.fixtureRepository.ByID(r.FixtureId)
 
 	if err != nil {
@@ -89,10 +89,10 @@ func (s TeamStatsService) GetTeamStatsForFixture(c context.Context, r *proto.Fix
 		)
 	}
 
-	res := proto.TeamStatsResponse{
+	res := statisticoproto.TeamStatsResponse{
 		HomeTeam: factory.TeamStatsToProto(home),
 		AwayTeam: factory.TeamStatsToProto(away),
-		TeamXg: &proto.TeamXG{
+		TeamXg: &statisticoproto.TeamXG{
 			Home: parseXgRating(xg.Home),
 			Away: parseXgRating(xg.Away),
 		},

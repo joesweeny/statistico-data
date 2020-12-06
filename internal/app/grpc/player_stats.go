@@ -6,7 +6,7 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/statistico/statistico-data/internal/app"
 	"github.com/statistico/statistico-data/internal/app/grpc/factory"
-	"github.com/statistico/statistico-data/internal/app/grpc/proto"
+	"github.com/statistico/statistico-proto/data/go"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
@@ -17,7 +17,7 @@ type PlayerStatsService struct {
 	logger      *logrus.Logger
 }
 
-func (s PlayerStatsService) GetPlayerStatsForFixture(c context.Context, r *proto.FixtureRequest) (*proto.PlayerStatsResponse, error) {
+func (s PlayerStatsService) GetPlayerStatsForFixture(c context.Context, r *statisticoproto.FixtureRequest) (*statisticoproto.PlayerStatsResponse, error) {
 	fix, err := s.fixtureRepo.ByID(r.FixtureId)
 
 	if err != nil {
@@ -44,7 +44,7 @@ func (s PlayerStatsService) GetPlayerStatsForFixture(c context.Context, r *proto
 		)
 	}
 
-	res := proto.PlayerStatsResponse{
+	res := statisticoproto.PlayerStatsResponse{
 		HomeTeam: home,
 		AwayTeam: away,
 	}
@@ -52,7 +52,7 @@ func (s PlayerStatsService) GetPlayerStatsForFixture(c context.Context, r *proto
 	return &res, nil
 }
 
-func (s PlayerStatsService) GetLineUpForFixture(c context.Context, r *proto.FixtureRequest) (*proto.LineupResponse, error) {
+func (s PlayerStatsService) GetLineUpForFixture(c context.Context, r *statisticoproto.FixtureRequest) (*statisticoproto.LineupResponse, error) {
 	fix, err := s.fixtureRepo.ByID(r.FixtureId)
 
 	if err != nil {
@@ -79,7 +79,7 @@ func (s PlayerStatsService) GetLineUpForFixture(c context.Context, r *proto.Fixt
 		)
 	}
 
-	res := proto.LineupResponse{
+	res := statisticoproto.LineupResponse{
 		HomeTeam: home,
 		AwayTeam: away,
 	}

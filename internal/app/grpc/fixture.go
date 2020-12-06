@@ -6,7 +6,7 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/statistico/statistico-data/internal/app"
 	"github.com/statistico/statistico-data/internal/app/grpc/factory"
-	"github.com/statistico/statistico-data/internal/app/grpc/proto"
+	"github.com/statistico/statistico-proto/data/go"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"time"
@@ -18,7 +18,7 @@ type FixtureService struct {
 	logger      *logrus.Logger
 }
 
-func (s *FixtureService) ListSeasonFixtures(r *proto.SeasonFixtureRequest, stream proto.FixtureService_ListSeasonFixturesServer) error {
+func (s *FixtureService) ListSeasonFixtures(r *statisticoproto.SeasonFixtureRequest, stream statisticoproto.FixtureService_ListSeasonFixturesServer) error {
 	from, err := time.Parse(time.RFC3339, r.DateFrom)
 
 	if err != nil {
@@ -60,7 +60,7 @@ func (s *FixtureService) ListSeasonFixtures(r *proto.SeasonFixtureRequest, strea
 	return nil
 }
 
-func (s *FixtureService) FixtureByID(c context.Context, r *proto.FixtureRequest) (*proto.Fixture, error) {
+func (s *FixtureService) FixtureByID(c context.Context, r *statisticoproto.FixtureRequest) (*statisticoproto.Fixture, error) {
 	fix, err := s.fixtureRepo.ByID(r.FixtureId)
 
 	if err != nil {
@@ -78,7 +78,7 @@ func (s *FixtureService) FixtureByID(c context.Context, r *proto.FixtureRequest)
 	return f, nil
 }
 
-func (s *FixtureService) Search(r *proto.FixtureSearchRequest, stream proto.FixtureService_SearchServer) error {
+func (s *FixtureService) Search(r *statisticoproto.FixtureSearchRequest, stream statisticoproto.FixtureService_SearchServer) error {
 	query, err := buildFixtureRepositoryQuery(r)
 
 	if err != nil {
@@ -113,7 +113,7 @@ func NewFixtureService(r app.FixtureRepository, f *factory.FixtureFactory, log *
 	return &FixtureService{fixtureRepo: r, factory: f, logger: log}
 }
 
-func buildFixtureRepositoryQuery(r *proto.FixtureSearchRequest) (app.FixtureRepositoryQuery, error) {
+func buildFixtureRepositoryQuery(r *statisticoproto.FixtureSearchRequest) (app.FixtureRepositoryQuery, error) {
 	var query app.FixtureRepositoryQuery
 
 	if r.GetDateBefore() != nil {
