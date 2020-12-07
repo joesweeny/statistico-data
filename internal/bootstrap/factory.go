@@ -26,6 +26,7 @@ func (c Container) ProtoResultFactory() *factory.ResultFactory {
 		c.RoundRepository(),
 		c.SeasonRepository(),
 		c.TeamRepository(),
+		c.TeamStatsRepository(),
 		c.VenueRepository(),
 		c.Logger,
 	)
