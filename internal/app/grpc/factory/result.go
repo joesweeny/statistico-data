@@ -12,6 +12,7 @@ type ResultFactory struct {
 	roundRepo app.RoundRepository
 	seasonRepo app.SeasonRepository
 	teamRepo   app.TeamRepository
+	teamStatsRepo app.TeamStatsRepository
 	venueRepo  app.VenueRepository
 	logger     *logrus.Logger
 }
@@ -42,16 +43,32 @@ func (r ResultFactory) BuildResult(f *app.Fixture) (*statisticoproto.Result, err
 		return nil, r.returnLoggedError(f.ID, err)
 	}
 
+	hs, err := r.teamStatsRepo.ByFixtureAndTeam(f.ID, f.HomeTeamID)
+
+	if err != nil {
+		return nil, r.returnLoggedError(f.ID, err)
+	}
+
+	as, err := r.teamStatsRepo.ByFixtureAndTeam(f.ID, f.AwayTeamID)
+
+	if err != nil {
+		return nil, r.returnLoggedError(f.ID, err)
+	}
+
+	date := statisticoproto.Date{
+		Utc: f.Date.Unix(),
+		Rfc: f.Date.Format(time.RFC3339),
+	}
+
 	p := statisticoproto.Result{
-		Id:        x.FixtureID,
-		HomeTeam:  TeamToProto(home),
-		AwayTeam:  TeamToProto(away),
-		Season:    SeasonToProto(season),
-		DateTime:  &statisticoproto.Date{
-			Utc: f.Date.Unix(),
-			Rfc: f.Date.Format(time.RFC3339),
-		},
-		Stats: toMatchStats(x),
+		Id:            x.FixtureID,
+		HomeTeam:      TeamToProto(home),
+		AwayTeam:      TeamToProto(away),
+		Season:        SeasonToProto(season),
+		DateTime:      &date,
+		Stats:         toMatchStats(x),
+		HomeTeamStats: TeamStatsToProto(hs),
+		AwayTeamStats: TeamStatsToProto(as),
 	}
 
 	if f.VenueID != nil {
@@ -83,8 +100,17 @@ func NewResultFactory(
 	o app.RoundRepository,
 	s app.SeasonRepository,
 	t app.TeamRepository,
+	ts app.TeamStatsRepository,
 	v app.VenueRepository,
 	log *logrus.Logger,
 ) *ResultFactory {
-	return &ResultFactory{resultRepo: r, roundRepo: o, seasonRepo: s, teamRepo: t, venueRepo: v, logger: log}
+	return &ResultFactory{
+		resultRepo: r,
+		roundRepo: o,
+		seasonRepo: s,
+		teamRepo: t,
+		teamStatsRepo: ts,
+		venueRepo: v,
+		logger: log,
+	}
 }
