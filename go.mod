@@ -17,7 +17,7 @@ require (
 	github.com/pkg/errors v0.9.1
 	github.com/sirupsen/logrus v1.7.0
 	github.com/statistico/statistico-proto/data/go v0.0.0-20201206103606-0c0195cd0f49
-	github.com/statistico/statistico-sportmonks-go-client v0.1.1-0.20200819072529-122343e1b6f0
+	github.com/statistico/statistico-sportmonks-go-client v0.1.1-0.20201210140505-f3fd680c72ab
 	github.com/statistico/statistico-understat-parser v0.0.0-20191121181340-7c8c9511f89e
 	github.com/stretchr/testify v1.5.1
 	golang.org/x/net v0.0.0-20201202161906-c7110b5ffcbb // indirect
