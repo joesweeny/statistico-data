@@ -75,6 +75,8 @@ github.com/statistico/statistico-proto/data/go v0.0.0-20201206103606-0c0195cd0f4
 github.com/statistico/statistico-proto/data/go v0.0.0-20201206103606-0c0195cd0f49/go.mod h1:QRXaCFpUv/KYxci0GttjdOio5EPwluZ6fM3RgUjl/Ck=
 github.com/statistico/statistico-sportmonks-go-client v0.1.1-0.20200819072529-122343e1b6f0 h1:qjwd2n22MceTifPO3GyzqA2f0PpG1TKMv4HDHK9uWJ0=
 github.com/statistico/statistico-sportmonks-go-client v0.1.1-0.20200819072529-122343e1b6f0/go.mod h1:Cauw+83hBCOj/Ng8HLV9hiXEbfNCjGKpfA6icqwRxsQ=
+github.com/statistico/statistico-sportmonks-go-client v0.1.1-0.20201210140505-f3fd680c72ab h1:8K6HfH2Q5u+n2/Kvpw5y4jfG1hq5d400nUBUTs2SPSk=
+github.com/statistico/statistico-sportmonks-go-client v0.1.1-0.20201210140505-f3fd680c72ab/go.mod h1:Cauw+83hBCOj/Ng8HLV9hiXEbfNCjGKpfA6icqwRxsQ=
 github.com/statistico/statistico-understat-parser v0.0.0-20191121181340-7c8c9511f89e h1:i64+h1LX2n4w2709Nrd5NMKAseXTkVV9v/QR2RLiS1k=
 github.com/statistico/statistico-understat-parser v0.0.0-20191121181340-7c8c9511f89e/go.mod h1:BWHrNO9pjeOiKasUWP/jiQBXld1thUkjI9gJVf9VXw8=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
