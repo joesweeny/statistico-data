@@ -19,6 +19,11 @@ func (m *FixtureRepository) Update(c *app.Fixture) error {
 	return args.Error(0)
 }
 
+func (m *FixtureRepository) Delete(id uint64) error {
+	args := m.Called(id)
+	return args.Error(0)
+}
+
 func (m *FixtureRepository) ByID(id uint64) (*app.Fixture, error) {
 	args := m.Called(id)
 	c := args.Get(0).(*app.Fixture)
