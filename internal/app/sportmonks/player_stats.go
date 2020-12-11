@@ -42,7 +42,7 @@ func (p PlayerStatsRequester) sendStatsRequest(id uint64, ch chan<- *app.PlayerS
 
 	if err != nil {
 		p.logger.Errorf(
-			"Error when calling client '%s' when making fixtures request to parse team stats. Fixture ID %d",
+			"Error when calling client '%s' when making fixtures request to parse player stats. Fixture ID %d",
 			err.Error(),
 			id,
 		)
