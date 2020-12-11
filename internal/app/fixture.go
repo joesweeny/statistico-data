@@ -22,6 +22,7 @@ type Fixture struct {
 type FixtureRepository interface {
 	Insert(f *Fixture) error
 	Update(f *Fixture) error
+	Delete(id uint64) error
 	ByID(id uint64) (*Fixture, error)
 	ByTeamID(id uint64, query FixtureFilterQuery) ([]Fixture, error)
 	Get(q FixtureRepositoryQuery) ([]Fixture, error)

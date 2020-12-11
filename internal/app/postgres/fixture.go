@@ -37,7 +37,7 @@ func (r *FixtureRepository) Insert(f *app.Fixture) error {
 }
 
 func (r *FixtureRepository) Update(f *app.Fixture) error {
-	_, err := r.ByID(uint64(f.ID))
+	_, err := r.ByID(f.ID)
 
 	if err != nil {
 		return err
@@ -58,6 +58,14 @@ func (r *FixtureRepository) Update(f *app.Fixture) error {
 		f.Date.Unix(),
 		r.clock.Now().Unix(),
 	)
+
+	return err
+}
+
+func (r *FixtureRepository) Delete(id uint64) error {
+	query := `DELETE FROM sportmonks_fixture where id = $1`
+
+	_, err := r.connection.Exec(query, id)
 
 	return err
 }
