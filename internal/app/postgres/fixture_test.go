@@ -834,6 +834,55 @@ func TestFixtureRepository_Get(t *testing.T) {
 	})
 }
 
+func TestFixtureRepository_Delete(t *testing.T) {
+	conn, cleanUp := test.GetConnection(t, "sportmonks_fixture")
+	repo := postgres.NewFixtureRepository(conn, test.Clock)
+
+	t.Run("deletes a record from the database", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+
+		fixture := newFixture(5, 14567, 451, 924)
+
+		if err := repo.Insert(fixture); err != nil {
+			t.Fatalf("Expected nil, got %s", err.Error())
+		}
+
+		fetched, err := repo.ByID(5)
+
+		if err != nil {
+			t.Fatalf("Expected nil, got %s", err.Error())
+		}
+
+		a := assert.New(t)
+
+		a.Equal(fixture.ID, fetched.ID)
+
+		err = repo.Delete(5)
+
+		if err != nil {
+			t.Fatalf("Expected nil, got %s", err.Error())
+		}
+
+		_, err = repo.ByID(5)
+
+		if err == nil {
+			t.Fatal("Expected error, got nil")
+		}
+	})
+
+	t.Run("error is suppressed if deleting a fixture that does not exist", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+
+		err := repo.Delete(5)
+
+		if err != nil {
+			t.Fatalf("Expected nil, got %s", err.Error())
+		}
+	})
+}
+
 func newFixture(id, seasonId, homeId, awayId uint64) *app.Fixture {
 	var roundId = uint64(165789)
 

@@ -48,6 +48,7 @@ func TestFixtureRequester_FixturesBySeasonIds(t *testing.T) {
 		a.Equal(uint64(1), x.HomeTeamID)
 		a.Equal(uint64(14), x.AwayTeamID)
 		a.Equal(uint64(14532), *x.RefereeID)
+		a.Equal("FT", *x.Status)
 		a.Equal("2019-09-22 13:00:00 +0000 UTC", x.Date.String())
 
 		a.Equal(uint64(11867285), y.ID)
@@ -57,6 +58,7 @@ func TestFixtureRequester_FixturesBySeasonIds(t *testing.T) {
 		a.Equal(uint64(1), y.HomeTeamID)
 		a.Equal(uint64(14), y.AwayTeamID)
 		a.Equal(uint64(14532), *y.RefereeID)
+		a.Equal("FT", *x.Status)
 		a.Equal("2019-09-22 13:00:00 +0000 UTC", y.Date.String())
 
 		a.Equal(uint64(11867285), z.ID)
@@ -66,6 +68,7 @@ func TestFixtureRequester_FixturesBySeasonIds(t *testing.T) {
 		a.Equal(uint64(1), z.HomeTeamID)
 		a.Equal(uint64(14), z.AwayTeamID)
 		a.Equal(uint64(14532), *z.RefereeID)
+		a.Equal("FT", *x.Status)
 		a.Equal("2019-09-22 13:00:00 +0000 UTC", z.Date.String())
 	})
 }

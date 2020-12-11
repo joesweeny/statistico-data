@@ -14,6 +14,7 @@ type Fixture struct {
 	AwayTeamID uint64    `json:"away_team_id"`
 	RefereeID  *uint64   `json:"referee_id"`
 	Date       time.Time `json:"date"`
+	Status     *string   `json:"status"`
 	CreatedAt  time.Time `json:"created_at"`
 	UpdatedAt  time.Time `json:"updated_at"`
 }
@@ -22,6 +23,7 @@ type Fixture struct {
 type FixtureRepository interface {
 	Insert(f *Fixture) error
 	Update(f *Fixture) error
+	Delete(id uint64) error
 	ByID(id uint64) (*Fixture, error)
 	ByTeamID(id uint64, query FixtureFilterQuery) ([]Fixture, error)
 	Get(q FixtureRepositoryQuery) ([]Fixture, error)

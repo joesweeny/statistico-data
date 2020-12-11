@@ -352,6 +352,51 @@ func TestFixtureProcessor_Process(t *testing.T) {
 		assert.Equal(t, 1, len(hook.Entries))
 		assert.Equal(t, logrus.WarnLevel, hook.LastEntry().Level)
 	})
+
+	t.Run("delete fixture from repository if fixture status is Deleted", func(t *testing.T) {
+		t.Helper()
+
+		fixtureRepo := new(mock.FixtureRepository)
+		seasonRepo := new(mock.SeasonRepository)
+		requester := new(mock.FixtureRequester)
+		logger, hook := test.NewNullLogger()
+
+		processor := process.NewFixtureProcessor(fixtureRepo, seasonRepo, requester, logger)
+
+		done := make(chan bool)
+
+		one := newFixture(34)
+		two := newFixture(400)
+
+		status := "Deleted"
+
+		two.Status = &status
+
+		fixtures := make([]*app.Fixture, 2)
+		fixtures[0] = one
+		fixtures[1] = two
+
+		ch := fixtureChannel(fixtures)
+
+		ids := []uint64{34, 400}
+
+		seasonRepo.On("IDs").Return(ids, nil)
+
+		requester.On("FixturesBySeasonIDs", ids).Return(ch)
+
+		fixtureRepo.On("ByID", uint64(34)).Return(&app.Fixture{}, errors.New("not Found"))
+		fixtureRepo.On("Delete", uint64(400)).Return(nil)
+		fixtureRepo.On("Insert", one).Return(nil)
+
+		processor.Process("fixture", "", done)
+
+		<-done
+
+		requester.AssertExpectations(t)
+		seasonRepo.AssertExpectations(t)
+		fixtureRepo.AssertExpectations(t)
+		assert.Nil(t, hook.LastEntry())
+	})
 }
 
 func newFixture(id uint64) *app.Fixture {
