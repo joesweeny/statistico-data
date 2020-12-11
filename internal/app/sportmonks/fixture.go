@@ -67,6 +67,7 @@ func transformFixture(s *spClient.Fixture) *app.Fixture {
 		AwayTeamID: uint64(s.VisitorTeamID),
 		RefereeID:  helpers.NullableUint64(s.RefereeID),
 		Date:       time.Unix(int64(s.Time.StartingAt.Timestamp), 0),
+		Status:     &s.Time.Status,
 	}
 }
 

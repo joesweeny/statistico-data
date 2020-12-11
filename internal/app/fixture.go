@@ -14,6 +14,7 @@ type Fixture struct {
 	AwayTeamID uint64    `json:"away_team_id"`
 	RefereeID  *uint64   `json:"referee_id"`
 	Date       time.Time `json:"date"`
+	Status     *string   `json:"status"`
 	CreatedAt  time.Time `json:"created_at"`
 	UpdatedAt  time.Time `json:"updated_at"`
 }
