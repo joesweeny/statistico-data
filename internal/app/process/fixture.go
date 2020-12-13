@@ -64,7 +64,7 @@ func (f FixtureProcessor) persistFixtures(ch <-chan *app.Fixture, done chan bool
 }
 
 func (f FixtureProcessor) persist(x *app.Fixture) {
-	if x.Status != nil && *x.Status == "Deleted" {
+	if x.Status != nil && (*x.Status == "Deleted" || *x.Status == "POSTP"){
 		if err := f.fixtureRepo.Delete(x.ID); err != nil {
 			f.logger.Warningf("Error '%s' occurred when delete fixture: %d\n,", err.Error(), x.ID)
 		}
