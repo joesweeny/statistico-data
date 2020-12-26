@@ -10,6 +10,8 @@ services:
       - .:/opt
     ports:
       - 5432:5432
+    networks:
+      - statistico-data_default
 
   console: &console
     build:
@@ -25,6 +27,8 @@ services:
     tty: true
     links:
       - postgres
+    networks:
+      - statistico-data_default
 
   cron:
     <<: *console
@@ -36,6 +40,9 @@ services:
 
   statistico-data-grpc:
     <<: *console
+    networks:
+      - statistico-data_default
+      - statistico_internal
     ports:
       - "50051:50051"
     command: ["./grpc", "--port 50051"]
@@ -57,3 +64,9 @@ services:
       - postgres
     depends_on:
       - postgres
+
+networks:
+  statistico-data_default:
+    external: false
+  statistico_internal:
+    external: true
