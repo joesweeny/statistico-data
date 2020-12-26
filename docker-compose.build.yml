@@ -64,6 +64,8 @@ services:
       - postgres
     depends_on:
       - postgres
+    networks:
+      - statistico-data_default
 
 networks:
   statistico-data_default:
