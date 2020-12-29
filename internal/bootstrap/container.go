@@ -66,7 +66,7 @@ func sportMonksClient(config *Config) *spClient.HTTPClient {
 		Dial: (&net.Dialer{
 			Timeout: 5 * time.Second,
 		}).Dial,
-		TLSHandshakeTimeout: 5 * time.Second,
+		TLSHandshakeTimeout: 10 * time.Second,
 	}
 
 	client := &http.Client{
