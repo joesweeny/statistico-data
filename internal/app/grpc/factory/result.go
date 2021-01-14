@@ -46,7 +46,7 @@ func (r ResultFactory) BuildResult(f *app.Fixture) (*statisticoproto.Result, err
 	as, awayErr := r.teamStatsRepo.ByFixtureAndTeam(f.ID, f.AwayTeamID)
 
 	if homeErr != nil || awayErr != nil {
-		r.logger.Errorf("error hydrating proto result: fixture %d. error %w: %w", f.ID, homeErr, awayErr)
+		r.logger.Errorf("error hydrating proto result: fixture %d. error %s: %s", f.ID, homeErr, awayErr)
 	}
 
 	date := statisticoproto.Date{
