@@ -19,11 +19,12 @@ func TestTeamStatsProcessor_Process(t *testing.T) {
 
 		teamStatsRepo := new(mock.TeamStatsRepository)
 		fixtureRepo := new(mock.FixtureRepository)
+		seasonRepo := new(mock.SeasonRepository)
 		requester := new(mock.TeamStatsRequester)
 		clock := clockwork.NewFakeClock()
 		logger, hook := test.NewNullLogger()
 
-		processor := process.NewTeamStatsProcessor(teamStatsRepo, fixtureRepo, requester, clock, logger)
+		processor := process.NewTeamStatsProcessor(teamStatsRepo, fixtureRepo, seasonRepo, requester, clock, logger)
 
 		done := make(chan bool)
 
@@ -58,11 +59,12 @@ func TestTeamStatsProcessor_Process(t *testing.T) {
 
 		teamStatsRepo := new(mock.TeamStatsRepository)
 		fixtureRepo := new(mock.FixtureRepository)
+		seasonRepo := new(mock.SeasonRepository)
 		requester := new(mock.TeamStatsRequester)
 		clock := clockwork.NewFakeClock()
 		logger, hook := test.NewNullLogger()
 
-		processor := process.NewTeamStatsProcessor(teamStatsRepo, fixtureRepo, requester, clock, logger)
+		processor := process.NewTeamStatsProcessor(teamStatsRepo, fixtureRepo, seasonRepo, requester, clock, logger)
 
 		done := make(chan bool)
 
@@ -97,11 +99,12 @@ func TestTeamStatsProcessor_Process(t *testing.T) {
 
 		teamStatsRepo := new(mock.TeamStatsRepository)
 		fixtureRepo := new(mock.FixtureRepository)
+		seasonRepo := new(mock.SeasonRepository)
 		requester := new(mock.TeamStatsRequester)
 		clock := clockwork.NewFakeClock()
 		logger, hook := test.NewNullLogger()
 
-		processor := process.NewTeamStatsProcessor(teamStatsRepo, fixtureRepo, requester, clock, logger)
+		processor := process.NewTeamStatsProcessor(teamStatsRepo, fixtureRepo, seasonRepo, requester, clock, logger)
 
 		done := make(chan bool)
 
@@ -137,11 +140,12 @@ func TestTeamStatsProcessor_Process(t *testing.T) {
 
 		teamStatsRepo := new(mock.TeamStatsRepository)
 		fixtureRepo := new(mock.FixtureRepository)
+		seasonRepo := new(mock.SeasonRepository)
 		requester := new(mock.TeamStatsRequester)
 		clock := clockwork.NewFakeClock()
 		logger, hook := test.NewNullLogger()
 
-		processor := process.NewTeamStatsProcessor(teamStatsRepo, fixtureRepo, requester, clock, logger)
+		processor := process.NewTeamStatsProcessor(teamStatsRepo, fixtureRepo, seasonRepo, requester, clock, logger)
 
 		done := make(chan bool)
 
@@ -177,11 +181,12 @@ func TestTeamStatsProcessor_Process(t *testing.T) {
 
 		teamStatsRepo := new(mock.TeamStatsRepository)
 		fixtureRepo := new(mock.FixtureRepository)
+		seasonRepo := new(mock.SeasonRepository)
 		requester := new(mock.TeamStatsRequester)
 		clock := clockwork.NewFakeClock()
 		logger, hook := test.NewNullLogger()
 
-		processor := process.NewTeamStatsProcessor(teamStatsRepo, fixtureRepo, requester, clock, logger)
+		processor := process.NewTeamStatsProcessor(teamStatsRepo, fixtureRepo, seasonRepo, requester, clock, logger)
 
 		done := make(chan bool)
 
@@ -220,11 +225,12 @@ func TestTeamStatsProcessor_Process(t *testing.T) {
 
 		teamStatsRepo := new(mock.TeamStatsRepository)
 		fixtureRepo := new(mock.FixtureRepository)
+		seasonRepo := new(mock.SeasonRepository)
 		requester := new(mock.TeamStatsRequester)
 		clock := clockwork.NewFakeClock()
 		logger, hook := test.NewNullLogger()
 
-		processor := process.NewTeamStatsProcessor(teamStatsRepo, fixtureRepo, requester, clock, logger)
+		processor := process.NewTeamStatsProcessor(teamStatsRepo, fixtureRepo, seasonRepo, requester, clock, logger)
 
 		done := make(chan bool)
 
@@ -263,11 +269,12 @@ func TestTeamStatsProcessor_Process(t *testing.T) {
 
 		teamStatsRepo := new(mock.TeamStatsRepository)
 		fixtureRepo := new(mock.FixtureRepository)
+		seasonRepo := new(mock.SeasonRepository)
 		requester := new(mock.TeamStatsRequester)
 		clock := clockwork.NewFakeClock()
 		logger, hook := test.NewNullLogger()
 
-		processor := process.NewTeamStatsProcessor(teamStatsRepo, fixtureRepo, requester, clock, logger)
+		processor := process.NewTeamStatsProcessor(teamStatsRepo, fixtureRepo, seasonRepo, requester, clock, logger)
 
 		done := make(chan bool)
 
@@ -307,11 +314,12 @@ func TestTeamStatsProcessor_Process(t *testing.T) {
 
 		teamStatsRepo := new(mock.TeamStatsRepository)
 		fixtureRepo := new(mock.FixtureRepository)
+		seasonRepo := new(mock.SeasonRepository)
 		requester := new(mock.TeamStatsRequester)
 		clock := clockwork.NewFakeClock()
 		logger, hook := test.NewNullLogger()
 
-		processor := process.NewTeamStatsProcessor(teamStatsRepo, fixtureRepo, requester, clock, logger)
+		processor := process.NewTeamStatsProcessor(teamStatsRepo, fixtureRepo, seasonRepo, requester, clock, logger)
 
 		done := make(chan bool)
 
@@ -351,11 +359,12 @@ func TestTeamStatsProcessor_Process(t *testing.T) {
 
 		teamStatsRepo := new(mock.TeamStatsRepository)
 		fixtureRepo := new(mock.FixtureRepository)
+		seasonRepo := new(mock.SeasonRepository)
 		requester := new(mock.TeamStatsRequester)
 		clock := clockwork.NewFakeClock()
 		logger, hook := test.NewNullLogger()
 
-		processor := process.NewTeamStatsProcessor(teamStatsRepo, fixtureRepo, requester, clock, logger)
+		processor := process.NewTeamStatsProcessor(teamStatsRepo, fixtureRepo, seasonRepo, requester, clock, logger)
 
 		done := make(chan bool)
 
@@ -397,11 +406,12 @@ func TestTeamStatsProcessor_Process(t *testing.T) {
 
 		teamStatsRepo := new(mock.TeamStatsRepository)
 		fixtureRepo := new(mock.FixtureRepository)
+		seasonRepo := new(mock.SeasonRepository)
 		requester := new(mock.TeamStatsRequester)
 		clock := clockwork.NewFakeClock()
 		logger, hook := test.NewNullLogger()
 
-		processor := process.NewTeamStatsProcessor(teamStatsRepo, fixtureRepo, requester, clock, logger)
+		processor := process.NewTeamStatsProcessor(teamStatsRepo, fixtureRepo, seasonRepo, requester, clock, logger)
 
 		done := make(chan bool)
 
@@ -443,11 +453,12 @@ func TestTeamStatsProcessor_Process(t *testing.T) {
 
 		teamStatsRepo := new(mock.TeamStatsRepository)
 		fixtureRepo := new(mock.FixtureRepository)
+		seasonRepo := new(mock.SeasonRepository)
 		requester := new(mock.TeamStatsRequester)
 		clock := clockwork.NewFakeClock()
 		logger, hook := test.NewNullLogger()
 
-		processor := process.NewTeamStatsProcessor(teamStatsRepo, fixtureRepo, requester, clock, logger)
+		processor := process.NewTeamStatsProcessor(teamStatsRepo, fixtureRepo, seasonRepo, requester, clock, logger)
 
 		done := make(chan bool)
 
@@ -490,11 +501,12 @@ func TestTeamStatsProcessor_Process(t *testing.T) {
 
 		teamStatsRepo := new(mock.TeamStatsRepository)
 		fixtureRepo := new(mock.FixtureRepository)
+		seasonRepo := new(mock.SeasonRepository)
 		requester := new(mock.TeamStatsRequester)
 		clock := clockwork.NewFakeClock()
 		logger, hook := test.NewNullLogger()
 
-		processor := process.NewTeamStatsProcessor(teamStatsRepo, fixtureRepo, requester, clock, logger)
+		processor := process.NewTeamStatsProcessor(teamStatsRepo, fixtureRepo, seasonRepo, requester, clock, logger)
 
 		done := make(chan bool)
 

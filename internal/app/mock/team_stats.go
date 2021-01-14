@@ -43,3 +43,8 @@ func (t *TeamStatsRequester) TeamStatsByFixtureIDs(ids []uint64) <-chan *app.Tea
 	args := t.Called(ids)
 	return args.Get(0).(chan *app.TeamStats)
 }
+
+func (t *TeamStatsRequester) TeamStatsBySeasonIDs(ids []uint64) <-chan *app.TeamStats {
+	args := t.Called(ids)
+	return args.Get(0).(chan *app.TeamStats)
+}

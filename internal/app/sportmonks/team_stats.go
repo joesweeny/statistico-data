@@ -6,6 +6,7 @@ import (
 	"github.com/statistico/statistico-data/internal/app"
 	"github.com/statistico/statistico-data/internal/app/helpers"
 	spClient "github.com/statistico/statistico-sportmonks-go-client"
+	"sync"
 )
 
 type TeamStatsRequester struct {
@@ -19,6 +20,46 @@ func (t TeamStatsRequester) TeamStatsByFixtureIDs(ids []uint64) <-chan *app.Team
 	go t.parseStats(ids, ch)
 
 	return ch
+}
+
+func (t TeamStatsRequester) TeamStatsBySeasonIDs(ids []uint64) <-chan *app.TeamStats {
+	ch := make(chan *app.TeamStats, 100)
+
+	var wg sync.WaitGroup
+
+	for _, id := range ids {
+		wg.Add(1)
+		go t.sendFixtureRequests(id, ch, &wg)
+	}
+
+	wg.Wait()
+
+	go t.parseStats(ids, ch)
+
+	return ch
+}
+
+func (t TeamStatsRequester) sendFixtureRequests(seasonID uint64, ch chan<- *app.TeamStats, w *sync.WaitGroup) {
+	res, _, err := t.client.SeasonByID(context.Background(), int(seasonID), []string{"fixtures", "fixtures.stats"})
+
+	if err != nil {
+		t.logger.Errorf(
+			"Error when calling client '%s' when making season fixtures request. Season ID %d",
+			err.Error(),
+			seasonID,
+		)
+
+		w.Done()
+		return
+	}
+
+	for _, fixture := range res.Fixtures() {
+		for _, stats := range fixture.TeamStats() {
+			ch <- transformTeamStats(&stats)
+		}
+	}
+
+	w.Done()
 }
 
 func (t TeamStatsRequester) parseStats(ids []uint64, ch chan<- *app.TeamStats) {
