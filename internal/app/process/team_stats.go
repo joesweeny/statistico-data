@@ -9,6 +9,7 @@ import (
 	"time"
 )
 
+const teamStats = "team-stats"
 const teamStatsByResultId = "team-stats:by-result-id"
 const teamStatsBySeasonId = "team-stats:by-season-id"
 const teamStatsToday = "team-stats:today"
@@ -16,6 +17,7 @@ const teamStatsToday = "team-stats:today"
 type TeamStatsProcessor struct {
 	teamStatsRepo app.TeamStatsRepository
 	fixtureRepo   app.FixtureRepository
+	seasonRepo    app.SeasonRepository
 	requester     app.TeamStatsRequester
 	clock         clockwork.Clock
 	logger        *logrus.Logger
@@ -23,6 +25,8 @@ type TeamStatsProcessor struct {
 
 func (t TeamStatsProcessor) Process(command string, option string, done chan bool) {
 	switch command {
+	case teamStats:
+		go t.processAllSeasons(done)
 	case teamStatsByResultId:
 		for _, id := range strings.Split(option, ",") {
 			id, _ := strconv.Atoi(id)
@@ -37,6 +41,19 @@ func (t TeamStatsProcessor) Process(command string, option string, done chan boo
 		t.logger.Fatalf("Command %s is not supported", command)
 		return
 	}
+}
+
+func (t TeamStatsProcessor) processAllSeasons(done chan bool) {
+	ids, err := t.seasonRepo.IDs()
+
+	if err != nil {
+		t.logger.Fatalf("Error when retrieving season ids: %s", err.Error())
+		return
+	}
+
+	ch := t.requester.TeamStatsBySeasonIDs(ids)
+
+	go t.persistStats(ch, done)
 }
 
 func (t TeamStatsProcessor) processByID(done chan bool, id uint64) {
@@ -128,9 +145,17 @@ func (t TeamStatsProcessor) persist(x *app.TeamStats) {
 func NewTeamStatsProcessor(
 	r app.TeamStatsRepository,
 	f app.FixtureRepository,
+	s app.SeasonRepository,
 	q app.TeamStatsRequester,
 	c clockwork.Clock,
 	log *logrus.Logger,
 ) *TeamStatsProcessor {
-	return &TeamStatsProcessor{teamStatsRepo: r, fixtureRepo: f, requester: q, clock: c, logger: log}
+	return &TeamStatsProcessor{
+		teamStatsRepo: r,
+		fixtureRepo: f,
+		seasonRepo: s,
+		requester: q,
+		clock: c,
+		logger: log,
+	}
 }
