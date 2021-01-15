@@ -27,7 +27,7 @@ func (c Container) CountryProcessor() *process.CountryProcessor {
 func (c Container) EventProcessor() *process.EventProcessor {
 	return process.NewEventProcessor(
 		c.EventRepository(),
-		c.FixtureRepository(),
+		c.SeasonRepository(),
 		c.EventRequester(),
 		c.Clock,
 		c.Logger,
@@ -64,7 +64,7 @@ func (c Container) PlayerProcessor() *process.PlayerProcessor {
 func (c Container) PlayerStatsProcessor() *process.PlayerStatsProcessor {
 	return process.NewPlayerStatsProcessor(
 		c.PlayerStatsRepository(),
-		c.FixtureRepository(),
+		c.SeasonRepository(),
 		c.PlayerStatsRequester(),
 		c.Clock,
 		c.Logger,
@@ -74,7 +74,7 @@ func (c Container) PlayerStatsProcessor() *process.PlayerStatsProcessor {
 func (c Container) ResultProcessor() *process.ResultProcessor {
 	return process.NewResultProcessor(
 		c.ResultRepository(),
-		c.FixtureRepository(),
+		c.SeasonRepository(),
 		c.ResultRequester(),
 		c.Clock,
 		c.Logger,
@@ -119,7 +119,6 @@ func (c Container) TeamProcessor() *process.TeamProcessor {
 func (c Container) TeamStatsProcessor() *process.TeamStatsProcessor {
 	return process.NewTeamStatsProcessor(
 		c.TeamStatsRepository(),
-		c.FixtureRepository(),
 		c.SeasonRepository(),
 		c.TeamStatsRequester(),
 		c.Clock,

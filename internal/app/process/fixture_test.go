@@ -45,7 +45,7 @@ func TestFixtureProcessor_Process(t *testing.T) {
 		fixtureRepo.On("Insert", one).Return(nil)
 		fixtureRepo.On("Insert", two).Return(nil)
 
-		processor.Process("fixture", "", done)
+		processor.Process("fixtures", "", done)
 
 		<-done
 
@@ -87,7 +87,7 @@ func TestFixtureProcessor_Process(t *testing.T) {
 		fixtureRepo.On("Update", &one).Return(nil)
 		fixtureRepo.On("Update", &two).Return(nil)
 
-		processor.Process("fixture", "", done)
+		processor.Process("fixtures", "", done)
 
 		<-done
 
@@ -129,7 +129,7 @@ func TestFixtureProcessor_Process(t *testing.T) {
 		fixtureRepo.On("Insert", one).Return(errors.New("error occurred"))
 		fixtureRepo.On("Insert", two).Return(nil)
 
-		processor.Process("fixture", "", done)
+		processor.Process("fixtures", "", done)
 
 		<-done
 
@@ -172,7 +172,7 @@ func TestFixtureProcessor_Process(t *testing.T) {
 		fixtureRepo.On("Update", &one).Return(errors.New("error occurred"))
 		fixtureRepo.On("Update", &two).Return(nil)
 
-		processor.Process("fixture", "", done)
+		processor.Process("fixtures", "", done)
 
 		<-done
 
@@ -215,7 +215,7 @@ func TestFixtureProcessor_Process(t *testing.T) {
 		fixtureRepo.On("Insert", one).Return(nil)
 		fixtureRepo.On("Insert", two).Return(nil)
 
-		processor.Process("fixture:current-season", "", done)
+		processor.Process("fixtures:current-season", "", done)
 
 		<-done
 
@@ -257,7 +257,7 @@ func TestFixtureProcessor_Process(t *testing.T) {
 		fixtureRepo.On("Update", &one).Return(nil)
 		fixtureRepo.On("Update", &two).Return(nil)
 
-		processor.Process("fixture:current-season", "", done)
+		processor.Process("fixtures:current-season", "", done)
 
 		<-done
 
@@ -299,7 +299,7 @@ func TestFixtureProcessor_Process(t *testing.T) {
 		fixtureRepo.On("Insert", one).Return(errors.New("error occurred"))
 		fixtureRepo.On("Insert", two).Return(nil)
 
-		processor.Process("fixture:current-season", "", done)
+		processor.Process("fixtures:current-season", "", done)
 
 		<-done
 
@@ -342,7 +342,7 @@ func TestFixtureProcessor_Process(t *testing.T) {
 		fixtureRepo.On("Update", &one).Return(errors.New("error occurred"))
 		fixtureRepo.On("Update", &two).Return(nil)
 
-		processor.Process("fixture:current-season", "", done)
+		processor.Process("fixtures:current-season", "", done)
 
 		<-done
 
@@ -388,7 +388,7 @@ func TestFixtureProcessor_Process(t *testing.T) {
 		fixtureRepo.On("Delete", uint64(400)).Return(nil)
 		fixtureRepo.On("Insert", one).Return(nil)
 
-		processor.Process("fixture", "", done)
+		processor.Process("fixtures", "", done)
 
 		<-done
 
@@ -433,7 +433,7 @@ func TestFixtureProcessor_Process(t *testing.T) {
 		fixtureRepo.On("Delete", uint64(400)).Return(nil)
 		fixtureRepo.On("Insert", one).Return(nil)
 
-		processor.Process("fixture", "", done)
+		processor.Process("fixtures", "", done)
 
 		<-done
 

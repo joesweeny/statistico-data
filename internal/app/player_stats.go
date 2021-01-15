@@ -85,4 +85,5 @@ type PlayerStatsRepository interface {
 // the channel before closing the channel once successful execution is complete.
 type PlayerStatRequester interface {
 	PlayerStatsByFixtureIDs(ids []uint64) <-chan *PlayerStats
+	PlayerStatsBySeasonIDs(seasonIDs []uint64) <-chan *PlayerStats
 }

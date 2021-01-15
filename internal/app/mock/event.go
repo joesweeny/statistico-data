@@ -60,3 +60,8 @@ func (m *EventRequester) EventsByFixtureIDs(ids []uint64) (<-chan *app.GoalEvent
 	args := m.Called(ids)
 	return args.Get(0).(chan *app.GoalEvent), args.Get(1).(chan *app.SubstitutionEvent), args.Get(2).(chan *app.CardEvent)
 }
+
+func (m *EventRequester) EventsBySeasonIDs(ids []uint64) (<-chan *app.GoalEvent, <-chan *app.SubstitutionEvent, <-chan *app.CardEvent) {
+	args := m.Called(ids)
+	return args.Get(0).(chan *app.GoalEvent), args.Get(1).(chan *app.SubstitutionEvent), args.Get(2).(chan *app.CardEvent)
+}

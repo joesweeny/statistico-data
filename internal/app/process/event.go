@@ -6,18 +6,18 @@ import (
 	"github.com/statistico/statistico-data/internal/app"
 	"strconv"
 	"sync"
-	"time"
 )
 
-const eventsByResultId = "events:by-result-id"
+const events = "events"
+const eventsCurrentSeason = "events:current-season"
 const eventsBySeasonId = "events:by-season-id"
-const eventsToday = "events:today"
+
 
 // EventProcessor fetches data from external data source using the EventRequester
 // before persisting to the storage engine using the EventRepository.
 type EventProcessor struct {
 	eventRepo   app.EventRepository
-	fixtureRepo app.FixtureRepository
+	seasonRepo  app.SeasonRepository
 	requester   app.EventRequester
 	clock       clockwork.Clock
 	logger      *logrus.Logger
@@ -25,78 +25,47 @@ type EventProcessor struct {
 
 func (e EventProcessor) Process(command string, option string, done chan bool) {
 	switch command {
-	case eventsByResultId:
-		id, _ := strconv.Atoi(option)
-		go e.processEventsByFixtureID(uint64(id), done)
+	case events:
+		go e.processAllSeasons(done)
+	case eventsCurrentSeason:
+		go e.processCurrentSeason(done)
 	case eventsBySeasonId:
 		id, _ := strconv.Atoi(option)
 		go e.processEventsBySeasonID(uint64(id), done)
-	case eventsToday:
-		go e.processTodayEvents(done)
 	default:
 		e.logger.Fatalf("Command %s is not supported", command)
 		return
 	}
 }
 
-func (e EventProcessor) processEventsByFixtureID(id uint64, done chan bool) {
-	fix, err := e.fixtureRepo.ByID(id)
+func (e EventProcessor) processAllSeasons(done chan bool) {
+	ids, err := e.seasonRepo.IDs()
 
 	if err != nil {
-		e.logger.Fatalf("Error when retrieving fixture ID: %d, %s", id, err.Error())
+		e.logger.Fatalf("Error when retrieving season ids: %s", err.Error())
 		return
 	}
 
-	ids := []uint64{fix.ID}
-
-	goals, subs, cards := e.requester.EventsByFixtureIDs(ids)
+	goals, subs, cards := e.requester.EventsBySeasonIDs(ids)
 
 	go e.parseEvents(goals, subs, cards, done)
 }
 
-func (e EventProcessor) processEventsBySeasonID(id uint64, done chan bool) {
-	query := app.FixtureRepositoryQuery{
-		SeasonIDs: []uint64{id},
-	}
-
-	fix, err := e.fixtureRepo.Get(query)
+func (e EventProcessor) processCurrentSeason(done chan bool) {
+	ids, err := e.seasonRepo.CurrentSeasonIDs()
 
 	if err != nil {
-		e.logger.Fatalf("Error when retrieving fixtures for season ID: %d, %s", id, err.Error())
+		e.logger.Fatalf("Error when retrieving season ids: %s", err.Error())
 		return
 	}
 
-	var ids []uint64
-
-	for _, f := range fix {
-		ids = append(ids, f.ID)
-	}
-
-	goals, subs, cards := e.requester.EventsByFixtureIDs(ids)
+	goals, subs, cards := e.requester.EventsBySeasonIDs(ids)
 
 	go e.parseEvents(goals, subs, cards, done)
 }
 
-func (e EventProcessor) processTodayEvents(done chan bool) {
-	now := e.clock.Now()
-	y, m, d := now.Date()
-
-	from := time.Date(y, m, d, 0, 0, 0, 0, now.Location())
-	to := time.Date(y, m, d, 23, 59, 59, 59, now.Location())
-
-	query := app.FixtureRepositoryQuery{
-		DateTo:   &to,
-		DateFrom: &from,
-	}
-
-	ids, err := e.fixtureRepo.GetIDs(query)
-
-	if err != nil {
-		e.logger.Fatalf("Error when retrieving fixture ids in event processor: %s", err.Error())
-		return
-	}
-
-	goals, subs, cards := e.requester.EventsByFixtureIDs(ids)
+func (e EventProcessor) processEventsBySeasonID(seasonID uint64, done chan bool) {
+	goals, subs, cards := e.requester.EventsBySeasonIDs([]uint64{seasonID})
 
 	go e.parseEvents(goals, subs, cards, done)
 }
@@ -165,6 +134,6 @@ func (e EventProcessor) persistSubstitutionEvent(x *app.SubstitutionEvent) {
 	}
 }
 
-func NewEventProcessor(r app.EventRepository, f app.FixtureRepository, q app.EventRequester, c clockwork.Clock, log *logrus.Logger) *EventProcessor {
-	return &EventProcessor{eventRepo: r, fixtureRepo: f, requester: q, clock: c, logger: log}
+func NewEventProcessor(r app.EventRepository, s app.SeasonRepository, q app.EventRequester, c clockwork.Clock, log *logrus.Logger) *EventProcessor {
+	return &EventProcessor{eventRepo: r, seasonRepo: s, requester: q, clock: c, logger: log}
 }

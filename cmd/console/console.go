@@ -19,45 +19,45 @@ func main() {
 	var processor bootstrap.Processor
 
 	switch *command {
-	case Competition:
+	case competition:
 		processor = app.CompetitionProcessor()
 		break
-	case Country:
+	case country:
 		processor = app.CountryProcessor()
 		break
-	case EventsByResultId, EventsBySeasonId, EventsToday:
+	case events, eventsCurrentSeason, eventsBySeasonId:
 		processor = app.EventProcessor()
 		break
-	case Fixture, FixtureCurrentSeason:
+	case fixtures, fixturesCurrentSeason, fixturesBySeasonId:
 		processor = app.FixtureProcessor()
 		break
-	case FixtureXG, FixtureXGCurrentSeason:
+	case fixtureXG, fixtureXGCurrentSeason:
 		processor = app.FixtureTeamXGProcessor()
-	case Player:
+	case player:
 		processor = app.PlayerProcessor()
 		break
-	case PlayerStatsByResultId, PlayerStatsBySeasonId, PlayerStatsToday:
+	case playerStats, playerStatsCurrentSeason, playerStatsBySeasonId:
 		processor = app.PlayerStatsProcessor()
 		break
-	case Result, ResultById, ResultBySeasonId, ResultToday:
+	case results, resultsCurrentSeason, resultsBySeasonId:
 		processor = app.ResultProcessor()
 		break
-	case Round, RoundCurrentSeason:
+	case round, roundCurrentSeason:
 		processor = app.RoundProcessor()
 		break
-	case Season:
+	case season:
 		processor = app.SeasonProcessor()
 		break
-	case Squad, SquadCurrentSeason:
+	case squad, squadCurrentSeason:
 		processor = app.SquadProcessor()
 		break
-	case Team, TeamCurrentSeason:
+	case team, teamCurrentSeason:
 		processor = app.TeamProcessor()
 		break
-	case TeamStats, TeamStatsByResultId, TeamStatsBySeasonId, TeamStatsToday:
+	case teamStats, teamStatsCurrentSeason, teamStatsBySeasonId:
 		processor = app.TeamStatsProcessor()
 		break
-	case Venue, VenueCurrentSeason:
+	case venue, venueCurrentSeason:
 		processor = app.VenueProcessor()
 		break
 	default:

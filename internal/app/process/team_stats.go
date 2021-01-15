@@ -5,18 +5,14 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/statistico/statistico-data/internal/app"
 	"strconv"
-	"strings"
-	"time"
 )
 
 const teamStats = "team-stats"
-const teamStatsByResultId = "team-stats:by-result-id"
+const teamStatsCurrentSeason = "team-stats:current-season"
 const teamStatsBySeasonId = "team-stats:by-season-id"
-const teamStatsToday = "team-stats:today"
 
 type TeamStatsProcessor struct {
 	teamStatsRepo app.TeamStatsRepository
-	fixtureRepo   app.FixtureRepository
 	seasonRepo    app.SeasonRepository
 	requester     app.TeamStatsRequester
 	clock         clockwork.Clock
@@ -27,16 +23,11 @@ func (t TeamStatsProcessor) Process(command string, option string, done chan boo
 	switch command {
 	case teamStats:
 		go t.processAllSeasons(done)
-	case teamStatsByResultId:
-		for _, id := range strings.Split(option, ",") {
-			id, _ := strconv.Atoi(id)
-			go t.processByID(done, uint64(id))
-		}
+	case teamStatsCurrentSeason:
+		go t.processCurrentSeason(done)
 	case teamStatsBySeasonId:
 		id, _ := strconv.Atoi(option)
-		go t.processSeason(done, uint64(id))
-	case teamStatsToday:
-		go t.processToday(done)
+		go t.processSeason(uint64(id), done)
 	default:
 		t.logger.Fatalf("Command %s is not supported", command)
 		return
@@ -56,69 +47,28 @@ func (t TeamStatsProcessor) processAllSeasons(done chan bool) {
 	go t.persistStats(ch, done)
 }
 
-func (t TeamStatsProcessor) processByID(done chan bool, id uint64) {
-	fix, err := t.fixtureRepo.ByID(id)
+func (t TeamStatsProcessor) processCurrentSeason(done chan bool) {
+	ids, err := t.seasonRepo.CurrentSeasonIDs()
 
 	if err != nil {
-		t.logger.Fatalf("Error when retrieving fixtures for ID: %d, %s", id, err.Error())
+		t.logger.Fatalf("Error when retrieving season ids: %s", err.Error())
 		return
 	}
 
-	ch := t.requester.TeamStatsByFixtureIDs([]uint64{fix.ID})
+	ch := t.requester.TeamStatsBySeasonIDs(ids)
 
 	go t.persistStats(ch, done)
 }
 
-func (t TeamStatsProcessor) processSeason(done chan bool, seasonID uint64) {
-	query := app.FixtureRepositoryQuery{
-		SeasonIDs: []uint64{seasonID},
-	}
-
-	fix, err := t.fixtureRepo.Get(query)
-
-	if err != nil {
-		t.logger.Fatalf("Error when retrieving fixtures for Season ID: %d, %s", seasonID, err.Error())
-		return
-	}
-
-	var ids []uint64
-
-	for _, f := range fix {
-		ids = append(ids, f.ID)
-	}
-
-	ch := t.requester.TeamStatsByFixtureIDs(ids)
-
-	go t.persistStats(ch, done)
-}
-
-func (t TeamStatsProcessor) processToday(done chan bool) {
-	now := t.clock.Now()
-	y, m, d := now.Date()
-
-	from := time.Date(y, m, d, 0, 0, 0, 0, now.Location())
-	to := time.Date(y, m, d, 23, 59, 59, 59, now.Location())
-
-	query := app.FixtureRepositoryQuery{
-		DateTo:   &to,
-		DateFrom: &from,
-	}
-
-	ids, err := t.fixtureRepo.GetIDs(query)
-
-	if err != nil {
-		t.logger.Fatalf("Error when retrieving fixture ids in event processor: %s", err.Error())
-		return
-	}
-
-	ch := t.requester.TeamStatsByFixtureIDs(ids)
+func (t TeamStatsProcessor) processSeason(seasonID uint64, done chan bool) {
+	ch := t.requester.TeamStatsBySeasonIDs([]uint64{seasonID})
 
 	go t.persistStats(ch, done)
 }
 
 func (t TeamStatsProcessor) persistStats(ch <-chan *app.TeamStats, done chan bool) {
-	for result := range ch {
-		t.persist(result)
+	for stats := range ch {
+		t.persist(stats)
 	}
 
 	done <- true
@@ -134,17 +84,10 @@ func (t TeamStatsProcessor) persist(x *app.TeamStats) {
 
 		return
 	}
-
-	if err := t.teamStatsRepo.UpdateTeamStats(x); err != nil {
-		t.logger.Warningf("Error '%s' occurred when updating team stats struct: %+v\n,", err.Error(), *x)
-	}
-
-	return
 }
 
 func NewTeamStatsProcessor(
 	r app.TeamStatsRepository,
-	f app.FixtureRepository,
 	s app.SeasonRepository,
 	q app.TeamStatsRequester,
 	c clockwork.Clock,
@@ -152,7 +95,6 @@ func NewTeamStatsProcessor(
 ) *TeamStatsProcessor {
 	return &TeamStatsProcessor{
 		teamStatsRepo: r,
-		fixtureRepo: f,
 		seasonRepo: s,
 		requester: q,
 		clock: c,

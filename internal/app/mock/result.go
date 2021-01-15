@@ -33,3 +33,8 @@ func (m ResultRequester) ResultsByFixtureIDs(id []uint64) <-chan *app.Result {
 	args := m.Called(id)
 	return args.Get(0).(chan *app.Result)
 }
+
+func (m ResultRequester) ResultsBySeasonIDs(id []uint64) <-chan *app.Result {
+	args := m.Called(id)
+	return args.Get(0).(chan *app.Result)
+}

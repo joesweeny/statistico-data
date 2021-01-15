@@ -22,6 +22,27 @@ func (p PlayerStatsRequester) PlayerStatsByFixtureIDs(ids []uint64) <-chan *app.
 	return ch
 }
 
+func (p PlayerStatsRequester) PlayerStatsBySeasonIDs(seasonIDs []uint64) <-chan *app.PlayerStats {
+	ch := make(chan *app.PlayerStats, 100)
+
+	go p.parseBySeasonIDs(seasonIDs, ch)
+
+	return ch
+}
+
+func (p PlayerStatsRequester) parseBySeasonIDs(seasonIDs []uint64, ch chan<- *app.PlayerStats) {
+	defer close(ch)
+
+	wg := sync.WaitGroup{}
+
+	for _, id := range seasonIDs {
+		wg.Add(1)
+		go p.sendSeasonRequest(id, ch, &wg)
+	}
+
+	wg.Wait()
+}
+
 func (p PlayerStatsRequester) parseStats(ids []uint64, ch chan<- *app.PlayerStats) {
 	defer close(ch)
 
@@ -33,6 +54,33 @@ func (p PlayerStatsRequester) parseStats(ids []uint64, ch chan<- *app.PlayerStat
 	}
 
 	wg.Wait()
+}
+
+func (p PlayerStatsRequester) sendSeasonRequest(seasonID uint64, ch chan<- *app.PlayerStats, wg *sync.WaitGroup) {
+	res, _, err := p.client.SeasonByID(context.Background(), int(seasonID), []string{"results.lineup", "results.bench"})
+
+	if err != nil {
+		p.logger.Errorf(
+			"Error when calling client '%s' when making season fixtures request. Season ID %d",
+			err.Error(),
+			seasonID,
+		)
+
+		wg.Done()
+		return
+	}
+
+	for _, res := range res.Results() {
+		for _, stats := range res.Lineups() {
+			ch <- transformPlayerStats(&stats, false)
+		}
+
+		for _, stats := range res.Bench() {
+			ch <- transformPlayerStats(&stats, true)
+		}
+	}
+
+	wg.Done()
 }
 
 func (p PlayerStatsRequester) sendStatsRequest(id uint64, ch chan<- *app.PlayerStats, wg *sync.WaitGroup) {
