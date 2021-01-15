@@ -3,10 +3,12 @@ package process
 import (
 	"github.com/sirupsen/logrus"
 	"github.com/statistico/statistico-data/internal/app"
+	"strconv"
 )
 
-const fixture = "fixture"
-const fixtureCurrentSeason = "fixture:current-season"
+const fixtures = "fixtures"
+const fixturesCurrentSeason = "fixtures:current-season"
+const fixturesBySeasonId = "fixtures:by-season-id"
 
 // FixtureProcessor fetches data from external data source using the FixtureRequester
 // before persisting to the storage engine using the FixtureRepository
@@ -19,10 +21,13 @@ type FixtureProcessor struct {
 
 func (f FixtureProcessor) Process(command string, option string, done chan bool) {
 	switch command {
-	case fixture:
+	case fixtures:
 		go f.processAllSeasons(done)
-	case fixtureCurrentSeason:
+	case fixturesCurrentSeason:
 		go f.processCurrentSeason(done)
+	case fixturesBySeasonId:
+		id, _ := strconv.Atoi(option)
+		go f.processSeason(uint64(id), done)
 	default:
 		f.logger.Fatalf("Command %s is not supported", command)
 		return
@@ -51,6 +56,12 @@ func (f FixtureProcessor) processCurrentSeason(done chan bool) {
 	}
 
 	ch := f.requester.FixturesBySeasonIDs(ids)
+
+	go f.persistFixtures(ch, done)
+}
+
+func (f FixtureProcessor) processSeason(seasonID uint64, done chan bool) {
+	ch := f.requester.FixturesBySeasonIDs([]uint64{seasonID})
 
 	go f.persistFixtures(ch, done)
 }

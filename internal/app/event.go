@@ -57,4 +57,5 @@ type EventRepository interface {
 // the channel before closing the channel once successful execution is complete.
 type EventRequester interface {
 	EventsByFixtureIDs(ids []uint64) (<-chan *GoalEvent, <-chan *SubstitutionEvent, <-chan *CardEvent)
+	EventsBySeasonIDs(ids []uint64) (<-chan *GoalEvent, <-chan *SubstitutionEvent, <-chan *CardEvent)
 }

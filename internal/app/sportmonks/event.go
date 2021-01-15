@@ -25,6 +25,62 @@ func (e EventRequester) EventsByFixtureIDs(ids []uint64) (<-chan *app.GoalEvent,
 	return goal, sub, card
 }
 
+func (e EventRequester) EventsBySeasonIDs(seasonIDs []uint64) (<-chan *app.GoalEvent, <-chan *app.SubstitutionEvent, <-chan *app.CardEvent) {
+	goal := make(chan *app.GoalEvent, 500)
+	sub := make(chan *app.SubstitutionEvent, 500)
+	card := make(chan *app.CardEvent, 500)
+
+	go e.parseBySeasonIDs(seasonIDs, goal, sub, card)
+
+	return goal, sub, card
+}
+
+func (e EventRequester) parseBySeasonIDs(seasonIDs []uint64, g chan<- *app.GoalEvent, s chan<- *app.SubstitutionEvent, c chan<- *app.CardEvent) {
+	defer close(g)
+	defer close(s)
+	defer close(c)
+
+	wg := sync.WaitGroup{}
+
+	for _, id := range seasonIDs {
+		wg.Add(1)
+		go e.sendSeasonRequest(id, g, s, c, &wg)
+	}
+
+	wg.Wait()
+}
+
+func (e EventRequester) sendSeasonRequest(seasonID uint64, g chan<- *app.GoalEvent, s chan<- *app.SubstitutionEvent, c chan<- *app.CardEvent, wg *sync.WaitGroup) {
+	res, _, err := e.client.SeasonByID(context.Background(), int(seasonID), []string{"results.cards", "results.goals", "results.substitutions"})
+
+	if err != nil {
+		e.logger.Errorf(
+			"Error when calling client '%s' when making season fixtures request. Season ID %d",
+			err.Error(),
+			seasonID,
+		)
+
+		wg.Done()
+		return
+	}
+
+	for _, res := range res.Results() {
+		for _, event := range res.Cards() {
+			c <- transformCardEvent(&event)
+		}
+
+		for _, event := range res.Goals() {
+			g <- transformGoalEvent(&event)
+		}
+
+		for _, event := range res.Substitutions() {
+			s <- transformSubstitutionEvent(&event)
+		}
+	}
+
+	wg.Done()
+}
+
 func (e EventRequester) parseEvents(ids []uint64, g chan<- *app.GoalEvent, s chan<- *app.SubstitutionEvent, c chan<- *app.CardEvent) {
 	defer close(g)
 	defer close(s)

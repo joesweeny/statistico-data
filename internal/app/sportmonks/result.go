@@ -5,6 +5,7 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/statistico/statistico-data/internal/app"
 	spClient "github.com/statistico/statistico-sportmonks-go-client"
+	"sync"
 )
 
 type ResultRequester struct {
@@ -12,34 +13,46 @@ type ResultRequester struct {
 	logger *logrus.Logger
 }
 
-func (r ResultRequester) ResultsByFixtureIDs(ids []uint64) <-chan *app.Result {
+func (r ResultRequester) ResultsBySeasonIDs(seasonIDs []uint64) <-chan *app.Result {
 	ch := make(chan *app.Result, 100)
 
-	go r.parseResults(ids, ch)
+	go r.parseResults(seasonIDs, ch)
 
 	return ch
 }
 
-func (r ResultRequester) parseResults(ids []uint64, ch chan<- *app.Result) {
+func (r ResultRequester) parseResults(seasonIDs []uint64, ch chan<- *app.Result) {
 	defer close(ch)
 
-	var filters map[string][]int
-	var includes []string
+	var wg sync.WaitGroup
 
-	for _, id := range ids {
-		res, _, err := r.client.FixtureByID(context.Background(), int(id), includes, filters)
-
-		if err != nil {
-			r.logger.Errorf(
-				"Error when calling client '%s' when making requests request. Fixture ID %d",
-				err.Error(),
-				id,
-			)
-			return
-		}
-
-		ch <- transformResult(res)
+	for _, id := range seasonIDs {
+		wg.Add(1)
+		go r.sendSeasonRequests(id, ch, &wg)
 	}
+
+	wg.Wait()
+}
+
+func (r ResultRequester) sendSeasonRequests(seasonID uint64, ch chan<- *app.Result, w *sync.WaitGroup) {
+	season, _, err := r.client.SeasonByID(context.Background(), int(seasonID), []string{"results"})
+
+	if err != nil {
+		r.logger.Errorf(
+			"Error when calling client '%s' when making fixtures request. Season ID %d",
+			err.Error(),
+			seasonID,
+		)
+
+		w.Done()
+		return
+	}
+
+	for _, result := range season.Results() {
+		ch <- transformResult(&result)
+	}
+
+	w.Done()
 }
 
 func transformResult(s *spClient.Fixture) *app.Result {

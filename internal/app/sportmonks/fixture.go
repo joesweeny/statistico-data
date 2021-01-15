@@ -30,13 +30,13 @@ func (f FixtureRequester) parseFixtures(seasonIDs []uint64, ch chan<- *app.Fixtu
 
 	for _, id := range seasonIDs {
 		wg.Add(1)
-		go f.sendFixtureRequests(id, ch, &wg)
+		go f.sendSeasonRequests(id, ch, &wg)
 	}
 
 	wg.Wait()
 }
 
-func (f FixtureRequester) sendFixtureRequests(seasonID uint64, ch chan<- *app.Fixture, w *sync.WaitGroup) {
+func (f FixtureRequester) sendSeasonRequests(seasonID uint64, ch chan<- *app.Fixture, w *sync.WaitGroup) {
 	res, _, err := f.client.SeasonByID(context.Background(), int(seasonID), []string{"fixtures"})
 
 	if err != nil {

@@ -39,3 +39,8 @@ func (m PlayerStatsRequester) PlayerStatsByFixtureIDs(ids []uint64) <-chan *app.
 	args := m.Called(ids)
 	return args.Get(0).(chan *app.PlayerStats)
 }
+
+func (m PlayerStatsRequester) PlayerStatsBySeasonIDs(ids []uint64) <-chan *app.PlayerStats {
+	args := m.Called(ids)
+	return args.Get(0).(chan *app.PlayerStats)
+}

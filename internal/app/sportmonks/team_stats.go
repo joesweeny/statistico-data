@@ -17,7 +17,7 @@ type TeamStatsRequester struct {
 func (t TeamStatsRequester) TeamStatsByFixtureIDs(ids []uint64) <-chan *app.TeamStats {
 	ch := make(chan *app.TeamStats, 100)
 
-	go t.parseStats(ids, ch)
+	go t.parseByFixtureIDs(ids, ch)
 
 	return ch
 }
@@ -25,44 +25,25 @@ func (t TeamStatsRequester) TeamStatsByFixtureIDs(ids []uint64) <-chan *app.Team
 func (t TeamStatsRequester) TeamStatsBySeasonIDs(ids []uint64) <-chan *app.TeamStats {
 	ch := make(chan *app.TeamStats, 100)
 
-	var wg sync.WaitGroup
-
-	for _, id := range ids {
-		wg.Add(1)
-		go t.sendFixtureRequests(id, ch, &wg)
-	}
-
-	wg.Wait()
-
-	go t.parseStats(ids, ch)
+	go t.parseBySeasonIDs(ids, ch)
 
 	return ch
 }
 
-func (t TeamStatsRequester) sendFixtureRequests(seasonID uint64, ch chan<- *app.TeamStats, w *sync.WaitGroup) {
-	res, _, err := t.client.SeasonByID(context.Background(), int(seasonID), []string{"fixtures", "fixtures.stats"})
+func (t TeamStatsRequester) parseBySeasonIDs(seasonIDs []uint64, ch chan<- *app.TeamStats) {
+	defer close(ch)
 
-	if err != nil {
-		t.logger.Errorf(
-			"Error when calling client '%s' when making season fixtures request. Season ID %d",
-			err.Error(),
-			seasonID,
-		)
+	wg := sync.WaitGroup{}
 
-		w.Done()
-		return
+	for _, id := range seasonIDs {
+		wg.Add(1)
+		go t.sendSeasonRequest(id, ch, &wg)
 	}
 
-	for _, fixture := range res.Fixtures() {
-		for _, stats := range fixture.TeamStats() {
-			ch <- transformTeamStats(&stats)
-		}
-	}
-
-	w.Done()
+	wg.Wait()
 }
 
-func (t TeamStatsRequester) parseStats(ids []uint64, ch chan<- *app.TeamStats) {
+func (t TeamStatsRequester) parseByFixtureIDs(ids []uint64, ch chan<- *app.TeamStats) {
 	defer close(ch)
 
 	var filters map[string][]int
@@ -83,6 +64,29 @@ func (t TeamStatsRequester) parseStats(ids []uint64, ch chan<- *app.TeamStats) {
 			ch <- transformTeamStats(&stats)
 		}
 	}
+}
+
+func (t TeamStatsRequester) sendSeasonRequest(seasonID uint64, ch chan<- *app.TeamStats, wg *sync.WaitGroup) {
+	season, _, err := t.client.SeasonByID(context.Background(), int(seasonID), []string{"results.stats"})
+
+	if err != nil {
+		t.logger.Errorf(
+			"Error when calling client '%s' when making season fixtures request. Season ID %d",
+			err.Error(),
+			seasonID,
+		)
+
+		wg.Done()
+		return
+	}
+
+	for _, res := range season.Results() {
+		for _, stats := range res.TeamStats() {
+			ch <- transformTeamStats(&stats)
+		}
+	}
+
+	wg.Done()
 }
 
 func transformTeamStats(s *spClient.TeamStats) *app.TeamStats {
