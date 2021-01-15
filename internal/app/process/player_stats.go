@@ -84,12 +84,6 @@ func (p PlayerStatsProcessor) persist(x *app.PlayerStats) {
 
 		return
 	}
-
-	if err := p.playerStatsRepo.Update(x); err != nil {
-		p.logger.Warningf("Error '%s' occurred when updating player stats struct: %+v\n,", err.Error(), *x)
-	}
-
-	return
 }
 
 func NewPlayerStatsProcessor(
