@@ -50,7 +50,7 @@ func TestTeamStatsProcessor_Process(t *testing.T) {
 		teamStatsRepo.AssertExpectations(t)
 		assert.Nil(t, hook.LastEntry())
 	})
-	
+
 	t.Run("log errors if unable to insert team stats into repository when processing team stats by season id command", func(t *testing.T) {
 		t.Helper()
 

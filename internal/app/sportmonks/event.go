@@ -30,7 +30,7 @@ func (e EventRequester) EventsBySeasonIDs(seasonIDs []uint64) (<-chan *app.GoalE
 	sub := make(chan *app.SubstitutionEvent, 500)
 	card := make(chan *app.CardEvent, 500)
 
-	go e.parseEvents(seasonIDs, goal, sub, card)
+	go e.parseBySeasonIDs(seasonIDs, goal, sub, card)
 
 	return goal, sub, card
 }
