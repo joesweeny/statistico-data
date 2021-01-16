@@ -71,7 +71,7 @@ func sportMonksClient(config *Config) *spClient.HTTPClient {
 	}
 
 	client := &http.Client{
-		Timeout:   time.Second * 30,
+		Timeout:   time.Second * 60,
 		Transport: trans,
 	}
 
