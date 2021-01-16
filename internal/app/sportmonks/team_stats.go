@@ -15,7 +15,7 @@ type TeamStatsRequester struct {
 }
 
 func (t TeamStatsRequester) TeamStatsByFixtureIDs(ids []uint64) <-chan *app.TeamStats {
-	ch := make(chan *app.TeamStats, 100)
+	ch := make(chan *app.TeamStats, 10000)
 
 	go t.parseByFixtureIDs(ids, ch)
 
@@ -23,7 +23,7 @@ func (t TeamStatsRequester) TeamStatsByFixtureIDs(ids []uint64) <-chan *app.Team
 }
 
 func (t TeamStatsRequester) TeamStatsBySeasonIDs(ids []uint64) <-chan *app.TeamStats {
-	ch := make(chan *app.TeamStats, 100)
+	ch := make(chan *app.TeamStats, 10000)
 
 	go t.parseBySeasonIDs(ids, ch)
 

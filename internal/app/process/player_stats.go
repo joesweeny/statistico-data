@@ -13,6 +13,7 @@ const playerStatsBySeasonId = "player-stats:by-season-id"
 
 type PlayerStatsProcessor struct {
 	playerStatsRepo app.PlayerStatsRepository
+	fixtureRepo    app.FixtureRepository
 	seasonRepo     app.SeasonRepository
 	requester       app.PlayerStatRequester
 	clock           clockwork.Clock
