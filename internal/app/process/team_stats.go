@@ -10,6 +10,7 @@ import (
 const teamStats = "team-stats"
 const teamStatsCurrentSeason = "team-stats:current-season"
 const teamStatsBySeasonId = "team-stats:by-season-id"
+const teamStatsByCompetitionId = "team-stats:by-competition-id"
 
 type TeamStatsProcessor struct {
 	teamStatsRepo app.TeamStatsRepository
@@ -28,6 +29,9 @@ func (t TeamStatsProcessor) Process(command string, option string, done chan boo
 	case teamStatsBySeasonId:
 		id, _ := strconv.Atoi(option)
 		go t.processSeason(uint64(id), done)
+	case teamStatsByCompetitionId:
+		id, _ := strconv.Atoi(option)
+		go t.processCompetition(uint64(id), done)
 	default:
 		t.logger.Fatalf("Command %s is not supported", command)
 		return
@@ -62,6 +66,25 @@ func (t TeamStatsProcessor) processCurrentSeason(done chan bool) {
 
 func (t TeamStatsProcessor) processSeason(seasonID uint64, done chan bool) {
 	ch := t.requester.TeamStatsBySeasonIDs([]uint64{seasonID})
+
+	go t.persistStats(ch, done)
+}
+
+func (t TeamStatsProcessor) processCompetition(competitionID uint64, done chan bool) {
+	seasons, err := t.seasonRepo.ByCompetitionId(competitionID, "name_asc")
+
+	if err != nil {
+		t.logger.Fatalf("Error when retrieving season ids: %s", err.Error())
+		return
+	}
+
+	var ids []uint64
+
+	for _, season := range seasons {
+		ids = append(ids, season.ID)
+	}
+
+	ch := t.requester.TeamStatsBySeasonIDs(ids)
 
 	go t.persistStats(ch, done)
 }
