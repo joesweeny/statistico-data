@@ -88,5 +88,5 @@ type PlayerStatRequester interface {
 	PlayerStatsBySeasonIDs(seasonIDs []uint64) <-chan *PlayerStats
 	// Fetch as parse player stats for fixture on a given date. Provide a struct of uint64 season IDs to limit fetched
 	// data to specific competitions
-	PlayerStatsByDate(date time.Time, competitionIDS []uint64) <-chan *PlayerStats
+	PlayerStatsByDate(date time.Time, competitionIDs []uint64) <-chan *PlayerStats
 }

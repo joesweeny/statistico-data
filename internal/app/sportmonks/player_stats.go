@@ -31,10 +31,10 @@ func (p PlayerStatsRequester) PlayerStatsBySeasonIDs(seasonIDs []uint64) <-chan 
 	return ch
 }
 
-func (p PlayerStatsRequester) PlayerStatsByDate(date time.Time, competitionIDS []uint64) <-chan *app.PlayerStats {
+func (p PlayerStatsRequester) PlayerStatsByDate(date time.Time, competitionIDs []uint64) <-chan *app.PlayerStats {
 	ch := make(chan *app.PlayerStats, 1000)
 
-	go p.parseByDate(competitionIDS, date, ch)
+	go p.parseByDate(competitionIDs, date, ch)
 
 	return ch
 }
@@ -52,14 +52,14 @@ func (p PlayerStatsRequester) parseBySeasonIDs(seasonIDs []uint64, ch chan<- *ap
 	wg.Wait()
 }
 
-func (p PlayerStatsRequester) parseByDate(competitionIDS []uint64, date time.Time, ch chan<- *app.PlayerStats) {
+func (p PlayerStatsRequester) parseByDate(competitionIDs []uint64, date time.Time, ch chan<- *app.PlayerStats) {
 	defer close(ch)
 
 	wg := sync.WaitGroup{}
 
-	for _, competitionID := range competitionIDS {
+	for _, id := range competitionIDs {
 		wg.Add(1)
-		go p.sendByDateRequest(competitionID, date, ch, &wg)
+		go p.sendByDateRequest(id, date, ch, &wg)
 	}
 
 	wg.Wait()
@@ -78,19 +78,19 @@ func (p PlayerStatsRequester) parseStats(ids []uint64, ch chan<- *app.PlayerStat
 	wg.Wait()
 }
 
-func (p PlayerStatsRequester) sendByDateRequest(seasonID uint64, date time.Time, ch chan<- *app.PlayerStats, wg *sync.WaitGroup) {
+func (p PlayerStatsRequester) sendByDateRequest(competitionID uint64, date time.Time, ch chan<- *app.PlayerStats, wg *sync.WaitGroup) {
 	results, _, err := p.client.FixturesByDate(
 		context.Background(),
 		date,
 		[]string{"lineup", "bench"},
-		map[string][]int{"leagues": {int(seasonID)}},
+		map[string][]int{"leagues": {int(competitionID)}},
 	)
 
 	if err != nil {
 		p.logger.Errorf(
-			"Error when calling client '%s' when making season fixtures request. Season ID %d",
+			"Error when calling client '%s' when making competition fixtures request. Competition ID %d",
 			err.Error(),
-			seasonID,
+			competitionID,
 		)
 
 		wg.Done()
