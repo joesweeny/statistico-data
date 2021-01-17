@@ -7,6 +7,7 @@ import (
 	"github.com/statistico/statistico-data/internal/app/helpers"
 	spClient "github.com/statistico/statistico-sportmonks-go-client"
 	"sync"
+	"time"
 )
 
 type PlayerStatsRequester struct {
@@ -30,6 +31,14 @@ func (p PlayerStatsRequester) PlayerStatsBySeasonIDs(seasonIDs []uint64) <-chan 
 	return ch
 }
 
+func (p PlayerStatsRequester) PlayerStatsByDate(date time.Time, competitionIDS []uint64) <-chan *app.PlayerStats {
+	ch := make(chan *app.PlayerStats, 1000)
+
+	go p.parseByDate(competitionIDS, date, ch)
+
+	return ch
+}
+
 func (p PlayerStatsRequester) parseBySeasonIDs(seasonIDs []uint64, ch chan<- *app.PlayerStats) {
 	defer close(ch)
 
@@ -38,6 +47,19 @@ func (p PlayerStatsRequester) parseBySeasonIDs(seasonIDs []uint64, ch chan<- *ap
 	for _, id := range seasonIDs {
 		wg.Add(1)
 		go p.sendSeasonRequest(id, ch, &wg)
+	}
+
+	wg.Wait()
+}
+
+func (p PlayerStatsRequester) parseByDate(competitionIDS []uint64, date time.Time, ch chan<- *app.PlayerStats) {
+	defer close(ch)
+
+	wg := sync.WaitGroup{}
+
+	for _, competitionID := range competitionIDS {
+		wg.Add(1)
+		go p.sendByDateRequest(competitionID, date, ch, &wg)
 	}
 
 	wg.Wait()
@@ -54,6 +76,38 @@ func (p PlayerStatsRequester) parseStats(ids []uint64, ch chan<- *app.PlayerStat
 	}
 
 	wg.Wait()
+}
+
+func (p PlayerStatsRequester) sendByDateRequest(seasonID uint64, date time.Time, ch chan<- *app.PlayerStats, wg *sync.WaitGroup) {
+	results, _, err := p.client.FixturesByDate(
+		context.Background(),
+		date,
+		[]string{"lineup", "bench"},
+		map[string][]int{"leagues": {int(seasonID)}},
+	)
+
+	if err != nil {
+		p.logger.Errorf(
+			"Error when calling client '%s' when making season fixtures request. Season ID %d",
+			err.Error(),
+			seasonID,
+		)
+
+		wg.Done()
+		return
+	}
+
+	for _, res := range results {
+		for _, stats := range res.Lineups() {
+			ch <- transformPlayerStats(&stats, false)
+		}
+
+		for _, stats := range res.Bench() {
+			ch <- transformPlayerStats(&stats, true)
+		}
+	}
+
+	wg.Done()
 }
 
 func (p PlayerStatsRequester) sendSeasonRequest(seasonID uint64, ch chan<- *app.PlayerStats, wg *sync.WaitGroup) {
