@@ -30,6 +30,11 @@ func (m *CompetitionRepository) Get(q app.CompetitionFilterQuery) ([]app.Competi
 	return args.Get(0).([]app.Competition), args.Error(1)
 }
 
+func (m *CompetitionRepository) IDs() ([]uint64, error) {
+	args := m.Called()
+	return args.Get(0).([]uint64), args.Error(1)
+}
+
 type CompetitionRequester struct {
 	mock.Mock
 }
