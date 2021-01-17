@@ -329,6 +329,34 @@ func TestCompetitionRepository_Get(t *testing.T) {
 	})
 }
 
+func TestCompetitionRepository_IDs(t *testing.T) {
+	conn, cleanUp := test.GetConnection(t, "sportmonks_competition")
+	repo := postgres.NewCompetitionRepository(conn, test.Clock)
+
+	t.Run("test returns a slice of uint64 ids", func(t *testing.T) {
+		t.Helper()
+		defer cleanUp()
+
+		for i := 1; i <= 4; i++ {
+			s := newCompetition(uint64(i), 560, true)
+
+			if err := repo.Insert(s); err != nil {
+				t.Errorf("Error when inserting record into the competition database: %s", err.Error())
+			}
+		}
+
+		ids, err := repo.IDs()
+
+		want := []uint64{1, 2, 3, 4}
+
+		if err != nil {
+			t.Fatalf("Test failed, expected %v, got %s", want, err.Error())
+		}
+
+		assert.Equal(t, want, ids)
+	})
+}
+
 func newCompetition(id uint64, country uint64, isCup bool) *app.Competition {
 	return &app.Competition{
 		ID:        id,

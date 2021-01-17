@@ -64,6 +64,7 @@ func (c Container) PlayerProcessor() *process.PlayerProcessor {
 func (c Container) PlayerStatsProcessor() *process.PlayerStatsProcessor {
 	return process.NewPlayerStatsProcessor(
 		c.PlayerStatsRepository(),
+		c.CompetitionRepository(),
 		c.SeasonRepository(),
 		c.PlayerStatsRequester(),
 		c.Clock,

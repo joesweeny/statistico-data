@@ -99,6 +99,31 @@ func (r *CompetitionRepository) Get(q app.CompetitionFilterQuery) ([]app.Competi
 	return rowsToCompetition(rows)
 }
 
+func (r *CompetitionRepository) IDs() ([]uint64, error) {
+	query := `SELECT id FROM sportmonks_competition ORDER BY id ASC`
+
+	rows, err := r.connection.Query(query)
+
+	if err != nil {
+		return []uint64{}, err
+	}
+
+	defer rows.Close()
+
+	var id uint64
+	var ids []uint64
+
+	for rows.Next() {
+		if err := rows.Scan(&id); err != nil {
+			return ids, err
+		}
+
+		ids = append(ids, id)
+	}
+
+	return ids, nil
+}
+
 func rowToCompetition(r *sql.Row) (*app.Competition, error) {
 	var created int64
 	var updated int64

@@ -20,6 +20,7 @@ type CompetitionRepository interface {
 	Update(c *Competition) error
 	ByID(id uint64) (*Competition, error)
 	Get(q CompetitionFilterQuery) ([]Competition, error)
+	IDs() ([]uint64, error)
 }
 
 // CompetitionRequester provides an interface allowing this application to request data from an external
