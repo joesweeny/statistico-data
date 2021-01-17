@@ -3,6 +3,7 @@ package mock
 import (
 	"github.com/statistico/statistico-data/internal/app"
 	"github.com/stretchr/testify/mock"
+	"time"
 )
 
 type PlayerStatsRepository struct {
@@ -42,5 +43,10 @@ func (m PlayerStatsRequester) PlayerStatsByFixtureIDs(ids []uint64) <-chan *app.
 
 func (m PlayerStatsRequester) PlayerStatsBySeasonIDs(ids []uint64) <-chan *app.PlayerStats {
 	args := m.Called(ids)
+	return args.Get(0).(chan *app.PlayerStats)
+}
+
+func (m PlayerStatsRequester) PlayerStatsByDate(date time.Time, competitionIDS []uint64) <-chan *app.PlayerStats {
+	args := m.Called(competitionIDS, date)
 	return args.Get(0).(chan *app.PlayerStats)
 }
