@@ -7,6 +7,7 @@ import (
 	"github.com/statistico/statistico-data/internal/app/helpers"
 	spClient "github.com/statistico/statistico-sportmonks-go-client"
 	"sync"
+	"time"
 )
 
 type TeamStatsRequester struct {
@@ -30,6 +31,14 @@ func (t TeamStatsRequester) TeamStatsBySeasonIDs(ids []uint64) <-chan *app.TeamS
 	return ch
 }
 
+func (t TeamStatsRequester) TeamStatsByDate(date time.Time, competitionIDs []uint64) <-chan *app.TeamStats {
+	ch := make(chan *app.TeamStats, 1000)
+
+	go t.parseByDate(competitionIDs, date, ch)
+
+	return ch
+}
+
 func (t TeamStatsRequester) parseBySeasonIDs(seasonIDs []uint64, ch chan<- *app.TeamStats) {
 	defer close(ch)
 
@@ -38,6 +47,19 @@ func (t TeamStatsRequester) parseBySeasonIDs(seasonIDs []uint64, ch chan<- *app.
 	for _, id := range seasonIDs {
 		wg.Add(1)
 		go t.sendSeasonRequest(id, ch, &wg)
+	}
+
+	wg.Wait()
+}
+
+func (t TeamStatsRequester) parseByDate(competitionIDs []uint64, date time.Time, ch chan<- *app.TeamStats) {
+	defer close(ch)
+
+	wg := sync.WaitGroup{}
+
+	for _, id := range competitionIDs {
+		wg.Add(1)
+		go t.sendByDateRequest(id, date, ch, &wg)
 	}
 
 	wg.Wait()
@@ -81,6 +103,34 @@ func (t TeamStatsRequester) sendSeasonRequest(seasonID uint64, ch chan<- *app.Te
 	}
 
 	for _, res := range season.Results() {
+		for _, stats := range res.TeamStats() {
+			ch <- transformTeamStats(&stats)
+		}
+	}
+
+	wg.Done()
+}
+
+func (t TeamStatsRequester) sendByDateRequest(competitionID uint64, date time.Time, ch chan<- *app.TeamStats, wg *sync.WaitGroup) {
+	results, _, err := t.client.FixturesByDate(
+		context.Background(),
+		date,
+		[]string{"stats"},
+		map[string][]int{"leagues": {int(competitionID)}},
+	)
+
+	if err != nil {
+		t.logger.Errorf(
+			"Error when calling client '%s' when making competition fixtures request. Competition ID %d",
+			err.Error(),
+			competitionID,
+		)
+
+		wg.Done()
+		return
+	}
+
+	for _, res := range results {
 		for _, stats := range res.TeamStats() {
 			ch <- transformTeamStats(&stats)
 		}
