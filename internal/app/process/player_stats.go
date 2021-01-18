@@ -95,14 +95,14 @@ func (p PlayerStatsProcessor) persist(x *app.PlayerStats) {
 
 	if err != nil {
 		if err := p.playerStatsRepo.Insert(x); err != nil {
-			p.logger.Warningf("Error '%s' occurred when inserting player stats struct: %+v\n,", err.Error(), *x)
+			p.logger.Errorf("Error '%s' occurred when inserting player stats struct: %+v\n,", err.Error(), *x)
 		}
 
 		return
 	}
 
 	if err := p.playerStatsRepo.Update(x); err != nil {
-		p.logger.Warningf("Error '%s' occurred when updating player stats struct: %+v\n,", err.Error(), *x)
+		p.logger.Errorf("Error '%s' occurred when updating player stats struct: %+v\n,", err.Error(), *x)
 	}
 
 	return
