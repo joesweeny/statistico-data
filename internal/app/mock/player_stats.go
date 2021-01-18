@@ -47,6 +47,6 @@ func (m PlayerStatsRequester) PlayerStatsBySeasonIDs(ids []uint64) <-chan *app.P
 }
 
 func (m PlayerStatsRequester) PlayerStatsByDate(date time.Time, competitionIDS []uint64) <-chan *app.PlayerStats {
-	args := m.Called(competitionIDS, date)
+	args := m.Called(date, competitionIDS)
 	return args.Get(0).(chan *app.PlayerStats)
 }
