@@ -120,6 +120,7 @@ func (c Container) TeamProcessor() *process.TeamProcessor {
 func (c Container) TeamStatsProcessor() *process.TeamStatsProcessor {
 	return process.NewTeamStatsProcessor(
 		c.TeamStatsRepository(),
+		c.CompetitionRepository(),
 		c.SeasonRepository(),
 		c.TeamStatsRequester(),
 		c.Clock,
