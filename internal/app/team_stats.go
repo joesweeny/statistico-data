@@ -71,4 +71,5 @@ type TeamStatsRepository interface {
 type TeamStatsRequester interface {
 	TeamStatsByFixtureIDs(ids []uint64) <-chan *TeamStats
 	TeamStatsBySeasonIDs(ids []uint64) <-chan *TeamStats
+	TeamStatsByDate(date time.Time, competitionIDs []uint64) <-chan *TeamStats
 }

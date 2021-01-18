@@ -54,7 +54,7 @@ func main() {
 	case team, teamCurrentSeason:
 		processor = app.TeamProcessor()
 		break
-	case teamStats, teamStatsCurrentSeason, teamStatsBySeasonId, teamStatsByCompetitionId:
+	case teamStatsByDate, teamStatsBySeasonId, teamStatsByCompetitionId:
 		processor = app.TeamStatsProcessor()
 		break
 	case venue, venueCurrentSeason:

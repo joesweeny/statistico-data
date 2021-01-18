@@ -5,15 +5,16 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/statistico/statistico-data/internal/app"
 	"strconv"
+	"time"
 )
 
-const teamStats = "team-stats"
-const teamStatsCurrentSeason = "team-stats:current-season"
+const teamStatsByDate = "team-stats:by-date"
 const teamStatsBySeasonId = "team-stats:by-season-id"
 const teamStatsByCompetitionId = "team-stats:by-competition-id"
 
 type TeamStatsProcessor struct {
 	teamStatsRepo app.TeamStatsRepository
+	competitionRepo    app.CompetitionRepository
 	seasonRepo    app.SeasonRepository
 	requester     app.TeamStatsRequester
 	clock         clockwork.Clock
@@ -22,10 +23,8 @@ type TeamStatsProcessor struct {
 
 func (t TeamStatsProcessor) Process(command string, option string, done chan bool) {
 	switch command {
-	case teamStats:
-		go t.processAllSeasons(done)
-	case teamStatsCurrentSeason:
-		go t.processCurrentSeason(done)
+	case teamStatsByDate:
+		go t.processByDate(option, done)
 	case teamStatsBySeasonId:
 		id, _ := strconv.Atoi(option)
 		go t.processSeason(uint64(id), done)
@@ -38,28 +37,22 @@ func (t TeamStatsProcessor) Process(command string, option string, done chan boo
 	}
 }
 
-func (t TeamStatsProcessor) processAllSeasons(done chan bool) {
-	ids, err := t.seasonRepo.IDs()
+func (t TeamStatsProcessor) processByDate(date string, done chan bool) {
+	d, err := time.Parse("2006-01-02", date)
 
 	if err != nil {
-		t.logger.Fatalf("Error when retrieving season ids: %s", err.Error())
+		t.logger.Fatalf("Error parsing date in team stats processor: %s", err.Error())
 		return
 	}
 
-	ch := t.requester.TeamStatsBySeasonIDs(ids)
-
-	go t.persistStats(ch, done)
-}
-
-func (t TeamStatsProcessor) processCurrentSeason(done chan bool) {
-	ids, err := t.seasonRepo.CurrentSeasonIDs()
+	ids, err := t.competitionRepo.IDs()
 
 	if err != nil {
-		t.logger.Fatalf("Error when retrieving season ids: %s", err.Error())
+		t.logger.Fatalf("Error fetching competition IDs in team stats processor: %s", err.Error())
 		return
 	}
 
-	ch := t.requester.TeamStatsBySeasonIDs(ids)
+	ch := t.requester.TeamStatsByDate(d, ids)
 
 	go t.persistStats(ch, done)
 }
@@ -102,25 +95,33 @@ func (t TeamStatsProcessor) persist(x *app.TeamStats) {
 
 	if err != nil {
 		if err := t.teamStatsRepo.InsertTeamStats(x); err != nil {
-			t.logger.Warningf("Error '%s' occurred when inserting team stats struct: %+v\n,", err.Error(), *x)
+			t.logger.Errorf("Error '%s' occurred when inserting team stats struct: %+v\n,", err.Error(), *x)
 		}
 
 		return
 	}
+
+	if err := t.teamStatsRepo.UpdateTeamStats(x); err != nil {
+		t.logger.Errorf("Error '%s' occurred when updating team stats struct: %+v\n,", err.Error(), *x)
+	}
+
+	return
 }
 
 func NewTeamStatsProcessor(
 	r app.TeamStatsRepository,
+	c app.CompetitionRepository,
 	s app.SeasonRepository,
 	q app.TeamStatsRequester,
-	c clockwork.Clock,
+	cl clockwork.Clock,
 	log *logrus.Logger,
 ) *TeamStatsProcessor {
 	return &TeamStatsProcessor{
 		teamStatsRepo: r,
+		competitionRepo: c,
 		seasonRepo: s,
 		requester: q,
-		clock: c,
+		clock: cl,
 		logger: log,
 	}
 }

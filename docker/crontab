@@ -1,10 +1,9 @@
 0 */2 * * * /opt/console -command=results:current-season > /proc/1/fd/1 2> /proc/1/fd/2
-15 */2 * * * /opt/console -command=team-stats:current-season > /proc/1/fd/1 2> /proc/1/fd/2
+15 */2 * * * /opt/console -command=team-stats:by-date -option=`date +'%Y-%m-%d'` > /proc/1/fd/1 2> /proc/1/fd/2
 30 */2 * * * /opt/console -command=player-stats:by-date -option=`date +'%Y-%m-%d'` > /proc/1/fd/1 2> /proc/1/fd/2
 45 */2 * * * /opt/console -command=events:current-season > /proc/1/fd/1 2> /proc/1/fd/2
 0 */6 * * * /opt/console -command=fixtures:current-season > /proc/1/fd/1 2> /proc/1/fd/2
-0 8 * * * /opt/console -command=fixture-xg:current-season > /proc/1/fd/1 2> /proc/1/fd/2
-0 23 * * * /opt/console -command=fixture-xg:current-season > /proc/1/fd/1 2> /proc/1/fd/2
+0 8,23 * * * /opt/console -command=fixture-xg:current-season > /proc/1/fd/1 2> /proc/1/fd/2
 30 4 * * * /opt/console -command=player > /proc/1/fd/1 2> /proc/1/fd/2
 00 9 * * * /opt/console -command=squad:current-season > /proc/1/fd/1 2> /proc/1/fd/2
 30 7 * * 1 /opt/console -command=venue:current-season > /proc/1/fd/1 2> /proc/1/fd/2
