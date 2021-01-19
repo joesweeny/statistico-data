@@ -39,7 +39,7 @@ func main() {
 	case playerStatsByDate, playerStatsBySeasonId, playerStatsByCompetitionId:
 		processor = app.PlayerStatsProcessor()
 		break
-	case results, resultsCurrentSeason, resultsBySeasonId:
+	case resultsCurrentSeason, resultsBySeasonId, resultsByCompetitionId:
 		processor = app.ResultProcessor()
 		break
 	case round, roundCurrentSeason:
