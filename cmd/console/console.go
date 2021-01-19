@@ -28,7 +28,7 @@ func main() {
 	case events, eventsCurrentSeason, eventsBySeasonId:
 		processor = app.EventProcessor()
 		break
-	case fixtures, fixturesCurrentSeason, fixturesBySeasonId:
+	case fixturesCurrentSeason, fixturesBySeasonId, fixturesByCompetitionId:
 		processor = app.FixtureProcessor()
 		break
 	case fixtureXG, fixtureXGCurrentSeason:

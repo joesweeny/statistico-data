@@ -6,9 +6,9 @@ import (
 	"strconv"
 )
 
-const fixtures = "fixtures"
 const fixturesCurrentSeason = "fixtures:current-season"
 const fixturesBySeasonId = "fixtures:by-season-id"
+const fixturesByCompetitionId = "fixtures:by-competition-id"
 
 // FixtureProcessor fetches data from external data source using the FixtureRequester
 // before persisting to the storage engine using the FixtureRepository
@@ -21,30 +21,18 @@ type FixtureProcessor struct {
 
 func (f FixtureProcessor) Process(command string, option string, done chan bool) {
 	switch command {
-	case fixtures:
-		go f.processAllSeasons(done)
 	case fixturesCurrentSeason:
 		go f.processCurrentSeason(done)
 	case fixturesBySeasonId:
 		id, _ := strconv.Atoi(option)
 		go f.processSeason(uint64(id), done)
+	case fixturesByCompetitionId:
+		id, _ := strconv.Atoi(option)
+		go f.processCompetition(uint64(id), done)
 	default:
 		f.logger.Fatalf("Command %s is not supported", command)
 		return
 	}
-}
-
-func (f FixtureProcessor) processAllSeasons(done chan bool) {
-	ids, err := f.seasonRepo.IDs()
-
-	if err != nil {
-		f.logger.Fatalf("Error when retrieving season ids: %s", err.Error())
-		return
-	}
-
-	ch := f.requester.FixturesBySeasonIDs(ids)
-
-	go f.persistFixtures(ch, done)
 }
 
 func (f FixtureProcessor) processCurrentSeason(done chan bool) {
@@ -62,6 +50,25 @@ func (f FixtureProcessor) processCurrentSeason(done chan bool) {
 
 func (f FixtureProcessor) processSeason(seasonID uint64, done chan bool) {
 	ch := f.requester.FixturesBySeasonIDs([]uint64{seasonID})
+
+	go f.persistFixtures(ch, done)
+}
+
+func (f FixtureProcessor) processCompetition(competitionID uint64, done chan bool) {
+	seasons, err := f.seasonRepo.ByCompetitionId(competitionID, "name_asc")
+
+	if err != nil {
+		f.logger.Fatalf("Error when retrieving seasons in fixture processor: %s", err.Error())
+		return
+	}
+
+	var ids []uint64
+
+	for _, season := range seasons {
+		ids = append(ids, season.ID)
+	}
+
+	ch := f.requester.FixturesBySeasonIDs(ids)
 
 	go f.persistFixtures(ch, done)
 }

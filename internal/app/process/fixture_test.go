@@ -13,7 +13,7 @@ import (
 )
 
 func TestFixtureProcessor_Process(t *testing.T) {
-	t.Run("inserts new fixture into repository when processing fixture command", func(t *testing.T) {
+	t.Run("inserts new fixture into repository when processing fixtures by competition id command", func(t *testing.T) {
 		t.Helper()
 
 		fixtureRepo := new(mock.FixtureRepository)
@@ -34,18 +34,22 @@ func TestFixtureProcessor_Process(t *testing.T) {
 
 		ch := fixtureChannel(fixtures)
 
-		ids := []uint64{34, 400}
+		seasonRepo.On("ByCompetitionId", uint64(5), "name_asc").Return(
+			[]app.Season{
+				*newSeason(1, false),
+				*newSeason(2, true),
+			},
+			nil,
+		)
 
-		seasonRepo.On("IDs").Return(ids, nil)
-
-		requester.On("FixturesBySeasonIDs", ids).Return(ch)
+		requester.On("FixturesBySeasonIDs", []uint64{1, 2}).Return(ch)
 
 		fixtureRepo.On("ByID", uint64(34)).Return(&app.Fixture{}, errors.New("not Found"))
 		fixtureRepo.On("ByID", uint64(400)).Return(&app.Fixture{}, errors.New("not Found"))
 		fixtureRepo.On("Insert", one).Return(nil)
 		fixtureRepo.On("Insert", two).Return(nil)
 
-		processor.Process("fixtures", "", done)
+		processor.Process("fixtures:by-competition-id", "5", done)
 
 		<-done
 
@@ -55,7 +59,7 @@ func TestFixtureProcessor_Process(t *testing.T) {
 		assert.Nil(t, hook.LastEntry())
 	})
 
-	t.Run("updates existing fixture into repository when processing fixture command", func(t *testing.T) {
+	t.Run("updates existing fixture into repository when processing fixtures by competition id command", func(t *testing.T) {
 		t.Helper()
 
 		fixtureRepo := new(mock.FixtureRepository)
@@ -76,18 +80,22 @@ func TestFixtureProcessor_Process(t *testing.T) {
 
 		ch := fixtureChannel(fixtures)
 
-		ids := []uint64{34, 400}
+		seasonRepo.On("ByCompetitionId", uint64(5), "name_asc").Return(
+			[]app.Season{
+				*newSeason(1, false),
+				*newSeason(2, true),
+			},
+			nil,
+		)
 
-		seasonRepo.On("IDs").Return(ids, nil)
-
-		requester.On("FixturesBySeasonIDs", ids).Return(ch)
+		requester.On("FixturesBySeasonIDs", []uint64{1, 2}).Return(ch)
 
 		fixtureRepo.On("ByID", uint64(34)).Return(one, nil)
 		fixtureRepo.On("ByID", uint64(400)).Return(two, nil)
 		fixtureRepo.On("Update", &one).Return(nil)
 		fixtureRepo.On("Update", &two).Return(nil)
 
-		processor.Process("fixtures", "", done)
+		processor.Process("fixtures:by-competition-id", "5", done)
 
 		<-done
 
@@ -97,7 +105,7 @@ func TestFixtureProcessor_Process(t *testing.T) {
 		assert.Nil(t, hook.LastEntry())
 	})
 
-	t.Run("logs error when unable to insert fixture into repository when processing fixture command", func(t *testing.T) {
+	t.Run("logs error when unable to insert fixture into repository when processing fixtures by competition id command", func(t *testing.T) {
 		t.Helper()
 
 		fixtureRepo := new(mock.FixtureRepository)
@@ -118,18 +126,22 @@ func TestFixtureProcessor_Process(t *testing.T) {
 
 		ch := fixtureChannel(fixtures)
 
-		ids := []uint64{34, 400}
+		seasonRepo.On("ByCompetitionId", uint64(5), "name_asc").Return(
+			[]app.Season{
+				*newSeason(1, false),
+				*newSeason(2, true),
+			},
+			nil,
+		)
 
-		seasonRepo.On("IDs").Return(ids, nil)
-
-		requester.On("FixturesBySeasonIDs", ids).Return(ch)
+		requester.On("FixturesBySeasonIDs", []uint64{1, 2}).Return(ch)
 
 		fixtureRepo.On("ByID", uint64(34)).Return(&app.Fixture{}, errors.New("not Found"))
 		fixtureRepo.On("ByID", uint64(400)).Return(&app.Fixture{}, errors.New("not Found"))
 		fixtureRepo.On("Insert", one).Return(errors.New("error occurred"))
 		fixtureRepo.On("Insert", two).Return(nil)
 
-		processor.Process("fixtures", "", done)
+		processor.Process("fixtures:by-competition-id", "5", done)
 
 		<-done
 
@@ -140,7 +152,7 @@ func TestFixtureProcessor_Process(t *testing.T) {
 		assert.Equal(t, logrus.WarnLevel, hook.LastEntry().Level)
 	})
 
-	t.Run("logs error when unable to update fixture into repository when processing fixture command", func(t *testing.T) {
+	t.Run("logs error when unable to update fixture into repository when processing fixtures by competition id command", func(t *testing.T) {
 		t.Helper()
 
 		fixtureRepo := new(mock.FixtureRepository)
@@ -161,18 +173,22 @@ func TestFixtureProcessor_Process(t *testing.T) {
 
 		ch := fixtureChannel(fixtures)
 
-		ids := []uint64{34, 400}
+		seasonRepo.On("ByCompetitionId", uint64(5), "name_asc").Return(
+			[]app.Season{
+				*newSeason(1, false),
+				*newSeason(2, true),
+			},
+			nil,
+		)
 
-		seasonRepo.On("IDs").Return(ids, nil)
-
-		requester.On("FixturesBySeasonIDs", ids).Return(ch)
+		requester.On("FixturesBySeasonIDs", []uint64{1, 2}).Return(ch)
 
 		fixtureRepo.On("ByID", uint64(34)).Return(one, nil)
 		fixtureRepo.On("ByID", uint64(400)).Return(two, nil)
 		fixtureRepo.On("Update", &one).Return(errors.New("error occurred"))
 		fixtureRepo.On("Update", &two).Return(nil)
 
-		processor.Process("fixtures", "", done)
+		processor.Process("fixtures:by-competition-id", "5", done)
 
 		<-done
 
@@ -378,17 +394,21 @@ func TestFixtureProcessor_Process(t *testing.T) {
 
 		ch := fixtureChannel(fixtures)
 
-		ids := []uint64{34, 400}
+		seasonRepo.On("ByCompetitionId", uint64(5), "name_asc").Return(
+			[]app.Season{
+				*newSeason(1, false),
+				*newSeason(2, true),
+			},
+			nil,
+		)
 
-		seasonRepo.On("IDs").Return(ids, nil)
-
-		requester.On("FixturesBySeasonIDs", ids).Return(ch)
+		requester.On("FixturesBySeasonIDs", []uint64{1, 2}).Return(ch)
 
 		fixtureRepo.On("ByID", uint64(34)).Return(&app.Fixture{}, errors.New("not Found"))
 		fixtureRepo.On("Delete", uint64(400)).Return(nil)
 		fixtureRepo.On("Insert", one).Return(nil)
 
-		processor.Process("fixtures", "", done)
+		processor.Process("fixtures:by-competition-id", "5", done)
 
 		<-done
 
@@ -423,17 +443,21 @@ func TestFixtureProcessor_Process(t *testing.T) {
 
 		ch := fixtureChannel(fixtures)
 
-		ids := []uint64{34, 400}
+		seasonRepo.On("ByCompetitionId", uint64(5), "name_asc").Return(
+			[]app.Season{
+				*newSeason(1, false),
+				*newSeason(2, true),
+			},
+			nil,
+		)
 
-		seasonRepo.On("IDs").Return(ids, nil)
-
-		requester.On("FixturesBySeasonIDs", ids).Return(ch)
+		requester.On("FixturesBySeasonIDs", []uint64{1, 2}).Return(ch)
 
 		fixtureRepo.On("ByID", uint64(34)).Return(&app.Fixture{}, errors.New("not Found"))
 		fixtureRepo.On("Delete", uint64(400)).Return(nil)
 		fixtureRepo.On("Insert", one).Return(nil)
 
-		processor.Process("fixtures", "", done)
+		processor.Process("fixtures:by-competition-id", "5", done)
 
 		<-done
 
