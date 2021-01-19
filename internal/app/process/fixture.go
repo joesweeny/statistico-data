@@ -28,7 +28,7 @@ func (f FixtureProcessor) Process(command string, option string, done chan bool)
 		go f.processSeason(uint64(id), done)
 	case fixturesByCompetitionId:
 		id, _ := strconv.Atoi(option)
-		go f.processSeason(uint64(id), done)
+		go f.processCompetition(uint64(id), done)
 	default:
 		f.logger.Fatalf("Command %s is not supported", command)
 		return
