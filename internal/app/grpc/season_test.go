@@ -8,7 +8,7 @@ import (
 	"github.com/statistico/statistico-data/internal/app"
 	"github.com/statistico/statistico-data/internal/app/grpc"
 	"github.com/statistico/statistico-data/internal/app/mock"
-	"github.com/statistico/statistico-proto/data/go"
+	"github.com/statistico/statistico-proto/go"
 	"github.com/stretchr/testify/assert"
 	mock2 "github.com/stretchr/testify/mock"
 	"testing"
@@ -32,12 +32,12 @@ func TestSeasonService_GetSeasonsForCompetition(t *testing.T) {
 
 		repo.On("ByCompetitionId", uint64(16036), "name_asc").Return(seasons, nil)
 
-		request := statisticoproto.SeasonCompetitionRequest{
+		request := statistico.SeasonCompetitionRequest{
 			CompetitionId: 16036,
 			Sort:          &wrappers.StringValue{Value: "name_asc"},
 		}
 
-		server.On("Send", mock2.AnythingOfType("*statisticoproto.Season")).
+		server.On("Send", mock2.AnythingOfType("*statistico.Season")).
 			Times(3).
 			Return(nil)
 
@@ -64,7 +64,7 @@ func TestSeasonService_GetSeasonsForCompetition(t *testing.T) {
 
 		server.AssertNotCalled(t, "Send")
 
-		request := statisticoproto.SeasonCompetitionRequest{
+		request := statistico.SeasonCompetitionRequest{
 			CompetitionId: 16036,
 			Sort:          &wrappers.StringValue{Value: "name_asc"},
 		}
@@ -99,12 +99,12 @@ func TestSeasonService_GetSeasonsForCompetition(t *testing.T) {
 
 		repo.On("ByCompetitionId", uint64(16036), "name_asc").Return(seasons, nil)
 
-		request := statisticoproto.SeasonCompetitionRequest{
+		request := statistico.SeasonCompetitionRequest{
 			CompetitionId: 16036,
 			Sort:          &wrappers.StringValue{Value: "name_asc"},
 		}
 
-		server.On("Send", mock2.AnythingOfType("*statisticoproto.Season")).Return(errors.New("oh no"))
+		server.On("Send", mock2.AnythingOfType("*statistico.Season")).Return(errors.New("oh no"))
 
 		err := service.GetSeasonsForCompetition(&request, server)
 
@@ -138,12 +138,12 @@ func TestSeasonService_GetSeasonsForTeam(t *testing.T) {
 
 		repo.On("ByTeamId", uint64(1), "name_asc").Return(seasons, nil)
 
-		request := statisticoproto.TeamSeasonsRequest{
+		request := statistico.TeamSeasonsRequest{
 			TeamId: 	   1,
 			Sort:          &wrappers.StringValue{Value: "name_asc"},
 		}
 
-		server.On("Send", mock2.AnythingOfType("*statisticoproto.Season")).
+		server.On("Send", mock2.AnythingOfType("*statistico.Season")).
 			Times(3).
 			Return(nil)
 
@@ -170,7 +170,7 @@ func TestSeasonService_GetSeasonsForTeam(t *testing.T) {
 
 		server.AssertNotCalled(t, "Send")
 
-		request := statisticoproto.TeamSeasonsRequest{
+		request := statistico.TeamSeasonsRequest{
 			TeamId: 	   1,
 			Sort:          &wrappers.StringValue{Value: "name_asc"},
 		}
@@ -205,12 +205,12 @@ func TestSeasonService_GetSeasonsForTeam(t *testing.T) {
 
 		repo.On("ByTeamId", uint64(16036), "name_asc").Return(seasons, nil)
 
-		request := statisticoproto.TeamSeasonsRequest{
+		request := statistico.TeamSeasonsRequest{
 			TeamId: 	   16036,
 			Sort:          &wrappers.StringValue{Value: "name_asc"},
 		}
 
-		server.On("Send", mock2.AnythingOfType("*statisticoproto.Season")).Return(errors.New("oh no"))
+		server.On("Send", mock2.AnythingOfType("*statistico.Season")).Return(errors.New("oh no"))
 
 		err := service.GetSeasonsForTeam(&request, server)
 

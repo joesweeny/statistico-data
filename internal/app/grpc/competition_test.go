@@ -7,7 +7,7 @@ import (
 	"github.com/statistico/statistico-data/internal/app"
 	"github.com/statistico/statistico-data/internal/app/grpc"
 	"github.com/statistico/statistico-data/internal/app/mock"
-	"github.com/statistico/statistico-proto/data/go"
+	"github.com/statistico/statistico-proto/go"
 	"github.com/stretchr/testify/assert"
 	mock2 "github.com/stretchr/testify/mock"
 	"testing"
@@ -35,11 +35,11 @@ func TestCompetitionService_ListCompetitions(t *testing.T) {
 
 		repo.On("Get", query).Return(competitions, nil)
 
-		request := statisticoproto.CompetitionRequest{
+		request := statistico.CompetitionRequest{
 			CountryIds: []uint64{462},
 		}
 
-		server.On("Send", mock2.AnythingOfType("*statisticoproto.Competition")).
+		server.On("Send", mock2.AnythingOfType("*statistico.Competition")).
 			Times(3).
 			Return(nil)
 
@@ -66,7 +66,7 @@ func TestCompetitionService_ListCompetitions(t *testing.T) {
 
 		server.AssertNotCalled(t, "Send")
 
-		err := service.ListCompetitions(&statisticoproto.CompetitionRequest{}, server)
+		err := service.ListCompetitions(&statistico.CompetitionRequest{}, server)
 
 		if err == nil {
 			t.Fatal("Expected error, got nil")
@@ -100,11 +100,11 @@ func TestCompetitionService_ListCompetitions(t *testing.T) {
 
 		repo.On("Get", query).Return(competitions, nil)
 
-		request := statisticoproto.CompetitionRequest{
+		request := statistico.CompetitionRequest{
 			CountryIds: []uint64{462},
 		}
 
-		server.On("Send", mock2.AnythingOfType("*statisticoproto.Competition")).Return(errors.New("oh no"))
+		server.On("Send", mock2.AnythingOfType("*statistico.Competition")).Return(errors.New("oh no"))
 
 		err := service.ListCompetitions(&request, server)
 

@@ -6,7 +6,7 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/statistico/statistico-data/internal/app"
 	"github.com/statistico/statistico-data/internal/app/grpc/factory"
-	"github.com/statistico/statistico-proto/data/go"
+	"github.com/statistico/statistico-proto/go"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"time"
@@ -16,9 +16,10 @@ type ResultService struct {
 	fixtureRepo app.FixtureRepository
 	factory     *factory.ResultFactory
 	logger      *logrus.Logger
+	statistico.UnimplementedResultServiceServer
 }
 
-func (s ResultService) GetById(ctx context.Context, r *statisticoproto.ResultRequest) (*statisticoproto.Result, error) {
+func (s ResultService) GetById(ctx context.Context, r *statistico.ResultRequest) (*statistico.Result, error) {
 	fix, err := s.fixtureRepo.ByID(r.GetFixtureId())
 
 	if err != nil {
@@ -35,7 +36,7 @@ func (s ResultService) GetById(ctx context.Context, r *statisticoproto.ResultReq
 	return x, nil
 }
 
-func (s ResultService) GetHistoricalResultsForFixture(r *statisticoproto.HistoricalResultRequest, stream statisticoproto.ResultService_GetHistoricalResultsForFixtureServer) error {
+func (s ResultService) GetHistoricalResultsForFixture(r *statistico.HistoricalResultRequest, stream statistico.ResultService_GetHistoricalResultsForFixtureServer) error {
 	date, err := time.Parse(time.RFC3339, r.DateBefore)
 
 	if err != nil {
@@ -61,7 +62,7 @@ func (s ResultService) GetHistoricalResultsForFixture(r *statisticoproto.Histori
 	return s.sendResults(fixtures, stream)
 }
 
-func (s ResultService) GetResultsForTeam(r *statisticoproto.TeamResultRequest, stream statisticoproto.ResultService_GetResultsForTeamServer) error {
+func (s ResultService) GetResultsForTeam(r *statistico.TeamResultRequest, stream statistico.ResultService_GetResultsForTeamServer) error {
 	var query app.FixtureFilterQuery
 
 	if r.GetDateBefore() != nil {
@@ -119,7 +120,7 @@ func (s ResultService) GetResultsForTeam(r *statisticoproto.TeamResultRequest, s
 	return s.sendResults(fixtures, stream)
 }
 
-func (s ResultService) GetResultsForSeason(r *statisticoproto.SeasonRequest, stream statisticoproto.ResultService_GetResultsForSeasonServer) error {
+func (s ResultService) GetResultsForSeason(r *statistico.SeasonRequest, stream statistico.ResultService_GetResultsForSeasonServer) error {
 	date, err := time.Parse(time.RFC3339, r.DateBefore)
 
 	if err != nil {
@@ -143,7 +144,7 @@ func (s ResultService) GetResultsForSeason(r *statisticoproto.SeasonRequest, str
 	return s.sendResults(fixtures, stream)
 }
 
-func (s ResultService) sendResults(f []app.Fixture, stream statisticoproto.ResultService_GetResultsForTeamServer) error {
+func (s ResultService) sendResults(f []app.Fixture, stream statistico.ResultService_GetResultsForTeamServer) error {
 	for _, fix := range f {
 		x, err := s.factory.BuildResult(&fix)
 

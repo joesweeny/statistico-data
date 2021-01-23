@@ -5,7 +5,8 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/statistico/statistico-data/internal/app"
 	"github.com/statistico/statistico-data/internal/app/grpc/factory"
-	"github.com/statistico/statistico-proto/data/go"
+	statistico "github.com/statistico/statistico-proto/go"
+
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
@@ -13,9 +14,10 @@ import (
 type EventService struct {
 	eventRepo  app.EventRepository
 	logger     *logrus.Logger
+	statistico.UnimplementedEventServiceServer
 }
 
-func (e *EventService) FixtureEvents(ctx context.Context, req *statisticoproto.FixtureRequest) (*statisticoproto.FixtureEventsResponse, error) {
+func (e *EventService) FixtureEvents(ctx context.Context, req *statistico.FixtureRequest) (*statistico.FixtureEventsResponse, error) {
 	cards, err := e.eventRepo.CardEventsForFixture(req.FixtureId)
 
 	if err != nil {
@@ -30,7 +32,7 @@ func (e *EventService) FixtureEvents(ctx context.Context, req *statisticoproto.F
 		return nil, status.Error(codes.Internal, "Internal server error")
 	}
 
-	res := statisticoproto.FixtureEventsResponse{FixtureId: req.FixtureId}
+	res := statistico.FixtureEventsResponse{FixtureId: req.FixtureId}
 
 	for _, c := range cards {
 		res.Cards = append(res.Cards, factory.CardEventToProto(c))

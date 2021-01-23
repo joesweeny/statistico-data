@@ -3,13 +3,13 @@ package factory
 import (
 	"github.com/golang/protobuf/ptypes/wrappers"
 	"github.com/statistico/statistico-data/internal/app"
-	"github.com/statistico/statistico-proto/data/go"
+	"github.com/statistico/statistico-proto/go"
 	"time"
 )
 
 // Convert a domain CardEvent struct into a proto CardEvent struct
-func CardEventToProto(e *app.CardEvent) *statisticoproto.CardEvent {
-	return &statisticoproto.CardEvent{
+func CardEventToProto(e *app.CardEvent) *statistico.CardEvent {
+	return &statistico.CardEvent{
 		Id:       e.ID,
 		TeamId:   e.TeamID,
 		Type:     e.Type,
@@ -19,8 +19,8 @@ func CardEventToProto(e *app.CardEvent) *statisticoproto.CardEvent {
 }
 
 // Convert a domain GoalEvent struct into a proto GoalEvent struct
-func GoalEventToProto(e *app.GoalEvent) *statisticoproto.GoalEvent {
-	pe := statisticoproto.GoalEvent{
+func GoalEventToProto(e *app.GoalEvent) *statistico.GoalEvent {
+	pe := statistico.GoalEvent{
 		Id:             e.ID,
 		TeamId:         e.TeamID,
 		PlayerId:       e.PlayerID,
@@ -36,8 +36,8 @@ func GoalEventToProto(e *app.GoalEvent) *statisticoproto.GoalEvent {
 }
 
 // Convert a domain Team struct into a proto Team struct
-func TeamToProto(t *app.Team) *statisticoproto.Team {
-	team := statisticoproto.Team{
+func TeamToProto(t *app.Team) *statistico.Team {
+	team := statistico.Team{
 		Id:             t.ID,
 		Name:           t.Name,
 		CountryId:      t.CountryID,
@@ -61,8 +61,8 @@ func TeamToProto(t *app.Team) *statisticoproto.Team {
 }
 
 // Convert a domain Competition struct into a proto Competition struct
-func CompetitionToProto(c *app.Competition) *statisticoproto.Competition {
-	var x statisticoproto.Competition
+func CompetitionToProto(c *app.Competition) *statistico.Competition {
+	var x statistico.Competition
 	x.Id = c.ID
 	x.Name = c.Name
 	x.IsCup = c.IsCup
@@ -72,8 +72,8 @@ func CompetitionToProto(c *app.Competition) *statisticoproto.Competition {
 }
 
 // Convert a domain PlayerStats struct into a proto LineupPlayer struct
-func playerStatsToLineupPlayerProto(p *app.PlayerStats) *statisticoproto.LineupPlayer {
-	player := statisticoproto.LineupPlayer{
+func playerStatsToLineupPlayerProto(p *app.PlayerStats) *statistico.LineupPlayer {
+	player := statistico.LineupPlayer{
 		PlayerId:     p.PlayerID,
 		Position:     *p.Position,
 		IsSubstitute: p.IsSubstitute,
@@ -89,8 +89,8 @@ func playerStatsToLineupPlayerProto(p *app.PlayerStats) *statisticoproto.LineupP
 }
 
 // Convert a domain PlayerStats struct into a proto PlayerStats struct
-func playerStatsToProto(p *app.PlayerStats) *statisticoproto.PlayerStats {
-	stats := statisticoproto.PlayerStats{
+func playerStatsToProto(p *app.PlayerStats) *statistico.PlayerStats {
+	stats := statistico.PlayerStats{
 		PlayerId: p.PlayerID,
 	}
 
@@ -132,8 +132,8 @@ func playerStatsToProto(p *app.PlayerStats) *statisticoproto.PlayerStats {
 }
 
 // Convert a domain Round struct into a proto Round struct
-func roundToProto(r *app.Round) *statisticoproto.Round {
-	return &statisticoproto.Round{
+func roundToProto(r *app.Round) *statistico.Round {
+	return &statistico.Round{
 		Id:        r.ID,
 		Name:      r.Name,
 		SeasonId:  r.SeasonID,
@@ -143,8 +143,8 @@ func roundToProto(r *app.Round) *statisticoproto.Round {
 }
 
 // Convert a domain Season struct into a proto Season struct
-func SeasonToProto(s *app.Season) *statisticoproto.Season {
-	var x statisticoproto.Season
+func SeasonToProto(s *app.Season) *statistico.Season {
+	var x statistico.Season
 	x.Id = s.ID
 	x.Name = s.Name
 	x.IsCurrent = &wrappers.BoolValue{
@@ -155,8 +155,8 @@ func SeasonToProto(s *app.Season) *statisticoproto.Season {
 }
 
 // Convert a domain TeamStats struct into a proto TeamStats struct
-func TeamStatsToProto(t *app.TeamStats) *statisticoproto.TeamStats {
-	stats := statisticoproto.TeamStats{
+func TeamStatsToProto(t *app.TeamStats) *statistico.TeamStats {
+	stats := statistico.TeamStats{
 		TeamId: t.TeamID,
 	}
 
@@ -313,8 +313,8 @@ func TeamStatsToProto(t *app.TeamStats) *statisticoproto.TeamStats {
 	return &stats
 }
 
-func TeamStatToProto(s *app.TeamStat) *statisticoproto.TeamStat {
-	stat := statisticoproto.TeamStat{
+func TeamStatToProto(s *app.TeamStat) *statistico.TeamStat {
+	stat := statistico.TeamStat{
 		FixtureId: s.FixtureID,
 		Stat:      s.Stat,
 	}
@@ -329,16 +329,16 @@ func TeamStatToProto(s *app.TeamStat) *statisticoproto.TeamStat {
 }
 
 // Convert a domain Venue struct into a proto Venue struct
-func venueToProto(v *app.Venue) *statisticoproto.Venue {
-	return &statisticoproto.Venue{
+func venueToProto(v *app.Venue) *statistico.Venue {
+	return &statistico.Venue{
 		Id: v.ID,
 		Name: v.Name,
 	}
 }
 
 // Convert a domain Result struct into a proto MatchStats struct
-func toMatchStats(res *app.Result) *statisticoproto.MatchStats {
-	stats := statisticoproto.MatchStats{
+func toMatchStats(res *app.Result) *statistico.MatchStats {
+	stats := statistico.MatchStats{
 		HomeScore: &wrappers.UInt32Value{
 			Value: uint32(*res.HomeScore),
 		},
@@ -434,8 +434,8 @@ func toMatchStats(res *app.Result) *statisticoproto.MatchStats {
 	return &stats
 }
 
-func handlePlayerStats(p []*app.PlayerStats) []*statisticoproto.PlayerStats {
-	var stats []*statisticoproto.PlayerStats
+func handlePlayerStats(p []*app.PlayerStats) []*statistico.PlayerStats {
+	var stats []*statistico.PlayerStats
 
 	for _, player := range p {
 		s := playerStatsToProto(player)
@@ -445,8 +445,8 @@ func handlePlayerStats(p []*app.PlayerStats) []*statisticoproto.PlayerStats {
 	return stats
 }
 
-func handleStartingLineupPlayers(p []*app.PlayerStats) []*statisticoproto.LineupPlayer {
-	var lineup []*statisticoproto.LineupPlayer
+func handleStartingLineupPlayers(p []*app.PlayerStats) []*statistico.LineupPlayer {
+	var lineup []*statistico.LineupPlayer
 
 	for _, player := range p {
 		if !player.IsSubstitute {
@@ -458,8 +458,8 @@ func handleStartingLineupPlayers(p []*app.PlayerStats) []*statisticoproto.Lineup
 	return lineup
 }
 
-func handleSubstituteLineupPlayers(p []*app.PlayerStats) []*statisticoproto.LineupPlayer {
-	var lineup []*statisticoproto.LineupPlayer
+func handleSubstituteLineupPlayers(p []*app.PlayerStats) []*statistico.LineupPlayer {
+	var lineup []*statistico.LineupPlayer
 
 	for _, player := range p {
 		if player.IsSubstitute {

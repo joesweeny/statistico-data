@@ -4,7 +4,8 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/statistico/statistico-data/internal/app"
 	"github.com/statistico/statistico-data/internal/app/grpc/factory"
-	"github.com/statistico/statistico-proto/data/go"
+	"github.com/statistico/statistico-proto/go"
+
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
@@ -12,11 +13,12 @@ import (
 type SeasonService struct {
 	seasonRepo app.SeasonRepository
 	logger *logrus.Logger
+	statistico.UnimplementedSeasonServiceServer
 }
 
 func (s *SeasonService) GetSeasonsForCompetition(
-	r *statisticoproto.SeasonCompetitionRequest,
-	stream statisticoproto.SeasonService_GetSeasonsForCompetitionServer,
+	r *statistico.SeasonCompetitionRequest,
+	stream statistico.SeasonService_GetSeasonsForCompetitionServer,
 ) error {
 	seasons, err := s.seasonRepo.ByCompetitionId(r.GetCompetitionId(), r.GetSort().GetValue())
 
@@ -37,7 +39,7 @@ func (s *SeasonService) GetSeasonsForCompetition(
 	return nil
 }
 
-func (s *SeasonService) GetSeasonsForTeam(r *statisticoproto.TeamSeasonsRequest, stream statisticoproto.SeasonService_GetSeasonsForTeamServer) error {
+func (s *SeasonService) GetSeasonsForTeam(r *statistico.TeamSeasonsRequest, stream statistico.SeasonService_GetSeasonsForTeamServer) error {
 	seasons, err := s.seasonRepo.ByTeamId(r.GetTeamId(), r.GetSort().GetValue())
 
 	if err != nil {

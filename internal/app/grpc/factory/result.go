@@ -3,7 +3,7 @@ package factory
 import (
 	"github.com/sirupsen/logrus"
 	"github.com/statistico/statistico-data/internal/app"
-	"github.com/statistico/statistico-proto/data/go"
+	"github.com/statistico/statistico-proto/go"
 	"time"
 )
 
@@ -17,7 +17,7 @@ type ResultFactory struct {
 	logger     *logrus.Logger
 }
 
-func (r ResultFactory) BuildResult(f *app.Fixture) (*statisticoproto.Result, error) {
+func (r ResultFactory) BuildResult(f *app.Fixture) (*statistico.Result, error) {
 	x, err := r.resultRepo.ByFixtureID(f.ID)
 
 	if err != nil {
@@ -49,12 +49,12 @@ func (r ResultFactory) BuildResult(f *app.Fixture) (*statisticoproto.Result, err
 		r.logger.Errorf("error hydrating proto result: fixture %d. error %s: %s", f.ID, homeErr, awayErr)
 	}
 
-	date := statisticoproto.Date{
+	date := statistico.Date{
 		Utc: f.Date.Unix(),
 		Rfc: f.Date.Format(time.RFC3339),
 	}
 
-	p := statisticoproto.Result{
+	p := statistico.Result{
 		Id:            x.FixtureID,
 		HomeTeam:      TeamToProto(home),
 		AwayTeam:      TeamToProto(away),

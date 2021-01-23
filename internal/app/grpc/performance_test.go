@@ -6,13 +6,13 @@ import (
 	"github.com/statistico/statistico-data/internal/app/grpc"
 	"github.com/statistico/statistico-data/internal/app/mock"
 	"github.com/statistico/statistico-data/internal/app/performance"
-	"github.com/statistico/statistico-proto/data/go"
+	"github.com/statistico/statistico-proto/go"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
 func TestPerformanceService_GetTeamsMatchingStat(t *testing.T) {
-	request := statisticoproto.TeamStatPerformanceRequest{
+	request := statistico.TeamStatPerformanceRequest{
 		Action:  "for",
 		Games:   3,
 		Measure: "average",
@@ -59,7 +59,7 @@ func TestPerformanceService_GetTeamsMatchingStat(t *testing.T) {
 			t.Fatalf("Expected nil, got %s", err.Error())
 		}
 
-		protoTeams := []*statisticoproto.Team{
+		protoTeams := []*statistico.Team{
 			{
 				Id:   1,
 				Name: "West Ham United",
