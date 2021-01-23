@@ -3,7 +3,7 @@ package factory
 import (
 	"github.com/sirupsen/logrus"
 	"github.com/statistico/statistico-data/internal/app"
-	"github.com/statistico/statistico-proto/data/go"
+	"github.com/statistico/statistico-proto/go"
 )
 
 type PlayerStatsFactory struct {
@@ -11,7 +11,7 @@ type PlayerStatsFactory struct {
 	logger *logrus.Logger
 }
 
-func (p PlayerStatsFactory) BuildPlayerStats(f *app.Fixture, teamID uint64) ([]*statisticoproto.PlayerStats, error) {
+func (p PlayerStatsFactory) BuildPlayerStats(f *app.Fixture, teamID uint64) ([]*statistico.PlayerStats, error) {
 	pl, err := p.repo.ByFixtureAndTeam(f.ID, teamID)
 
 	if err != nil {
@@ -21,14 +21,14 @@ func (p PlayerStatsFactory) BuildPlayerStats(f *app.Fixture, teamID uint64) ([]*
 	return handlePlayerStats(pl), nil
 }
 
-func (p PlayerStatsFactory) BuildLineup(f *app.Fixture, teamID uint64) (*statisticoproto.Lineup, error) {
+func (p PlayerStatsFactory) BuildLineup(f *app.Fixture, teamID uint64) (*statistico.Lineup, error) {
 	pl, err := p.repo.ByFixtureAndTeam(f.ID, teamID)
 
 	if err != nil {
 		return nil, p.returnLoggedError(f.ID, err)
 	}
 
-	lineup := statisticoproto.Lineup{
+	lineup := statistico.Lineup{
 		Start: handleStartingLineupPlayers(pl),
 		Bench: handleSubstituteLineupPlayers(pl),
 	}

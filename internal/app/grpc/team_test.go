@@ -9,7 +9,7 @@ import (
 	e "github.com/statistico/statistico-data/internal/app/errors"
 	"github.com/statistico/statistico-data/internal/app/grpc"
 	"github.com/statistico/statistico-data/internal/app/mock"
-	"github.com/statistico/statistico-proto/data/go"
+	"github.com/statistico/statistico-proto/go"
 	"github.com/stretchr/testify/assert"
 	mock2 "github.com/stretchr/testify/mock"
 	"testing"
@@ -20,7 +20,7 @@ func TestTeamService_GetTeamById(t *testing.T) {
 	t.Run("returns a proto Team struct", func(t *testing.T) {
 		t.Helper()
 
-		request := statisticoproto.TeamRequest{TeamId: 1}
+		request := statistico.TeamRequest{TeamId: 1}
 
 		repo := new(mock.TeamRepository)
 		logger, _ := test.NewNullLogger()
@@ -63,7 +63,7 @@ func TestTeamService_GetTeamById(t *testing.T) {
 	t.Run("returns not found if error returned by repository", func(t *testing.T) {
 		t.Helper()
 
-		request := statisticoproto.TeamRequest{TeamId: 1}
+		request := statistico.TeamRequest{TeamId: 1}
 
 		repo := new(mock.TeamRepository)
 		logger, _ := test.NewNullLogger()
@@ -83,7 +83,7 @@ func TestTeamService_GetTeamById(t *testing.T) {
 	t.Run("returns internal server error and logs error", func(t *testing.T) {
 		t.Helper()
 
-		request := statisticoproto.TeamRequest{TeamId: 1}
+		request := statistico.TeamRequest{TeamId: 1}
 
 		repo := new(mock.TeamRepository)
 		logger, hook := test.NewNullLogger()
@@ -120,9 +120,9 @@ func TestTeamService_GetTeamsBySeasonId(t *testing.T) {
 
 		repo.On("BySeasonId", uint64(16036)).Return(teams, nil)
 
-		request := statisticoproto.SeasonTeamsRequest{SeasonId: 16036}
+		request := statistico.SeasonTeamsRequest{SeasonId: 16036}
 
-		server.On("Send", mock2.AnythingOfType("*statisticoproto.Team")).
+		server.On("Send", mock2.AnythingOfType("*statistico.Team")).
 			Times(3).
 			Return(nil)
 
@@ -149,7 +149,7 @@ func TestTeamService_GetTeamsBySeasonId(t *testing.T) {
 
 		server.AssertNotCalled(t, "Send")
 
-		request := statisticoproto.SeasonTeamsRequest{SeasonId: 16036}
+		request := statistico.SeasonTeamsRequest{SeasonId: 16036}
 
 		err := service.GetTeamsBySeasonId(&request, server)
 
@@ -181,9 +181,9 @@ func TestTeamService_GetTeamsBySeasonId(t *testing.T) {
 
 		repo.On("BySeasonId", uint64(16036)).Return(teams, nil)
 
-		request := statisticoproto.SeasonTeamsRequest{SeasonId: 16036}
+		request := statistico.SeasonTeamsRequest{SeasonId: 16036}
 
-		server.On("Send", mock2.AnythingOfType("*statisticoproto.Team")).Return(errors.New("oh no"))
+		server.On("Send", mock2.AnythingOfType("*statistico.Team")).Return(errors.New("oh no"))
 
 		err := service.GetTeamsBySeasonId(&request, server)
 

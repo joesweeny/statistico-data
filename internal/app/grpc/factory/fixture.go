@@ -3,7 +3,7 @@ package factory
 import (
 	"github.com/sirupsen/logrus"
 	"github.com/statistico/statistico-data/internal/app"
-	"github.com/statistico/statistico-proto/data/go"
+	"github.com/statistico/statistico-proto/go"
 	"time"
 )
 
@@ -16,7 +16,7 @@ type FixtureFactory struct {
 	logger    *logrus.Logger
 }
 
-func (b FixtureFactory) BuildFixture(f *app.Fixture) (*statisticoproto.Fixture, error) {
+func (b FixtureFactory) BuildFixture(f *app.Fixture) (*statistico.Fixture, error) {
 	home, err := b.teamRepo.ByID(f.HomeTeamID)
 
 	if err != nil {
@@ -41,13 +41,13 @@ func (b FixtureFactory) BuildFixture(f *app.Fixture) (*statisticoproto.Fixture, 
 		return nil, b.returnLoggedError(f.ID, err)
 	}
 
-	p := statisticoproto.Fixture{
+	p := statistico.Fixture{
 		Id:       int64(f.ID),
 		HomeTeam: TeamToProto(home),
 		AwayTeam: TeamToProto(away),
 		Competition: CompetitionToProto(comp),
 		Season:   SeasonToProto(season),
-		DateTime: &statisticoproto.Date{
+		DateTime: &statistico.Date{
 			Utc: f.Date.Unix(),
 			Rfc: f.Date.Format(time.RFC3339),
 		},
