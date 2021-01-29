@@ -30,7 +30,7 @@ func TestEventProcessor_Process(t *testing.T) {
 		goalOne := newGoalEvent(10)
 		goalTwo := newGoalEvent(20)
 
-		goals := make([]*app.GoalEvent, 2)
+		goals := make([]app.GoalEvent, 2)
 		goals[0] = goalOne
 		goals[1] = goalTwo
 
@@ -39,7 +39,7 @@ func TestEventProcessor_Process(t *testing.T) {
 		subOne := newSubstitutionEvent(55)
 		subTwo := newSubstitutionEvent(2)
 
-		subs := make([]*app.SubstitutionEvent, 2)
+		subs := make([]app.SubstitutionEvent, 2)
 		subs[0] = subOne
 		subs[1] = subTwo
 
@@ -48,7 +48,7 @@ func TestEventProcessor_Process(t *testing.T) {
 		cardOne := newCardEvent(1)
 		cardTwo := newCardEvent(2)
 
-		cards := make([]*app.CardEvent, 2)
+		cards := make([]app.CardEvent, 2)
 		cards[0] = cardOne
 		cards[1] = cardTwo
 
@@ -58,18 +58,18 @@ func TestEventProcessor_Process(t *testing.T) {
 
 		eventRepo.On("GoalEventByID", uint64(10)).Return(&app.GoalEvent{}, errors.New("not found"))
 		eventRepo.On("GoalEventByID", uint64(20)).Return(&app.GoalEvent{}, errors.New("not found"))
-		eventRepo.On("InsertGoalEvent", goalOne).Return(nil)
-		eventRepo.On("InsertGoalEvent", goalTwo).Return(nil)
+		eventRepo.On("InsertGoalEvent", &goalOne).Return(nil)
+		eventRepo.On("InsertGoalEvent", &goalTwo).Return(nil)
 
 		eventRepo.On("SubstitutionEventByID", uint64(55)).Return(&app.SubstitutionEvent{}, errors.New("not found"))
 		eventRepo.On("SubstitutionEventByID", uint64(2)).Return(&app.SubstitutionEvent{}, errors.New("not found"))
-		eventRepo.On("InsertSubstitutionEvent", subOne).Return(nil)
-		eventRepo.On("InsertSubstitutionEvent", subTwo).Return(nil)
+		eventRepo.On("InsertSubstitutionEvent", &subOne).Return(nil)
+		eventRepo.On("InsertSubstitutionEvent", &subTwo).Return(nil)
 
 		eventRepo.On("CardEventByID", uint64(1)).Return(&app.CardEvent{}, errors.New("not found"))
 		eventRepo.On("CardEventByID", uint64(2)).Return(&app.CardEvent{}, errors.New("not found"))
-		eventRepo.On("InsertCardEvent", cardOne).Return(nil)
-		eventRepo.On("InsertCardEvent", cardTwo).Return(nil)
+		eventRepo.On("InsertCardEvent", &cardOne).Return(nil)
+		eventRepo.On("InsertCardEvent", &cardTwo).Return(nil)
 
 		processor.Process("events:by-season-id", "12", done)
 
@@ -97,7 +97,7 @@ func TestEventProcessor_Process(t *testing.T) {
 		goalOne := newGoalEvent(10)
 		goalTwo := newGoalEvent(20)
 
-		goals := make([]*app.GoalEvent, 2)
+		goals := make([]app.GoalEvent, 2)
 		goals[0] = goalOne
 		goals[1] = goalTwo
 
@@ -106,7 +106,7 @@ func TestEventProcessor_Process(t *testing.T) {
 		subOne := newSubstitutionEvent(55)
 		subTwo := newSubstitutionEvent(2)
 
-		subs := make([]*app.SubstitutionEvent, 2)
+		subs := make([]app.SubstitutionEvent, 2)
 		subs[0] = subOne
 		subs[1] = subTwo
 
@@ -115,7 +115,7 @@ func TestEventProcessor_Process(t *testing.T) {
 		cardOne := newCardEvent(1)
 		cardTwo := newCardEvent(2)
 
-		cards := make([]*app.CardEvent, 2)
+		cards := make([]app.CardEvent, 2)
 		cards[0] = cardOne
 		cards[1] = cardTwo
 
@@ -123,20 +123,20 @@ func TestEventProcessor_Process(t *testing.T) {
 
 		requester.On("EventsBySeasonIDs", []uint64{12}).Return(goalCh, subCh, cardCh)
 
-		eventRepo.On("GoalEventByID", uint64(10)).Return(goalOne, nil)
-		eventRepo.On("GoalEventByID", uint64(20)).Return(goalTwo, nil)
-		eventRepo.AssertNotCalled(t, "InsertGoalEvent", goalOne)
-		eventRepo.AssertNotCalled(t, "InsertGoalEvent", goalTwo)
+		eventRepo.On("GoalEventByID", uint64(10)).Return(&goalOne, nil)
+		eventRepo.On("GoalEventByID", uint64(20)).Return(&goalTwo, nil)
+		eventRepo.AssertNotCalled(t, "InsertGoalEvent", &goalOne)
+		eventRepo.AssertNotCalled(t, "InsertGoalEvent", &goalTwo)
 
-		eventRepo.On("SubstitutionEventByID", uint64(55)).Return(subOne, nil)
-		eventRepo.On("SubstitutionEventByID", uint64(2)).Return(subTwo, nil)
-		eventRepo.AssertNotCalled(t, "InsertSubstitutionEvent", subOne)
-		eventRepo.AssertNotCalled(t, "InsertSubstitutionEvent", subTwo)
+		eventRepo.On("SubstitutionEventByID", uint64(55)).Return(&subOne, nil)
+		eventRepo.On("SubstitutionEventByID", uint64(2)).Return(&subTwo, nil)
+		eventRepo.AssertNotCalled(t, "InsertSubstitutionEvent", &subOne)
+		eventRepo.AssertNotCalled(t, "InsertSubstitutionEvent", &subTwo)
 
-		eventRepo.On("CardEventByID", uint64(1)).Return(cardOne, nil)
-		eventRepo.On("CardEventByID", uint64(2)).Return(cardTwo, nil)
-		eventRepo.AssertNotCalled(t, "InsertCardEvent", cardOne)
-		eventRepo.AssertNotCalled(t, "InsertCardEvent", cardTwo)
+		eventRepo.On("CardEventByID", uint64(1)).Return(&cardOne, nil)
+		eventRepo.On("CardEventByID", uint64(2)).Return(&cardTwo, nil)
+		eventRepo.AssertNotCalled(t, "InsertCardEvent", &cardOne)
+		eventRepo.AssertNotCalled(t, "InsertCardEvent", &cardTwo)
 
 		processor.Process("events:by-season-id", "12", done)
 
@@ -164,7 +164,7 @@ func TestEventProcessor_Process(t *testing.T) {
 		goalOne := newGoalEvent(10)
 		goalTwo := newGoalEvent(20)
 
-		goals := make([]*app.GoalEvent, 2)
+		goals := make([]app.GoalEvent, 2)
 		goals[0] = goalOne
 		goals[1] = goalTwo
 
@@ -173,7 +173,7 @@ func TestEventProcessor_Process(t *testing.T) {
 		subOne := newSubstitutionEvent(55)
 		subTwo := newSubstitutionEvent(2)
 
-		subs := make([]*app.SubstitutionEvent, 2)
+		subs := make([]app.SubstitutionEvent, 2)
 		subs[0] = subOne
 		subs[1] = subTwo
 
@@ -182,7 +182,7 @@ func TestEventProcessor_Process(t *testing.T) {
 		cardOne := newCardEvent(1)
 		cardTwo := newCardEvent(2)
 
-		cards := make([]*app.CardEvent, 2)
+		cards := make([]app.CardEvent, 2)
 		cards[0] = cardOne
 		cards[1] = cardTwo
 
@@ -192,18 +192,18 @@ func TestEventProcessor_Process(t *testing.T) {
 
 		eventRepo.On("GoalEventByID", uint64(10)).Return(&app.GoalEvent{}, errors.New("not found"))
 		eventRepo.On("GoalEventByID", uint64(20)).Return(&app.GoalEvent{}, errors.New("not found"))
-		eventRepo.On("InsertGoalEvent", goalOne).Return(errors.New("error occurred"))
-		eventRepo.On("InsertGoalEvent", goalTwo).Return(nil)
+		eventRepo.On("InsertGoalEvent", &goalOne).Return(errors.New("error occurred"))
+		eventRepo.On("InsertGoalEvent", &goalTwo).Return(nil)
 
 		eventRepo.On("SubstitutionEventByID", uint64(55)).Return(&app.SubstitutionEvent{}, errors.New("not found"))
 		eventRepo.On("SubstitutionEventByID", uint64(2)).Return(&app.SubstitutionEvent{}, errors.New("not found"))
-		eventRepo.On("InsertSubstitutionEvent", subOne).Return(nil)
-		eventRepo.On("InsertSubstitutionEvent", subTwo).Return(errors.New("error occurred"))
+		eventRepo.On("InsertSubstitutionEvent", &subOne).Return(nil)
+		eventRepo.On("InsertSubstitutionEvent", &subTwo).Return(errors.New("error occurred"))
 
 		eventRepo.On("CardEventByID", uint64(1)).Return(&app.CardEvent{}, errors.New("not found"))
 		eventRepo.On("CardEventByID", uint64(2)).Return(&app.CardEvent{}, errors.New("not found"))
-		eventRepo.On("InsertCardEvent", cardOne).Return(nil)
-		eventRepo.On("InsertCardEvent", cardTwo).Return(errors.New("error occurred"))
+		eventRepo.On("InsertCardEvent", &cardOne).Return(nil)
+		eventRepo.On("InsertCardEvent", &cardTwo).Return(errors.New("error occurred"))
 
 		processor.Process("events:by-season-id", "12", done)
 
@@ -217,8 +217,8 @@ func TestEventProcessor_Process(t *testing.T) {
 	})
 }
 
-func newCardEvent(id uint64) *app.CardEvent {
-	return &app.CardEvent{
+func newCardEvent(id uint64) app.CardEvent {
+	return app.CardEvent{
 		ID:          id,
 		TeamID:      uint64(4509),
 		Type:        "redcard",
@@ -230,8 +230,8 @@ func newCardEvent(id uint64) *app.CardEvent {
 	}
 }
 
-func newGoalEvent(id uint64) *app.GoalEvent {
-	return &app.GoalEvent{
+func newGoalEvent(id uint64) app.GoalEvent {
+	return app.GoalEvent{
 		ID:        id,
 		FixtureID: uint64(45),
 		TeamID:    uint64(4509),
@@ -242,9 +242,9 @@ func newGoalEvent(id uint64) *app.GoalEvent {
 	}
 }
 
-func newSubstitutionEvent(id uint64) *app.SubstitutionEvent {
+func newSubstitutionEvent(id uint64) app.SubstitutionEvent {
 	true := true
-	return &app.SubstitutionEvent{
+	return app.SubstitutionEvent{
 		ID:          id,
 		FixtureID:   uint64(45),
 		TeamID:      uint64(4509),
@@ -256,8 +256,8 @@ func newSubstitutionEvent(id uint64) *app.SubstitutionEvent {
 	}
 }
 
-func cardEventChannel(cards []*app.CardEvent) chan *app.CardEvent {
-	ch := make(chan *app.CardEvent, len(cards))
+func cardEventChannel(cards []app.CardEvent) chan app.CardEvent {
+	ch := make(chan app.CardEvent, len(cards))
 
 	for _, c := range cards {
 		ch <- c
@@ -268,8 +268,8 @@ func cardEventChannel(cards []*app.CardEvent) chan *app.CardEvent {
 	return ch
 }
 
-func goalEventChannel(goals []*app.GoalEvent) chan *app.GoalEvent {
-	ch := make(chan *app.GoalEvent, len(goals))
+func goalEventChannel(goals []app.GoalEvent) chan app.GoalEvent {
+	ch := make(chan app.GoalEvent, len(goals))
 
 	for _, c := range goals {
 		ch <- c
@@ -280,8 +280,8 @@ func goalEventChannel(goals []*app.GoalEvent) chan *app.GoalEvent {
 	return ch
 }
 
-func subEventChannel(subs []*app.SubstitutionEvent) chan *app.SubstitutionEvent {
-	ch := make(chan *app.SubstitutionEvent, len(subs))
+func subEventChannel(subs []app.SubstitutionEvent) chan app.SubstitutionEvent {
+	ch := make(chan app.SubstitutionEvent, len(subs))
 
 	for _, c := range subs {
 		ch <- c

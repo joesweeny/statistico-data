@@ -38,5 +38,5 @@ type ResultRepository interface {
 // data provider. The requester implementation is responsible for creating the channel, filtering struct data into
 // the channel before closing the channel once successful execution is complete.
 type ResultRequester interface {
-	ResultsBySeasonIDs(seasonIDs []uint64) <-chan *Result
+	ResultsBySeasonIDs(seasonIDs []uint64) <-chan Result
 }

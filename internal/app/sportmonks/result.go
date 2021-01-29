@@ -13,15 +13,15 @@ type ResultRequester struct {
 	logger *logrus.Logger
 }
 
-func (r ResultRequester) ResultsBySeasonIDs(seasonIDs []uint64) <-chan *app.Result {
-	ch := make(chan *app.Result, 100)
+func (r ResultRequester) ResultsBySeasonIDs(seasonIDs []uint64) <-chan app.Result {
+	ch := make(chan app.Result, 100)
 
 	go r.parseResults(seasonIDs, ch)
 
 	return ch
 }
 
-func (r ResultRequester) parseResults(seasonIDs []uint64, ch chan<- *app.Result) {
+func (r ResultRequester) parseResults(seasonIDs []uint64, ch chan<- app.Result) {
 	defer close(ch)
 
 	var wg sync.WaitGroup
@@ -34,7 +34,7 @@ func (r ResultRequester) parseResults(seasonIDs []uint64, ch chan<- *app.Result)
 	wg.Wait()
 }
 
-func (r ResultRequester) sendSeasonRequests(seasonID uint64, ch chan<- *app.Result, w *sync.WaitGroup) {
+func (r ResultRequester) sendSeasonRequests(seasonID uint64, ch chan<- app.Result, w *sync.WaitGroup) {
 	season, _, err := r.client.SeasonByID(context.Background(), int(seasonID), []string{"results"})
 
 	if err != nil {
@@ -49,14 +49,14 @@ func (r ResultRequester) sendSeasonRequests(seasonID uint64, ch chan<- *app.Resu
 	}
 
 	for _, result := range season.Results() {
-		ch <- transformResult(&result)
+		ch <- transformResult(result)
 	}
 
 	w.Done()
 }
 
-func transformResult(s *spClient.Fixture) *app.Result {
-	return &app.Result{
+func transformResult(s spClient.Fixture) app.Result {
+	return app.Result{
 		FixtureID:          uint64(s.ID),
 		PitchCondition:     s.Pitch,
 		HomeFormation:      s.Formations.LocalTeamFormation,

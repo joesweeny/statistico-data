@@ -82,7 +82,7 @@ func (t TeamStatsProcessor) processCompetition(competitionID uint64, done chan b
 	go t.persistStats(ch, done)
 }
 
-func (t TeamStatsProcessor) persistStats(ch <-chan *app.TeamStats, done chan bool) {
+func (t TeamStatsProcessor) persistStats(ch <-chan app.TeamStats, done chan bool) {
 	for stats := range ch {
 		t.persist(stats)
 	}
@@ -90,19 +90,19 @@ func (t TeamStatsProcessor) persistStats(ch <-chan *app.TeamStats, done chan boo
 	done <- true
 }
 
-func (t TeamStatsProcessor) persist(x *app.TeamStats) {
+func (t TeamStatsProcessor) persist(x app.TeamStats) {
 	_, err := t.teamStatsRepo.ByFixtureAndTeam(x.FixtureID, x.TeamID)
 
 	if err != nil {
-		if err := t.teamStatsRepo.InsertTeamStats(x); err != nil {
-			t.logger.Errorf("Error '%s' occurred when inserting team stats struct: %+v\n,", err.Error(), *x)
+		if err := t.teamStatsRepo.InsertTeamStats(&x); err != nil {
+			t.logger.Errorf("Error '%s' occurred when inserting team stats struct: %+v\n,", err.Error(), x)
 		}
 
 		return
 	}
 
-	if err := t.teamStatsRepo.UpdateTeamStats(x); err != nil {
-		t.logger.Errorf("Error '%s' occurred when updating team stats struct: %+v\n,", err.Error(), *x)
+	if err := t.teamStatsRepo.UpdateTeamStats(&x); err != nil {
+		t.logger.Errorf("Error '%s' occurred when updating team stats struct: %+v\n,", err.Error(), x)
 	}
 
 	return

@@ -28,7 +28,7 @@ func TestFixtureProcessor_Process(t *testing.T) {
 		one := newFixture(34)
 		two := newFixture(400)
 
-		fixtures := make([]*app.Fixture, 2)
+		fixtures := make([]app.Fixture, 2)
 		fixtures[0] = one
 		fixtures[1] = two
 
@@ -46,8 +46,8 @@ func TestFixtureProcessor_Process(t *testing.T) {
 
 		fixtureRepo.On("ByID", uint64(34)).Return(&app.Fixture{}, errors.New("not Found"))
 		fixtureRepo.On("ByID", uint64(400)).Return(&app.Fixture{}, errors.New("not Found"))
-		fixtureRepo.On("Insert", one).Return(nil)
-		fixtureRepo.On("Insert", two).Return(nil)
+		fixtureRepo.On("Insert", &one).Return(nil)
+		fixtureRepo.On("Insert", &two).Return(nil)
 
 		processor.Process("fixtures:by-competition-id", "5", done)
 
@@ -70,11 +70,11 @@ func TestFixtureProcessor_Process(t *testing.T) {
 		processor := process.NewFixtureProcessor(fixtureRepo, seasonRepo, requester, logger)
 
 		done := make(chan bool)
-
+	
 		one := newFixture(34)
 		two := newFixture(400)
 
-		fixtures := make([]*app.Fixture, 2)
+		fixtures := make([]app.Fixture, 2)
 		fixtures[0] = one
 		fixtures[1] = two
 
@@ -90,8 +90,8 @@ func TestFixtureProcessor_Process(t *testing.T) {
 
 		requester.On("FixturesBySeasonIDs", []uint64{1, 2}).Return(ch)
 
-		fixtureRepo.On("ByID", uint64(34)).Return(one, nil)
-		fixtureRepo.On("ByID", uint64(400)).Return(two, nil)
+		fixtureRepo.On("ByID", uint64(34)).Return(&app.Fixture{}, nil)
+		fixtureRepo.On("ByID", uint64(400)).Return(&app.Fixture{}, nil)
 		fixtureRepo.On("Update", &one).Return(nil)
 		fixtureRepo.On("Update", &two).Return(nil)
 
@@ -120,7 +120,7 @@ func TestFixtureProcessor_Process(t *testing.T) {
 		one := newFixture(34)
 		two := newFixture(400)
 
-		fixtures := make([]*app.Fixture, 2)
+		fixtures := make([]app.Fixture, 2)
 		fixtures[0] = one
 		fixtures[1] = two
 
@@ -138,8 +138,8 @@ func TestFixtureProcessor_Process(t *testing.T) {
 
 		fixtureRepo.On("ByID", uint64(34)).Return(&app.Fixture{}, errors.New("not Found"))
 		fixtureRepo.On("ByID", uint64(400)).Return(&app.Fixture{}, errors.New("not Found"))
-		fixtureRepo.On("Insert", one).Return(errors.New("error occurred"))
-		fixtureRepo.On("Insert", two).Return(nil)
+		fixtureRepo.On("Insert", &one).Return(errors.New("error occurred"))
+		fixtureRepo.On("Insert", &two).Return(nil)
 
 		processor.Process("fixtures:by-competition-id", "5", done)
 
@@ -167,7 +167,7 @@ func TestFixtureProcessor_Process(t *testing.T) {
 		one := newFixture(34)
 		two := newFixture(400)
 
-		fixtures := make([]*app.Fixture, 2)
+		fixtures := make([]app.Fixture, 2)
 		fixtures[0] = one
 		fixtures[1] = two
 
@@ -183,8 +183,8 @@ func TestFixtureProcessor_Process(t *testing.T) {
 
 		requester.On("FixturesBySeasonIDs", []uint64{1, 2}).Return(ch)
 
-		fixtureRepo.On("ByID", uint64(34)).Return(one, nil)
-		fixtureRepo.On("ByID", uint64(400)).Return(two, nil)
+		fixtureRepo.On("ByID", uint64(34)).Return(&app.Fixture{}, nil)
+		fixtureRepo.On("ByID", uint64(400)).Return(&app.Fixture{}, nil)
 		fixtureRepo.On("Update", &one).Return(errors.New("error occurred"))
 		fixtureRepo.On("Update", &two).Return(nil)
 
@@ -214,7 +214,7 @@ func TestFixtureProcessor_Process(t *testing.T) {
 		one := newFixture(34)
 		two := newFixture(400)
 
-		fixtures := make([]*app.Fixture, 2)
+		fixtures := make([]app.Fixture, 2)
 		fixtures[0] = one
 		fixtures[1] = two
 
@@ -228,8 +228,8 @@ func TestFixtureProcessor_Process(t *testing.T) {
 
 		fixtureRepo.On("ByID", uint64(34)).Return(&app.Fixture{}, errors.New("not Found"))
 		fixtureRepo.On("ByID", uint64(400)).Return(&app.Fixture{}, errors.New("not Found"))
-		fixtureRepo.On("Insert", one).Return(nil)
-		fixtureRepo.On("Insert", two).Return(nil)
+		fixtureRepo.On("Insert", &one).Return(nil)
+		fixtureRepo.On("Insert", &two).Return(nil)
 
 		processor.Process("fixtures:current-season", "", done)
 
@@ -256,7 +256,7 @@ func TestFixtureProcessor_Process(t *testing.T) {
 		one := newFixture(34)
 		two := newFixture(400)
 
-		fixtures := make([]*app.Fixture, 2)
+		fixtures := make([]app.Fixture, 2)
 		fixtures[0] = one
 		fixtures[1] = two
 
@@ -268,8 +268,8 @@ func TestFixtureProcessor_Process(t *testing.T) {
 
 		requester.On("FixturesBySeasonIDs", ids).Return(ch)
 
-		fixtureRepo.On("ByID", uint64(34)).Return(one, nil)
-		fixtureRepo.On("ByID", uint64(400)).Return(two, nil)
+		fixtureRepo.On("ByID", uint64(34)).Return(&app.Fixture{}, nil)
+		fixtureRepo.On("ByID", uint64(400)).Return(&app.Fixture{}, nil)
 		fixtureRepo.On("Update", &one).Return(nil)
 		fixtureRepo.On("Update", &two).Return(nil)
 
@@ -298,7 +298,7 @@ func TestFixtureProcessor_Process(t *testing.T) {
 		one := newFixture(34)
 		two := newFixture(400)
 
-		fixtures := make([]*app.Fixture, 2)
+		fixtures := make([]app.Fixture, 2)
 		fixtures[0] = one
 		fixtures[1] = two
 
@@ -312,8 +312,8 @@ func TestFixtureProcessor_Process(t *testing.T) {
 
 		fixtureRepo.On("ByID", uint64(34)).Return(&app.Fixture{}, errors.New("not Found"))
 		fixtureRepo.On("ByID", uint64(400)).Return(&app.Fixture{}, errors.New("not Found"))
-		fixtureRepo.On("Insert", one).Return(errors.New("error occurred"))
-		fixtureRepo.On("Insert", two).Return(nil)
+		fixtureRepo.On("Insert", &one).Return(errors.New("error occurred"))
+		fixtureRepo.On("Insert", &two).Return(nil)
 
 		processor.Process("fixtures:current-season", "", done)
 
@@ -341,7 +341,7 @@ func TestFixtureProcessor_Process(t *testing.T) {
 		one := newFixture(34)
 		two := newFixture(400)
 
-		fixtures := make([]*app.Fixture, 2)
+		fixtures := make([]app.Fixture, 2)
 		fixtures[0] = one
 		fixtures[1] = two
 
@@ -353,8 +353,8 @@ func TestFixtureProcessor_Process(t *testing.T) {
 
 		requester.On("FixturesBySeasonIDs", ids).Return(ch)
 
-		fixtureRepo.On("ByID", uint64(34)).Return(one, nil)
-		fixtureRepo.On("ByID", uint64(400)).Return(two, nil)
+		fixtureRepo.On("ByID", uint64(34)).Return(&app.Fixture{}, nil)
+		fixtureRepo.On("ByID", uint64(400)).Return(&app.Fixture{}, nil)
 		fixtureRepo.On("Update", &one).Return(errors.New("error occurred"))
 		fixtureRepo.On("Update", &two).Return(nil)
 
@@ -388,7 +388,7 @@ func TestFixtureProcessor_Process(t *testing.T) {
 
 		two.Status = &status
 
-		fixtures := make([]*app.Fixture, 2)
+		fixtures := make([]app.Fixture, 2)
 		fixtures[0] = one
 		fixtures[1] = two
 
@@ -406,7 +406,7 @@ func TestFixtureProcessor_Process(t *testing.T) {
 
 		fixtureRepo.On("ByID", uint64(34)).Return(&app.Fixture{}, errors.New("not Found"))
 		fixtureRepo.On("Delete", uint64(400)).Return(nil)
-		fixtureRepo.On("Insert", one).Return(nil)
+		fixtureRepo.On("Insert", &one).Return(nil)
 
 		processor.Process("fixtures:by-competition-id", "5", done)
 
@@ -437,7 +437,7 @@ func TestFixtureProcessor_Process(t *testing.T) {
 
 		two.Status = &status
 
-		fixtures := make([]*app.Fixture, 2)
+		fixtures := make([]app.Fixture, 2)
 		fixtures[0] = one
 		fixtures[1] = two
 
@@ -455,7 +455,7 @@ func TestFixtureProcessor_Process(t *testing.T) {
 
 		fixtureRepo.On("ByID", uint64(34)).Return(&app.Fixture{}, errors.New("not Found"))
 		fixtureRepo.On("Delete", uint64(400)).Return(nil)
-		fixtureRepo.On("Insert", one).Return(nil)
+		fixtureRepo.On("Insert", &one).Return(nil)
 
 		processor.Process("fixtures:by-competition-id", "5", done)
 
@@ -468,10 +468,10 @@ func TestFixtureProcessor_Process(t *testing.T) {
 	})
 }
 
-func newFixture(id uint64) *app.Fixture {
+func newFixture(id uint64) app.Fixture {
 	var roundId = uint64(165789)
 
-	return &app.Fixture{
+	return app.Fixture{
 		ID:         id,
 		SeasonID:   uint64(14567),
 		RoundID:    &roundId,
@@ -483,8 +483,8 @@ func newFixture(id uint64) *app.Fixture {
 	}
 }
 
-func fixtureChannel(fixtures []*app.Fixture) chan *app.Fixture {
-	ch := make(chan *app.Fixture, len(fixtures))
+func fixtureChannel(fixtures []app.Fixture) chan app.Fixture {
+	ch := make(chan app.Fixture, len(fixtures))
 
 	for _, c := range fixtures {
 		ch <- c

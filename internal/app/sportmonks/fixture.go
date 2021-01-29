@@ -15,15 +15,15 @@ type FixtureRequester struct {
 	logger *logrus.Logger
 }
 
-func (f FixtureRequester) FixturesBySeasonIDs(ids []uint64) <-chan *app.Fixture {
-	ch := make(chan *app.Fixture, 100)
+func (f FixtureRequester) FixturesBySeasonIDs(ids []uint64) <-chan app.Fixture {
+	ch := make(chan app.Fixture, 100)
 
 	go f.parseFixtures(ids, ch)
 
 	return ch
 }
 
-func (f FixtureRequester) parseFixtures(seasonIDs []uint64, ch chan<- *app.Fixture) {
+func (f FixtureRequester) parseFixtures(seasonIDs []uint64, ch chan<- app.Fixture) {
 	defer close(ch)
 
 	var wg sync.WaitGroup
@@ -36,7 +36,7 @@ func (f FixtureRequester) parseFixtures(seasonIDs []uint64, ch chan<- *app.Fixtu
 	wg.Wait()
 }
 
-func (f FixtureRequester) sendSeasonRequests(seasonID uint64, ch chan<- *app.Fixture, w *sync.WaitGroup) {
+func (f FixtureRequester) sendSeasonRequests(seasonID uint64, ch chan<- app.Fixture, w *sync.WaitGroup) {
 	res, _, err := f.client.SeasonByID(context.Background(), int(seasonID), []string{"fixtures"})
 
 	if err != nil {
@@ -51,14 +51,14 @@ func (f FixtureRequester) sendSeasonRequests(seasonID uint64, ch chan<- *app.Fix
 	}
 
 	for _, fixture := range res.Fixtures() {
-		ch <- transformFixture(&fixture)
+		ch <- transformFixture(fixture)
 	}
 
 	w.Done()
 }
 
-func transformFixture(s *spClient.Fixture) *app.Fixture {
-	return &app.Fixture{
+func transformFixture(s spClient.Fixture) app.Fixture {
+	return app.Fixture{
 		ID:         uint64(s.ID),
 		SeasonID:   uint64(s.SeasonID),
 		RoundID:    helpers.NullableUint64(s.RoundID),

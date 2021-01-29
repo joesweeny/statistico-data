@@ -15,7 +15,7 @@ func (m *FixtureRepository) Insert(c *app.Fixture) error {
 }
 
 func (m *FixtureRepository) Update(c *app.Fixture) error {
-	args := m.Called(&c)
+	args := m.Called(c)
 	return args.Error(0)
 }
 
@@ -49,7 +49,7 @@ type FixtureRequester struct {
 	mock.Mock
 }
 
-func (m *FixtureRequester) FixturesBySeasonIDs(ids []uint64) <-chan *app.Fixture {
+func (m *FixtureRequester) FixturesBySeasonIDs(ids []uint64) <-chan app.Fixture {
 	args := m.Called(ids)
-	return args.Get(0).(chan *app.Fixture)
+	return args.Get(0).(chan app.Fixture)
 }

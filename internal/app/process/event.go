@@ -70,12 +70,12 @@ func (e EventProcessor) processEventsBySeasonID(seasonID uint64, done chan bool)
 	go e.parseEvents(goals, subs, cards, done)
 }
 
-func (e EventProcessor) parseEvents(g <-chan *app.GoalEvent, s <-chan *app.SubstitutionEvent, c <-chan *app.CardEvent, done chan bool) {
+func (e EventProcessor) parseEvents(g <-chan app.GoalEvent, s <-chan app.SubstitutionEvent, c <-chan app.CardEvent, done chan bool) {
 	var wg = sync.WaitGroup{}
 
 	wg.Add(3)
 
-	go func(c <-chan *app.CardEvent) {
+	go func(c <-chan app.CardEvent) {
 		for card := range c {
 			e.persistCardEvent(card)
 		}
@@ -83,7 +83,7 @@ func (e EventProcessor) parseEvents(g <-chan *app.GoalEvent, s <-chan *app.Subst
 		wg.Done()
 	}(c)
 
-	go func(g <-chan *app.GoalEvent) {
+	go func(g <-chan app.GoalEvent) {
 		for goal := range g {
 			e.persistGoalEvent(goal)
 		}
@@ -91,7 +91,7 @@ func (e EventProcessor) parseEvents(g <-chan *app.GoalEvent, s <-chan *app.Subst
 		wg.Done()
 	}(g)
 
-	go func(g <-chan *app.SubstitutionEvent) {
+	go func(g <-chan app.SubstitutionEvent) {
 		for sub := range s {
 			e.persistSubstitutionEvent(sub)
 		}
@@ -104,33 +104,33 @@ func (e EventProcessor) parseEvents(g <-chan *app.GoalEvent, s <-chan *app.Subst
 	done <- true
 }
 
-func (e EventProcessor) persistCardEvent(x *app.CardEvent) {
+func (e EventProcessor) persistCardEvent(x app.CardEvent) {
 	if _, err := e.eventRepo.CardEventByID(x.ID); err == nil {
 		return
 	}
 
-	if err := e.eventRepo.InsertCardEvent(x); err != nil {
-		e.logger.Warningf("Error '%s' occurred when inserting card event struct: %+v\n,", err.Error(), *x)
+	if err := e.eventRepo.InsertCardEvent(&x); err != nil {
+		e.logger.Warningf("Error '%s' occurred when inserting card event struct: %+v\n,", err.Error(), x)
 	}
 }
 
-func (e EventProcessor) persistGoalEvent(x *app.GoalEvent) {
+func (e EventProcessor) persistGoalEvent(x app.GoalEvent) {
 	if _, err := e.eventRepo.GoalEventByID(x.ID); err == nil {
 		return
 	}
 
-	if err := e.eventRepo.InsertGoalEvent(x); err != nil {
-		e.logger.Warningf("Error '%s' occurred when inserting goal event struct: %+v\n,", err.Error(), *x)
+	if err := e.eventRepo.InsertGoalEvent(&x); err != nil {
+		e.logger.Warningf("Error '%s' occurred when inserting goal event struct: %+v\n,", err.Error(), x)
 	}
 }
 
-func (e EventProcessor) persistSubstitutionEvent(x *app.SubstitutionEvent) {
+func (e EventProcessor) persistSubstitutionEvent(x app.SubstitutionEvent) {
 	if _, err := e.eventRepo.SubstitutionEventByID(x.ID); err == nil {
 		return
 	}
 
-	if err := e.eventRepo.InsertSubstitutionEvent(x); err != nil {
-		e.logger.Warningf("Error '%s' occurred when inserting substitution event struct: %+v\n,", err.Error(), *x)
+	if err := e.eventRepo.InsertSubstitutionEvent(&x); err != nil {
+		e.logger.Warningf("Error '%s' occurred when inserting substitution event struct: %+v\n,", err.Error(), x)
 	}
 }
 

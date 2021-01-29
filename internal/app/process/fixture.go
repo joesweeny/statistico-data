@@ -73,7 +73,7 @@ func (f FixtureProcessor) processCompetition(competitionID uint64, done chan boo
 	go f.persistFixtures(ch, done)
 }
 
-func (f FixtureProcessor) persistFixtures(ch <-chan *app.Fixture, done chan bool) {
+func (f FixtureProcessor) persistFixtures(ch <-chan app.Fixture, done chan bool) {
 	for fixture := range ch {
 		f.persist(fixture)
 	}
@@ -81,7 +81,7 @@ func (f FixtureProcessor) persistFixtures(ch <-chan *app.Fixture, done chan bool
 	done <- true
 }
 
-func (f FixtureProcessor) persist(x *app.Fixture) {
+func (f FixtureProcessor) persist(x app.Fixture) {
 	if x.Status != nil && (*x.Status == "Deleted" || *x.Status == "POSTP"){
 		if err := f.fixtureRepo.Delete(x.ID); err != nil {
 			f.logger.Warningf("Error '%s' occurred when delete fixture: %d\n,", err.Error(), x.ID)
@@ -93,15 +93,15 @@ func (f FixtureProcessor) persist(x *app.Fixture) {
 	_, err := f.fixtureRepo.ByID(x.ID)
 
 	if err != nil {
-		if err := f.fixtureRepo.Insert(x); err != nil {
-			f.logger.Warningf("Error '%s' occurred when inserting fixture struct: %+v\n,", err.Error(), *x)
+		if err := f.fixtureRepo.Insert(&x); err != nil {
+			f.logger.Warningf("Error '%s' occurred when inserting fixture struct: %+v\n,", err.Error(), x)
 		}
 
 		return
 	}
 
-	if err := f.fixtureRepo.Update(x); err != nil {
-		f.logger.Warningf("Error '%s' occurred when updating fixture struct: %+v\n,", err.Error(), *x)
+	if err := f.fixtureRepo.Update(&x); err != nil {
+		f.logger.Warningf("Error '%s' occurred when updating fixture struct: %+v\n,", err.Error(), x)
 	}
 
 	return
