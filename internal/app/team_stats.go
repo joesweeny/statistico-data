@@ -69,7 +69,7 @@ type TeamStatsRepository interface {
 // data provider. The requester implementation is responsible for creating the channel, filtering struct data into
 // the channel before closing the channel once successful execution is complete.
 type TeamStatsRequester interface {
-	TeamStatsByFixtureIDs(ids []uint64) <-chan *TeamStats
-	TeamStatsBySeasonIDs(ids []uint64) <-chan *TeamStats
-	TeamStatsByDate(date time.Time, competitionIDs []uint64) <-chan *TeamStats
+	TeamStatsByFixtureIDs(ids []uint64) <-chan TeamStats
+	TeamStatsBySeasonIDs(ids []uint64) <-chan TeamStats
+	TeamStatsByDate(date time.Time, competitionIDs []uint64) <-chan TeamStats
 }

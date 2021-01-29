@@ -15,31 +15,31 @@ type TeamStatsRequester struct {
 	logger *logrus.Logger
 }
 
-func (t TeamStatsRequester) TeamStatsByFixtureIDs(ids []uint64) <-chan *app.TeamStats {
-	ch := make(chan *app.TeamStats, 10000)
+func (t TeamStatsRequester) TeamStatsByFixtureIDs(ids []uint64) <-chan app.TeamStats {
+	ch := make(chan app.TeamStats, 10000)
 
 	go t.parseByFixtureIDs(ids, ch)
 
 	return ch
 }
 
-func (t TeamStatsRequester) TeamStatsBySeasonIDs(ids []uint64) <-chan *app.TeamStats {
-	ch := make(chan *app.TeamStats, 10000)
+func (t TeamStatsRequester) TeamStatsBySeasonIDs(ids []uint64) <-chan app.TeamStats {
+	ch := make(chan app.TeamStats, 10000)
 
 	go t.parseBySeasonIDs(ids, ch)
 
 	return ch
 }
 
-func (t TeamStatsRequester) TeamStatsByDate(date time.Time, competitionIDs []uint64) <-chan *app.TeamStats {
-	ch := make(chan *app.TeamStats, 1000)
+func (t TeamStatsRequester) TeamStatsByDate(date time.Time, competitionIDs []uint64) <-chan app.TeamStats {
+	ch := make(chan app.TeamStats, 1000)
 
 	go t.parseByDate(competitionIDs, date, ch)
 
 	return ch
 }
 
-func (t TeamStatsRequester) parseBySeasonIDs(seasonIDs []uint64, ch chan<- *app.TeamStats) {
+func (t TeamStatsRequester) parseBySeasonIDs(seasonIDs []uint64, ch chan<- app.TeamStats) {
 	defer close(ch)
 
 	wg := sync.WaitGroup{}
@@ -52,7 +52,7 @@ func (t TeamStatsRequester) parseBySeasonIDs(seasonIDs []uint64, ch chan<- *app.
 	wg.Wait()
 }
 
-func (t TeamStatsRequester) parseByDate(competitionIDs []uint64, date time.Time, ch chan<- *app.TeamStats) {
+func (t TeamStatsRequester) parseByDate(competitionIDs []uint64, date time.Time, ch chan<- app.TeamStats) {
 	defer close(ch)
 
 	wg := sync.WaitGroup{}
@@ -65,7 +65,7 @@ func (t TeamStatsRequester) parseByDate(competitionIDs []uint64, date time.Time,
 	wg.Wait()
 }
 
-func (t TeamStatsRequester) parseByFixtureIDs(ids []uint64, ch chan<- *app.TeamStats) {
+func (t TeamStatsRequester) parseByFixtureIDs(ids []uint64, ch chan<- app.TeamStats) {
 	defer close(ch)
 
 	var filters map[string][]int
@@ -83,12 +83,12 @@ func (t TeamStatsRequester) parseByFixtureIDs(ids []uint64, ch chan<- *app.TeamS
 		}
 
 		for _, stats := range res.TeamStats() {
-			ch <- transformTeamStats(&stats)
+			ch <- transformTeamStats(stats)
 		}
 	}
 }
 
-func (t TeamStatsRequester) sendSeasonRequest(seasonID uint64, ch chan<- *app.TeamStats, wg *sync.WaitGroup) {
+func (t TeamStatsRequester) sendSeasonRequest(seasonID uint64, ch chan<- app.TeamStats, wg *sync.WaitGroup) {
 	season, _, err := t.client.SeasonByID(context.Background(), int(seasonID), []string{"results.stats"})
 
 	if err != nil {
@@ -104,14 +104,14 @@ func (t TeamStatsRequester) sendSeasonRequest(seasonID uint64, ch chan<- *app.Te
 
 	for _, res := range season.Results() {
 		for _, stats := range res.TeamStats() {
-			ch <- transformTeamStats(&stats)
+			ch <- transformTeamStats(stats)
 		}
 	}
 
 	wg.Done()
 }
 
-func (t TeamStatsRequester) sendByDateRequest(competitionID uint64, date time.Time, ch chan<- *app.TeamStats, wg *sync.WaitGroup) {
+func (t TeamStatsRequester) sendByDateRequest(competitionID uint64, date time.Time, ch chan<- app.TeamStats, wg *sync.WaitGroup) {
 	results, _, err := t.client.FixturesByDate(
 		context.Background(),
 		date,
@@ -132,15 +132,15 @@ func (t TeamStatsRequester) sendByDateRequest(competitionID uint64, date time.Ti
 
 	for _, res := range results {
 		for _, stats := range res.TeamStats() {
-			ch <- transformTeamStats(&stats)
+			ch <- transformTeamStats(stats)
 		}
 	}
 
 	wg.Done()
 }
 
-func transformTeamStats(s *spClient.TeamStats) *app.TeamStats {
-	return &app.TeamStats{
+func transformTeamStats(s spClient.TeamStats) app.TeamStats {
+	return app.TeamStats{
 		FixtureID:     uint64(s.FixtureID),
 		TeamID:        uint64(s.TeamID),
 		TeamShots:     handleTeamShots(&s.Shots),

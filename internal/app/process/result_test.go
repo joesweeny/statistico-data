@@ -28,14 +28,14 @@ func TestResultProcessor_Process(t *testing.T) {
 
 		res := newResult(34)
 
-		results := make([]*app.Result, 1)
+		results := make([]app.Result, 1)
 		results[0] = res
 
 		ch := resultChannel(results)
 
 		requester.On("ResultsBySeasonIDs", []uint64{34}).Return(ch)
 		resultRepo.On("ByFixtureID", uint64(34)).Return(&app.Result{}, errors.New("not found"))
-		resultRepo.On("Insert", res).Return(nil)
+		resultRepo.On("Insert", &res).Return(nil)
 		processor.Process("results:by-season-id", "34", done)
 
 		<-done
@@ -60,14 +60,14 @@ func TestResultProcessor_Process(t *testing.T) {
 
 		res := newResult(34)
 
-		results := make([]*app.Result, 1)
+		results := make([]app.Result, 1)
 		results[0] = res
 
 		ch := resultChannel(results)
 
 		requester.On("ResultsBySeasonIDs", []uint64{34}).Return(ch)
-		resultRepo.On("ByFixtureID", uint64(34)).Return(res, nil)
-		resultRepo.On("Update", res).Return(nil)
+		resultRepo.On("ByFixtureID", uint64(34)).Return(&app.Result{}, nil)
+		resultRepo.On("Update", &res).Return(nil)
 		processor.Process("results:by-season-id", "34", done)
 
 		<-done
@@ -92,14 +92,14 @@ func TestResultProcessor_Process(t *testing.T) {
 
 		res := newResult(34)
 
-		results := make([]*app.Result, 1)
+		results := make([]app.Result, 1)
 		results[0] = res
 
 		ch := resultChannel(results)
 
 		requester.On("ResultsBySeasonIDs", []uint64{34}).Return(ch)
 		resultRepo.On("ByFixtureID", uint64(34)).Return(&app.Result{}, errors.New("not found"))
-		resultRepo.On("Insert", res).Return(errors.New("error occurred"))
+		resultRepo.On("Insert", &res).Return(errors.New("error occurred"))
 		processor.Process("results:by-season-id", "34", done)
 
 		<-done
@@ -125,14 +125,14 @@ func TestResultProcessor_Process(t *testing.T) {
 
 		res := newResult(34)
 
-		results := make([]*app.Result, 1)
+		results := make([]app.Result, 1)
 		results[0] = res
 
 		ch := resultChannel(results)
 
 		requester.On("ResultsBySeasonIDs", []uint64{34}).Return(ch)
-		resultRepo.On("ByFixtureID", uint64(34)).Return(res, nil)
-		resultRepo.On("Update", res).Return(errors.New("error occurred"))
+		resultRepo.On("ByFixtureID", uint64(34)).Return(&app.Result{}, nil)
+		resultRepo.On("Update", &res).Return(errors.New("error occurred"))
 		processor.Process("results:by-season-id", "34", done)
 
 		<-done
@@ -159,7 +159,7 @@ func TestResultProcessor_Process(t *testing.T) {
 
 		res := newResult(34)
 
-		results := make([]*app.Result, 1)
+		results := make([]app.Result, 1)
 		results[0] = res
 
 		ch := resultChannel(results)
@@ -174,7 +174,7 @@ func TestResultProcessor_Process(t *testing.T) {
 
 		requester.On("ResultsBySeasonIDs", []uint64{1, 2}).Return(ch)
 		resultRepo.On("ByFixtureID", uint64(34)).Return(&app.Result{}, errors.New("not found"))
-		resultRepo.On("Insert", res).Return(nil)
+		resultRepo.On("Insert", &res).Return(nil)
 		processor.Process("results:by-competition-id", "5", done)
 
 		<-done
@@ -199,7 +199,7 @@ func TestResultProcessor_Process(t *testing.T) {
 
 		res := newResult(34)
 
-		results := make([]*app.Result, 1)
+		results := make([]app.Result, 1)
 		results[0] = res
 
 		ch := resultChannel(results)
@@ -213,8 +213,8 @@ func TestResultProcessor_Process(t *testing.T) {
 		)
 
 		requester.On("ResultsBySeasonIDs", []uint64{1, 2}).Return(ch)
-		resultRepo.On("ByFixtureID", uint64(34)).Return(res, nil)
-		resultRepo.On("Update", res).Return(nil)
+		resultRepo.On("ByFixtureID", uint64(34)).Return(&app.Result{}, nil)
+		resultRepo.On("Update", &res).Return(nil)
 		processor.Process("results:by-competition-id", "5", done)
 
 		<-done
@@ -240,7 +240,7 @@ func TestResultProcessor_Process(t *testing.T) {
 
 		res := newResult(34)
 
-		results := make([]*app.Result, 1)
+		results := make([]app.Result, 1)
 		results[0] = res
 
 		ch := resultChannel(results)
@@ -255,7 +255,7 @@ func TestResultProcessor_Process(t *testing.T) {
 
 		requester.On("ResultsBySeasonIDs", []uint64{1, 2}).Return(ch)
 		resultRepo.On("ByFixtureID", uint64(34)).Return(&app.Result{}, errors.New("not found"))
-		resultRepo.On("Insert", res).Return(errors.New("error occurred"))
+		resultRepo.On("Insert", &res).Return(errors.New("error occurred"))
 		processor.Process("results:by-competition-id", "5", done)
 
 		<-done
@@ -281,7 +281,7 @@ func TestResultProcessor_Process(t *testing.T) {
 
 		res := newResult(34)
 
-		results := make([]*app.Result, 1)
+		results := make([]app.Result, 1)
 		results[0] = res
 
 		ch := resultChannel(results)
@@ -295,8 +295,8 @@ func TestResultProcessor_Process(t *testing.T) {
 		)
 
 		requester.On("ResultsBySeasonIDs", []uint64{1, 2}).Return(ch)
-		resultRepo.On("ByFixtureID", uint64(34)).Return(res, nil)
-		resultRepo.On("Update", res).Return(errors.New("error occurred"))
+		resultRepo.On("ByFixtureID", uint64(34)).Return(&app.Result{}, nil)
+		resultRepo.On("Update", &res).Return(errors.New("error occurred"))
 		processor.Process("results:by-competition-id", "5", done)
 
 		<-done
@@ -323,7 +323,7 @@ func TestResultProcessor_Process(t *testing.T) {
 
 		res := newResult(34)
 
-		results := make([]*app.Result, 1)
+		results := make([]app.Result, 1)
 		results[0] = res
 
 		ch := resultChannel(results)
@@ -332,7 +332,7 @@ func TestResultProcessor_Process(t *testing.T) {
 
 		requester.On("ResultsBySeasonIDs", []uint64{1, 2}).Return(ch)
 		resultRepo.On("ByFixtureID", uint64(34)).Return(&app.Result{}, errors.New("not found"))
-		resultRepo.On("Insert", res).Return(nil)
+		resultRepo.On("Insert", &res).Return(nil)
 		processor.Process("results:current-season", "5", done)
 
 		<-done
@@ -357,7 +357,7 @@ func TestResultProcessor_Process(t *testing.T) {
 
 		res := newResult(34)
 
-		results := make([]*app.Result, 1)
+		results := make([]app.Result, 1)
 		results[0] = res
 
 		ch := resultChannel(results)
@@ -365,8 +365,8 @@ func TestResultProcessor_Process(t *testing.T) {
 		seasonRepo.On("CurrentSeasonIDs").Return([]uint64{1, 2}, nil)
 
 		requester.On("ResultsBySeasonIDs", []uint64{1, 2}).Return(ch)
-		resultRepo.On("ByFixtureID", uint64(34)).Return(res, nil)
-		resultRepo.On("Update", res).Return(nil)
+		resultRepo.On("ByFixtureID", uint64(34)).Return(&app.Result{}, nil)
+		resultRepo.On("Update", &res).Return(nil)
 		processor.Process("results:current-season", "5", done)
 
 		<-done
@@ -392,7 +392,7 @@ func TestResultProcessor_Process(t *testing.T) {
 
 		res := newResult(34)
 
-		results := make([]*app.Result, 1)
+		results := make([]app.Result, 1)
 		results[0] = res
 
 		ch := resultChannel(results)
@@ -401,7 +401,7 @@ func TestResultProcessor_Process(t *testing.T) {
 
 		requester.On("ResultsBySeasonIDs", []uint64{1, 2}).Return(ch)
 		resultRepo.On("ByFixtureID", uint64(34)).Return(&app.Result{}, errors.New("not found"))
-		resultRepo.On("Insert", res).Return(errors.New("error occurred"))
+		resultRepo.On("Insert", &res).Return(errors.New("error occurred"))
 		processor.Process("results:current-season", "5", done)
 
 		<-done
@@ -427,7 +427,7 @@ func TestResultProcessor_Process(t *testing.T) {
 
 		res := newResult(34)
 
-		results := make([]*app.Result, 1)
+		results := make([]app.Result, 1)
 		results[0] = res
 
 		ch := resultChannel(results)
@@ -435,8 +435,8 @@ func TestResultProcessor_Process(t *testing.T) {
 		seasonRepo.On("CurrentSeasonIDs").Return([]uint64{1, 2}, nil)
 
 		requester.On("ResultsBySeasonIDs", []uint64{1, 2}).Return(ch)
-		resultRepo.On("ByFixtureID", uint64(34)).Return(res, nil)
-		resultRepo.On("Update", res).Return(errors.New("error occurred"))
+		resultRepo.On("ByFixtureID", uint64(34)).Return(&app.Result{}, nil)
+		resultRepo.On("Update", &res).Return(errors.New("error occurred"))
 		processor.Process("results:current-season", "5", done)
 
 		<-done
@@ -449,12 +449,12 @@ func TestResultProcessor_Process(t *testing.T) {
 	})
 }
 
-func newResult(f uint64) *app.Result {
-	return &app.Result{FixtureID: f}
+func newResult(f uint64) app.Result {
+	return app.Result{FixtureID: f}
 }
 
-func resultChannel(results []*app.Result) chan *app.Result {
-	ch := make(chan *app.Result, len(results))
+func resultChannel(results []app.Result) chan app.Result {
+	ch := make(chan app.Result, len(results))
 
 	for _, c := range results {
 		ch <- c

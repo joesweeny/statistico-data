@@ -31,7 +31,7 @@ func TestTeamStatsProcessor_Process(t *testing.T) {
 		home := newTeamStats(45, 99)
 		away := newTeamStats(45, 2)
 
-		stats := make([]*app.TeamStats, 2)
+		stats := make([]app.TeamStats, 2)
 		stats[0] = home
 		stats[1] = away
 
@@ -40,8 +40,8 @@ func TestTeamStatsProcessor_Process(t *testing.T) {
 		requester.On("TeamStatsBySeasonIDs", []uint64{45}).Return(ch)
 		teamStatsRepo.On("ByFixtureAndTeam", uint64(45), uint64(99)).Return(&app.TeamStats{}, errors.New("not found"))
 		teamStatsRepo.On("ByFixtureAndTeam", uint64(45), uint64(2)).Return(&app.TeamStats{}, errors.New("not found"))
-		teamStatsRepo.On("InsertTeamStats", home).Return(nil)
-		teamStatsRepo.On("InsertTeamStats", away).Return(nil)
+		teamStatsRepo.On("InsertTeamStats", &home).Return(nil)
+		teamStatsRepo.On("InsertTeamStats", &away).Return(nil)
 
 		processor.Process("team-stats:by-season-id", "45", done)
 
@@ -69,7 +69,7 @@ func TestTeamStatsProcessor_Process(t *testing.T) {
 		home := newTeamStats(45, 99)
 		away := newTeamStats(45, 2)
 
-		stats := make([]*app.TeamStats, 2)
+		stats := make([]app.TeamStats, 2)
 		stats[0] = home
 		stats[1] = away
 
@@ -78,8 +78,8 @@ func TestTeamStatsProcessor_Process(t *testing.T) {
 		requester.On("TeamStatsBySeasonIDs", []uint64{45}).Return(ch)
 		teamStatsRepo.On("ByFixtureAndTeam", uint64(45), uint64(99)).Return(&app.TeamStats{}, errors.New("not found"))
 		teamStatsRepo.On("ByFixtureAndTeam", uint64(45), uint64(2)).Return(&app.TeamStats{}, errors.New("not found"))
-		teamStatsRepo.On("InsertTeamStats", home).Return(errors.New("error occurred"))
-		teamStatsRepo.On("InsertTeamStats", away).Return(nil)
+		teamStatsRepo.On("InsertTeamStats", &home).Return(errors.New("error occurred"))
+		teamStatsRepo.On("InsertTeamStats", &away).Return(nil)
 
 		processor.Process("team-stats:by-season-id", "45", done)
 
@@ -108,17 +108,17 @@ func TestTeamStatsProcessor_Process(t *testing.T) {
 		home := newTeamStats(45, 99)
 		away := newTeamStats(45, 2)
 
-		stats := make([]*app.TeamStats, 2)
+		stats := make([]app.TeamStats, 2)
 		stats[0] = home
 		stats[1] = away
 
 		ch := teamStatsChannel(stats)
 
 		requester.On("TeamStatsBySeasonIDs", []uint64{45}).Return(ch)
-		teamStatsRepo.On("ByFixtureAndTeam", uint64(45), uint64(99)).Return(home, nil)
-		teamStatsRepo.On("ByFixtureAndTeam", uint64(45), uint64(2)).Return(away, nil)
-		teamStatsRepo.On("UpdateTeamStats", home).Return(nil)
-		teamStatsRepo.On("UpdateTeamStats", away).Return(nil)
+		teamStatsRepo.On("ByFixtureAndTeam", uint64(45), uint64(99)).Return(&app.TeamStats{}, nil)
+		teamStatsRepo.On("ByFixtureAndTeam", uint64(45), uint64(2)).Return(&app.TeamStats{}, nil)
+		teamStatsRepo.On("UpdateTeamStats", &home).Return(nil)
+		teamStatsRepo.On("UpdateTeamStats", &away).Return(nil)
 
 		processor.Process("team-stats:by-season-id", "45", done)
 
@@ -146,17 +146,17 @@ func TestTeamStatsProcessor_Process(t *testing.T) {
 		home := newTeamStats(45, 99)
 		away := newTeamStats(45, 2)
 
-		stats := make([]*app.TeamStats, 2)
+		stats := make([]app.TeamStats, 2)
 		stats[0] = home
 		stats[1] = away
 
 		ch := teamStatsChannel(stats)
 
 		requester.On("TeamStatsBySeasonIDs", []uint64{45}).Return(ch)
-		teamStatsRepo.On("ByFixtureAndTeam", uint64(45), uint64(99)).Return(home, nil)
-		teamStatsRepo.On("ByFixtureAndTeam", uint64(45), uint64(2)).Return(away, nil)
-		teamStatsRepo.On("UpdateTeamStats", home).Return(nil)
-		teamStatsRepo.On("UpdateTeamStats", away).Return(errors.New("error occurred"))
+		teamStatsRepo.On("ByFixtureAndTeam", uint64(45), uint64(99)).Return(&app.TeamStats{}, nil)
+		teamStatsRepo.On("ByFixtureAndTeam", uint64(45), uint64(2)).Return(&app.TeamStats{}, nil)
+		teamStatsRepo.On("UpdateTeamStats", &home).Return(nil)
+		teamStatsRepo.On("UpdateTeamStats", &away).Return(errors.New("error occurred"))
 
 		processor.Process("team-stats:by-season-id", "45", done)
 
@@ -185,7 +185,7 @@ func TestTeamStatsProcessor_Process(t *testing.T) {
 		home := newTeamStats(45, 99)
 		away := newTeamStats(45, 2)
 
-		stats := make([]*app.TeamStats, 2)
+		stats := make([]app.TeamStats, 2)
 		stats[0] = home
 		stats[1] = away
 
@@ -198,8 +198,8 @@ func TestTeamStatsProcessor_Process(t *testing.T) {
 		requester.On("TeamStatsByDate", date, []uint64{1, 2, 3}).Return(ch)
 		teamStatsRepo.On("ByFixtureAndTeam", uint64(45), uint64(99)).Return(&app.TeamStats{}, errors.New("not found"))
 		teamStatsRepo.On("ByFixtureAndTeam", uint64(45), uint64(2)).Return(&app.TeamStats{}, errors.New("not found"))
-		teamStatsRepo.On("InsertTeamStats", home).Return(nil)
-		teamStatsRepo.On("InsertTeamStats", away).Return(nil)
+		teamStatsRepo.On("InsertTeamStats", &home).Return(nil)
+		teamStatsRepo.On("InsertTeamStats", &away).Return(nil)
 
 		processor.Process("team-stats:by-date", "2021-01-18", done)
 
@@ -227,7 +227,7 @@ func TestTeamStatsProcessor_Process(t *testing.T) {
 		home := newTeamStats(45, 99)
 		away := newTeamStats(45, 2)
 
-		stats := make([]*app.TeamStats, 2)
+		stats := make([]app.TeamStats, 2)
 		stats[0] = home
 		stats[1] = away
 
@@ -240,8 +240,8 @@ func TestTeamStatsProcessor_Process(t *testing.T) {
 		requester.On("TeamStatsByDate", date, []uint64{1, 2, 3}).Return(ch)
 		teamStatsRepo.On("ByFixtureAndTeam", uint64(45), uint64(99)).Return(&app.TeamStats{}, errors.New("not found"))
 		teamStatsRepo.On("ByFixtureAndTeam", uint64(45), uint64(2)).Return(&app.TeamStats{}, errors.New("not found"))
-		teamStatsRepo.On("InsertTeamStats", home).Return(errors.New("error occurred"))
-		teamStatsRepo.On("InsertTeamStats", away).Return(nil)
+		teamStatsRepo.On("InsertTeamStats", &home).Return(errors.New("error occurred"))
+		teamStatsRepo.On("InsertTeamStats", &away).Return(nil)
 
 		processor.Process("team-stats:by-date", "2021-01-18", done)
 
@@ -271,7 +271,7 @@ func TestTeamStatsProcessor_Process(t *testing.T) {
 		home := newTeamStats(45, 99)
 		away := newTeamStats(45, 2)
 
-		stats := make([]*app.TeamStats, 2)
+		stats := make([]app.TeamStats, 2)
 		stats[0] = home
 		stats[1] = away
 
@@ -282,10 +282,10 @@ func TestTeamStatsProcessor_Process(t *testing.T) {
 		date, _ := time.Parse("2006-01-02", "2021-01-18")
 
 		requester.On("TeamStatsByDate", date, []uint64{1, 2, 3}).Return(ch)
-		teamStatsRepo.On("ByFixtureAndTeam", uint64(45), uint64(99)).Return(home, nil)
-		teamStatsRepo.On("ByFixtureAndTeam", uint64(45), uint64(2)).Return(away, nil)
-		teamStatsRepo.On("UpdateTeamStats", home).Return(nil)
-		teamStatsRepo.On("UpdateTeamStats", away).Return(nil)
+		teamStatsRepo.On("ByFixtureAndTeam", uint64(45), uint64(99)).Return(&app.TeamStats{}, nil)
+		teamStatsRepo.On("ByFixtureAndTeam", uint64(45), uint64(2)).Return(&app.TeamStats{}, nil)
+		teamStatsRepo.On("UpdateTeamStats", &home).Return(nil)
+		teamStatsRepo.On("UpdateTeamStats", &away).Return(nil)
 
 		processor.Process("team-stats:by-date", "2021-01-18", done)
 
@@ -313,7 +313,7 @@ func TestTeamStatsProcessor_Process(t *testing.T) {
 		home := newTeamStats(45, 99)
 		away := newTeamStats(45, 2)
 
-		stats := make([]*app.TeamStats, 2)
+		stats := make([]app.TeamStats, 2)
 		stats[0] = home
 		stats[1] = away
 
@@ -324,10 +324,10 @@ func TestTeamStatsProcessor_Process(t *testing.T) {
 		date, _ := time.Parse("2006-01-02", "2021-01-18")
 
 		requester.On("TeamStatsByDate", date, []uint64{1, 2, 3}).Return(ch)
-		teamStatsRepo.On("ByFixtureAndTeam", uint64(45), uint64(99)).Return(home, nil)
-		teamStatsRepo.On("ByFixtureAndTeam", uint64(45), uint64(2)).Return(away, nil)
-		teamStatsRepo.On("UpdateTeamStats", home).Return(errors.New("error occurred"))
-		teamStatsRepo.On("UpdateTeamStats", away).Return(nil)
+		teamStatsRepo.On("ByFixtureAndTeam", uint64(45), uint64(99)).Return(&app.TeamStats{}, nil)
+		teamStatsRepo.On("ByFixtureAndTeam", uint64(45), uint64(2)).Return(&app.TeamStats{}, nil)
+		teamStatsRepo.On("UpdateTeamStats", &home).Return(errors.New("error occurred"))
+		teamStatsRepo.On("UpdateTeamStats", &away).Return(nil)
 
 		processor.Process("team-stats:by-date", "2021-01-18", done)
 
@@ -357,7 +357,7 @@ func TestTeamStatsProcessor_Process(t *testing.T) {
 		home := newTeamStats(45, 99)
 		away := newTeamStats(45, 2)
 
-		stats := make([]*app.TeamStats, 2)
+		stats := make([]app.TeamStats, 2)
 		stats[0] = home
 		stats[1] = away
 
@@ -374,8 +374,8 @@ func TestTeamStatsProcessor_Process(t *testing.T) {
 		requester.On("TeamStatsBySeasonIDs", []uint64{1, 2}).Return(ch)
 		teamStatsRepo.On("ByFixtureAndTeam", uint64(45), uint64(99)).Return(&app.TeamStats{}, errors.New("not found"))
 		teamStatsRepo.On("ByFixtureAndTeam", uint64(45), uint64(2)).Return(&app.TeamStats{}, errors.New("not found"))
-		teamStatsRepo.On("InsertTeamStats", home).Return(nil)
-		teamStatsRepo.On("InsertTeamStats", away).Return(nil)
+		teamStatsRepo.On("InsertTeamStats", &home).Return(nil)
+		teamStatsRepo.On("InsertTeamStats", &away).Return(nil)
 
 		processor.Process("team-stats:by-competition-id", "5", done)
 
@@ -403,7 +403,7 @@ func TestTeamStatsProcessor_Process(t *testing.T) {
 		home := newTeamStats(45, 99)
 		away := newTeamStats(45, 2)
 
-		stats := make([]*app.TeamStats, 2)
+		stats := make([]app.TeamStats, 2)
 		stats[0] = home
 		stats[1] = away
 
@@ -420,8 +420,8 @@ func TestTeamStatsProcessor_Process(t *testing.T) {
 		requester.On("TeamStatsBySeasonIDs", []uint64{1, 2}).Return(ch)
 		teamStatsRepo.On("ByFixtureAndTeam", uint64(45), uint64(99)).Return(&app.TeamStats{}, errors.New("not found"))
 		teamStatsRepo.On("ByFixtureAndTeam", uint64(45), uint64(2)).Return(&app.TeamStats{}, errors.New("not found"))
-		teamStatsRepo.On("InsertTeamStats", home).Return(errors.New("error occurred"))
-		teamStatsRepo.On("InsertTeamStats", away).Return(nil)
+		teamStatsRepo.On("InsertTeamStats", &home).Return(errors.New("error occurred"))
+		teamStatsRepo.On("InsertTeamStats", &away).Return(nil)
 
 		processor.Process("team-stats:by-competition-id", "5", done)
 
@@ -451,7 +451,7 @@ func TestTeamStatsProcessor_Process(t *testing.T) {
 		home := newTeamStats(45, 99)
 		away := newTeamStats(45, 2)
 
-		stats := make([]*app.TeamStats, 2)
+		stats := make([]app.TeamStats, 2)
 		stats[0] = home
 		stats[1] = away
 
@@ -466,10 +466,10 @@ func TestTeamStatsProcessor_Process(t *testing.T) {
 		)
 
 		requester.On("TeamStatsBySeasonIDs", []uint64{1, 2}).Return(ch)
-		teamStatsRepo.On("ByFixtureAndTeam", uint64(45), uint64(99)).Return(home, nil)
-		teamStatsRepo.On("ByFixtureAndTeam", uint64(45), uint64(2)).Return(away, nil)
-		teamStatsRepo.On("UpdateTeamStats", home).Return(nil)
-		teamStatsRepo.On("UpdateTeamStats", away).Return(nil)
+		teamStatsRepo.On("ByFixtureAndTeam", uint64(45), uint64(99)).Return(&app.TeamStats{}, nil)
+		teamStatsRepo.On("ByFixtureAndTeam", uint64(45), uint64(2)).Return(&app.TeamStats{}, nil)
+		teamStatsRepo.On("UpdateTeamStats", &home).Return(nil)
+		teamStatsRepo.On("UpdateTeamStats", &away).Return(nil)
 
 		processor.Process("team-stats:by-competition-id", "5", done)
 
@@ -497,7 +497,7 @@ func TestTeamStatsProcessor_Process(t *testing.T) {
 		home := newTeamStats(45, 99)
 		away := newTeamStats(45, 2)
 
-		stats := make([]*app.TeamStats, 2)
+		stats := make([]app.TeamStats, 2)
 		stats[0] = home
 		stats[1] = away
 
@@ -512,10 +512,10 @@ func TestTeamStatsProcessor_Process(t *testing.T) {
 		)
 
 		requester.On("TeamStatsBySeasonIDs", []uint64{1, 2}).Return(ch)
-		teamStatsRepo.On("ByFixtureAndTeam", uint64(45), uint64(99)).Return(home, nil)
-		teamStatsRepo.On("ByFixtureAndTeam", uint64(45), uint64(2)).Return(away, nil)
-		teamStatsRepo.On("UpdateTeamStats", home).Return(errors.New("error occurred"))
-		teamStatsRepo.On("UpdateTeamStats", away).Return(nil)
+		teamStatsRepo.On("ByFixtureAndTeam", uint64(45), uint64(99)).Return(&app.TeamStats{}, nil)
+		teamStatsRepo.On("ByFixtureAndTeam", uint64(45), uint64(2)).Return(&app.TeamStats{}, nil)
+		teamStatsRepo.On("UpdateTeamStats", &home).Return(errors.New("error occurred"))
+		teamStatsRepo.On("UpdateTeamStats", &away).Return(nil)
 
 		processor.Process("team-stats:by-competition-id", "5", done)
 
@@ -529,8 +529,8 @@ func TestTeamStatsProcessor_Process(t *testing.T) {
 	})
 }
 
-func newTeamStats(fixtureId, teamId uint64) *app.TeamStats {
-	return &app.TeamStats{
+func newTeamStats(fixtureId, teamId uint64) app.TeamStats {
+	return app.TeamStats{
 		FixtureID:   fixtureId,
 		TeamID:      teamId,
 		TeamShots:   app.TeamShots{},
@@ -541,8 +541,8 @@ func newTeamStats(fixtureId, teamId uint64) *app.TeamStats {
 	}
 }
 
-func teamStatsChannel(stats []*app.TeamStats) chan *app.TeamStats {
-	ch := make(chan *app.TeamStats, len(stats))
+func teamStatsChannel(stats []app.TeamStats) chan app.TeamStats {
+	ch := make(chan app.TeamStats, len(stats))
 
 	for _, c := range stats {
 		ch <- c

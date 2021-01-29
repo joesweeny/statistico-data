@@ -40,17 +40,17 @@ type TeamStatsRequester struct {
 	mock.Mock
 }
 
-func (t *TeamStatsRequester) TeamStatsByFixtureIDs(ids []uint64) <-chan *app.TeamStats {
+func (t *TeamStatsRequester) TeamStatsByFixtureIDs(ids []uint64) <-chan app.TeamStats {
 	args := t.Called(ids)
-	return args.Get(0).(chan *app.TeamStats)
+	return args.Get(0).(chan app.TeamStats)
 }
 
-func (t *TeamStatsRequester) TeamStatsBySeasonIDs(ids []uint64) <-chan *app.TeamStats {
+func (t *TeamStatsRequester) TeamStatsBySeasonIDs(ids []uint64) <-chan app.TeamStats {
 	args := t.Called(ids)
-	return args.Get(0).(chan *app.TeamStats)
+	return args.Get(0).(chan app.TeamStats)
 }
 
-func (t *TeamStatsRequester) TeamStatsByDate(date time.Time, competitionIDs []uint64) <-chan *app.TeamStats {
+func (t *TeamStatsRequester) TeamStatsByDate(date time.Time, competitionIDs []uint64) <-chan app.TeamStats {
 	args := t.Called(date, competitionIDs)
-	return args.Get(0).(chan *app.TeamStats)
+	return args.Get(0).(chan app.TeamStats)
 }

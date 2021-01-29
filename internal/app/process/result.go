@@ -73,7 +73,7 @@ func (r ResultProcessor) processCompetition(competitionID uint64, done chan bool
 	go r.persistResults(ch, done)
 }
 
-func (r ResultProcessor) persistResults(ch <-chan *app.Result, done chan bool) {
+func (r ResultProcessor) persistResults(ch <-chan app.Result, done chan bool) {
 	for result := range ch {
 		r.persist(result)
 	}
@@ -81,19 +81,19 @@ func (r ResultProcessor) persistResults(ch <-chan *app.Result, done chan bool) {
 	done <- true
 }
 
-func (r ResultProcessor) persist(x *app.Result) {
+func (r ResultProcessor) persist(x app.Result) {
 	_, err := r.resultRepo.ByFixtureID(x.FixtureID)
 
 	if err != nil {
-		if err := r.resultRepo.Insert(x); err != nil {
-			r.logger.Errorf("Error '%s' occurred when inserting result struct: %+v\n,", err.Error(), *x)
+		if err := r.resultRepo.Insert(&x); err != nil {
+			r.logger.Errorf("Error '%s' occurred when inserting result struct: %+v\n,", err.Error(), x)
 		}
 
 		return
 	}
 
-	if err := r.resultRepo.Update(x); err != nil {
-		r.logger.Errorf("Error '%s' occurred when updating result struct: %+v\n,", err.Error(), *x)
+	if err := r.resultRepo.Update(&x); err != nil {
+		r.logger.Errorf("Error '%s' occurred when updating result struct: %+v\n,", err.Error(), x)
 	}
 
 	return
