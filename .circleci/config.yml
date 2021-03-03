@@ -85,6 +85,5 @@ jobs:
           family: 'statistico-data-background'
           cluster-name: 'statistico-production'
           container-image-name-updates: >
-            container=console,image-and-tag=${AWS_ECR_ACCOUNT_URL}/statistico-data:${CIRCLE_SHA1},
             container=cron,image-and-tag=${AWS_ECR_ACCOUNT_URL}/statistico-data:${CIRCLE_SHA1},
             container=migrate,image-and-tag=${AWS_ECR_ACCOUNT_URL}/statistico-data:${CIRCLE_SHA1}
