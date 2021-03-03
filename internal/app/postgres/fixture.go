@@ -94,17 +94,17 @@ func (r *FixtureRepository) ByTeamID(id uint64, query app.FixtureFilterQuery) ([
 		q = q.Where(sq.Lt{"date": query.DateBefore.Unix()})
 	}
 
-	if query.Venue == nil {
+	if query.Venue == nil || *query.Venue == "HOME_AWAY" {
 		q = q.Where(sq.Or{
 			sq.Eq{"home_team_id": id},
 			sq.Eq{"away_team_id": id},
 		})
 	} else {
-		if *query.Venue == "home" {
+		if *query.Venue == "HOME" {
 			q = q.Where(sq.Eq{"home_team_id": id})
 		}
 
-		if *query.Venue == "away" {
+		if *query.Venue == "AWAY" {
 			q = q.Where(sq.Eq{"away_team_id": id})
 		}
 	}
