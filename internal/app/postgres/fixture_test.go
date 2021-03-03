@@ -316,16 +316,31 @@ func TestFixtureRepository_ByTeamID(t *testing.T) {
 
 		insertFixtures(t, repo)
 
-		venue := "away"
-
-		query := app.FixtureFilterQuery{
-			Venue: &venue,
-		}
-
-		fix, err := repo.ByTeamID(32, query)
-
-		if err != nil {
-			t.Fatalf("Test failed, expected nil, got %s", err.Error())
+		assertions := []struct{
+			TeamID uint64
+			Venue string
+			Count int
+		} {
+			{
+				66,
+				"AWAY",
+				1,
+			},
+			{
+				999,
+				"AWAY",
+				0,
+			},
+			{
+				66,
+				"HOME",
+				4,
+			},
+			{
+				66,
+				"HOME_AWAY",
+				5,
+			},
 		}
 
 		all, err := repo.Get(app.FixtureRepositoryQuery{})
@@ -334,9 +349,18 @@ func TestFixtureRepository_ByTeamID(t *testing.T) {
 			t.Fatalf("Test failed, expected nil, got %s", err.Error())
 		}
 
-		assert.Equal(t, 9, len(all))
-		assert.Equal(t, 1, len(fix))
-		assert.Equal(t, uint64(32), fix[0].AwayTeamID)
+		for _, assertion := range assertions {
+			query := app.FixtureFilterQuery{Venue: &assertion.Venue}
+
+			fix, err := repo.ByTeamID(assertion.TeamID, query)
+
+			if err != nil {
+				t.Fatalf("Test failed, expected nil, got %s", err.Error())
+			}
+
+			assert.Equal(t, 9, len(all))
+			assert.Equal(t, assertion.Count, len(fix))
+		}
 	})
 }
 
@@ -925,8 +949,8 @@ func insertFixtures(t *testing.T, repo app.FixtureRepository) {
 	s := app.Fixture{
 		ID:         uint64(99),
 		SeasonID:   uint64(145),
-		HomeTeamID: uint64(66),
-		AwayTeamID: uint64(32),
+		HomeTeamID: uint64(32),
+		AwayTeamID: uint64(66),
 		Date:       time.Unix(1550066312, 0),
 		CreatedAt:  time.Unix(1546965200, 0),
 		UpdatedAt:  time.Unix(1546965200, 0),
