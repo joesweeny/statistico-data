@@ -46,7 +46,7 @@ func (r ResultFactory) BuildResult(f *app.Fixture) (*statistico.Result, error) {
 	as, awayErr := r.teamStatsRepo.ByFixtureAndTeam(f.ID, f.AwayTeamID)
 
 	if homeErr != nil || awayErr != nil {
-		r.logger.Errorf("error hydrating proto result: fixture %d. error %s: %s", f.ID, homeErr, awayErr)
+		r.logger.Warnf("error hydrating proto result: fixture %d. error %s: %s", f.ID, homeErr, awayErr)
 	}
 
 	date := statistico.Date{
@@ -85,7 +85,7 @@ func (r ResultFactory) BuildResult(f *app.Fixture) (*statistico.Result, error) {
 }
 
 func (r ResultFactory) returnLoggedError(id uint64, err error) error {
-	r.logger.Errorf("error hydrating proto result: fixture %d. error %s", id, err.Error())
+	r.logger.Warnf("error hydrating proto result: fixture %d. error %s", id, err.Error())
 	return err
 }
 
