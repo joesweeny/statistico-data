@@ -55,7 +55,7 @@ func (s ResultService) GetHistoricalResultsForFixture(r *statistico.HistoricalRe
 	fixtures, err := s.fixtureRepo.Get(query)
 
 	if err != nil {
-		s.logger.Warnf("Error retrieving Fixture(s) in Result Service. Error: %s", err.Error())
+		s.logger.Errorf("Error retrieving Fixture(s) in Result Service. Error: %s", err.Error())
 		return status.Error(codes.Internal, "Internal server error")
 	}
 
@@ -113,7 +113,7 @@ func (s ResultService) GetResultsForTeam(r *statistico.TeamResultRequest, stream
 	fixtures, err := s.fixtureRepo.ByTeamID(r.GetTeamId(), query)
 
 	if err != nil {
-		s.logger.Warnf("Error retrieving Fixture(s) in Result Service. Error: %s", err.Error())
+		s.logger.Errorf("Error retrieving Fixture(s) in Result Service. Error: %s", err.Error())
 		return status.Error(codes.Internal, "Internal server error")
 	}
 
@@ -137,7 +137,7 @@ func (s ResultService) GetResultsForSeason(r *statistico.SeasonRequest, stream s
 	fixtures, err := s.fixtureRepo.Get(query)
 
 	if err != nil {
-		s.logger.Warnf("Error retrieving Fixture(s) in Result Service. Error: %s", err.Error())
+		s.logger.Errorf("Error retrieving Fixture(s) in Result Service. Error: %s", err.Error())
 		return status.Error(codes.Internal, "Internal server error")
 	}
 
@@ -154,7 +154,7 @@ func (s ResultService) sendResults(f []app.Fixture, stream statistico.ResultServ
 		}
 
 		if err := stream.Send(x); err != nil {
-			s.logger.Warnf("Error streaming Result back to client. Error: %s", err.Error())
+			s.logger.Errorf("Error streaming Result back to client. Error: %s", err.Error())
 			return status.Error(codes.Internal, "Internal server error")
 		}
 	}

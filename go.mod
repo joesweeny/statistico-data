@@ -8,6 +8,7 @@ require (
 	github.com/evalphobia/logrus_sentry v0.8.2
 	github.com/getsentry/raven-go v0.2.0 // indirect
 	github.com/go-sql-driver/mysql v1.4.1 // indirect
+	github.com/golang/groupcache v0.0.0-20200121045136-8c9f03a8e57e // indirect
 	github.com/golang/protobuf v1.4.3
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.1.0 // indirect
 	github.com/jonboulle/clockwork v0.1.0
@@ -21,6 +22,7 @@ require (
 	github.com/statistico/statistico-sportmonks-go-client v0.1.1-0.20210115124723-2e98df6d8cd5
 	github.com/statistico/statistico-understat-parser v0.0.0-20191121181340-7c8c9511f89e
 	github.com/stretchr/testify v1.5.1
+	golang.org/x/crypto v0.0.0-20200622213623-75b288015ac9 // indirect
 	golang.org/x/net v0.0.0-20210119194325-5f4716e94777 // indirect
 	golang.org/x/sys v0.0.0-20210123111255-9b0068b26619 // indirect
 	golang.org/x/text v0.3.5 // indirect
