@@ -1,9 +1,8 @@
 package main
 
 import (
-
 	"github.com/statistico/statistico-football-data/internal/bootstrap"
-	statistico "github.com/statistico/statistico-proto/go"
+	"github.com/statistico/statistico-proto/go"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/keepalive"
 	"google.golang.org/grpc/reflection"
@@ -27,7 +26,6 @@ func main() {
 	statistico.RegisterCompetitionServiceServer(server, app.CompetitionService())
 	statistico.RegisterEventServiceServer(server, app.EventService())
 	statistico.RegisterFixtureServiceServer(server, app.FixtureService())
-	statistico.RegisterPerformanceServiceServer(server, app.PerformanceService())
 	statistico.RegisterResultServiceServer(server, app.ResultService())
 	statistico.RegisterPlayerStatsServiceServer(server, app.PlayerStatsService())
 	statistico.RegisterSeasonServiceServer(server, app.SeasonService())
