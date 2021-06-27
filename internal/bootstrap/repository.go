@@ -1,7 +1,7 @@
 package bootstrap
 
 import (
-	"github.com/statistico/statistico-data/internal/app/postgres"
+	"github.com/statistico/statistico-football-data/internal/app/postgres"
 )
 
 func (c Container) CompetitionRepository() *postgres.CompetitionRepository {

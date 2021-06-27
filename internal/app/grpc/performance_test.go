@@ -3,9 +3,9 @@ package grpc_test
 import (
 	"context"
 	"errors"
-	"github.com/statistico/statistico-data/internal/app/grpc"
-	"github.com/statistico/statistico-data/internal/app/mock"
-	"github.com/statistico/statistico-data/internal/app/performance"
+	"github.com/statistico/statistico-football-data/internal/app/grpc"
+	"github.com/statistico/statistico-football-data/internal/app/mock"
+	"github.com/statistico/statistico-football-data/internal/app/performance"
 	"github.com/statistico/statistico-proto/go"
 	"github.com/stretchr/testify/assert"
 	"testing"

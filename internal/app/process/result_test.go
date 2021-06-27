@@ -5,9 +5,9 @@ import (
 	"github.com/jonboulle/clockwork"
 	"github.com/sirupsen/logrus"
 	"github.com/sirupsen/logrus/hooks/test"
-	"github.com/statistico/statistico-data/internal/app"
-	"github.com/statistico/statistico-data/internal/app/mock"
-	"github.com/statistico/statistico-data/internal/app/process"
+	"github.com/statistico/statistico-football-data/internal/app"
+	"github.com/statistico/statistico-football-data/internal/app/mock"
+	"github.com/statistico/statistico-football-data/internal/app/process"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )

@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/sirupsen/logrus"
-	"github.com/statistico/statistico-data/internal/app"
+	"github.com/statistico/statistico-football-data/internal/app"
 	spClient "github.com/statistico/statistico-sportmonks-go-client"
 )
 

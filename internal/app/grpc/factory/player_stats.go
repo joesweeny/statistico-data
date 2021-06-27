@@ -2,7 +2,7 @@ package factory
 
 import (
 	"github.com/sirupsen/logrus"
-	"github.com/statistico/statistico-data/internal/app"
+	"github.com/statistico/statistico-football-data/internal/app"
 	"github.com/statistico/statistico-proto/go"
 )
 

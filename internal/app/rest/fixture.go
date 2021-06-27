@@ -2,7 +2,7 @@ package rest
 
 import (
 	"github.com/julienschmidt/httprouter"
-	"github.com/statistico/statistico-data/internal/app"
+	"github.com/statistico/statistico-football-data/internal/app"
 	"net/http"
 	"net/url"
 	"strconv"

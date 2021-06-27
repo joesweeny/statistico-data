@@ -3,8 +3,8 @@ package sportmonks_test
 import (
 	"bytes"
 	"github.com/sirupsen/logrus/hooks/test"
-	"github.com/statistico/statistico-data/internal/app/mock"
-	"github.com/statistico/statistico-data/internal/app/sportmonks"
+	"github.com/statistico/statistico-football-data/internal/app/mock"
+	"github.com/statistico/statistico-football-data/internal/app/sportmonks"
 	spClient "github.com/statistico/statistico-sportmonks-go-client"
 	"github.com/stretchr/testify/assert"
 	"io/ioutil"

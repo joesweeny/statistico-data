@@ -3,7 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/statistico/statistico-data/internal/bootstrap"
+	"github.com/statistico/statistico-football-data/internal/bootstrap"
 	"os"
 	"time"
 )

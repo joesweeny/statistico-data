@@ -3,7 +3,7 @@ package process
 import (
 	"fmt"
 	"github.com/sirupsen/logrus"
-	"github.com/statistico/statistico-data/internal/app"
+	"github.com/statistico/statistico-football-data/internal/app"
 	understat "github.com/statistico/statistico-understat-parser"
 	"strconv"
 )

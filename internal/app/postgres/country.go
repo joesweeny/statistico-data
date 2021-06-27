@@ -6,7 +6,7 @@ import (
 	"github.com/jonboulle/clockwork"
 	_ "github.com/lib/pq"
 	"github.com/pkg/errors"
-	"github.com/statistico/statistico-data/internal/app"
+	"github.com/statistico/statistico-football-data/internal/app"
 	"time"
 )
 

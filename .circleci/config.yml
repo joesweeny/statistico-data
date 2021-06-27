@@ -33,7 +33,7 @@ workflows:
 
 jobs:
   build-and-test:
-    working_directory: ~/go/src/github.com/statistico/statistico-data
+    working_directory: ~/go/src/github.com/statistico/statistico-football-data
     machine: true
     environment:
       GOPATH: /home/circleci/go
@@ -77,13 +77,13 @@ jobs:
     steps:
       - aws-cli/setup
       - aws-ecs/update-service:
-          family: 'statistico-data-grpc'
+          family: 'statistico-football-data-grpc'
           cluster-name: 'statistico-production'
           container-image-name-updates: >
-            container=grpc,image-and-tag=${AWS_ECR_ACCOUNT_URL}/statistico-data:${CIRCLE_SHA1}
+            container=grpc,image-and-tag=${AWS_ECR_ACCOUNT_URL}/statistico-football-data:${CIRCLE_SHA1}
       - aws-ecs/update-service:
-          family: 'statistico-data-background'
+          family: 'statistico-football-data-background'
           cluster-name: 'statistico-production'
           container-image-name-updates: >
-            container=cron,image-and-tag=${AWS_ECR_ACCOUNT_URL}/statistico-data:${CIRCLE_SHA1},
-            container=migrate,image-and-tag=${AWS_ECR_ACCOUNT_URL}/statistico-data:${CIRCLE_SHA1}
+            container=cron,image-and-tag=${AWS_ECR_ACCOUNT_URL}/statistico-football-data:${CIRCLE_SHA1},
+            container=migrate,image-and-tag=${AWS_ECR_ACCOUNT_URL}/statistico-football-data:${CIRCLE_SHA1}

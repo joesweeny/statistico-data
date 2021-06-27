@@ -1,7 +1,7 @@
 package mock
 
 import (
-	"github.com/statistico/statistico-data/internal/app/performance"
+	"github.com/statistico/statistico-football-data/internal/app/performance"
 	"github.com/stretchr/testify/mock"
 )
 

@@ -1,10 +1,10 @@
 package postgres_test
 
 import (
-	"github.com/statistico/statistico-data/internal/app"
-	"github.com/statistico/statistico-data/internal/app/errors"
-	"github.com/statistico/statistico-data/internal/app/postgres"
-	"github.com/statistico/statistico-data/internal/app/test"
+	"github.com/statistico/statistico-football-data/internal/app"
+	"github.com/statistico/statistico-football-data/internal/app/errors"
+	"github.com/statistico/statistico-football-data/internal/app/postgres"
+	"github.com/statistico/statistico-football-data/internal/app/test"
 	"github.com/stretchr/testify/assert"
 	"testing"
 	"time"

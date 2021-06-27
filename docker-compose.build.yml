@@ -11,11 +11,11 @@ services:
     ports:
       - 5432:5432
     networks:
-      - statistico-data_default
+      - statistico-football-data_default
 
   console: &console
     build:
-      dockerfile: ./docker/Dockerfile
+      dockerfile: .docker/Dockerfile
       context: .
     environment:
       DB_DRIVER: postgres
@@ -28,28 +28,28 @@ services:
     links:
       - postgres
     networks:
-      - statistico-data_default
-
-  cron:
-    <<: *console
-    command: ["crond", "-f", "-d", "8"]
+      - statistico-football-data_default
 
   migrate:
     <<: *console
     command: ["./bin/migrate"]
 
-  statistico-data-grpc:
+  statistico-football-data-grpc:
     <<: *console
     networks:
-      - statistico-data_default
+      - statistico-football-data_default
       - statistico_internal
     ports:
       - "50051:50051"
     command: ["./grpc", "--port 50051"]
 
+  cron:
+    <<: *console
+    command: [ "crond", "-f", "-d", "8" ]
+
   test:
     build:
-      dockerfile: ./docker/test/Dockerfile
+      dockerfile: .docker/test/Dockerfile
       context: .
     volumes:
       - .:/opt
@@ -65,10 +65,10 @@ services:
     depends_on:
       - postgres
     networks:
-      - statistico-data_default
+      - statistico-football-data_default
 
 networks:
-  statistico-data_default:
+  statistico-football-data_default:
     external: false
   statistico_internal:
     external: true
