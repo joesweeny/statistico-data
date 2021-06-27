@@ -1,4 +1,4 @@
-module github.com/statistico/statistico-data
+module github.com/statistico/statistico-football-data
 
 go 1.12
 
