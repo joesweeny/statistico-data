@@ -6,6 +6,6 @@ services:
     env_file:
       - .env
 
-  statistico-data-grpc:
+  statistico-football-data-grpc:
     env_file:
       - .env
