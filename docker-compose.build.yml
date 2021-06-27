@@ -34,7 +34,7 @@ services:
     <<: *console
     command: ["./bin/migrate"]
 
-  statistico-data-grpc:
+  statistico-football-data-grpc:
     <<: *console
     networks:
       - statistico-data_default
@@ -42,6 +42,10 @@ services:
     ports:
       - "50051:50051"
     command: ["./grpc", "--port 50051"]
+
+  cron:
+    <<: *console
+    command: [ "crond", "-f", "-d", "8" ]
 
   test:
     build:
