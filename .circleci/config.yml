@@ -56,7 +56,7 @@ jobs:
       - persist_to_workspace:
           root: *workspace_root
           paths:
-            - docker-cache
+            - .docker-cache
 
   release-images:
     executor: aws-cli/default
