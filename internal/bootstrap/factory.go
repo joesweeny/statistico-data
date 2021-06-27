@@ -1,8 +1,8 @@
 package bootstrap
 
 import (
-	"github.com/statistico/statistico-data/internal/app/grpc/factory"
-	"github.com/statistico/statistico-data/internal/app/rest"
+	"github.com/statistico/statistico-football-data/internal/app/grpc/factory"
+	"github.com/statistico/statistico-football-data/internal/app/rest"
 )
 
 func (c Container) ProtoFixtureFactory() *factory.FixtureFactory {

@@ -3,9 +3,9 @@ package process_test
 import (
 	"errors"
 	"github.com/sirupsen/logrus/hooks/test"
-	"github.com/statistico/statistico-data/internal/app"
-	"github.com/statistico/statistico-data/internal/app/mock"
-	"github.com/statistico/statistico-data/internal/app/process"
+	"github.com/statistico/statistico-football-data/internal/app"
+	"github.com/statistico/statistico-football-data/internal/app/mock"
+	"github.com/statistico/statistico-football-data/internal/app/process"
 	"github.com/stretchr/testify/assert"
 	"testing"
 	"time"

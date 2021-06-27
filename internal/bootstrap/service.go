@@ -1,7 +1,7 @@
 package bootstrap
 
 import (
-	"github.com/statistico/statistico-data/internal/app/grpc"
+	"github.com/statistico/statistico-football-data/internal/app/grpc"
 )
 
 func (c Container) CompetitionService() *grpc.CompetitionService {

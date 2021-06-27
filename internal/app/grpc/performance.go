@@ -2,7 +2,7 @@ package grpc
 
 import (
 	"context"
-	"github.com/statistico/statistico-data/internal/app/performance"
+	"github.com/statistico/statistico-football-data/internal/app/performance"
 	statistico "github.com/statistico/statistico-proto/go"
 
 	"google.golang.org/grpc/codes"

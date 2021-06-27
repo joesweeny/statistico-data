@@ -11,7 +11,7 @@ services:
     ports:
       - 5432:5432
     networks:
-      - statistico-data_default
+      - statistico-football-data_default
 
   console: &console
     build:
@@ -28,7 +28,7 @@ services:
     links:
       - postgres
     networks:
-      - statistico-data_default
+      - statistico-football-data_default
 
   migrate:
     <<: *console
@@ -37,7 +37,7 @@ services:
   statistico-football-data-grpc:
     <<: *console
     networks:
-      - statistico-data_default
+      - statistico-football-data_default
       - statistico_internal
     ports:
       - "50051:50051"
@@ -65,10 +65,10 @@ services:
     depends_on:
       - postgres
     networks:
-      - statistico-data_default
+      - statistico-football-data_default
 
 networks:
-  statistico-data_default:
+  statistico-football-data_default:
     external: false
   statistico_internal:
     external: true

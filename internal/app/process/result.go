@@ -3,7 +3,7 @@ package process
 import (
 	"github.com/jonboulle/clockwork"
 	"github.com/sirupsen/logrus"
-	"github.com/statistico/statistico-data/internal/app"
+	"github.com/statistico/statistico-football-data/internal/app"
 	"strconv"
 )
 

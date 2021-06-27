@@ -2,8 +2,8 @@ package grpc
 
 import (
 	"github.com/sirupsen/logrus"
-	"github.com/statistico/statistico-data/internal/app"
-	"github.com/statistico/statistico-data/internal/app/grpc/factory"
+	"github.com/statistico/statistico-football-data/internal/app"
+	"github.com/statistico/statistico-football-data/internal/app/grpc/factory"
 	"github.com/statistico/statistico-proto/go"
 
 	"google.golang.org/grpc/codes"

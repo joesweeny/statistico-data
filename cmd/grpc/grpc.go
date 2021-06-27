@@ -2,7 +2,7 @@ package main
 
 import (
 
-	"github.com/statistico/statistico-data/internal/bootstrap"
+	"github.com/statistico/statistico-football-data/internal/bootstrap"
 	statistico "github.com/statistico/statistico-proto/go"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/keepalive"

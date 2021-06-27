@@ -1,8 +1,8 @@
 package bootstrap
 
 import (
-	"github.com/statistico/statistico-data/internal/app"
-	"github.com/statistico/statistico-data/internal/app/sportmonks"
+	"github.com/statistico/statistico-football-data/internal/app"
+	"github.com/statistico/statistico-football-data/internal/app/sportmonks"
 )
 
 func (c Container) CompetitionRequester() app.CompetitionRequester {

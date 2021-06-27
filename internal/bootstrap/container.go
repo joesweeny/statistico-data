@@ -90,7 +90,7 @@ func logger(config *Config) *logrus.Logger {
 	logger.SetOutput(os.Stdout)
 
 	tags := map[string]string{
-		"application": "statistico-data",
+		"application": "statistico-football-data",
 	}
 
 	levels := []logrus.Level{

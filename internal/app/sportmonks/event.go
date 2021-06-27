@@ -3,8 +3,8 @@ package sportmonks
 import (
 	"context"
 	"github.com/sirupsen/logrus"
-	"github.com/statistico/statistico-data/internal/app"
-	"github.com/statistico/statistico-data/internal/app/helpers"
+	"github.com/statistico/statistico-football-data/internal/app"
+	"github.com/statistico/statistico-football-data/internal/app/helpers"
 	spClient "github.com/statistico/statistico-sportmonks-go-client"
 	"strconv"
 	"sync"

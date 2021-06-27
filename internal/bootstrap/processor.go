@@ -1,7 +1,7 @@
 package bootstrap
 
 import (
-	"github.com/statistico/statistico-data/internal/app/process"
+	"github.com/statistico/statistico-football-data/internal/app/process"
 )
 
 type Processor interface {

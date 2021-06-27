@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/jonboulle/clockwork"
 	"github.com/lib/pq"
-	"github.com/statistico/statistico-data/internal/app"
+	"github.com/statistico/statistico-football-data/internal/app"
 	"strconv"
 	"time"
 )

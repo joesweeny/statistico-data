@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"github.com/jonboulle/clockwork"
-	"github.com/statistico/statistico-data/internal/bootstrap"
+	"github.com/statistico/statistico-football-data/internal/bootstrap"
 	"testing"
 	"time"
 )

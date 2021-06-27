@@ -3,7 +3,7 @@ package postgres
 import (
 	"database/sql"
 	sq "github.com/Masterminds/squirrel"
-	"github.com/statistico/statistico-data/internal/app/performance"
+	"github.com/statistico/statistico-football-data/internal/app/performance"
 )
 
 type StatReader struct {
