@@ -1,6 +1,6 @@
 version: "3.3"
 services:
-# Extends .docker-compose.build.yml
+# Extends docker-compose.build.yml
 
   console:
     env_file:
